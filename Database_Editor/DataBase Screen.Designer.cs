@@ -330,6 +330,7 @@
             // 
             // cbEditableCharData
             // 
+            this.cbEditableCharData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbEditableCharData.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbEditableCharData.FormattingEnabled = true;
             this.cbEditableCharData.Location = new System.Drawing.Point(320, 396);
@@ -339,6 +340,7 @@
             // 
             // btnEdit
             // 
+            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnEdit.Location = new System.Drawing.Point(475, 394);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(75, 23);
@@ -359,6 +361,7 @@
             // 
             // btnActorCancel
             // 
+            this.btnActorCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnActorCancel.Location = new System.Drawing.Point(709, 394);
             this.btnActorCancel.Name = "btnActorCancel";
             this.btnActorCancel.Size = new System.Drawing.Size(75, 23);
@@ -371,6 +374,8 @@
             // 
             this.dgvActorTags.AllowUserToResizeColumns = false;
             this.dgvActorTags.AllowUserToResizeRows = false;
+            this.dgvActorTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvActorTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvActorTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colActorTags});
@@ -426,6 +431,8 @@
             this.dgvActors.AllowUserToDeleteRows = false;
             this.dgvActors.AllowUserToResizeColumns = false;
             this.dgvActors.AllowUserToResizeRows = false;
+            this.dgvActors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvActors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvActors.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colActorsName});
@@ -494,6 +501,7 @@
             // 
             // btnEditCutsceneDialogue
             // 
+            this.btnEditCutsceneDialogue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnEditCutsceneDialogue.Location = new System.Drawing.Point(320, 394);
             this.btnEditCutsceneDialogue.Name = "btnEditCutsceneDialogue";
             this.btnEditCutsceneDialogue.Size = new System.Drawing.Size(96, 23);
@@ -536,6 +544,7 @@
             // 
             // btnCutsceneCancel
             // 
+            this.btnCutsceneCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCutsceneCancel.Location = new System.Drawing.Point(709, 394);
             this.btnCutsceneCancel.Name = "btnCutsceneCancel";
             this.btnCutsceneCancel.Size = new System.Drawing.Size(75, 23);
@@ -548,6 +557,8 @@
             // 
             this.dgvCutsceneTags.AllowUserToResizeColumns = false;
             this.dgvCutsceneTags.AllowUserToResizeRows = false;
+            this.dgvCutsceneTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvCutsceneTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCutsceneTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCutsceneTags});
@@ -587,6 +598,8 @@
             this.dgvCutscenes.AllowUserToDeleteRows = false;
             this.dgvCutscenes.AllowUserToResizeColumns = false;
             this.dgvCutscenes.AllowUserToResizeRows = false;
+            this.dgvCutscenes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvCutscenes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCutscenes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCutscenesName});
@@ -679,6 +692,7 @@
             // 
             // btnDungeonCancel
             // 
+            this.btnDungeonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDungeonCancel.Location = new System.Drawing.Point(709, 394);
             this.btnDungeonCancel.Name = "btnDungeonCancel";
             this.btnDungeonCancel.Size = new System.Drawing.Size(75, 23);
@@ -691,6 +705,8 @@
             // 
             this.dgvDungeonTags.AllowUserToResizeColumns = false;
             this.dgvDungeonTags.AllowUserToResizeRows = false;
+            this.dgvDungeonTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvDungeonTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDungeonTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colDungeonsTag});
@@ -714,6 +730,8 @@
             this.dgvDungeons.AllowUserToDeleteRows = false;
             this.dgvDungeons.AllowUserToResizeColumns = false;
             this.dgvDungeons.AllowUserToResizeRows = false;
+            this.dgvDungeons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvDungeons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDungeons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colDungeonsName});
@@ -780,6 +798,7 @@
             // 
             // btnItemCancel
             // 
+            this.btnItemCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnItemCancel.Location = new System.Drawing.Point(709, 394);
             this.btnItemCancel.Name = "btnItemCancel";
             this.btnItemCancel.Size = new System.Drawing.Size(75, 23);
@@ -792,6 +811,8 @@
             // 
             this.dgvItemTags.AllowUserToResizeColumns = false;
             this.dgvItemTags.AllowUserToResizeRows = false;
+            this.dgvItemTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvItemTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvItemTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colItemTags});
@@ -864,6 +885,8 @@
             this.dgvItems.AllowUserToDeleteRows = false;
             this.dgvItems.AllowUserToResizeColumns = false;
             this.dgvItems.AllowUserToResizeRows = false;
+            this.dgvItems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colItemsName});
@@ -937,6 +960,7 @@
             // 
             // btnLightCancel
             // 
+            this.btnLightCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLightCancel.Location = new System.Drawing.Point(709, 394);
             this.btnLightCancel.Name = "btnLightCancel";
             this.btnLightCancel.Size = new System.Drawing.Size(75, 23);
@@ -949,6 +973,8 @@
             // 
             this.dgvLightTags.AllowUserToResizeColumns = false;
             this.dgvLightTags.AllowUserToResizeRows = false;
+            this.dgvLightTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvLightTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLightTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colLightTags});
@@ -972,6 +998,8 @@
             this.dgvLights.AllowUserToDeleteRows = false;
             this.dgvLights.AllowUserToResizeColumns = false;
             this.dgvLights.AllowUserToResizeRows = false;
+            this.dgvLights.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvLights.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLights.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colLightsName});
@@ -1029,6 +1057,7 @@
             // 
             // btnShopCancel
             // 
+            this.btnShopCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnShopCancel.Location = new System.Drawing.Point(709, 394);
             this.btnShopCancel.Name = "btnShopCancel";
             this.btnShopCancel.Size = new System.Drawing.Size(75, 23);
@@ -1041,6 +1070,8 @@
             // 
             this.dgvShopTags.AllowUserToResizeColumns = false;
             this.dgvShopTags.AllowUserToResizeRows = false;
+            this.dgvShopTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvShopTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvShopTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colShopTags});
@@ -1080,6 +1111,8 @@
             this.dgvShops.AllowUserToDeleteRows = false;
             this.dgvShops.AllowUserToResizeColumns = false;
             this.dgvShops.AllowUserToResizeRows = false;
+            this.dgvShops.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvShops.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvShops.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colShopsName});
@@ -1133,6 +1166,7 @@
             // 
             // btnStatusEffectCancel
             // 
+            this.btnStatusEffectCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnStatusEffectCancel.Location = new System.Drawing.Point(709, 394);
             this.btnStatusEffectCancel.Name = "btnStatusEffectCancel";
             this.btnStatusEffectCancel.Size = new System.Drawing.Size(75, 23);
@@ -1145,6 +1179,8 @@
             // 
             this.dgvStatusEffectTags.AllowUserToResizeColumns = false;
             this.dgvStatusEffectTags.AllowUserToResizeRows = false;
+            this.dgvStatusEffectTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvStatusEffectTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvStatusEffectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colStatusEffectsTag});
@@ -1217,6 +1253,8 @@
             this.dgvStatusEffects.AllowUserToDeleteRows = false;
             this.dgvStatusEffects.AllowUserToResizeColumns = false;
             this.dgvStatusEffects.AllowUserToResizeRows = false;
+            this.dgvStatusEffects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvStatusEffects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvStatusEffects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colStatusEffectsName});
@@ -1269,6 +1307,7 @@
             // 
             // btnTaskCancel
             // 
+            this.btnTaskCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnTaskCancel.Location = new System.Drawing.Point(709, 394);
             this.btnTaskCancel.Name = "btnTaskCancel";
             this.btnTaskCancel.Size = new System.Drawing.Size(75, 23);
@@ -1281,6 +1320,8 @@
             // 
             this.dgvTaskTags.AllowUserToResizeColumns = false;
             this.dgvTaskTags.AllowUserToResizeRows = false;
+            this.dgvTaskTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvTaskTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTaskTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colTaskTags});
@@ -1353,6 +1394,8 @@
             this.dgvTasks.AllowUserToDeleteRows = false;
             this.dgvTasks.AllowUserToResizeColumns = false;
             this.dgvTasks.AllowUserToResizeRows = false;
+            this.dgvTasks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTasks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colTasksName});
@@ -1417,6 +1460,7 @@
             // 
             // btnWorldObjectCancel
             // 
+            this.btnWorldObjectCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnWorldObjectCancel.Location = new System.Drawing.Point(709, 394);
             this.btnWorldObjectCancel.Name = "btnWorldObjectCancel";
             this.btnWorldObjectCancel.Size = new System.Drawing.Size(75, 23);
@@ -1429,6 +1473,8 @@
             // 
             this.dgvWorldObjectTags.AllowUserToResizeColumns = false;
             this.dgvWorldObjectTags.AllowUserToResizeRows = false;
+            this.dgvWorldObjectTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvWorldObjectTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvWorldObjectTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colWorldObjectTags});
@@ -1484,6 +1530,8 @@
             this.dgvWorldObjects.AllowUserToDeleteRows = false;
             this.dgvWorldObjects.AllowUserToResizeColumns = false;
             this.dgvWorldObjects.AllowUserToResizeRows = false;
+            this.dgvWorldObjects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvWorldObjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvWorldObjects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colWorldObjectsName});
@@ -1525,6 +1573,7 @@
             // 
             // btnUpgradeCancel
             // 
+            this.btnUpgradeCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnUpgradeCancel.Location = new System.Drawing.Point(709, 394);
             this.btnUpgradeCancel.Name = "btnUpgradeCancel";
             this.btnUpgradeCancel.Size = new System.Drawing.Size(75, 23);
@@ -1537,6 +1586,8 @@
             // 
             this.dgvUpgradeTags.AllowUserToResizeColumns = false;
             this.dgvUpgradeTags.AllowUserToResizeRows = false;
+            this.dgvUpgradeTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvUpgradeTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvUpgradeTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colUpgradeTags});
@@ -1592,6 +1643,8 @@
             this.dgvUpgrades.AllowUserToDeleteRows = false;
             this.dgvUpgrades.AllowUserToResizeColumns = false;
             this.dgvUpgrades.AllowUserToResizeRows = false;
+            this.dgvUpgrades.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dgvUpgrades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvUpgrades.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colUpgradesName});
@@ -1641,6 +1694,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Database Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmDBEditor_FormClosing);
+            this.Load += new System.EventHandler(this.FrmDBEditor_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabCtl.ResumeLayout(false);

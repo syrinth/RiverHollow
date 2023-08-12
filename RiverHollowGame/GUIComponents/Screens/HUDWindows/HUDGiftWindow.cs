@@ -82,9 +82,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         public void BtnGift()
         {
-            TextEntry giftEntry = _npc.Gift(_arrToSell[0, 0]);
-            GUIManager.CloseMainObject();
-            GUIManager.OpenTextWindow(giftEntry);
+            _npc.Gift(_arrToSell[0, 0]);
         }
 
         private void Refresh()

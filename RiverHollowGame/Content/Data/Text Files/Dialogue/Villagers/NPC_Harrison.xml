@@ -36,19 +36,31 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Name][Text][UnlockObjectID:112]</Value>
-    </Item>
-    <Item>
-      <Key>9</Key>
-      <Value>[Name][Text]</Value>
-    </Item>
-    <Item>
-      <Key>10</Key>
       <Value>[Name:Task_12_Start][Text:I'm here, ready and willing,  to lend my expertise to this little enterprise of yours. It looks like you're lacking a  $WorldObject_25$. If you get me settled, I'll show you what useful things I can bring into town for you.][UnlockObjectID:25]</Value>
     </Item>
     <Item>
+      <Key>9</Key>
+      <Value>[Name:Collection][Text:Oh ho ho! Thank you very much, This will look great on display!]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:Gift_Happy][Text:How lovely!]</Value>
+    </Item>
+    <Item>
       <Key>11</Key>
-      <Value>[Name][Text]</Value>
+      <Value>[Name:Gift_Pleased][Text:What a nice thought!]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Name:Gift_Neutral][Text:Hm, well thank you.]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Name:Gift_Sad][Text:Hm... might be better to sell this one.]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Name:Gift_Miserable][Text:I can't even imagine anyone would want to buy something like that.]</Value>
     </Item>
   </Asset>
 </XnaContent>

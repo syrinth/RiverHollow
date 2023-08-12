@@ -132,7 +132,7 @@ namespace RiverHollow.Characters
         {
             if (OnTheMap)
             {
-                BodySprite.Draw(spriteBatch, useLayerDepth);
+                GetSprites().ForEach(x => x.Draw(spriteBatch, useLayerDepth));
 
                 if (Constants.DRAW_COLLISION)
                 {

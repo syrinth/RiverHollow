@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.0" name="Decor" tilewidth="16" tileheight="16" tilecount="1380" columns="23">
- <image source="../../Textures/WorldObjects/Decor.png" width="368" height="960"/>
+<tileset version="1.10" tiledversion="1.10.2" name="Decor" tilewidth="16" tileheight="16" tilecount="1564" columns="23">
+ <image source="../../Textures/WorldObjects/Decor.png" width="368" height="1098"/>
  <tile id="23">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
@@ -522,6 +522,26 @@
   </properties>
  </tile>
  <tile id="1040">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="1403">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="1404">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="1405">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="1406">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>

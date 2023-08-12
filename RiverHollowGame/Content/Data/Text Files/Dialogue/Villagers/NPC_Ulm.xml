@@ -45,5 +45,31 @@ Ah! That hits the spot. Now then, where was that town you said? Great, I'll see 
       <Value>[Name:Task_2_Start][Text:You call this a town? More like a sad clump of buildings if you ask me...
 	  Lucky for you, I am an expert Apothecary. You build me a nice little home to call my own, and I'll see to it that the merchants have more than enough potions and unguents to keep them coming.][UnlockObjectID:18]</Value>
     </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Name:Collection][Text:I've been wanting one of these for years! Thanks.]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:Gift_Happy][Text:For me? You sure you don't want it? Great, mine now.]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Name:Gift_Pleased][Text:Ooh, that's for me?]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Name:Gift_Neutral][Text:Hm, thanks I guess.]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Name:Gift_Sad][Text:Now why would you think I'd want one of these things?]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Name:Gift_Miserable][Text:Nope. Don't want it, you can keep it.
+
+Or maybe burn it.]</Value>
+    </Item>
   </Asset>
 </XnaContent>

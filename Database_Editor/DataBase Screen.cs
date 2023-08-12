@@ -4,6 +4,7 @@ using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -130,6 +131,7 @@ namespace Database_Editor
             LoadDataGrids();
             LoadAllInfoPanels();
         }
+
 
         private void SetupTabCollections()
         {
@@ -2076,5 +2078,12 @@ namespace Database_Editor
             del();
         }
         #endregion
+
+        private void FrmDBEditor_Load(object sender, EventArgs e)
+        {
+            this.MinimumSize = new Size(832, 0);
+            this.MaximumSize = new Size(832, Screen.PrimaryScreen.Bounds.Height);
+
+        }
     }
 }

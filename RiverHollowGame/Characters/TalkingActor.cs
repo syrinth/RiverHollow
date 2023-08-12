@@ -136,7 +136,7 @@ namespace RiverHollow.Characters
             _iTaskGoals += val;
         }
 
-        public virtual TextEntry Gift(Item item) { return null; }
+        public virtual void Gift(Item item) { }
         public virtual TextEntry JoinParty() { return null; }
         public virtual void OpenShop()  { }
         public virtual void OpenMerchantWindow() { }

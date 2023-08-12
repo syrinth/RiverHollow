@@ -484,9 +484,9 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public override TextEntry Gift(Item item)
+        public override void Gift(Item item)
         {
-            TextEntry rv = null;
+            TextEntry response = null;
 
             bool giftGiven = true;
             if (item != null)
@@ -494,7 +494,7 @@ namespace RiverHollow.Characters
                 if (_diCollection.ContainsKey(item.ID) && !_diCollection[item.ID])
                 {
                     FriendshipPoints += Constants.GIFT_COLLECTION;
-                    rv = GetDialogEntry("Collection");
+                    response = GetDialogEntry("Collection");
                     int index = new List<int>(_diCollection.Keys).FindIndex(x => x == item.ID);
 
                     _diCollection[item.ID] = true;
@@ -513,31 +513,32 @@ namespace RiverHollow.Characters
                             case MoodEnum.Happy:
                                 WeeklyGiftGiven = true;
                                 FriendshipPoints += Constants.GIFT_HAPPY;
-                                rv = GetDialogEntry("Gift_Happy");
+                                response = GetDialogEntry("Gift_Happy");
                                 break;
                             case MoodEnum.Pleased:
                                 WeeklyGiftGiven = true;
                                 FriendshipPoints += Constants.GIFT_PLEASED;
-                                rv = GetDialogEntry("Gift_Pleased");
+                                response = GetDialogEntry("Gift_Pleased");
                                 break;
                             case MoodEnum.Neutral:
                                 FriendshipPoints += Constants.GIFT_NEUTRAL;
-                                rv = GetDialogEntry("Gift_Neutral");
+                                response = GetDialogEntry("Gift_Neutral");
                                 break;
                             case MoodEnum.Sad:
                                 FriendshipPoints += Constants.GIFT_SAD;
-                                rv = GetDialogEntry("Gift_Sad");
+                                response = GetDialogEntry("Gift_Sad");
                                 break;
                             case MoodEnum.Miserable:
                                 FriendshipPoints += Constants.GIFT_MISERABLE;
-                                rv = GetDialogEntry("Gift_Miserable");
+                                response = GetDialogEntry("Gift_Miserable");
                                 break;
                         }
                     }
                 }
             }
 
-            return rv;
+            GUIManager.CloseMainObject();
+            GUIManager.OpenTextWindow(response, this);
         }
 
         public MoodEnum ItemOpinion(Item it)

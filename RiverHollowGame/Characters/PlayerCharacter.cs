@@ -111,16 +111,13 @@ namespace RiverHollow.Characters
         {
             base.Draw(spriteBatch, useLayerDepth);
 
-            if (Constants.DRAW_ADJACENCY)
+            if (OnTheMap && Constants.DRAW_ADJACENCY)
             {
                 foreach (var r in PlayerManager.AdjacencyRects)
                 {
                     spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), r, GUIUtils.BLACK_BOX, Color.Red * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
                 }
             }
-
-            _sprEyes?.Draw(spriteBatch, useLayerDepth);
-            _sprHair?.Draw(spriteBatch, useLayerDepth);
 
             //Chest?.Sprite.Draw(spriteBatch, useLayerDepth);
             //Hat?.Sprite.Draw(spriteBatch, useLayerDepth);

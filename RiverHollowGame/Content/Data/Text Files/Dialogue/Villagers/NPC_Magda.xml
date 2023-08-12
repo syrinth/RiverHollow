@@ -3,7 +3,8 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Hello! Hello! I am $Actor_41$, merchant and wizard extraordinaire!]</Value>
+      <Value>[Name:Introduction][Text:Interesting place for a town, I must say. Quite a few monsters around no?
+I am called $Actor_36$, and I'm quite interested in those monsters. I can make it worth your while if you bring me them and any other Artifacts you might find.]</Value>
     </Item>
     <Item>
       <Key>1</Key>

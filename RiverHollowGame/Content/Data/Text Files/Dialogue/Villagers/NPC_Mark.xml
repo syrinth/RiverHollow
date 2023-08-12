@@ -30,7 +30,7 @@ I'll keep the visitors entertained as best I can, but you'll have to check in be
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:Gift_Happy][Text:Oh. This is a surprise!]</Value>
+      <Value>[Name:Gift_Happy][Text:Are you sure? Thanks!]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -54,11 +54,11 @@ I'll keep the visitors entertained as best I can, but you'll have to check in be
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Name:Gift_Pleased][Text:Pleased]</Value>
+      <Value>[Name:Gift_Pleased][Text:Thank you, this is very thoughtful.]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Name:Gift_Neutral][Text:How kind, thank you.]</Value>
+      <Value>[Name:Gift_Neutral][Text:Oh. Thank you.]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -66,7 +66,7 @@ I'll keep the visitors entertained as best I can, but you'll have to check in be
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Name:Gift_Miserable][Text:..I appreciate the thought.]</Value>
+      <Value>[Name:Gift_Miserable][Text:...I appreciate the thought.]</Value>
     </Item>
   </Asset>
 </XnaContent>
