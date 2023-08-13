@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="177">
  <properties>
-  <property name="FillerID" value="103-60-Spread-80/51-5/60-5/147-20/65-20"/>
+  <property name="FillerID" value="103-60/51-5/60-5/147-15/65-15"/>
   <property name="FillerPercent" type="float" value="0.55"/>
   <property name="FillerRate" type="float" value="0.2"/>
   <property name="MapType" value="Town"/>

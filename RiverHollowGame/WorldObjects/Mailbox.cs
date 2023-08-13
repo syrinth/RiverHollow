@@ -3,52 +3,61 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
-using System.Collections.Generic;
-using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
-using RiverHollow.Utilities;
 using RiverHollow.GUIComponents;
-using System;
 using RiverHollow.Map_Handling;
+
+using static RiverHollow.Utilities.Enums;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.WorldObjects
 {
     public class Mailbox : Buildable
     {
         private AnimatedSprite _alertSprite;
+        private RHTimer _timer;
+        private bool _bBounce;
 
         public Mailbox(int id) : base(id)
         {
             Unique = true;
             _rBase.Y = _pSize.Y - BaseHeight;
 
-            Rectangle animation = GUIUtils.ALERT_ANIMATION;
+            Rectangle animation = GUIUtils.ICON_EXCLAMATION;
             _alertSprite = new AnimatedSprite(DataManager.HUD_COMPONENTS);
-            _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, animation.X, animation.Y, animation.Width, animation.Height, 3, 0.150f, true);
+            _alertSprite.AddAnimation(AnimationEnum.ObjectIdle, animation.X, animation.Y, animation.Width, animation.Height, 1, 0.3f, true);
+            _alertSprite.SetLinkedSprite(Sprite, false);
+
+            _timer = new RHTimer(0.5);
+            _bBounce = false;
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (TownManager.MailboxHasMessages())
+            if (AlertVisible() && _timer.TickDown(gTime, true))
             {
-                _alertSprite?.Update(gTime);
+                _alertSprite.Position += new Point(0, _bBounce ? 1 : -1);
+                _bBounce = !_bBounce;
             }
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            if (TownManager.MailboxHasMessages())
+            if (AlertVisible())
             {
-                _alertSprite?.Draw(spriteBatch, Constants.MAX_LAYER_DEPTH);
+                _alertSprite?.Draw(spriteBatch);
             }
+        }
+
+        private bool AlertVisible()
+        {
+            return TownManager.MailboxHasMessages() && GameManager.HeldObject != this;
         }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
             bool rv = base.PlaceOnMap(pos, map, ignoreActors);
-            _alertSprite.Position = new Point(MapPosition.X, MapPosition.Y - Constants.TILE_SIZE);
+            _alertSprite.Position = new Point(MapPosition.X + 6, MapPosition.Y + 1);
             return rv;
         }
 

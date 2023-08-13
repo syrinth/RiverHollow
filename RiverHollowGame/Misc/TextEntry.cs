@@ -151,38 +151,7 @@ namespace RiverHollow.Misc
 
             return rv;
         }
-        public bool Validate()
-        {
-            bool rv = false;
-            if (_diTags.ContainsKey("GameStart"))
-            {
-                if (GameCalendar.CurrentDay == 1 && GameCalendar.CurrentSeason == SeasonEnum.Spring && GameCalendar.CurrentYear == 1)
-                {
-                    rv = true;
-                }
-                else { return false; }
-            }
 
-            if (CheckIntValidation("Day", GameCalendar.CurrentDay, out bool valid))
-            {
-                if (valid) { rv = true; }
-                else { return false; }
-            }
-
-            if (CheckIntValidation("Month", (int)GameCalendar.CurrentSeason, out valid))
-            {
-                if (valid) { rv = true; }
-                else { return false; }
-            }
-
-            if (CheckIntValidation("Year", GameCalendar.CurrentYear, out valid))
-            {
-                if (valid) { rv = true; }
-                else { return false; }
-            }
-
-            return rv;
-        }
         /// <summary>
         /// This method is used to ensure that conditions are being met for TextEntries
         /// to be used. This method should only be used by Villagers.
@@ -199,6 +168,33 @@ namespace RiverHollow.Misc
             if (_diTags.ContainsKey("Default")) { rv = true; }
             else
             {
+                if (_diTags.ContainsKey("GameStart"))
+                {
+                    if (GameCalendar.CurrentDay == 1 && GameCalendar.CurrentSeason == SeasonEnum.Spring && GameCalendar.CurrentYear == 1)
+                    {
+                        rv = true;
+                    }
+                    else { return false; }
+                }
+
+                if (CheckIntValidation("Day", GameCalendar.CurrentDay, out bool valid))
+                {
+                    if (valid) { rv = true; }
+                    else { return false; }
+                }
+
+                if (CheckIntValidation("Month", (int)GameCalendar.CurrentSeason, out valid))
+                {
+                    if (valid) { rv = true; }
+                    else { return false; }
+                }
+
+                if (CheckIntValidation("Year", GameCalendar.CurrentYear, out valid))
+                {
+                    if (valid) { rv = true; }
+                    else { return false; }
+                }
+
                 if (_diTags.ContainsKey("MaxChildren"))
                 {
                     if (PlayerManager.Children.Count < int.Parse(_diTags["MaxChildren"])) { rv = true; }
