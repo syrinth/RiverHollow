@@ -79,7 +79,7 @@ namespace RiverHollow.WorldObjects
         }
         public virtual string Description()
         {
-            return Name() + System.Environment.NewLine + GetTextData("Description");
+            return GetTextData("Description");
         }
 
         public bool Reset { get; protected set; } = false;
@@ -245,7 +245,7 @@ namespace RiverHollow.WorldObjects
 
                 if (!GUIManager.IsHoverWindowOpen())
                 {
-                    var win = new GUIItemDescriptionWindow(this, Point.Zero);
+                    var win = new GUIItemDescriptionWindow(this);
                     win.AnchorToScreen(SideEnum.BottomRight);
                     GUIManager.OpenHoverObject(win, Sprite.SpriteRectangle, false);
                 }

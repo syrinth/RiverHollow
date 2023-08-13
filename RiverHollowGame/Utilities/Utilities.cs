@@ -175,10 +175,16 @@ namespace RiverHollow.Utilities
             TEnum rv = Enum.TryParse(convertThis, true, out rv) ? rv : default;
             return rv;
         }
-        public static string GetEnumString<TEnum>(TEnum convertThis)
+        public static string GetEnumString<TEnum>(TEnum convertThis, bool spaceIt = false)
         {
-
-            return Enum.GetName(typeof(TEnum), convertThis);
+            if (spaceIt)
+            {
+                return System.Text.RegularExpressions.Regex.Replace(Enum.GetName(typeof(TEnum), convertThis), "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
+            }
+            else
+            {
+                return Enum.GetName(typeof(TEnum), convertThis);
+            }
         }
 
         public static string GetActorString(VerbEnum verb)

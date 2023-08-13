@@ -38,7 +38,7 @@
         public const float GUI_TEXT_MARKER_FLASH_RATE = 0.5f;
         public const float GUI_WINDOW_OPEN_SPEED = 0.004f;
 
-        public const int MINIMUM_DAYS_OF_PRECIPITATION = 6;
+        public const int MAX_ITEM_DESC_SIZE = 550;
         public const int NORMAL_SCALE = 4;
         public const int TILE_SIZE = 16;
         public const int MAX_LAYER_DEPTH = 999999;
@@ -51,6 +51,7 @@
         public const int NIGHTFALL_STANDARD = 18;
         public const int NIGHTFALL_LATE = 21;
         public const int NIGHTFALL_EARLY = 16;
+        public const int MINIMUM_DAYS_OF_PRECIPITATION = 6;
 
         public const string TRIGGER_MOB_OPEN = "MOB";
         public const string TRIGGER_ITEM_OPEN = "VALID_ITEM";

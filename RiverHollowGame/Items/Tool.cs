@@ -202,5 +202,10 @@ namespace RiverHollow.Items
         {
             return _iCharges > 0;
         }
+
+        public override string GetDetails()
+        {
+            return string.Format("Level: {0}", ToolLevel);
+        }
     }
 }

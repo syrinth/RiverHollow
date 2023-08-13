@@ -30,13 +30,11 @@ namespace RiverHollow.GUIComponents.Screens
 
         public HUDMiniInventory() : base(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
         {
-            HoverControls = false;
-
             _liItems = new GUIItemBox[InventoryManager.maxItemColumns];
 
             for (int i = 0; i < InventoryManager.maxItemColumns; i++)
             {
-                GUIItemBox ib = new GUIItemBox(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
+                GUIItemBox ib = new GUIItemBox(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i], Enums.ItemBoxDraw.OnlyStacks);
                 _liItems[i] = ib;
 
                 if (i == 0) { ib.AnchorToInnerSide(this, SideEnum.TopLeft); }
@@ -257,12 +255,16 @@ namespace RiverHollow.GUIComponents.Screens
             return rv;
         }
 
-        protected override void BeginHover()
+        public override bool ProcessHover(Point mouse)
         {
-            if (!GameManager.GamePaused())
+            bool rv = base.ProcessHover(mouse);
+
+            if (rv && !GameManager.GamePaused())
             {
                 _eFadeState = StateEnum.FadeIn;
             }
+
+            return rv;
         }
 
         protected override void EndHover()
@@ -316,6 +318,8 @@ namespace RiverHollow.GUIComponents.Screens
                 float startFade = _fAlphaValue;
                 _fAlphaValue = MIN_FADE;
                 SetAlpha(startFade);
+
+                GUIManager.CloseHoverWindow();
             }
         }
     }

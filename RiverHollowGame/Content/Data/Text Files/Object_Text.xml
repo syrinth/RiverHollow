@@ -536,7 +536,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_8</Key>
-      <Value>[Name:Green Slime][Description:An enchanted bottle holding a magical song.]</Value>
+      <Value>[Name:Green Slime][Description:A blob of sticky green slime. Safe to eat, but why would you want to?]</Value>
     </Item>
     <Item>
       <Key>Item_9</Key>
@@ -876,7 +876,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_93</Key>
-      <Value>[Name:Piff-Puff]</Value>
+      <Value>[Name:Piff-Puff][Description:A soft, puffy flower with a bright yellow hue. Given as a gift to help brighten the darkest days.]</Value>
     </Item>
     <Item>
       <Key>Item_94</Key>
@@ -888,7 +888,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_96</Key>
-      <Value>[Name:Windblossom]</Value>
+      <Value>[Name:Windblossom][Description:A tall stem covered with tiny fragrant flowers. The aroma carries on the wind for miles.]</Value>
     </Item>
     <Item>
       <Key>Item_97</Key>
@@ -988,7 +988,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_121</Key>
-      <Value>[Name:Sword]</Value>
+      <Value>[Name:Sword][Description:A plain sword. Easy to swing, but neither well-balanced or particularly sharp.]</Value>
     </Item>
     <Item>
       <Key>Item_122</Key>
@@ -1032,19 +1032,19 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_132</Key>
-      <Value>[Name:Pick Axe][Description:Breaks things]</Value>
+      <Value>[Name:Pick Axe][Description:A humble pick axe, used by common miners for centuries to clear rubble and debris.]</Value>
     </Item>
     <Item>
       <Key>Item_133</Key>
-      <Value>[Name:Wooden Axe][Description:Chop Chop Motherfucker]</Value>
+      <Value>[Name:Wooden Axe][Description:A half dull axe. It will get the job done, but the blade could be sharper.]</Value>
     </Item>
     <Item>
       <Key>Item_134</Key>
-      <Value>[Name:Hoe][Description:Use to till the soil]</Value>
+      <Value>[Name:Hoe][Description:Used to till the earth and make it suitable for planting.]</Value>
     </Item>
     <Item>
       <Key>Item_135</Key>
-      <Value>[Name:Watering Can][Description:Watering the thing]</Value>
+      <Value>[Name:Watering Can][Description:Watering crops is the only way to make them grow. This is a watering can, not a watering can't]</Value>
     </Item>
     <Item>
       <Key>Item_136</Key>
@@ -1052,7 +1052,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_137</Key>
-      <Value>[Name:Lantern][Description:Casts a dim light in dark places.]</Value>
+      <Value>[Name:Lantern][Description:Casts a light in dark places.]</Value>
     </Item>
     <Item>
       <Key>Item_138</Key>
@@ -1060,15 +1060,15 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_139</Key>
-      <Value>[Name:Scythe]</Value>
+      <Value>[Name:Scythe][Description:A simple farming scythe used to clear grass and weeds.]</Value>
     </Item>
     <Item>
       <Key>Item_140</Key>
-      <Value>[Name:Backpack]</Value>
+      <Value>[Name:Backpack][Description:A simple backpack to carry around whatever you may need in your journey.]</Value>
     </Item>
     <Item>
       <Key>Item_141</Key>
-      <Value>[Name:Canvas Bag]</Value>
+      <Value>[Name:Canvas Bag][Description:A Backpack made of sturdy canvas. It has extra pockets! Can be used to carry even more.]</Value>
     </Item>
     <Item>
       <Key>Item_142</Key>
@@ -1152,7 +1152,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_162</Key>
-      <Value>[Name:Juice Berry]</Value>
+      <Value>[Name:Juice Berry][Description:Juicy, and squishy. A wonderful tactile experience.]</Value>
     </Item>
     <Item>
       <Key>Item_163</Key>

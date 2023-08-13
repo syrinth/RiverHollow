@@ -28,11 +28,10 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }
 
-        public override string Description()
+        public override string GetDetails()
         {
-            string rv = base.Description();
-            rv += System.Environment.NewLine;
-            if (Recover) { rv += "Ends Knocked Out"; }
+            string rv = string.Empty;
+
             if (Health > 0) { rv += "Health: +" + Health + " "; }
             if (Mana > 0) { rv += "Mana: +" + Mana + " "; }
             rv = rv.Trim();

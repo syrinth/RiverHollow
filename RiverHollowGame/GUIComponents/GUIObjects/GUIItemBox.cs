@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
-using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -18,11 +17,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public int ColumnID { get; }
         public int RowID { get; }
 
-        bool _bAlignUnder;
-
-        public GUIItemBox(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks, bool alignUnder = true) : base(GUIUtils.ITEM_BOX)
+        public GUIItemBox(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks) : base(GUIUtils.ITEM_BOX)
         {
-            _bAlignUnder = alignUnder;
             SetItem(it, e);
         }
 
@@ -56,13 +52,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (BoxItem != null)
             {
-                var win = new GUIItemDescriptionWindow(BoxItem, new Point(DrawRectangle.Left, DrawRectangle.Bottom));
-                if (_bAlignUnder) { win.AnchorAndAlignWithSpacing(this, SideEnum.Bottom, SideEnum.CenterX, -1); }
-                else { win.AnchorToScreen(SideEnum.BottomRight); }
+                var win = new GUIItemDescriptionWindow(BoxItem);
+                win.AnchorToScreen(SideEnum.BottomRight);
                 GUIManager.OpenHoverObject(win, DrawRectangle, true);
             }
         }
-
         public void SetEquipmentType(EquipmentEnum e)
         {
             EquipmentType = e;

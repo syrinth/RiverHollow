@@ -69,7 +69,7 @@ namespace RiverHollow.GUIComponents.Screens
             for (int i = 0; i < recipeNumber; i++)
             {
                 Item recipe = DataManager.CraftItem(recipes[i]);
-                GUIItemBox newBox = new GUIItemBox(recipe, ItemBoxDraw.Always, false);
+                GUIItemBox newBox = new GUIItemBox(recipe, ItemBoxDraw.Always);
                 if (i == 0)
                 {
                     _iSelectedItemID = recipe.ID;

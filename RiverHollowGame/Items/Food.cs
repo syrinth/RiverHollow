@@ -17,7 +17,7 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Food");
         }
 
-        public override string Description()
+        public override string GetDetails()
         {
             string rv = base.Description();
             rv += System.Environment.NewLine;

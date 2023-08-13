@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
-using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
@@ -51,7 +50,7 @@ namespace RiverHollow.Items
         }
         public override string Description()
         {
-            return Name() + System.Environment.NewLine + DataManager.GetTextData(_iObjectID, "Description", DataType.WorldObject);
+            return DataManager.GetTextData(_iObjectID, "Description", DataType.WorldObject);
         }
 
         public override bool ItemBeingUsed()
@@ -69,6 +68,11 @@ namespace RiverHollow.Items
         public override int GetIntByIDKey(string key, int defaultValue = -1)
         {
             return DataManager.GetIntByIDKey(_iObjectID, key, DataType.WorldObject, defaultValue);
+        }
+
+        public override TEnum GetEnumByIDKey<TEnum>(string key)
+        {
+            return DataManager.GetEnumByIDKey<TEnum>(_iObjectID, key, DataType.WorldObject);
         }
     }
 }

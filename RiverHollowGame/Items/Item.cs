@@ -100,7 +100,12 @@ namespace RiverHollow.Items
         }
         public virtual string Description()
         {
-            return Name() + System.Environment.NewLine + DataManager.GetTextData(ID, "Description", DataType.Item);
+            return DataManager.GetTextData(ID, "Description", DataType.Item);
+        }
+
+        public virtual string GetDetails()
+        {
+            return string.Empty;
         }
 
         /// <summary>
@@ -266,7 +271,7 @@ namespace RiverHollow.Items
         {
             return DataManager.GetStringByIDKey(ID, key, DataType.Item);
         }
-        public TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
+        public virtual TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
         {
             return DataManager.GetEnumByIDKey<TEnum>(ID, key, DataType.Item);
         }
