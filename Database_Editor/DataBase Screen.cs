@@ -891,7 +891,7 @@ namespace Database_Editor
         }
         private void btnDialogue_Click(object sender, EventArgs e)
         {
-            string npcKey = @"\NPC_" + _diBasicXML[ACTOR_XML_FILE][_diTabIndices["Actors"]].GetTagValue("Key") + ".xml";
+            string npcKey = @"\NPC_" + _diBasicXML[ACTOR_XML_FILE][int.Parse(tbActorID.Text)].GetTagValue("Key") + ".xml";
             FormCharExtraData frm;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
@@ -1178,8 +1178,8 @@ namespace Database_Editor
             //    _iNextCurrID = -1;
             //}
 
-            LoadDataGrids();
-            LoadAllInfoPanels();
+            //LoadDataGrids();
+            //LoadAllInfoPanels();
 
             UpdateStatus("Save Complete.");
         }
@@ -1813,24 +1813,30 @@ namespace Database_Editor
         }
         private void LoadWorldObjectInfo()
         {
-            DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
-            XMLData data = null;
-            if (_typeFilter == "All") { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE][r.Index]; }
-            else if (_subtypeFilter != "All")
+            if (dgvWorldObjects.SelectedRows.Count > 0)
             {
-                data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter) && x.GetTagValue("Subtype").Equals(_subtypeFilter))[r.Index];
-            }
-            else { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
+                DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
+                XMLData data = null;
+                if (_typeFilter == "All") { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE][r.Index]; }
+                else if (_subtypeFilter != "All")
+                {
+                    data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter) && x.GetTagValue("Subtype").Equals(_subtypeFilter))[r.Index];
+                }
+                else { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
 
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.WorldObject]);
+                LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.WorldObject]);
+            }
         }
         private void LoadActorInfo()
         {
-            DataGridViewRow r = dgvActors.SelectedRows[0];
-            XMLData data = null;
-            if (_typeFilter == "All") { data = _diBasicXML[ACTOR_XML_FILE][_diTabIndices["Actors"]]; }
-            else { data = _diBasicXML[ACTOR_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_typeFilter))[r.Index]; }
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Actor]);
+            if (dgvActors.SelectedRows.Count > 0)
+            {
+                DataGridViewRow r = dgvActors.SelectedRows[0];
+                XMLData data = null;
+                if (_typeFilter == "All") { data = _diBasicXML[ACTOR_XML_FILE][_diTabIndices["Actors"]]; }
+                else { data = _diBasicXML[ACTOR_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_typeFilter))[r.Index]; }
+                LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Actor]);
+            }
         }
         private void LoadTaskInfo()
         {
