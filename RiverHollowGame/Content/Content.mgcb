@@ -49,11 +49,6 @@
 /processor:PassThroughProcessor
 /build:Data/LightData.xml
 
-#begin Data/MonsterTraitTable.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/MonsterTraitTable.xml
-
 #begin Data/PlayerClassAnimationConfig.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor

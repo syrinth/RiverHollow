@@ -391,7 +391,7 @@
     </Item>
     <Item>
       <Key>97</Key>
-      <Value>[Type:Buildable][Subtype:Mailbox][Image:0-44][Size:1-2]</Value>
+      <Value>[Type:Buildable][Subtype:Mailbox][Image:0-44][Size:1-2][Mailbox]</Value>
     </Item>
     <Item>
       <Key>98</Key>

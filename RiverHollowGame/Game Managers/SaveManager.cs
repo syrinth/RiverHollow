@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 using static RiverHollow.Misc.RHTask;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -86,10 +87,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "CutsceneData")]
             public List<CutsceneData> CSData;
-
-            [XmlElement(ElementName = "Mailbox")]
-            public MailboxData TheMailbox;
-
         }
         public struct OptionsData
         {
@@ -201,6 +198,16 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "TravelersCame")]
             public bool travelersCame;
+
+            [XmlArray(ElementName = "MailboxUnsent")]
+            public List<string> MailboxUnsent;
+
+            [XmlArray(ElementName = "MailboxSent")]
+            public List<string> MailboxSent;
+
+            [XmlArray(ElementName = "MailboxWaiting")]
+            public List<string> MailboxWaiting;
+
 
         }
         public struct CalendarData
@@ -547,7 +554,6 @@ namespace RiverHollow.Game_Managers
                 AvailableMissions = new List<MissionData>(),
                 ShopData = new List<ShopData>(),
                 CSData = new List<CutsceneData>(),
-                TheMailbox = PlayerManager.PlayerMailbox.SaveData(),
                 optionData = SaveOptions(),
                 playerData = PlayerManager.SaveData(),
                 townData = TownManager.SaveData()
@@ -698,8 +704,6 @@ namespace RiverHollow.Game_Managers
             TownManager.LoadData(dataToLoad.townData);
 
             PlayerManager.LoadToolData(dataToLoad.Tools);
-            //Needs to be here because the Mailbox is a worldobject
-            PlayerManager.PlayerMailbox.LoadData(dataToLoad.TheMailbox);
 
             CutsceneManager.LoadCutscenes(dataToLoad.CSData);
 

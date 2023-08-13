@@ -7,9 +7,10 @@ using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using static RiverHollow.Game_Managers.SaveManager;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Characters
 {

@@ -2,11 +2,13 @@
 using RiverHollow.Characters;
 using RiverHollow.Items;
 using RiverHollow.Map_Handling;
+using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -21,14 +23,20 @@ namespace RiverHollow.Game_Managers
 
         public static int Income { get; private set; }
 
+        #region Key Buildings
         public static Building Inn { get; private set; }
         public static Building Home { get; private set; }
         public static Structure Market { get; private set; }
+        public static Mailbox TownMailbox { get; private set; }
+        #endregion
 
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
         public static Dictionary<int, ValueTuple<bool, bool>> DIArchive { get; private set; }
+
+        private static Dictionary<MailboxEnum, List<string>> _diMailbox;
+
         public static Merchant Merchant { get; private set; }
         public static List<Animal> TownAnimals { get; set; }
         public static List<Traveler> Travelers { get; set; }
@@ -39,6 +47,16 @@ namespace RiverHollow.Game_Managers
         {
             TownAnimals = new List<Animal>();
             Travelers = new List<Traveler>();
+            _diMailbox = new Dictionary<MailboxEnum, List<string>>
+            {
+                [MailboxEnum.Waiting] = new List<string>(),
+                [MailboxEnum.Unsent] = new List<string>(),
+                [MailboxEnum.Sent] = new List<string>()
+            };
+            foreach (var key in DataManager.GetMailboxData())
+            {
+                _diMailbox[MailboxEnum.Unsent].Add(key);
+            }
 
             Inventory = new Item[Constants.KITCHEN_STOCK_ROW, Constants.KITCHEN_STOCK_COLUMN];
 
@@ -144,24 +162,8 @@ namespace RiverHollow.Game_Managers
             }
 
             SpawnTravelers();
-        }
 
-        private static void TryToEat(List<Food> sortedFood, Traveler t, FoodTypeEnum e)
-        {
-            var eatMe = sortedFood.Find(f => f.FoodType == e);
-            if (eatMe != null)
-            {
-                t.TryEat(eatMe);
-            }
-        }
-
-        private static void TryToEatNeutral(List<Food> sortedFood, Traveler t)
-        {
-            var eatMe = sortedFood.Find(f => t.NeutralFood(f.FoodType));
-            if (eatMe != null)
-            {
-                t.TryEat(eatMe);
-            }
+            RolloverMailbox();
         }
 
         public static void AddToKitchen(Item i)
@@ -189,6 +191,11 @@ namespace RiverHollow.Game_Managers
             }
 
             return rv;
+        }
+        public static void AddAnimal(Animal npc)
+        {
+            TownAnimals.Add(npc);
+            npc.MoveToSpawn();
         }
 
         #region Traveler Code
@@ -361,6 +368,23 @@ namespace RiverHollow.Game_Managers
             tuple.Item2 += 1;
             DITravelerInfo[npc.ID] = new ValueTuple<bool, int>(DITravelerInfo[npc.ID].Item1, DITravelerInfo[npc.ID].Item2 + 1);
         }
+
+        private static void TryToEat(List<Food> sortedFood, Traveler t, FoodTypeEnum e)
+        {
+            var eatMe = sortedFood.Find(f => f.FoodType == e);
+            if (eatMe != null)
+            {
+                t.TryEat(eatMe);
+            }
+        }
+        private static void TryToEatNeutral(List<Food> sortedFood, Traveler t)
+        {
+            var eatMe = sortedFood.Find(f => t.NeutralFood(f.FoodType));
+            if (eatMe != null)
+            {
+                t.TryEat(eatMe);
+            }
+        }
         #endregion
 
         #region Merchant Code
@@ -369,12 +393,6 @@ namespace RiverHollow.Game_Managers
             Merchant = m;
         }
         #endregion
-
-        public static void AddAnimal(Animal npc)
-        {
-            TownAnimals.Add(npc);
-            npc.MoveToSpawn();
-        }
 
         #region Town Helpers
         public static void AddToCodex(int id)
@@ -419,6 +437,7 @@ namespace RiverHollow.Game_Managers
                 if (obj.GetBoolByIDKey("Inn")) { Inn = (Building)obj; }
                 if (obj.GetBoolByIDKey("Home")) { Home = (Building)obj; }
                 if (obj.GetBoolByIDKey("Market")) { Market = (Structure)obj; }
+                if (obj.GetBoolByIDKey("Mailbox")) { TownMailbox = (Mailbox)obj; }
             }
         }
         public static int GetNumberTownObjects(int objID)
@@ -446,6 +465,48 @@ namespace RiverHollow.Game_Managers
         public static IReadOnlyDictionary<int, List<WorldObject>> GetTownObjects() { return MapManager.TownMap.GetObjects(); }
         #endregion
 
+        #region Mailbox
+        private static void RolloverMailbox()
+        {
+            var allLetters = new List<string>(_diMailbox[MailboxEnum.Unsent]);
+            foreach (var letterID in allLetters)
+            {
+                TextEntry entry = DataManager.GetMailboxLetter(letterID);
+                if (entry.Validate())
+                {
+                    _diMailbox[MailboxEnum.Unsent].Remove(letterID);
+                    _diMailbox[MailboxEnum.Waiting].Add(letterID);
+                }
+            }
+        }
+
+        //Only use this for messages that can recur.
+        public static void MailboxSendMessage(string letterID)
+        {
+            _diMailbox[MailboxEnum.Waiting].Add(letterID);
+        }
+
+        public static TextEntry MailboxTakeMessage()
+        {
+            TextEntry entry = null;
+            if (_diMailbox[MailboxEnum.Waiting].Count > 0)
+            {
+                string str = _diMailbox[MailboxEnum.Waiting][0];
+                entry = DataManager.GetMailboxLetter(str);
+
+                _diMailbox[MailboxEnum.Waiting].Remove(str);
+                Util.AddToListDictionary(ref _diMailbox, Enums.MailboxEnum.Sent, str);
+            }
+
+            return entry;
+        }
+
+        public static bool MailboxHasMessages()
+        {
+            return _diMailbox[MailboxEnum.Waiting].Count > 0;
+        }
+        #endregion
+
         public static TownData SaveData()
         {
             TownData data = new TownData
@@ -457,13 +518,19 @@ namespace RiverHollow.Game_Managers
                 MerchantData = new List<MerchantData>(),
                 TravelerData = new List<TravelerData>(),
                 CodexEntries = new List<CodexEntryData>(),
-                Inventory = new List<ItemData>()
+                Inventory = new List<ItemData>(),
+                MailboxSent = new List<string>(),
+                MailboxUnsent = new List<string>(),
+                MailboxWaiting = new List<string>(),
+                MerchantID = Merchant != null ? Merchant.ID : -1
             };
-
-            data.MerchantID = Merchant != null ? Merchant.ID : -1;
 
             Travelers.ForEach(x => data.Travelers.Add(x.ID));
             TownAnimals.ForEach(x => data.TownAnimals.Add(x.ID));
+
+            data.MailboxUnsent = _diMailbox[MailboxEnum.Unsent];
+            data.MailboxSent = _diMailbox[MailboxEnum.Sent];
+            data.MailboxWaiting = _diMailbox[MailboxEnum.Waiting];
 
             foreach (Villager npc in DIVillagers.Values)
             {
@@ -519,10 +586,10 @@ namespace RiverHollow.Game_Managers
                 AddAnimal(m);
             }
 
-            foreach (int id in saveData.Travelers)
-            {
-                AddTraveler(id);
-            }
+            saveData.Travelers.ForEach(x => AddTraveler(x));
+            _diMailbox[MailboxEnum.Unsent] = saveData.MailboxUnsent;
+            _diMailbox[MailboxEnum.Sent] = saveData.MailboxSent;
+            _diMailbox[MailboxEnum.Waiting] = saveData.MailboxWaiting;
 
             foreach (VillagerData data in saveData.VillagerData)
             {

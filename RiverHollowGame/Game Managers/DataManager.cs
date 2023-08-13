@@ -14,9 +14,10 @@ using RiverHollow.Items;
 using RiverHollow.WorldObjects.Trigger_Objects;
 using RiverHollow.Items.Tools;
 
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.Characters.Mobs;
 using System.Linq;
+
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -62,7 +63,7 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Texture2D> _diTextures;
         static Dictionary<string, BitmapFont> _diBMFonts;
         static Dictionary<string, string> _diGameText;
-        static Dictionary<string, string> _diMonsterTraits;
+        static Dictionary<string, string> _diMailboxData;
 
         static Dictionary<int, List<string>> _diSongs;
         static Dictionary<string, Dictionary<string, string>> _diNPCDialogue;
@@ -73,7 +74,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diPlayerAnimationData;
 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
-        static Dictionary<string, string> _diLetters;
 
         static Dictionary<int, Dictionary<string, string>> _diItemData;
         public static List<int> ItemKeys => _diItemData.Keys.ToList();
@@ -102,9 +102,7 @@ namespace RiverHollow.Game_Managers
             //Allocate Dictionaries
             _diTextures = new Dictionary<string, Texture2D>();
 
-            _diMonsterTraits = Content.Load<Dictionary<string, string>>(@"Data\MonsterTraitTable");
-
-            _diLetters = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
+            _diMailboxData = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -711,11 +709,6 @@ namespace RiverHollow.Game_Managers
             return _diJobs.Count;
         }
 
-        public static string GetMonsterTraitData(string trait)
-        {
-            return _diMonsterTraits[trait];
-        }
-
         public static Actor CreateNPCByIndex(int id)
         {
             if (id != -1 && _diItemData.ContainsKey(id))
@@ -926,21 +919,14 @@ namespace RiverHollow.Game_Managers
             entry.FormatText(formatParameters);
             return entry;
         }
-        public static List<TextEntry> GetAllLetters()
+        public static List<string> GetMailboxData()
         {
-            List<TextEntry> rv = new List<TextEntry>();
-
-            foreach (var kvp in _diLetters)
-            {
-                rv.Add(GetLetter(kvp.Key));
-            }
-
-            return rv;
+            return _diMailboxData.Keys.ToList();
         }
 
-        public static TextEntry GetLetter(string messageID)
+        public static TextEntry GetMailboxLetter(string messageID)
         {
-            return new TextEntry(messageID, Util.DictionaryFromTaggedString(_diLetters[messageID]));
+            return new TextEntry(messageID, Util.DictionaryFromTaggedString(_diMailboxData[messageID]));
         }
         public static Dictionary<string, TextEntry> GetNPCDialogue(string key)
         {

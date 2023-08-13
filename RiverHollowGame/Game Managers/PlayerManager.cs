@@ -580,8 +580,6 @@ namespace RiverHollow.Game_Managers
 
             foreach(Child c in Children) { c.Rollover(); }
 
-            PlayerMailbox.Rollover();
-
             NewDayRecovery();
 
             MoveToSpawn();
@@ -1019,7 +1017,5 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-
-        public static Mailbox PlayerMailbox;
     }
 }

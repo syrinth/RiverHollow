@@ -138,6 +138,19 @@ namespace RiverHollow.Misc
             return _liCommands;
         }
 
+        #region Validation
+        private bool CheckIntValidation(string key, int validator, out bool valid)
+        {
+            bool rv = false;
+            if (_diTags.ContainsKey(key))
+            {
+                rv = true;
+                valid = validator == int.Parse(_diTags[key]);
+            }
+            else { valid = false; }
+
+            return rv;
+        }
         public bool Validate()
         {
             bool rv = false;
@@ -147,11 +160,29 @@ namespace RiverHollow.Misc
                 {
                     rv = true;
                 }
+                else { return false; }
+            }
+
+            if (CheckIntValidation("Day", GameCalendar.CurrentDay, out bool valid))
+            {
+                if (valid) { rv = true; }
+                else { return false; }
+            }
+
+            if (CheckIntValidation("Month", (int)GameCalendar.CurrentSeason, out valid))
+            {
+                if (valid) { rv = true; }
+                else { return false; }
+            }
+
+            if (CheckIntValidation("Year", GameCalendar.CurrentYear, out valid))
+            {
+                if (valid) { rv = true; }
+                else { return false; }
             }
 
             return rv;
         }
-
         /// <summary>
         /// This method is used to ensure that conditions are being met for TextEntries
         /// to be used. This method should only be used by Villagers.
@@ -229,6 +260,7 @@ namespace RiverHollow.Misc
 
             return rv;
         }
+        #endregion
 
         /// <summary>
         /// This method is called before a GUITextWindow is opened. Perform any special actions that need to be done here
@@ -267,7 +299,7 @@ namespace RiverHollow.Misc
                     int id = int.Parse(split[0]);
                     int number = split.Length == 1 ? 1 : int.Parse(split[1]);
 
-                    if (InventoryManager.HasSpaceInInventory(id, number))
+                    if (InventoryManager.HasSpaceInInventory(id, number) || talker == null)
                     {
                         InventoryManager.AddToInventory(id, number);
                     }
@@ -290,16 +322,12 @@ namespace RiverHollow.Misc
             {
                 GameManager.DIShops[int.Parse(_diTags["ShopTargetID"])].UnlockMerchandise(int.Parse(_diTags["UnlockItemID"]));
             }
-            if (_diTags.ContainsKey("SendMessage"))
-            {
-                PlayerManager.PlayerMailbox.SendMessage(_diTags["SendMessage"]);
-            }
             if (_diTags.ContainsKey("SendToTown"))
             {
                 ((Villager)GameManager.CurrentNPC).ReadySmokeBomb();
             }
 
-            if (talker.HasAssignedTask() && !CutsceneManager.Playing)
+            if (talker != null &&  talker.HasAssignedTask() && !CutsceneManager.Playing)
             {
                 RHTask task = talker.GetAssignedTask();
                 task.TaskIsTalking();

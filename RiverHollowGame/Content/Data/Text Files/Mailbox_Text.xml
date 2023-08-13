@@ -3,7 +3,12 @@
   <Asset Type="Dictionary[string, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Welcome to Town][Text:Morning! I saw you got in late last night, so I thought I'd just slide this in your mailbox for whenever you get up. When you're ready, meet me at the $WorldObject_39$ on the East side of town so we can get to work.][GameStart]</Value>
+      <Value>[Name:Guild of Merchants Note 1][Text:Hello $Name$. I trust this letter finds you well.
+Hopefully, by the time you read this, you will have done the basic task of setting up a $WorldObject_112$ as our Merchants have been informed of your little settlement.
+According to our records, $Actor_36$ will be arriving on Wednesday, and $Actor_38$ will be arriving on Friday.
+$Actor_36$ has a keen eye for monster parts and relics from before the war, while $Actor_38$ is looking for potions and reagents.
+I suggest you make yourself ready.
+Yours, Delian Fortenay, Guild of Merchants][Day:2][Month:1][Year:1]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -71,6 +71,7 @@
         public enum TaskTypeEnum { Build, Fetch, GroupSlay, Population, Slay, Talk };
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
+        public enum MailboxEnum { Unsent, Sent, Waiting };
 
         public enum GameIconEnum { None, Book, Coin, Hammer, Traveler };
 
