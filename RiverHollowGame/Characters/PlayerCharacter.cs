@@ -7,19 +7,19 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.WorldObjects;
 using RiverHollow.GUIComponents;
-using System.Diagnostics;
+
+using static RiverHollow.Utilities.Enums;
+using MonoGame.Extended.Sprites;
+using System;
 
 namespace RiverHollow.Characters
 {
     public class PlayerCharacter : CombatActor
     {
-        AnimatedSprite _sprEyes;
-        public AnimatedSprite EyeSprite => _sprEyes;
-        AnimatedSprite _sprHair;
-        public AnimatedSprite HairSprite => _sprHair;
+        public AnimatedSprite EyeSprite { get; private set; }
+        public AnimatedSprite HairSprite { get; private set; }
         public Color HairColor { get; private set; } = Color.White;
         public Color EyeColor { get; private set; } = Color.White;
         public int HairIndex { get; private set; } = 0;
@@ -33,7 +33,7 @@ namespace RiverHollow.Characters
 
         public override List<AnimatedSprite> GetSprites()
         {
-            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { BodySprite, _sprEyes, _sprHair, Chest?.Sprite, Hat?.Sprite, Legs?.Sprite };
+            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { BodySprite, EyeSprite, HairSprite, Chest?.Sprite, Hat?.Sprite, Legs?.Sprite };
             liRv.RemoveAll(x => x == null);
             return liRv;
         }
@@ -77,12 +77,17 @@ namespace RiverHollow.Characters
             SetHairType(HairIndex);
 
             //Loads the Sprites for the players body for the appropriate class
-            _sprEyes = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER), Constants.TILE_SIZE, Constants.TILE_SIZE);
-            _sprEyes.SetLinkedSprite(BodySprite, false);
+            EyeSprite = new AnimatedSprite(string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
+            EyeSprite.AddAnimation(DirectionEnum.Down, 0, 0, new Point(1, 1));
+            EyeSprite.AddAnimation(DirectionEnum.Right, Constants.TILE_SIZE, 0, new Point(1, 1));
+            EyeSprite.AddAnimation(DirectionEnum.Up, Constants.TILE_SIZE * 2, 0, new Point(1, 1));
+            EyeSprite.AddAnimation(DirectionEnum.Left, Constants.TILE_SIZE, 0, new Point(1, 1));
+            EyeSprite.GetFrameAnimation(Util.GetEnumString(DirectionEnum.Left)).Flip = true;
+            EyeSprite.SetLinkedSprite(BodySprite, false);
 
             BodySprite.SetColor(Color.White);
-            _sprHair.SetColor(HairColor);
-            _sprEyes.SetColor(EyeColor);
+            HairSprite.SetColor(HairColor);
+            EyeSprite.SetColor(EyeColor);
 #else
             BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_01", DataManager.FOLDER_PLAYER));// BodyTypeStr));
 #endif
@@ -99,12 +104,37 @@ namespace RiverHollow.Characters
                 _lightSource.Position = Position - new Point((_lightSource.Width - Width) / 2, (_lightSource.Height - Height) / 2);
             }
 
+            SyncSprite(HairSprite);
+            SyncSprite(EyeSprite);
+
             if (HasKnockbackVelocity())
             {
                 ApplyKnockbackVelocity();
             }
 
             CheckDamageTimers(gTime);
+        }
+
+        private void SyncSprite(AnimatedSprite spr)
+        {
+            var currFrame = BodySprite.CurrentFrameAnimation;
+            var frameIndex = currFrame.CurrentFrame;
+            switch (frameIndex)
+            {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                    spr.Position = Position - new Point(0, 1);
+                    break;
+                case 2:
+                case 6:
+                    spr.Position = Position - new Point(0, 2);
+                    break;
+                default:
+                    spr.Position = Position;
+                    break;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
@@ -160,35 +190,54 @@ namespace RiverHollow.Characters
         public void SetHairColor(Color c)
         {
             HairColor = c;
-            SetColor(_sprHair, c);
+            SetColor(HairSprite, c);
         }
 
         public void SetEyeColor(Color c)
         {
             EyeColor = c;
-            SetColor(_sprEyes, c);
+            SetColor(EyeSprite, c);
         }
         public void SetHairType(int index)
         { 
             HairIndex = index;
-            //Loads the Sprites for the players hair animations for the class based off of the hair ID
-            _sprHair = LoadSpriteAnimations(Util.LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Hairstyles\Hair_{1}", DataManager.FOLDER_PLAYER, HairIndex), Constants.TILE_SIZE, Constants.TILE_SIZE);
-            _sprHair.SetLayerDepthMod(Constants.HAIR_DEPTH);
-            _sprHair.SetColor(HairColor);
-            _sprHair.SetLinkedSprite(BodySprite, false);
+            var size = new Point(1, 1);
+
+            int row = HairIndex / Constants.PLAYER_HAIR_COLUMNS;
+            int column = (HairIndex - (row * Constants.PLAYER_HAIR_COLUMNS)) * 4;
+            int xCrawl = 0;
+
+            HairSprite = new AnimatedSprite(string.Format(@"{0}Hair", DataManager.FOLDER_PLAYER));
+            foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+            {
+                if (e == DirectionEnum.None) { continue; }
+
+                HairSprite.AddAnimation(e, (column * Constants.TILE_SIZE) + xCrawl, (row * Constants.TILE_SIZE), size);
+                xCrawl += Constants.TILE_SIZE;
+            }
+
+            HairSprite.SetColor(HairColor);
+            HairSprite.SetLinkedSprite(BodySprite, false);
         }
 
         public override void PlayAnimation<TEnum>(TEnum anim)
         {
-            GetSprites().ForEach(spr => spr.PlayAnimation(anim));
+            BodySprite.PlayAnimation(anim);
             Chest?.Sprite.PlayAnimation(anim);
         }
         public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
         {
             if (verb == VerbEnum.Walk && ActiveMount != null) { verb = VerbEnum.Idle; }
 
-            GetSprites().ForEach(spr => spr.PlayAnimation(verb, dir));
+            BodySprite.PlayAnimation(verb, dir);
             Chest?.Sprite.PlayAnimation(verb, dir);
+        }
+
+        public override void SetFacing(DirectionEnum dir)
+        {
+            base.SetFacing(dir);
+            HairSprite.PlayAnimation(dir);
+            EyeSprite.PlayAnimation(dir);
         }
 
         public void SetScale(int scale = 1)
@@ -222,7 +271,7 @@ namespace RiverHollow.Characters
             if (c.Equals(EquipmentEnum.Shirt)) { Chest = null; }
             else if (c.Equals(EquipmentEnum.Hat))
             {
-                _sprHair.FrameCutoff = 0;
+                HairSprite.FrameCutoff = 0;
                 Hat = null;
             }
         }

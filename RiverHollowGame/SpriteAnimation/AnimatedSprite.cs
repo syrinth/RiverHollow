@@ -14,7 +14,7 @@ namespace RiverHollow.SpriteAnimations
         AnimatedSprite _sprLinkedSprite;
         bool _bLinkBelow = false;
         public int FakeHeight = 0;
-        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth + (_bLinkBelow ? -0.1f : 0.1f)) : (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (Position.X / 10000f);
+        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth + (_bLinkBelow ? -Constants.SPRITE_LINKED_MOD : Constants.SPRITE_LINKED_MOD)) : (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (Position.X / 10000f);
 
         readonly Texture2D _texture;                         // The texture that holds the images for this sprite
         public Color SpriteColor { get; private set; } = Color.White;
@@ -340,6 +340,17 @@ namespace RiverHollow.SpriteAnimations
         public bool ContainsAnimation<TEnum>(TEnum val)
         {
             return _diFrameAnimations.ContainsKey(Util.GetEnumString(val));
+        }
+
+        public FrameAnimation GetFrameAnimation(string key)
+        {
+            FrameAnimation rv = null;
+            if (_diFrameAnimations.ContainsKey(key))
+            {
+                rv = _diFrameAnimations[key];
+            }
+
+            return rv;
         }
     }
 }

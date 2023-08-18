@@ -269,7 +269,7 @@ namespace RiverHollow.Characters
 
         public void SetState(ActorStateEnum e) { State = e; }
 
-        public void SetFacing(DirectionEnum dir)
+        public virtual void SetFacing(DirectionEnum dir)
         {
             Facing = dir;
         }

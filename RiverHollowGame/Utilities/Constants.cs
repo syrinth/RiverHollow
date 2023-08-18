@@ -18,10 +18,11 @@
         public const float PLAYER_STARTING_HP = 10;
         public const float PLAYER_STARTING_ENERGY = 150;
         public const float PLAYER_STARTING_MAGIC = 20;
-        public const int PLAYER_GEAR_ROWS = 3;
+        public const int PLAYER_GEAR_ROWS = 5;
         public const int PLAYER_GEAR_COLUMNS = 2;
         public const int ENERGY_NAP_RECOVERY = 20;
         public const int BUILDING_TRAVELER_BOOST = 70;
+        public const int PLAYER_HAIR_COLUMNS = 3;
 
         public const float PLAYER_INVULN_PERIOD = 1;
         public const float MOB_INVULN_PERIOD = 0.3f;
@@ -67,8 +68,7 @@
         public const int FISH_MISSES = 3;
 
         public const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
-        public const float EYE_DEPTH = 0.001f;
-        public const float HAIR_DEPTH = 0.003f;
+        public const float SPRITE_LINKED_MOD = 0.0001f;
 
         public const int KITCHEN_STOCK_ROW = 2;
         public const int KITCHEN_STOCK_COLUMN = 4;

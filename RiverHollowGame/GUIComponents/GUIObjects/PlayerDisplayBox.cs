@@ -54,6 +54,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             for (int i = 0; i < _liSprites.Count; i++)
             {
                 _liSprites[i].PlayAnimation(_eLastVerb, _eLastDir);
+                _liSprites[i].PlayAnimation(dir);
             }
         }
     }
