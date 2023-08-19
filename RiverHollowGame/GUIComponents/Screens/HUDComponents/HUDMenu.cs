@@ -121,7 +121,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public void BtnInventory()
         {
             var _gMenuObject = new HUDPlayerInventory();
-            _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }
         public void BtnTaskLog()

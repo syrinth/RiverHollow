@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.Screens
         readonly GUIInventoryWindow _altInventory;
         readonly PlayerDisplayBox _playerDisplay;
 
-        public HUDPlayerInventory()
+        public HUDPlayerInventory() : base()
         {
             InventoryManager.LockedInventory = false;
 

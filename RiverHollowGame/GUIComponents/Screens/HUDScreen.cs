@@ -6,12 +6,11 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents.Screens.HUDComponents;
-using Microsoft.Xna.Framework.Graphics;
 
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Utilities.Enums;
-
+using RiverHollow.GUIComponents.Screens.HUDWindows;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -20,7 +19,6 @@ namespace RiverHollow.GUIComponents.Screens
         List<HUDNewAlert> _liTaskIcons;
 
         GUIButton _btnSkipCutscene;
-        GUIObject _gMenu;
         GUIOldStatDisplay _gHealthDisplay;
         GUIOldStatDisplay _gStaminaDisplay;
         GUIOldStatDisplay _gMagicDisplay;
@@ -131,8 +129,48 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                 }
 
-                if (InputManager.CheckForInitialKeyDown(Keys.D1)) { }
+                if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyInventory))
+                {
+                    OpenMenuObject(new HUDPlayerInventory());
+                }
+
+                if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyCodex))
+                {
+                    OpenMenuObject(new HUDCodex());
+                }
+
+                if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyTasks))
+                {
+                    OpenMenuObject(new HUDTaskLog());
+                }
+
+                if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyOptions))
+                {
+                    OpenMenuObject(new HUDOptions());
+                }
+
+                if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyBuild))
+                {
+                    if (!IsMenuOpen())
+                    {
+                        OpenMenu(false);
+                    }
+                    else
+                    {
+                        CloseMenu();
+                    }
+                }
             }
+        }
+
+        private void OpenMenuObject(GUIMainObject obj)
+        {
+            if (!IsMenuOpen())
+            {
+                OpenMenu();
+            }
+
+            GUIManager.OpenMainObject(obj);
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -173,14 +211,18 @@ namespace RiverHollow.GUIComponents.Screens
         #endregion
 
         #region Menu
-        public override bool IsMenuOpen() { return _gMenu != null; }
-        public override void OpenMenu()
+        public bool IsMenuOpen() { return _gMenu != null; }
+        public void OpenMenu(bool mainMenu = true)
         {
             GUICursor.ResetCursor();
             _gMenu = new HUDMenu(CloseMenu);
+            if(!mainMenu)
+            {
+                _gMenu.NewButtonMenu(HUDMenuEnum.Build);
+            }
             AddControl(_gMenu);
         }
-        public override void CloseMenu()
+        public void CloseMenu()
         {
             if (_gMenu != null)
             {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -24,6 +25,14 @@ namespace RiverHollow.Game_Managers
         private static List<TriggerObject> _liTriggerObjects;
         private static List<Spirit> _liSpirits;
         public static Dictionary<int, Shop> DIShops;
+        #endregion
+
+        #region HoyKeys
+        public static Keys HotkeyBuild { get; private set; } = Keys.B;
+        public static Keys HotkeyCodex { get; private set; } = Keys.C;
+        public static Keys HotkeyInventory { get; private set; } = Keys.I;
+        public static Keys HotkeyOptions { get; private set; } = Keys.O;
+        public static Keys HotkeyTasks { get; private set; } = Keys.T;
         #endregion
 
         #region Interaction Objects

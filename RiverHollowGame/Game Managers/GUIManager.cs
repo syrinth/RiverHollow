@@ -256,6 +256,11 @@ namespace RiverHollow.Game_Managers
     {
         protected GUIWindow _winMain;
 
+        public GUIMainObject() : base()
+        {
+            RemoveScreen();
+        }
+
         /// <summary>
         /// Creates a new GUIWindow, adds it to the Controls of the object, sets the Height
         /// and Width of the object to that of the GUIWindow then centers it on the screen.

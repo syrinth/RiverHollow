@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
@@ -373,7 +372,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 Controls.Add(g);
                 g.Parent = this;
-                g.Screen?.RemoveControl(g);
                 g.RemoveScreen();
             }
         }
@@ -402,8 +400,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        private void RemoveScreen()
+        protected void RemoveScreen()
         {
+            Screen?.RemoveControl(this);
             Screen = null;
         }
 

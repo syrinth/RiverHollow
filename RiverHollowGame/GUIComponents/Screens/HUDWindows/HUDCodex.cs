@@ -54,15 +54,16 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             AddTab(3, ShowMobs, GUIUtils.TOGGLE_MOBS_ON, GUIUtils.TOGGLE_MOBS_OFF);
             AddTab(4, ShowItems, GUIUtils.TOGGLE_ITEMS_ON, GUIUtils.TOGGLE_ITEMS_OFF);
 
+            int index = 0;
             _gItemToggles = new GUIToggle[5];
-            AddItemToggle(0, ItemResourceToggle, GUIUtils.TOGGLE_RESOURCE_OFF, GUIUtils.TOGGLE_RESOURCE_ON);
-            AddItemToggle(1, ItemPotionToggle, GUIUtils.TOGGLE_POTIONS_OFF, GUIUtils.TOGGLE_POTIONS_ON);
-            AddItemToggle(2, ItemToolToggle, GUIUtils.TOGGLE_TOOLS_OFF, GUIUtils.TOGGLE_TOOLS_ON);
-            AddItemToggle(3, ItemFoodToggle, GUIUtils.TOGGLE_FOOD_OFF, GUIUtils.TOGGLE_FOOD_ON);
-            AddItemToggle(4, ItemSpecialToggle, GUIUtils.TOGGLE_SPECIAL_OFF, GUIUtils.TOGGLE_SPECIAL_ON);
+            AddItemToggle(index++, ItemResourceToggle, GUIUtils.TOGGLE_RESOURCE_OFF, GUIUtils.TOGGLE_RESOURCE_ON);
+            AddItemToggle(index++, ItemPotionToggle, GUIUtils.TOGGLE_POTIONS_OFF, GUIUtils.TOGGLE_POTIONS_ON);
+            AddItemToggle(index++, ItemToolToggle, GUIUtils.TOGGLE_TOOLS_OFF, GUIUtils.TOGGLE_TOOLS_ON);
+            AddItemToggle(index++, ItemFoodToggle, GUIUtils.TOGGLE_FOOD_OFF, GUIUtils.TOGGLE_FOOD_ON);
+            AddItemToggle(index++, ItemSpecialToggle, GUIUtils.TOGGLE_SPECIAL_OFF, GUIUtils.TOGGLE_SPECIAL_ON);
 
-            _gTabToggles[0].AssignToggleGroup(_gTabToggles[1], _gTabToggles[2], _gTabToggles[3], _gTabToggles[4]);
-            _gItemToggles[0].AssignToggleGroup(_gItemToggles[1], _gItemToggles[2], _gItemToggles[3]);
+            _gTabToggles[0].AssignToggleGroup(_gTabToggles.Where(x => x != _gTabToggles[0]).ToArray());
+            _gItemToggles[0].AssignToggleGroup(_gItemToggles.Where(x => x != _gItemToggles[0]).ToArray());
 
             SetUpActorWindows();
         }

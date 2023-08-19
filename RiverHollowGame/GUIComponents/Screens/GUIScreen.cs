@@ -5,6 +5,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.GUIComponents.Screens.HUDComponents;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 
@@ -17,6 +18,8 @@ namespace RiverHollow.GUIComponents.Screens
         protected GUIImage _guiBackgroundImg;
         protected GUITextWindow _guiTextWindow;
         protected GUIObject _gHoverObject;
+        protected HUDMenu _gMenu;
+
         Rectangle _rHoverArea;
         bool _bGUIObject;
         protected GUITextSelectionWindow _gSelectionWindow;
@@ -108,8 +111,8 @@ namespace RiverHollow.GUIComponents.Screens
             _gHoverObject?.Draw(spriteBatch);
         }
 
-        public virtual bool IsMenuOpen() { return false; }
-        public virtual void OpenMenu() { }
+        public virtual bool IsMenuOpen() { return _gMenu != null; }
+        public virtual void OpenMenu(bool mainMenu = true) { }
         public virtual void CloseMenu() { }
 
         protected virtual void HandleInput() { }
@@ -233,9 +236,22 @@ namespace RiverHollow.GUIComponents.Screens
         public bool IsMainObjectOpen() { return _gMainObject != null; }
         public virtual void OpenMainObject(GUIMainObject o)
         {
+            bool openObject = true;
+
+            if (_gMainObject != null)
+            {
+                var type1 = o.GetType();
+                var type2 = _gMainObject.GetType();
+
+                openObject = !type1.Equals(type2);
+            }
             CloseMainObject();
-            _gMainObject = o;
-            AddControl(_gMainObject);
+
+            if (openObject)
+            {
+                _gMainObject = o;
+                AddControl(_gMainObject);
+            }
         }
         public virtual bool CloseMainObject()
         {

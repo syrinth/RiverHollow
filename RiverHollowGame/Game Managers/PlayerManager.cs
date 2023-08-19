@@ -11,11 +11,12 @@ using RiverHollow.Utilities;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 
-using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items.Tools;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Game_Managers
 {
@@ -191,7 +192,7 @@ namespace RiverHollow.Game_Managers
                 ReleaseTile();
             }
             
-            if (AllowMovement && PlayerActor.HasHP)
+            if (!GameManager.GamePaused() && AllowMovement && PlayerActor.HasHP)
             {
                 if(ObtainedItem != null)
                 {
