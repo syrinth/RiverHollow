@@ -49,5 +49,15 @@ namespace RiverHollow.Misc
                 PingPong = splitString[4].Equals("T");
             }
         }
+
+        public void SetYValue(int value)
+        {
+            YLocation = value;
+        }
+
+        public void ModXValue(int value)
+        {
+            XLocation += value;
+        }
     }
 }

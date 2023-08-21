@@ -902,6 +902,16 @@ namespace RiverHollow.Utilities
                 rarityDictionary[rarity].Add(new SpawnData(resourceID, t));
             }
         }
+
+        public static Point GetPointFromIndex(int index, int maxColumns, int columnWidth)
+        {
+            Point rv = Point.Zero;
+
+            rv.Y = index / maxColumns;
+            rv.X = (index - (rv.Y * maxColumns)) * columnWidth;
+
+            return rv;
+        }
     }
 
     public class RHRandom : Random

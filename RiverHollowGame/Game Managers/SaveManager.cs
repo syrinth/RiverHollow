@@ -123,7 +123,7 @@ namespace RiverHollow.Game_Managers
             public ItemData hat;
 
             [XmlElement(ElementName = "Chest")]
-            public ItemData chest;
+            public ItemData shirt;
 
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;

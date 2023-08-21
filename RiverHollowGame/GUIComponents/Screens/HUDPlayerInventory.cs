@@ -32,7 +32,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             AddControl(_altInventory);
 
-            _playerDisplay = new PlayerDisplayBox(PlayerManager.PlayerActor, GUIUtils.PLAYER_INVENTORY_PANE, new Point(6, 1));
+            _playerDisplay = new PlayerDisplayBox(GUIUtils.PLAYER_INVENTORY_PANE, new Point(6, 1));
             _playerDisplay.PositionAndMove(_altInventory, new Point(31, 17));
 
             _playerInventory.AnchorAndAlignWithSpacing(_altInventory, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);

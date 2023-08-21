@@ -57,7 +57,7 @@ namespace RiverHollow.GUIComponents.Screens
             _window.CenterOnScreen();
 
             //Create Player Display Box
-            _displayBox = new PlayerDisplayBox(PlayerManager.PlayerActor, GUIUtils.NEW_DISPLAY, new Point(17, 14));
+            _displayBox = new PlayerDisplayBox(GUIUtils.NEW_DISPLAY, new Point(17, 14));
             _displayBox.PositionAndMove(_window, 23, 17);
 
             //Create Turn Buttons
@@ -188,7 +188,10 @@ namespace RiverHollow.GUIComponents.Screens
                 clothesList.Add(int.Parse(s));
             }
 
-            PlayerManager.PlayerActor.SetClothes((Clothing)DataManager.GetItem(clothesList[0]));
+            PlayerManager.PlayerActor.PlayerGear[1, 0] = (Clothing)DataManager.GetItem(clothesList[0]);
+            PlayerManager.PlayerActor.SetClothing((Clothing)DataManager.GetItem(clothesList[0]));
+            PlayerManager.PlayerActor.PlayerGear[2, 0] = (Clothing)DataManager.GetItem(clothesList[1]);
+            PlayerManager.PlayerActor.SetClothing((Clothing)DataManager.GetItem(clothesList[1]));
         }
         public void SetSelection(GUITextInputWindow g)
         {
@@ -235,7 +238,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             PlayerManager.PlayerActor.SetBodyType(_iCurrBodyType);
 
-            _displayBox.AssignActor(PlayerManager.PlayerActor);
+            _displayBox.SyncSprites();
         }
         private void AssignColorPicker(OptionLabel obj, ChangeColorDelegate colorDel)
         {
@@ -247,12 +250,12 @@ namespace RiverHollow.GUIComponents.Screens
         private void ChangeHairColor(Color c)
         {
             PlayerManager.PlayerActor.SetHairColor(c);
-            _displayBox.AssignActor(PlayerManager.PlayerActor);
+            _displayBox.SyncSprites();
         }
         private void ChangeEyeColor(Color c)
         {
             PlayerManager.PlayerActor.SetEyeColor(c);
-            _displayBox.AssignActor(PlayerManager.PlayerActor);
+            _displayBox.SyncSprites();
         }
         private int ChangeHairType(bool increase)
         {
@@ -261,7 +264,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             PlayerManager.PlayerActor.SetHairType(_iHairTypeIndex);
 
-            _displayBox.AssignActor(PlayerManager.PlayerActor);
+            _displayBox.SyncSprites();
 
             return _iHairTypeIndex;
         }
@@ -271,7 +274,7 @@ namespace RiverHollow.GUIComponents.Screens
            // else { _iHatIndex = 0; }
 
             //SyncClothing((Clothing)DataManager.GetItem((_liHats[_iHatIndex])), ClothingEnum.Hat);
-            _displayBox.AssignActor(PlayerManager.PlayerActor);
+            _displayBox.SyncSprites();
         }
         private void BtnNextShirt()
         {
@@ -279,7 +282,7 @@ namespace RiverHollow.GUIComponents.Screens
             else { _iShirtIndex = 0; }
 
             //SyncClothing((Clothing)DataManager.GetItem((_liShirts[_iShirtIndex])), ClothingEnum.Body);
-            _displayBox.AssignActor(PlayerManager.PlayerActor);
+            _displayBox.SyncSprites();
         }
         private void BtnPregnancy()
         {

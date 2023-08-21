@@ -695,11 +695,11 @@
     </Item>
     <Item>
       <Key>173</Key>
-      <Value>[Type:Clothing][Subtype:Chest][Image:1-4][Value:0][Row:1][TexName:401][Key:Blue_Tunic]</Value>
+      <Value>[Type:Clothing][Subtype:Shirt][Image:1-4][Value:0][Row:1][TexName:401][Key:Blue_Tunic]</Value>
     </Item>
     <Item>
       <Key>174</Key>
-      <Value>[Type:Clothing][Subtype:Shirt][Image:2-4][Value:0][Row:2][TexName:404][Key:Blue_Tunic]</Value>
+      <Value>[Type:Clothing][Subtype:Pants][Image:0-0]</Value>
     </Item>
     <Item>
       <Key>175</Key>

@@ -355,7 +355,6 @@ Exit:
                     if (inventory[validRow, validCol].Number + itemToAdd.Number > 999)
                     {
                         int numToAdd = 999 - inventory[validRow, validCol].Number;
-                        int leftOver = itemToAdd.Number - numToAdd;
 
                         inventory[validRow, validCol].Add(numToAdd, inventory == PlayerInventory);
                         itemToAdd.Remove(numToAdd);
@@ -444,6 +443,11 @@ Exit:
                         rv = true;
                     }
                 }
+
+                if (inventory == PlayerManager.PlayerActor.PlayerGear && item.CompareType(ItemEnum.Clothing))
+                {
+                    PlayerManager.PlayerActor.SetClothing(item as Clothing);
+                }
             }
             return rv;
         }
@@ -464,6 +468,11 @@ Exit:
             if (inventory == PlayerInventory)
             {
                 TaskManager.CheckItemCount();
+            }
+
+            if (inventory == PlayerManager.PlayerActor.PlayerGear && inventory[row, column].CompareType(ItemEnum.Clothing))
+            {
+                PlayerManager.PlayerActor.RemoveClothing(inventory[row, column] as Clothing);
             }
 
             inventory[row, column] = null;

@@ -22,7 +22,11 @@
         public const int PLAYER_GEAR_COLUMNS = 2;
         public const int ENERGY_NAP_RECOVERY = 20;
         public const int BUILDING_TRAVELER_BOOST = 70;
-        public const int PLAYER_HAIR_COLUMNS = 3;
+        public const int PLAYER_EXTRAS_COLUMNS = 5;
+        public const int PLAYER_HAT_OFFSET = -4;
+        public const int PLAYER_SHIRT_OFFSET = 9;
+        public const int PLAYER_PANTS_OFFSET = 16;
+
 
         public const float PLAYER_INVULN_PERIOD = 1;
         public const float MOB_INVULN_PERIOD = 0.3f;

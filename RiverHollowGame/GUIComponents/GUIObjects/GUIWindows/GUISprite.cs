@@ -113,17 +113,17 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (_sprEyes != null) { _liSprites.Add(_sprEyes); }
             if (_sprHair != null) { _liSprites.Add(_sprHair); }
             if (PlayerManager.PlayerActor.Hat != null) {
-                _sprHat = new GUISprite(PlayerManager.PlayerActor.Hat.Sprite, overwrite);
+                _sprHat = new GUISprite(PlayerManager.PlayerActor.Hat.GetSprite(), overwrite);
                 _liSprites.Add(_sprHat);
             }
-            if (PlayerManager.PlayerActor.Chest != null)
+            if (PlayerManager.PlayerActor.Shirt != null)
             {
-                _sprChest = new GUISprite(PlayerManager.PlayerActor.Chest.Sprite, overwrite);
+                _sprChest = new GUISprite(PlayerManager.PlayerActor.Shirt.GetSprite(), overwrite);
                 _liSprites.Add(_sprChest);
             }
-            if (PlayerManager.PlayerActor.Legs != null)
+            if (PlayerManager.PlayerActor.Pants != null)
             {
-                _sprLegs = new GUISprite(PlayerManager.PlayerActor.Legs.Sprite, overwrite);
+                _sprLegs = new GUISprite(PlayerManager.PlayerActor.Pants.GetSprite(), overwrite);
                 _liSprites.Add(_sprLegs);
             }
 
