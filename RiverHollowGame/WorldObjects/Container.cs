@@ -3,7 +3,6 @@ using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -35,6 +34,7 @@ namespace RiverHollow.WorldObjects
         public override bool ProcessRightClick()
         {
             GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, DisplayTypeEnum.Inventory));
+            InventoryManager.SetHoldItem(GetEnumByIDKey<ItemEnum>("ItemType"));
             return true;
         }
 

@@ -1,4 +1,5 @@
-﻿using RiverHollow.Utilities;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -50,14 +51,10 @@ namespace RiverHollow.Misc
             }
         }
 
-        public void SetYValue(int value)
+        public void ChangeLocation(Point offset)
         {
-            YLocation = value;
-        }
-
-        public void ModXValue(int value)
-        {
-            XLocation += value;
+            XLocation += offset.X;
+            YLocation += offset.Y;
         }
     }
 }

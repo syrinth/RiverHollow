@@ -10,6 +10,7 @@ namespace RiverHollow.Game_Managers
     {
         #region Properties
         public static DisplayTypeEnum CurrentInventoryDisplay;
+        public static ItemEnum HoldItem;
 
         public static bool LockedInventory = false;
         public static int maxItemRows = 4;
@@ -50,9 +51,14 @@ namespace RiverHollow.Game_Managers
             ExtraInventory = inventory;
         }
 
+        public static void SetHoldItem(ItemEnum itemType)
+        {
+            HoldItem = itemType;
+        }
         public static void ClearExtraInventory()
         {
             ExtraInventory = null;
+            HoldItem = ItemEnum.None;
         }
 
         #region Helpers

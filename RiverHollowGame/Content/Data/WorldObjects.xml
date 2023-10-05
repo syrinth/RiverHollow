@@ -673,5 +673,9 @@
       <Key>167</Key>
       <Value>[Type:Buildable][Subtype:Decor][Image:0-10][Size:2-3][Base:0-1-2-2][ReqItems][Display][DisplayOffset:8-10]</Value>
     </Item>
+    <Item>
+      <Key>168</Key>
+      <Value>[Type:Buildable][Subtype:Container][Image:1-7][Size:2-3][Base:0-2-2-1][ReqItems][Rows:2][Cols:10][ItemType:Clothing]</Value>
+    </Item>
   </Asset>
 </XnaContent>

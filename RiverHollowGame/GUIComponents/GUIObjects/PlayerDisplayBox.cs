@@ -42,6 +42,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _arrClothing[2] != PlayerManager.PlayerActor.Pants)
             {
                 SyncSprites();
+
+                _arrClothing[0] = PlayerManager.PlayerActor.Hat;
+                _arrClothing[1] = PlayerManager.PlayerActor.Shirt;
+                _arrClothing[2] = PlayerManager.PlayerActor.Pants;
             }
         }
 
@@ -67,9 +71,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 spr.PositionAndMove(this, _pMoveBy);
 
                 int mod = 0;
-                if(sprite == PlayerManager.PlayerActor.HatSprite) { mod = Constants.PLAYER_HAT_OFFSET; }
-                else if(sprite == PlayerManager.PlayerActor.ShirtSprite) { mod = Constants.PLAYER_SHIRT_OFFSET; }
-                else if(sprite == PlayerManager.PlayerActor.PantsSprite) { mod = Constants.PLAYER_PANTS_OFFSET; }
+                if (sprite == PlayerManager.PlayerActor.HatSprite) { mod = Constants.PLAYER_HAT_OFFSET; }
+                else if (sprite == PlayerManager.PlayerActor.ShirtSprite) { mod = Constants.PLAYER_SHIRT_OFFSET; }
+                else if (sprite == PlayerManager.PlayerActor.PantsSprite) { mod = Constants.PLAYER_PANTS_OFFSET; }
 
                 spr.ScaledMoveBy(0, mod);
                 _liSprites.Add(spr);

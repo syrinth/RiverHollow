@@ -69,8 +69,8 @@ namespace RiverHollow.Characters
             _liTilePath = new List<RHTile>();
 
 #if DEBUG
-            BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
-            ArmSprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17], 35), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
+            BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17], Point.Zero), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
+            ArmSprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17], new Point(0, 35)), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
 
             //Hair type has already been set either by default or by being allocated.
             SetHairType(HairIndex);
@@ -97,7 +97,14 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
+            if (PantsSprite.CurrentFrameAnimation.FrameCount > 1 && PantsSprite.GetPlayCount() > 1)
+            {
+                ErrorManager.TrackError();
+
+            }
             base.Update(gTime);
+
+
             if (_lightSource != null)
             {
                 _lightSource.Position = Position - new Point((_lightSource.Width - Width) / 2, (_lightSource.Height - Height) / 2);
@@ -107,7 +114,8 @@ namespace RiverHollow.Characters
             SyncSprite(EyeSprite, 0);
             SyncSprite(HatSprite, Constants.PLAYER_HAT_OFFSET);
             SyncSprite(ShirtSprite, Constants.PLAYER_SHIRT_OFFSET);
-            SyncSprite(PantsSprite, Constants.PLAYER_PANTS_OFFSET);
+
+            PantsSprite.Position = BodySprite.Position + new Point(0, Constants.PLAYER_PANTS_OFFSET); 
 
             if (HasKnockbackVelocity())
             {
@@ -173,7 +181,7 @@ namespace RiverHollow.Characters
             _lightSource?.Draw(spriteBatch);
         }
 
-        private List<AnimationData> LoadPlayerAnimations(Dictionary<string, string> data, int yOffset = 0)
+        private List<AnimationData> LoadPlayerAnimations(Dictionary<string, string> data, Point shiftedValue)
         {
             List<AnimationData> rv;
             rv = Util.LoadPlayerAnimations(data);
@@ -181,11 +189,11 @@ namespace RiverHollow.Characters
             Util.AddToAnimationsList(ref rv, data, VerbEnum.UseTool, true, true);
             Util.AddToAnimationsList(ref rv, data, AnimationEnum.Pose);
 
-            if (yOffset != 0)
+            if (shiftedValue != Point.Zero)
             {
                 foreach (AnimationData d in rv)
                 {
-                    d.SetYValue(yOffset);
+                    d.ChangeLocation(shiftedValue);
                 }
             }
             return rv;
@@ -231,6 +239,7 @@ namespace RiverHollow.Characters
         {
             BodySprite.PlayAnimation(anim);
             ArmSprite.PlayAnimation(anim);
+            PantsSprite?.PlayAnimation(anim);
         }
         public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
         {
@@ -238,6 +247,7 @@ namespace RiverHollow.Characters
 
             BodySprite.PlayAnimation(verb, dir);
             ArmSprite.PlayAnimation(verb, dir);
+            PantsSprite?.PlayAnimation(verb, dir);
         }
 
         public override void SetFacing(DirectionEnum dir)
@@ -247,6 +257,7 @@ namespace RiverHollow.Characters
             EyeSprite?.PlayAnimation(dir);
             HatSprite?.PlayAnimation(dir);
             ShirtSprite?.PlayAnimation(dir);
+            PantsSprite?.PlayAnimation(dir);
         }
 
         public void SetScale(int scale = 1)
@@ -263,6 +274,7 @@ namespace RiverHollow.Characters
                 newSprite.PlayAnimation(BodySprite.CurrentAnimation);
                 newSprite.SetLinkedSprite(HairSprite, false);
 
+                //ToDo: Fix the clothing layer syncing.
                 switch (c.ClothingType)
                 {
                     case EquipmentEnum.Hat:
@@ -279,6 +291,8 @@ namespace RiverHollow.Characters
                         ArmSprite.SetLinkedSprite(PantsSprite, false);
                         break;
                 }
+
+                SetLinkedSprites();
             }
         }
 
@@ -296,6 +310,8 @@ namespace RiverHollow.Characters
                     PantsSprite = null;
                     break;
             }
+
+            SetLinkedSprites();
         }
 
         public void SetBodyType(int val)
@@ -304,6 +320,29 @@ namespace RiverHollow.Characters
             SetClothing(Hat);
             SetClothing(Shirt);
             SetClothing(Pants);
+        }
+
+        private void SetLinkedSprites()
+        {
+            AnimatedSprite temp = BodySprite;
+            LinkedSpriteHelper(PantsSprite, ref temp);
+            LinkedSpriteHelper(ShirtSprite, ref temp);
+
+            ArmSprite.SetLinkedSprite(temp, false);
+            EyeSprite.SetLinkedSprite(temp, false);
+            HairSprite.SetLinkedSprite(EyeSprite, false);
+            temp = HairSprite;
+
+            LinkedSpriteHelper(HatSprite, ref temp);
+        }
+
+        private void LinkedSpriteHelper(AnimatedSprite testSprite, ref AnimatedSprite temp)
+        {
+            if (testSprite != null)
+            {
+                testSprite.SetLinkedSprite(temp, false);
+                temp = testSprite;
+            }
         }
 
         public void SetPet(Pet actor)

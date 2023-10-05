@@ -8,12 +8,12 @@ using RiverHollow.Utilities;
 using System.Collections.Generic;
 using System.Threading;
 
-using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents;
 using System;
 using RiverHollow.WorldObjects;
-using MonoGame.Extended.Sprites;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Characters
 {
@@ -55,7 +55,7 @@ namespace RiverHollow.Characters
         protected ActorCollisionState _eCollisionState = ActorCollisionState.Block;
 
         public string CurrentMapName;
-        public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
+        public RHMap CurrentMap => (!string.IsNullOrEmpty(CurrentMapName) && MapManager.Maps.ContainsKey(CurrentMapName) ? MapManager.Maps[CurrentMapName] : null);
         public bool OnTheMap { get; protected set; } = true;
         public Point NewMapPosition;
         public bool OnScreen() { return CurrentMap == MapManager.CurrentMap; }
@@ -143,9 +143,12 @@ namespace RiverHollow.Characters
 
         public virtual void Update(GameTime gTime)
         {
-            foreach (AnimatedSprite spr in GetSprites())
+            if (CurrentMap == MapManager.CurrentMap)
             {
-                spr.Update(gTime);
+                foreach (AnimatedSprite spr in GetSprites())
+                {
+                    spr.Update(gTime);
+                }
             }
 
             if (!GamePaused())

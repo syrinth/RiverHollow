@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
-using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 using static RiverHollow.Misc.RHTask;
-using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {

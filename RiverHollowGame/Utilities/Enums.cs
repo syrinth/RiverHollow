@@ -37,7 +37,7 @@
         public enum FishingStateEnum { None, Cast, WaitForFish, AttemptToCatch, Finish, Get };
 
         public enum ItemGroupEnum { None, Artifact, Ceramic, Construction, Clothing, Fish, Flower, Food, Gem, Herb, Ingredient, Magic, Meal, Medicine, Metal, MonsterPart, Ore};
-        public enum ItemEnum { Resource, Blueprint, Buildable, Clothing, Consumable, Food, MonsterFood, NPCToken, Seed, Special, Tool };
+        public enum ItemEnum { None, Resource, Blueprint, Buildable, Clothing, Consumable, Food, MonsterFood, NPCToken, Seed, Special, Tool };
         public enum FoodTypeEnum { Dessert, Fancy, Healthy, Plain, Seafood };
         public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Hoe, StaffOfIce, Sword, WateringCan };
         public enum EquipmentEnum { None, Hat, Shirt, Pants, Neck, Ring };

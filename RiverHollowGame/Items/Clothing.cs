@@ -47,8 +47,8 @@ namespace RiverHollow.Items
             int xCrawl = 0;
             AnimatedSprite sprite =  new AnimatedSprite(GetTextureName());
 
-            //if (ClothingType != EquipmentEnum.Pants)
-           // {
+            if (ClothingType != EquipmentEnum.Pants)
+            {
                 foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
                 {
                     if (e == DirectionEnum.None) { continue; }
@@ -56,43 +56,41 @@ namespace RiverHollow.Items
                     sprite.AddAnimation(e, ((_pSourcePos.X + 1) * Constants.TILE_SIZE) + xCrawl, (_pSourcePos.Y * Constants.TILE_SIZE), size);
                     xCrawl += Constants.TILE_SIZE;
                 }
-          //  }
-           // else
-           // {
-                //var data = DataManager.Config[17];
-                //List<AnimationData> dataList = Util.LoadPlayerAnimations(data);
+            }
+            else
+            {
+                var data = DataManager.Config[17];
+                List<AnimationData> dataList = Util.LoadPlayerAnimations(data);
 
-                //Util.AddToAnimationsList(ref dataList, data, VerbEnum.UseTool, true, true);
-                //Util.AddToAnimationsList(ref dataList, data, AnimationEnum.Pose);
+                foreach (AnimationData d in dataList)
+                {
+                    xCrawl = 0;
+                    d.ChangeLocation(new Point(Constants.TILE_SIZE, _pSourcePos.Y * Constants.TILE_SIZE));
 
-                //foreach(AnimationData d in dataList)
-                //{
-                //    d.SetYValue(_pSourcePos.Y * Constants.TILE_SIZE);
-                //    d.ModXValue(Constants.TILE_SIZE);
+                    if (d.Directional)
+                    {
+                        foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                        {
+                            if (e == DirectionEnum.None) { continue; }
+                            sprite.AddAnimation(d.Verb, e, d.XLocation + xCrawl, d.YLocation * Constants.TILE_SIZE, Constants.TILE_SIZE, Constants.TILE_SIZE, d.Frames, d.FrameSpeed, false, d.Verb == VerbEnum.Action1);
+                            xCrawl += (d.Frames * Constants.TILE_SIZE);
+                        }
 
-                //    if (d.Directional)
-                //    {
-                //        foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
-                //        {
-                //            if (e == DirectionEnum.None) { continue; }
-                //            AddSpriteAnimation(ref sprite, ref xCrawl, e, d, width, height, pingpong);
-                //        }
-
-                //        if (backToIdle)
-                //        {
-                //            foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
-                //            {
-                //                if (e == DirectionEnum.None) { continue; }
-                //                SetNextAnimationToIdle(ref sprite, d.Verb, e);
-                //            }
-                //        }
-                //    }
-                //    else
-                //    {
-                //        sprite.AddAnimation(d.Animation, d.XLocation, d.YLocation, Constants.TILE_SIZE, Constants.TILE_SIZE, d.Frames, d.FrameSpeed, d.PingPong, d.PlayOnce);
-                //    }
-                //}
-            //}
+                        if (d.BackToIdle)
+                        {
+                            foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                            {
+                                if (e == DirectionEnum.None) { continue; }
+                                sprite.SetNextAnimation(Util.GetActorString(d.Verb, e), Util.GetActorString(VerbEnum.Idle, e));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        sprite.AddAnimation(d.Animation, d.XLocation, d.YLocation, Constants.TILE_SIZE, Constants.TILE_SIZE, d.Frames, d.FrameSpeed, d.PingPong, d.PlayOnce);
+                    }
+                }
+            }
             return sprite;
         }
     }

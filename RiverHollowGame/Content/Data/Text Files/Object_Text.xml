@@ -2047,6 +2047,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Square Table]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_168</Key>
+      <Value>[Name:Dresser]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Combat_Intro]</Value>
     </Item>

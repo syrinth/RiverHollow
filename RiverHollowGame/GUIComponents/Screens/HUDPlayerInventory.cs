@@ -105,6 +105,7 @@ namespace RiverHollow.GUIComponents.Screens
         public override void CloseMainWindow()
         {
             InventoryManager.CleanupInventoryDisplay();
+            PlayerManager.PlayerActor.SetFacing(PlayerManager.PlayerActor.Facing);
             base.CloseMainWindow();
         }
     }

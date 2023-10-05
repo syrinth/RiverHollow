@@ -127,6 +127,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 rv = true;
                 if (GameManager.HeldItem != null)
                 {
+                    if (!HoldsItem(GameManager.HeldItem))
+                    {
+                        return false;
+                    }
+
                     bool canPlaceItem = ItemCanGoThere(itemBox, GameManager.HeldItem);
 
                     var toSwitch = itemBox.BoxItem;
@@ -200,9 +205,14 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 GUIItemBox i = GetItemBox(mouse);
                 if (i != null && i.BoxItem != null)
                 {
+                    if (!HoldsItem(i.BoxItem))
+                    {
+                        return false;
+                    }
+
                     //If the only inventory we are working with is the player's inventory,
                     //pass the handler to the GUIItemBox and have it handle the item click
-                    if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory)
+                    if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && i.BoxItem.ItemType != ItemEnum.Clothing)
                     {
                         rv = i.BoxItem.ItemBeingUsed();
                     }
@@ -241,7 +251,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             if(InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && _bPlayerInventory)
                             {
                                 temp = InventoryManager.GetItemFromLocation(row, col, !_bPlayerInventory);
-                                InventoryManager.RemoveItemFromInventorySpot(row, col, !_bPlayerInventory);
+                                if (temp != null)
+                                {
+                                    InventoryManager.RemoveItemFromInventorySpot(row, col, !_bPlayerInventory);
+                                }
                             }
 
                             Item clickedItem = TakeItem(mouse, takeHalf);
@@ -275,6 +288,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (rv && IsItemThere(mouse) == null) { GUIManager.CloseHoverWindow(); }
 
             return rv;
+        }
+
+        private bool HoldsItem(Item i)
+        {
+            return _bPlayerInventory || InventoryManager.HoldItem == ItemEnum.None || i.ItemType == InventoryManager.HoldItem;
         }
 
         private GUIItemBox GetItemBox(Point mouse)

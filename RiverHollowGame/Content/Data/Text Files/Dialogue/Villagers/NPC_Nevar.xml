@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.][Name:IntroYes]</Value>
+      <Value>[Name:IntroYes][Text:Oh. How interesting. In that case, you should speak with $2$, he and his husband make excellent weapons.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -15,15 +15,15 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Text:What does that even mean?][Name:IntroMaybe]</Value>
+      <Value>[Name:IntroMaybe][Text:What does that even mean?]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:Hello $Name$. I hope you're well today.][Default][Name:4]</Value>
+      <Value>[Name:Insects][Text:I was speaking to the insects in the forest last night. They didn't have anything interesting to say, but they're good listeners.][Default]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Text:You seem stressed, have you been making sure to get enough rest? A warrior is useless without sleep.][Default][Name:5]</Value>
+      <Value>[Name:Strange People][Text:I've been alone for quite some time you know. Being around people agian is... strange, but exhilarating. You are all so very strange.][Default]</Value>
     </Item>
     <Item>
       <Key>6</Key>
