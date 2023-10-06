@@ -147,7 +147,7 @@
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:Monster][Wants:Artifact]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:MonsterPart][Wants:Artifact]</Value>
     </Item>
     <Item>
       <Key>37</Key>

@@ -19,8 +19,7 @@ namespace RiverHollow.Items
 
         public override string GetDetails()
         {
-            string rv = base.Description();
-            rv += System.Environment.NewLine;
+            string rv = string.Empty;
             if (Stamina > 0) { rv += "Stamina: +" + Stamina + " "; }
             rv = rv.Trim();
 

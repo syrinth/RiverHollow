@@ -125,7 +125,7 @@ namespace RiverHollow.Characters
         }
         public int EvaluateItem(Item it, ref Color c)
         {
-            if (it == null || it.CompareType(ItemEnum.Tool) || it.IsItemGroup(ItemGroupEnum.None))
+            if (it == null || it.CompareType(ItemEnum.Tool, ItemEnum.NPCToken, ItemEnum.Blueprint, ItemEnum.Buildable, ItemEnum.Special, ItemEnum.Clothing))
             {
                 return 0;
             }
@@ -154,6 +154,10 @@ namespace RiverHollow.Characters
                 {
                     c = Color.Green;
                     offer = (int)(it.Value * Constants.MERCHANT_WANT_MOD);
+                }
+                else
+                {
+                    offer = it.Value;
                 }
             }
 

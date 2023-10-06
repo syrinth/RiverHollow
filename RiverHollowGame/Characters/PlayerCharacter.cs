@@ -110,7 +110,10 @@ namespace RiverHollow.Characters
             SyncSprite(HatSprite, Constants.PLAYER_HAT_OFFSET);
             SyncSprite(ShirtSprite, Constants.PLAYER_SHIRT_OFFSET);
 
-            PantsSprite.Position = BodySprite.Position + new Point(0, Constants.PLAYER_PANTS_OFFSET); 
+            if (PantsSprite != null)
+            {
+                PantsSprite.Position = BodySprite.Position + new Point(0, Constants.PLAYER_PANTS_OFFSET);
+            }
 
             if (HasKnockbackVelocity())
             {

@@ -280,7 +280,7 @@ namespace RiverHollow.Misc
         /// <param name="act">The TalkingActor we're talking to</param>
         public void HandlePostWindowActions()
         {
-            TalkingActor talker = ((Villager)GameManager.CurrentNPC);
+            TalkingActor talker = GameManager.CurrentNPC;
 
             if (_diTags.ContainsKey("UnlockObjectID"))
             {

@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -252,7 +253,7 @@ namespace RiverHollow.Items
         {
             return GetEnumByIDKey<ItemGroupEnum>("Subtype") == e;
         }
-        public bool CompareType(ItemEnum type) { return _eItemType == type; }
+        public bool CompareType(params ItemEnum[] types) { return types.Any(x => _eItemType == x); }
 
         #region Lookup Handlers
         public bool GetBoolByIDKey(string key)
