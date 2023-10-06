@@ -97,11 +97,6 @@ namespace RiverHollow.Characters
 
         public override void Update(GameTime gTime)
         {
-            if (PantsSprite.CurrentFrameAnimation.FrameCount > 1 && PantsSprite.GetPlayCount() > 1)
-            {
-                ErrorManager.TrackError();
-
-            }
             base.Update(gTime);
 
 

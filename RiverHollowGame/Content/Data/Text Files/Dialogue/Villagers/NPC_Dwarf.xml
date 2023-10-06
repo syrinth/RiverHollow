@@ -8,11 +8,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Name:1][Text:$Name$, don't you ever slow down? Take it easy.][Default]</Value>
+      <Value>[Name:Slow Down][Text:How come all the rush all the time? You need to slow down and relax.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Name:2][Text:$Name$? You look stressed. Please don't push yourself and make sure you're getting enough sleep. a few years back I tried six hours a night and let me tell you what a mistake that was.][Default]</Value>
+      <Value>[Name:Anvil Smash][Text:Y'know, it's hard to be stressed when your job involves pounding an anvil all day. Couldn't recommend it more.][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>

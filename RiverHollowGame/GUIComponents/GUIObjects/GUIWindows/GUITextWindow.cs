@@ -47,6 +47,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _liTextPages = new List<string>();
             _iCharWidth = _gText.CharWidth;
             _iCharHeight = _gText.CharHeight;
+
+            AddControl(_gText);
         }
 
         //Used for the default TextWindow that sits on the bottom of the screen
