@@ -32,7 +32,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         public HUDCraftStructures(CloseMenuDelegate closeMenu)
         {
             _liCanBuild = new List<int>();
-            _liRequiredItems= new List<GUIItemBox>();
+            _liRequiredItems = new List<GUIItemBox>();
 
             _closeMenu = closeMenu;
 

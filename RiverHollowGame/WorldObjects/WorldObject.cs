@@ -33,7 +33,6 @@ namespace RiverHollow.WorldObjects
         public string MapName { get; protected set; } = string.Empty;
         public RHMap CurrentMap => MapManager.Maps.ContainsKey(MapName) ? MapManager.Maps[MapName] : null;
 
-        public bool PlayerCanEdit => !ShopItem && CompareType(ObjectTypeEnum.Buildable);
         public bool ShopItem { get; protected set; } = false;
 
         protected bool _bWalkable = false;
@@ -218,8 +217,9 @@ namespace RiverHollow.WorldObjects
         {
             Sprite.SetColor(_bSelected ? Color.Green : Color.White);
 
-            if (_bDrawUnder) { Sprite.Draw(spriteBatch, 1); }
-            else {
+            if (_bDrawUnder) { Sprite.Draw(spriteBatch, (_ePlacement == ObjectPlacementEnum.Floor ? 0.5f : 1)); }
+            else
+            {
                 float alpha = 1f;
 
                 var spriteRectangle = new Rectangle(Sprite.Position.X, Sprite.Position.Y, Sprite.Width, Sprite.Height);
@@ -273,7 +273,18 @@ namespace RiverHollow.WorldObjects
                 GUIManager.OpenTextWindow("Selection_Bed");
             }
 
+            if (GetBoolByIDKey("Field"))
+            {
+                rv = true;
+                //ToDo: Implement Field planting
+            }
+
             return rv;
+        }
+
+        public virtual bool PlayerCanEdit()
+        {
+            return !ShopItem && CompareType(ObjectTypeEnum.Buildable);
         }
 
         public virtual void SelectObject(bool val)

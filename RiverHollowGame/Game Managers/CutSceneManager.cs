@@ -737,6 +737,9 @@ namespace RiverHollow.Game_Managers
 
             GUIManager.CloseTextWindow();
 
+            _liUsedNPCs.ForEach(x => x.Activate(true));
+            PlayerManager.PlayerActor.Activate(true);
+
             PlayerManager.PlayerActor.SpdMult = Constants.NORMAL_SPEED;
             PlayerManager.AllowMovement = true;
             CutsceneManager.Playing = false;

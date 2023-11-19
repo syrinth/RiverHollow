@@ -28,11 +28,11 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:JoinPartyYes][Text:Certainly, I'd like to see what we can accomplish.]</Value>
+      <Value>[Name:Snowing|1][Text:As if the cold wasn't bad enough, now it's snowing even more! Bah, I'll stay even closer to my forge today.]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Name:JoinPartyNo][Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.]</Value>
+      <Value>[Name:Winter|1][Text:How do you put up with this weather? I'm bundled up and still freezing my arse off! Miserable weather up here, just miserable.]</Value>
     </Item>
     <Item>
       <Key>8</Key>

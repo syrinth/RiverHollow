@@ -8,11 +8,11 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hello! You know, my family has been living in this town for over a century. It may not look like much, but this town runs in my blood.][Default][Name:1]</Value>
+      <Value>[Name:Money in the air][Text:I love days like this. The sun is shining, the skies are clear, and you can just smell money in the air.][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Lovely day today, isn't it? It's a wonder what some fresh air will do for you!][Default][Name:2]</Value>
+      <Value>[Name:2][Text:I used to have a shop down in Westgate a few years back. Sold it to a nice man before I moved on myself. I wonder how he's doing?][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -28,11 +28,11 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Name:Raining|1][Text:What are you doing running around today? On a day like this, you should be inside where it's warm and dry.][Weather:Raining]</Value>
+      <Value>[Name:Raining|1][Text:It's good to see you out and about in this weather. Can I interest you in anything? Rain isn't very good for business.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Name:Raining|2][Text:My father used to tell me stories about nature spirits when I was a lad. Apparently some of them like to play in the rain. I fancy I can sometimes hear one, but I've never seen one with my own eyes.][Weather:Raining]</Value>
+      <Value>[Name:Raining|2][Text:I've heard tell that the woods here are full of nature spirits. Apparently some of them can even be seen playing in the rain at times. CAn't say I've manged to catch sight of one myself though.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>8</Key>

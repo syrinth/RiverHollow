@@ -1739,7 +1739,7 @@ namespace RiverHollow.Map_Handling
             if (TownModeEdit() && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasObject())
             {
                 WorldObject obj = MouseTile.RetrieveObjectFromLayer(true);
-                if (obj != null && obj.PlayerCanEdit)
+                if (obj != null && obj.PlayerCanEdit())
                 {
                     _objSelectedObject = (Buildable)obj;
                     _objSelectedObject.SelectObject(true);
@@ -1869,7 +1869,7 @@ namespace RiverHollow.Map_Handling
                     if (MouseTile.HasObject())
                     {
                         WorldObject targetObj = MouseTile.RetrieveObjectFromLayer(true);
-                        if (targetObj != null && targetObj.PlayerCanEdit)
+                        if (targetObj != null && targetObj.PlayerCanEdit())
                         {
                             Buildable b = (Buildable)targetObj;
                             switch (b.GetEnumByIDKey<BuildableEnum>("Subtype"))
@@ -2252,7 +2252,7 @@ namespace RiverHollow.Map_Handling
             if(obj.Type == ObjectTypeEnum.Plant)
             {
                 Plant p = (Plant)obj;
-                if (obj == GameManager.HeldObject && p.NeedsWatering && !testTile.Tilled)
+                if (GameManager.HeldObject != null && obj.ID == GameManager.HeldObject.ID && p.NeedsWatering && !testTile.IsTilled)
                 {
                     rv = false;
                 }
@@ -2691,7 +2691,7 @@ namespace RiverHollow.Map_Handling
             {
                 if (data.tilled)
                 {
-                    _arrTiles[data.x, data.y].TillTile();
+                    _arrTiles[data.x, data.y].TillTile(false);
                 }
             }
 

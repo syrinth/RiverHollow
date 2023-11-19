@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:17-0][Size:1-3][ReqItems:2-1/61-5][Idle:1-0.1][Base:0-2-1-1][LightID:1-8-8]</Value>
+      <Value>[Type:Buildable][Subtype:Field][Image:7-53][Size:3-3][Base:0-0-3-3][ReqItems:66-10/61-20][Field]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_6][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5/60-5]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Farmhouse][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-10/60-10]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -451,7 +451,7 @@
     </Item>
     <Item>
       <Key>112</Key>
-      <Value>[Type:Buildable][Subtype:Structure][Image:0-53][Size:7-7][ReqItems:55-20/60-20][Base:0-0-7-7][SpecialCoords:48-48][SubObjects:140-16-16/140-64-16/140-16-80/140-64-80][Unique][Market]</Value>
+      <Value>[Type:Buildable][Subtype:Structure][Image:0-53][Size:7-7][Base:0-0-7-7][ReqItems:55-20/60-20][SpecialCoords:48-48][SubObjects:140-16-16/140-64-16/140-16-80/140-64-80][Unique][Market]</Value>
     </Item>
     <Item>
       <Key>113</Key>

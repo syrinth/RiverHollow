@@ -33,8 +33,11 @@ namespace RiverHollow.Map_Handling
         public WorldObject ShadowObject { get; private set; }
         public WorldObject Flooring { get; private set; }
         public bool IsRoad { get; private set; }
+
+        public bool IsField => Flooring != null && Flooring.GetBoolByIDKey("Field");
         public bool IsWaterTile => ContainsProperty("Water", out string value) && value.Equals("true");
-        public bool Tilled { get; private set; }
+        private bool _bTilled;
+        public bool IsTilled => _bTilled || (Flooring != null && Flooring.GetBoolByIDKey("Field"));
         public bool Watered { get; private set; }
 
         bool _bArea = false;
@@ -55,7 +58,7 @@ namespace RiverHollow.Map_Handling
         {
             _objWallpaper?.Draw(spriteBatch);
 
-            if (Tilled && CurrentMap() == MapManager.TownMap)
+            if (_bTilled && CurrentMap() == MapManager.TownMap)
             {
                 Rectangle dirtRectangle;
                 if (Watered) { dirtRectangle = new Rectangle(16, 304, 16, 16); }
@@ -165,8 +168,8 @@ namespace RiverHollow.Map_Handling
         {
             if (getEditable)
             {
-                if (WorldObject != null && WorldObject.PlayerCanEdit) { return WorldObject.Pickup; }
-                else if (ShadowStructure() != null && ShadowStructure().PlayerCanEdit) { return ShadowStructure(); }
+                if (WorldObject != null && WorldObject.PlayerCanEdit()) { return WorldObject.Pickup; }
+                else if (ShadowStructure() != null && ShadowStructure().PlayerCanEdit()) { return ShadowStructure(); }
                 else { return Flooring; }
             }
             else
@@ -273,7 +276,7 @@ namespace RiverHollow.Map_Handling
             if (EnvironmentManager.IsRaining() && CurrentMap().IsOutside) { Watered = true; }
             else { Watered = false; }
 
-            if (Tilled && WorldObject == null)
+            if (_bTilled && WorldObject == null)
             {
                 if (RHRandom.Instance().RollPercent(20))
                 {
@@ -282,7 +285,7 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        public void TillTile()
+        public void TillTile(bool useEnergy)
         {
             if (ContainsProperty("Tillable", out string value))
             {
@@ -298,10 +301,13 @@ namespace RiverHollow.Map_Handling
                 }
                 else if (WorldObject == null && GetFloorObject() == null)
                 {
-                    PlayerManager.ToolLoseEnergy();
+                    if (useEnergy)
+                    {
+                        PlayerManager.ToolLoseEnergy();
+                    }
 
-                    Tilled = !Tilled;
-                    if (Tilled)
+                    _bTilled = !_bTilled;
+                    if (_bTilled)
                     {
                         Watered = EnvironmentManager.IsRaining();
                         CurrentMap().AddSpecialTile(this);
@@ -314,7 +320,7 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        private void UntillTile()
+        public void UntillTile()
         {
             Watered = false;
             CurrentMap().RemoveSpecialTile(this);
@@ -489,7 +495,7 @@ namespace RiverHollow.Map_Handling
             {
                 x = X,
                 y = Y,
-                tilled = Tilled,
+                tilled = _bTilled,
                 wallpaperData = _objWallpaper == null ? -1 : _objWallpaper.ID
             };
 

@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>Task_15</Key>
-      <Value>[Name:Row By Row][Description:$Actor_20$ has asked you to grow some crops.]</Value>
+      <Value>[Name:Hoes in the ground][Description:$Actor_60$ needs a place to live before he can get to work]</Value>
     </Item>
     <Item>
       <Key>Actor_0</Key>
@@ -305,6 +305,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Actor_59</Key>
       <Value>[Name:LightningBolt]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_60</Key>
+      <Value>[Name:Quentin]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_0</Key>
@@ -1375,6 +1379,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Cookie]</Value>
     </Item>
     <Item>
+      <Key>Item_218</Key>
+      <Value>[Name:Bountiful Fields]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -1384,7 +1392,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_2</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Field]</Value>
     </Item>
     <Item>
       <Key>WorldObject_3</Key>
@@ -1400,7 +1408,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_6</Key>
-      <Value>[Name:$Character_16$s House]</Value>
+      <Value>[Name:Farmhouse]</Value>
     </Item>
     <Item>
       <Key>WorldObject_7</Key>
@@ -2105,6 +2113,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Cutscene_13</Key>
       <Value>[Name:Inn the Right Mindset]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_14</Key>
+      <Value>[Name:Time for a Hoedown]</Value>
     </Item>
   </Asset>
 </XnaContent>

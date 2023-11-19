@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name:Introduction][Text:You the Builder here? Good. Name's $Actor_60$, Farmer by trade.
+]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Name:Raining_1][Text:Miserable weather, but it makes my job easier so I can't complain, can I?]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Name:Raining_2][Text:You're out and about in this? That's ... certainly a choice.]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name:How are you?][Text:I'm fine
+...
+How are you?]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Name:Crops][Text:Wetaher's nice at least.][Default]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Name:Grew yourself][Text:Ever eaten food you've grown yourself? I swear it tastes different, city people don't get it.][Default]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Name:Gift][Text:Oh, that's surprising. Thank you.]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Name:Collection][Text:This is... for me?
+Why?
+I mean... thank you.]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Name:Selection][Text:Yes? What now?][Selection:VillageTalk]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Name:Task_15_Start][Text:Look, all I'm looking for is a nice, quiet place to settle down and to not be bothered by nobody. The sooner you build me a $WorldObject_6$, the sooner I can get to work.][UnlockObjectID:6]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:JoinPartyNo][Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Text:Yes I will marry you!][Name:MarriageYes]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Text:Oh... I'm sorry but. No.][Name:MarriageNo]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

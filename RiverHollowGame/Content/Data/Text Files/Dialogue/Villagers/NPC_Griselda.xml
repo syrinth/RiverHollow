@@ -38,7 +38,7 @@ Here. It's not much, just a few odds and ends I had laying around but it should 
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:Huh, are you out and about today in this weather? In can't imagine why, it's intolerable. It's not fit for man, nor beast out there.][Weather:Raining][Name:Rain|1]</Value>
+      <Value>[Name:Rain|1][Text:Huh, are you out and about today in this weather? In can't imagine why, it's intolerable. It's not fit for man, nor beast out there.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>9</Key>

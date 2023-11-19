@@ -271,6 +271,11 @@ namespace RiverHollow.WorldObjects
                     var items = GetDroppedItems();
                     foreach (var it in items)
                     {
+                        if (Tiles[0].IsField && RHRandom.Instance().RollPercent(30))
+                        {
+                            it.SetNumber(it.Number + 1);
+                        }
+
                         if (_bPopItem)
                         {
                             MapManager.DropItemOnMap(it, MapPosition);

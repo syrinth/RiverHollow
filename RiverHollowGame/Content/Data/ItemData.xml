@@ -873,5 +873,9 @@
       <Key>217</Key>
       <Value>[Type:Food][Subtype:Meal][Image:8-2][FoodType:Dessert][FoodValue:50][Stam:5][ReqItems:151-1/150-1/216-1][CraftAmount:3]</Value>
     </Item>
+    <Item>
+      <Key>218</Key>
+      <Value>[Type:Blueprint][Image:3-0][ObjectID:2]</Value>
+    </Item>
   </Asset>
 </XnaContent>
