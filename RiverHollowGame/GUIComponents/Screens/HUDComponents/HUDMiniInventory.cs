@@ -113,7 +113,7 @@ namespace RiverHollow.GUIComponents.Screens
             int mapHeight = MapManager.CurrentMap.GetMapHeightInScaledPixels();
             int screenHeight = RiverHollow.ScreenHeight;
 
-            if(mapHeight > screenHeight && playerHeight > mapHeight - (screenHeight / 2))
+            if(playerHeight > mapHeight - (screenHeight / 2))
             {
                 Snap(SideEnum.Top);
             }
