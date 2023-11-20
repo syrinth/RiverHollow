@@ -209,7 +209,7 @@ namespace RiverHollow.GUIComponents
                 }
             }
         }
-        internal static void CreateSpacedGrid(List<GUIObject> components, GUIObject objSync, Point offset, int columns, int xSpacing, int ySpacing)
+        internal static void CreateSpacedGrid(List<GUIObject> components, GUIObject objSync, Point offset, int columns, int xSpacing, int ySpacing, ParentRuleEnum rule = ParentRuleEnum.Auto)
         {
             for (int i = 0; i < components.Count; i++)
             {
@@ -220,11 +220,11 @@ namespace RiverHollow.GUIComponents
                 }
                 else if (i % columns == 0)
                 {
-                    obj.AnchorAndAlignWithSpacing(components[i - columns], SideEnum.Bottom, SideEnum.Left, ySpacing);
+                    obj.AnchorAndAlignWithSpacing(components[i - columns], SideEnum.Bottom, SideEnum.Left, ySpacing, rule);
                 }
                 else
                 {
-                    obj.AnchorAndAlignWithSpacing(components[i - 1], SideEnum.Right, SideEnum.Bottom, xSpacing);
+                    obj.AnchorAndAlignWithSpacing(components[i - 1], SideEnum.Right, SideEnum.Bottom, xSpacing, rule);
                 }
             }
         }

@@ -20,6 +20,8 @@ namespace RiverHollow.Items
         public float EnergyCost => GetFloatByIDKey("Stam", 0);
         public int ToolLevel => GetIntByIDKey("Level");
 
+        public bool IsAutomatic => ToolType != ToolEnum.Sword && ToolType != ToolEnum.Hoe;
+
         protected int HitAt => GetIntByIDKey("HitAt");
         protected int _iCharges = 0;
 
@@ -147,10 +149,14 @@ namespace RiverHollow.Items
                 PlayerManager.AddTool(this);
                 return true;
             }
+            else if (Constants.AUTO_TOOL)
+            {
+                return PlayerManager.AddTool(this);
+            }
             else { return false; }
         }
 
-        public override bool HasUse() { return true; }
+        public override bool HasUse() { return !Constants.AUTO_TOOL || !IsAutomatic; }
         public override bool ItemBeingUsed()
         {
             GameManager.SetSelectedItem(this);

@@ -74,12 +74,6 @@
     <property name="ObjectID" type="int" value="166"/>
    </properties>
   </object>
-  <object id="45" name="WorldObject" x="208" y="144" width="16" height="16">
-   <properties>
-    <property name="ItemID" value="121/132/133/139"/>
-    <property name="ObjectID" type="int" value="165"/>
-   </properties>
-  </object>
   <object id="49" name="WorldObject" x="192" y="80" width="32" height="64">
    <properties>
     <property name="ObjectID" type="int" value="158"/>

@@ -1692,7 +1692,7 @@ namespace RiverHollow.Map_Handling
                         int distance = 0;
                         if (PlayerManager.PlayerInRangeGetDist(GUICursor.GetWorldMousePosition(), 3 * Constants.TILE_SIZE, ref distance))
                         {
-                            PlayerManager.PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
+                            PlayerManager.FaceCursor();
                         }
 
                         RHTile playerTile = GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter);
@@ -1702,15 +1702,25 @@ namespace RiverHollow.Map_Handling
                     }
                     else
                     {
-                        if (TargetTile != null && PlayerManager.InRangeOfPlayer(TargetTile.CollisionBox))
+                        if (TargetTile != null)
                         {
                             //Retrieves any object associated with the tile, this will include
                             //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
                             //as being on the tile.
                             WorldObject obj = TargetTile.GetWorldObject(false);
-                            if (obj != null)
+                            if (TargetTile.IsTilled && !TargetTile.HasBeenWatered)
+                            {
+                                PlayerManager.FaceCursor();
+                                PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.WateringCan));
+                            }
+                            else if (obj != null && obj.Tiles.Any(x => PlayerManager.InRangeOfPlayer(x.CollisionBox)))
                             {
                                 rv = obj.ProcessLeftClick();
+                            }
+                            else if (TargetTile.IsWaterTile)
+                            {
+                                PlayerManager.FaceCursor();
+                                PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.FishingRod));
                             }
                         }
                     }

@@ -2,6 +2,8 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Utilities;
+using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -38,12 +40,26 @@ namespace RiverHollow.GUIComponents.Screens
             _playerInventory.AnchorAndAlignWithSpacing(_altInventory, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);
 
             var toolboxWindow = new GUIWindow(GUIUtils.WINDOW_DARKBLUE);
-            GUIItemBox[] toolbox = new GUIItemBox[2];
-            toolbox[0] = new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Backpack));
-            toolbox[0].PositionAndMove(toolboxWindow, new Point(7, 6));
+            List<GUIItemBox> _liToolbox = new List<GUIItemBox>();
+            if (Constants.AUTO_TOOL)
+            {
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Backpack)));
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Axe)));
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Pick)));
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Lantern)));
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.FishingRod)));
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Harp)));
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.WateringCan)));
+                _liToolbox.Add(new GUIItemBox());
+            }
+            else
+            {
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Backpack)));
+                _liToolbox.Add(new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Lantern)));
+            }
 
-            toolbox[1] = new GUIItemBox(PlayerManager.RetrieveTool(ToolEnum.Lantern));
-            toolbox[1].AnchorAndAlignWithSpacing(toolbox[0], SideEnum.Right, SideEnum.Bottom, 2, GUIUtils.ParentRuleEnum.ForceToParent);
+            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liToolbox), toolboxWindow, new Point(7, 6), 4, 2, 2, GUIUtils.ParentRuleEnum.ForceToParent);
+
             toolboxWindow.DetermineSize(2);
             toolboxWindow.AnchorAndAlignWithSpacing(_playerInventory, SideEnum.Top, SideEnum.Right, 2, GUIUtils.ParentRuleEnum.ForceToParent);
 

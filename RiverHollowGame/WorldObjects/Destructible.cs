@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System;
@@ -73,9 +74,14 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = false;
 
-            if (HP > 0)
+            if (Constants.AUTO_TOOL)
             {
-               // PlayerManager.SetTool(PlayerManager.RetrieveTool(NeededTool));
+                Tool playerTool = PlayerManager.RetrieveTool(NeededTool);
+                if (HP > 0 && playerTool != null && playerTool.IsAutomatic)
+                {
+                    PlayerManager.FaceCursor();
+                    PlayerManager.SetTool(playerTool);
+                }
             }
 
             return rv;

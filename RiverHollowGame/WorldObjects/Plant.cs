@@ -118,7 +118,12 @@ namespace RiverHollow.WorldObjects
         public override bool ProcessLeftClick()
         {
             bool rv = false;
-            if (FinishedGrowing() && HP > 0)
+
+            if (NeededTool != ToolEnum.None)
+            {
+                base.ProcessLeftClick();
+            }
+            else if (FinishedGrowing() && HP > 0)
             {
                 rv = true;
                 Harvest();
@@ -161,7 +166,7 @@ namespace RiverHollow.WorldObjects
         {
             _bShaken = false;
 
-            if (!NeedsWatering ||Tiles[0].Watered)
+            if (!NeedsWatering ||Tiles[0].HasBeenWatered)
             {
 
                 if (_iDaysToNextState > 0) //Decrement the number of days until the next phase

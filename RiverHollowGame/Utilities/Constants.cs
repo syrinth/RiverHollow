@@ -2,6 +2,7 @@
 {
     static class Constants
     {
+        public const bool AUTO_TOOL = true;
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
 #if DEBUG

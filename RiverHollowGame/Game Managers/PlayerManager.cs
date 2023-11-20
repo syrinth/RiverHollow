@@ -17,6 +17,7 @@ using RiverHollow.Items.Tools;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
+using RiverHollow.GUIComponents.GUIObjects;
 
 namespace RiverHollow.Game_Managers
 {
@@ -323,20 +324,9 @@ namespace RiverHollow.Game_Managers
             PlayerActor.SetPath(list);
         }
 
-        /// <summary>
-        /// Iterates through all buildings owned by the Player, and 
-        /// adds all of the workers to the total number.
-        /// </summary>
-        /// <returns>The total number of workers</returns>
-        public static int GetTotalWorkers()
+        public static void FaceCursor()
         {
-            int rv = 0;
-            //foreach(Building b in Buildings)
-            //{
-            //    rv += b.Workers.Count;
-            //}
-
-            return rv;
+            PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
         }
 
         #region Crafting Dictionary
@@ -717,8 +707,10 @@ namespace RiverHollow.Game_Managers
         /// of each tool level in the game, but safety.
         /// </summary>
         /// <param name="newTool">The prospective new tool</param>
-        public static void AddTool(Tool newTool)
+        public static bool AddTool(Tool newTool)
         {
+            bool rv = newTool != null && newTool.IsAutomatic;
+
             if(newTool != null && CompareTools(newTool))
             {
                 _diTools[newTool.ToolType] = newTool;
@@ -732,6 +724,8 @@ namespace RiverHollow.Game_Managers
                     PlayerActor.NewLantern();
                 }
             }
+
+            return rv;
         }
 
         /// <summary>
