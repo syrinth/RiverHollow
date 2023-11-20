@@ -333,10 +333,9 @@ namespace RiverHollow.Characters
             {
                 RHMap map = MapManager.Maps[mapName];
 
-                string strSpawn = string.Empty;
                 if (Married)
                 {
-                    strSpawn = "Spouse";
+                    //ToDo: Fix Marriage spawning for spouse
                 }
                 else
                 {

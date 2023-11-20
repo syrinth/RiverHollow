@@ -8,7 +8,7 @@ namespace RiverHollow.Characters
 {
     public abstract class TravellingNPC : TalkingActor
     {
-        static readonly string[] ArrivalReqs = { "TotalMoneyEarnedReq", "RequiredPopulation" , "ArrivalDelay", "RequiredVillager", "ItemID", "RequiredObjectID" };
+        static readonly string[] ArrivalReqs = { "TotalMoneyEarnedReq", "RequiredPopulation" , "ArrivalDay", "RequiredVillager", "ItemID", "RequiredObjectID" };
 
         protected Dictionary<int, int> _diRequiredObjectIDs;
 
@@ -17,6 +17,7 @@ namespace RiverHollow.Characters
         protected int RequiredVillagerID => GetIntByIDKey("RequiredVillager");
         protected int RequiredObjectID => GetIntByIDKey("RequiredObjectID");
         protected int RequiredSpecialItem => GetIntByIDKey("ItemID");
+        protected string ArrivalDay => GetStringByIDKey("ArrivalDay");
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
         public bool Introduced => RelationshipState != RelationShipStatusEnum.None;
@@ -92,6 +93,15 @@ namespace RiverHollow.Characters
             if (TotalMoneyEarnedNeeded != -1 && TotalMoneyEarnedNeeded > PlayerManager.TotalMoneyEarned)
             {
                 return false;
+            }
+
+            if (!string.IsNullOrEmpty(ArrivalDay))
+            {
+                var date = Util.FindArguments(ArrivalDay);
+                if (Util.ParseEnum<SeasonEnum>(date[0]) != GameCalendar.CurrentSeason || !int.TryParse(date[1], out int day) || day != GameCalendar.CurrentDay)
+                {
+                    return false;
+                }
             }
 
             return true;

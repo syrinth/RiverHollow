@@ -119,8 +119,11 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Hat")]
             public ItemData hat;
 
-            [XmlElement(ElementName = "Chest")]
+            [XmlElement(ElementName = "Shirt")]
             public ItemData shirt;
+
+            [XmlElement(ElementName = "Pants")]
+            public ItemData pants;
 
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;

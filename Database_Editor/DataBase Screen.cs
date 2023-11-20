@@ -1590,7 +1590,7 @@ namespace Database_Editor
                     defaultTags = DEFAULT_ACTOR_TAGS + ",Action1:0-0-3-0.15-T,Action2:64-0-2-0.15-T";
                     break;
                 case ActorTypeEnum.Merchant:
-                    defaultTags = DEFAULT_ACTOR_TAGS + ",ShopData:,ArrivalDelay:,ArrivalPeriod:";
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",ShopData:,Day:Monday";
                     break;
                 case ActorTypeEnum.Mob:
                     defaultTags = "Key:,Size:16-32,Idle:3-.15-T,Walk:3-.15-T,KO:384-0-6-0.15-F,HP:,Damage:,Weight:,Speed:,ItemID:";

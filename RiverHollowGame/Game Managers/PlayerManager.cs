@@ -876,6 +876,7 @@ namespace RiverHollow.Game_Managers
                 hairIndex = PlayerActor.HairIndex,
                 hat = Item.SaveData(PlayerActor.Hat),
                 shirt = Item.SaveData(PlayerActor.Shirt),
+                pants = Item.SaveData(PlayerActor.Pants),
                 weddingCountdown = WeddingCountdown,
                 babyCountdown = BabyCountdown,
                 hpIncreases = HPIncrease,
@@ -951,6 +952,7 @@ namespace RiverHollow.Game_Managers
 #endif
             PlayerActor.SetClothing((Clothing)DataManager.GetItem(saveData.hat.itemID));
             PlayerActor.SetClothing((Clothing)DataManager.GetItem(saveData.shirt.itemID));
+            PlayerActor.SetClothing((Clothing)DataManager.GetItem(saveData.pants.itemID));
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);
 
             MoveToSpawn();
