@@ -1746,6 +1746,7 @@ namespace RiverHollow.Map_Handling
             if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
 
             _objSelectedObject?.SelectObject(false);
+            _objSelectedObject = null;
             if (TownModeEdit() && GameManager.HeldObject == null && MouseTile != null && MouseTile.HasObject())
             {
                 WorldObject obj = MouseTile.RetrieveObjectFromLayer(true);
@@ -1878,7 +1879,7 @@ namespace RiverHollow.Map_Handling
                 {
                     if (MouseTile.HasObject())
                     {
-                        WorldObject targetObj = MouseTile.RetrieveObjectFromLayer(true);
+                        WorldObject targetObj = MouseTile.RetrieveObjectFromLayer(true).Pickup;
                         if (targetObj != null && targetObj.PlayerCanEdit())
                         {
                             Buildable b = (Buildable)targetObj;

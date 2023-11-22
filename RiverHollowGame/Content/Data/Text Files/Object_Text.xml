@@ -1392,7 +1392,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_2</Key>
-      <Value>[Name:Field]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_3</Key>
@@ -2057,6 +2057,26 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_168</Key>
       <Value>[Name:Dresser]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_169</Key>
+      <Value>[Name:Field]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_170</Key>
+      <Value>[Name:Field Left Fence]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_171</Key>
+      <Value>[Name:Field Top Fence]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_172</Key>
+      <Value>[Name:Field Right Fence]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_173</Key>
+      <Value>[Name:Field Bottom Fence]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

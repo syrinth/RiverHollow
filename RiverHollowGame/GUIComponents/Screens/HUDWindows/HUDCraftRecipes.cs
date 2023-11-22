@@ -85,7 +85,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 }
             }
 
-            return rv ;
+            return rv;
         }
 
         private void SetUpItemWindows()

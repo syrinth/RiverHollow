@@ -189,8 +189,12 @@ namespace RiverHollow.Misc
             {
                 if (randomize && !string.IsNullOrEmpty(RandomIndices) && random.Length > i)
                 {
-                    Merchandise m = copies[int.Parse(random[i])];
-                    _liShopItemSpots[i].SetMerchandise(m);
+                    int rand = int.Parse(random[i]);
+                    if (copies.Count > rand)
+                    {
+                        Merchandise m = copies[rand];
+                        _liShopItemSpots[i].SetMerchandise(m);
+                    }
                 }
                 else { _liShopItemSpots[i].SetMerchandise(copies[i]); }
             }

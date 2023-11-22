@@ -48,13 +48,13 @@ namespace RiverHollow.WorldObjects
             base.Draw(spriteBatch);
             if (_objDisplay != null)
             {
-                _objDisplay.Sprite.SetColor(_bSelected ? Color.Green : Color.White);
+                _objDisplay.Sprite.SetColor(Selected ? Color.Green : Color.White);
                 _objDisplay.Sprite.Draw(spriteBatch, Sprite.LayerDepth + 1);
             }
             else if (_itemDisplay != null)
             {
                 //Because Items don't exist directly on the map, we only need to tell it where to draw itself here
-                _itemDisplay.SetColor(_bSelected ? Color.Green : Color.White);
+                _itemDisplay.SetColor(Selected ? Color.Green : Color.White);
                 _itemDisplay.Draw(spriteBatch, new Rectangle(MapPosition.X + _pDisplayOffset.X, MapPosition.Y + _pDisplayOffset.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1);
             }
         }

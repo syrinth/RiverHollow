@@ -48,6 +48,17 @@ namespace RiverHollow.Items
             spriteBatch.Draw(WrappedItem.Texture, CollisionBox, WrappedItem.SourceRectangle, WrappedItem.ItemColor, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
         }
 
+        public void SelectObject(bool val)
+        {
+            if (val)
+            {
+                WrappedItem.SetColor(Color.Green);
+            }
+            else
+            {
+                WrappedItem.SetColor(Color.White);
+            }
+        }
         public void MoveItem(Vector2 vector)
         {
             Position += _vbMovement.AddMovement(vector);

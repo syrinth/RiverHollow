@@ -166,7 +166,7 @@ namespace RiverHollow.WorldObjects
         {
             _bShaken = false;
 
-            if (!NeedsWatering ||Tiles[0].HasBeenWatered)
+            if (!NeedsWatering || Tiles[0].HasBeenWatered)
             {
 
                 if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
@@ -218,6 +218,24 @@ namespace RiverHollow.WorldObjects
 
             SetGrowthInfo();
         }
+
+        public void SetTotalDays(int val)
+        {
+            SetState(0);
+            while (val > 0)
+            {
+                if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
+                {
+                    val--;
+                    _iDaysToNextState--;
+                    if (_iDaysToNextState == 0 && !FinishedGrowing())
+                    {
+                        SetState(++CurrentState);
+                    }
+                }
+            }
+        }
+
         private void SetGrowthInfo()
         {
             if (MaxStates > 1)
@@ -256,7 +274,15 @@ namespace RiverHollow.WorldObjects
         {
             if (GetBoolByIDKey("ItemID"))
             {
-                return GetStringParamsByIDKey("ItemID")[CurrentState];
+                var strParams = GetStringParamsByIDKey("ItemID");
+                if (strParams.Length > CurrentState)
+                {
+                    return strParams[CurrentState];
+                }
+                else
+                {
+                    return strParams[0];
+                }
             }
             else { return string.Empty; }
         }
@@ -276,11 +302,6 @@ namespace RiverHollow.WorldObjects
                     var items = GetDroppedItems();
                     foreach (var it in items)
                     {
-                        if (Tiles[0].IsField && RHRandom.Instance().RollPercent(30))
-                        {
-                            it.SetNumber(it.Number + 1);
-                        }
-
                         if (_bPopItem)
                         {
                             MapManager.DropItemOnMap(it, MapPosition);

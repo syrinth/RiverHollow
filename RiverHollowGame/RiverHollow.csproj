@@ -98,6 +98,7 @@
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMenu.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\ItemDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\NPCDisplayWindow.cs" />
+    <Compile Include="GUIComponents\Screens\HUDFieldDisplay.cs" />
     <Compile Include="GUIComponents\Screens\HUDPlayerInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCodex.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftRecipes.cs" />

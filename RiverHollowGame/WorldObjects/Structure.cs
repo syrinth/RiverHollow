@@ -40,14 +40,22 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override void SelectObject(bool val)
+        private RHTile GetSubObjectTile(SubObjectInfo info)
         {
-            _bSelected = val;
+            return MapManager.Maps[MapName].GetTileByPixelPosition(new Point(CollisionBox.X + info.Position.X, CollisionBox.Y + info.Position.Y));
+        }
+
+        public override void SelectObject(bool val, bool selectParent = true)
+        {
+            Selected = val;
 
             foreach (SubObjectInfo info in _liSubObjectInfo)
             {
-                RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(MapPosition.X + info.Position.X, MapPosition.Y + info.Position.Y));
-                targetTile.WorldObject?.SelectObject(val);
+                var obj = GetSubObjectTile(info)?.WorldObject;
+                if(obj != null && obj.Selected != val)
+                {
+                    GetSubObjectTile(info)?.WorldObject?.SelectObject(val, false);
+                }
             }
         }
 
@@ -73,12 +81,15 @@ namespace RiverHollow.WorldObjects
                 foreach (SubObjectInfo info in _liSubObjectInfo)
                 {
                     WorldObject obj = new SubObject(this, info.ObjectID);
-                    RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(pos.X + info.Position.X, pos.Y + info.Position.Y));
-                    RHTile temp = targetTile;
-                    for (int i = 0; i < obj.CollisionBox.Width / 16; i++)
+                    RHTile targetTile = GetSubObjectTile(info);
+                    RHTile temp;
+                    for (int x = 0; x < obj.CollisionBox.Width / 16; x++)
                     {
-                        temp.RemoveWorldObject();
-                        temp = temp.GetTileByDirection(Enums.DirectionEnum.Right); 
+                        for (int y = 0; y < obj.CollisionBox.Height / 16; y++)
+                        {
+                            temp = CurrentMap.GetTileByGridCoords(targetTile.X + x, targetTile.Y + y);
+                            temp.RemoveWorldObject();
+                        }
                     }
                     obj.PlaceOnMap(targetTile.Position, MapManager.Maps[MapName]);
                 }
@@ -91,7 +102,7 @@ namespace RiverHollow.WorldObjects
         {
             foreach (SubObjectInfo info in _liSubObjectInfo)
             {
-                RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(MapPosition.X + info.Position.X, MapPosition.Y + info.Position.Y));
+                RHTile targetTile = GetSubObjectTile(info);
                 if (targetTile.WorldObject != null)
                 {
                     targetTile.WorldObject.Sprite.Show = false;
@@ -119,8 +130,8 @@ namespace RiverHollow.WorldObjects
             {
                 foreach (SubObjectInfo info in _liSubObjectInfo)
                 {
-                    RHTile targetTile = MapManager.Maps[MapName].GetTileByPixelPosition(new Point(MapPosition.X + info.Position.X, MapPosition.Y + info.Position.Y));
-                    if(targetTile.WorldObject != null)
+                    RHTile targetTile = GetSubObjectTile(info);
+                    if (targetTile.WorldObject != null)
                     {
                         foreach (var tile in targetTile.WorldObject.Tiles)
                         {
@@ -158,6 +169,15 @@ namespace RiverHollow.WorldObjects
         public override bool ProcessRightClick()
         {
             return _mainObj.ProcessRightClick();
+        }
+
+        public override void SelectObject(bool val, bool selectParent = true)
+        {
+            Selected = val;
+            if (selectParent)
+            {
+                Pickup.SelectObject(val);
+            }
         }
 
         public override bool HasTileInRange()

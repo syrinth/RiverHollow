@@ -36,7 +36,7 @@ namespace RiverHollow.WorldObjects
         public bool ShopItem { get; protected set; } = false;
 
         protected bool _bWalkable = false;
-        protected bool _bSelected = false;
+        public bool Selected { get; protected set; } = false;
 
         public bool Walkable => _bWalkable;
 
@@ -215,7 +215,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            Sprite.SetColor(_bSelected ? Color.Green : Color.White);
+            Sprite.SetColor(Selected ? Color.Green : Color.White);
 
             if (_bDrawUnder) { Sprite.Draw(spriteBatch, (_ePlacement == ObjectPlacementEnum.Floor ? 0.5f : 1)); }
             else
@@ -287,9 +287,9 @@ namespace RiverHollow.WorldObjects
             return !ShopItem && CompareType(ObjectTypeEnum.Buildable);
         }
 
-        public virtual void SelectObject(bool val)
+        public virtual void SelectObject(bool val, bool selectParent = true)
         {
-            _bSelected = val;
+            Selected = val;
         }
 
         public virtual bool HasTileInRange()

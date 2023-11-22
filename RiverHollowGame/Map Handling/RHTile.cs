@@ -34,7 +34,6 @@ namespace RiverHollow.Map_Handling
         public WorldObject Flooring { get; private set; }
         public bool IsRoad { get; private set; }
 
-        public bool IsField => Flooring != null && Flooring.GetBoolByIDKey("Field");
         public bool IsWaterTile => ContainsProperty("Water", out string value) && value.Equals("true");
         private bool _bTilled;
         public bool IsTilled => _bTilled || (Flooring != null && Flooring.GetBoolByIDKey("Field"));
