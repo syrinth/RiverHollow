@@ -14,13 +14,13 @@ namespace RiverHollow.GUIComponents.Screens
     {
         const int MAX_DISPLAY = 4;
 
-        Field _objField;
-        string[] _arrCropList;
+        readonly Field _objField;
+        readonly string[] _arrCropList;
 
-        GUIImage _gSelection;
-        GUIText _gName;
-        GUIText _gTime;
-        GUIImage _gScroll;
+        readonly GUIImage _gSelection;
+        readonly GUIText _gName;
+        readonly GUIText _gTime;
+        readonly GUIImage _gScroll;
 
         readonly List<GUIItemBoxHover> _liItemDisplay;
 

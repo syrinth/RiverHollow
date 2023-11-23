@@ -47,6 +47,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle ICON_GARBAGE = new Rectangle(336, 112, 16, 16);
         internal static Rectangle ICON_EXCLAMATION = new Rectangle(272, 128, 4, 10);
         internal static Rectangle ICON_ERROR = new Rectangle(276, 128, 8, 8);
+        internal static Rectangle ICON_BUILD = new Rectangle(336, 144, 16, 16);
 
         internal static Rectangle DIALOGUE_MORE = new Rectangle(160, 80, 16, 16);
         internal static Rectangle DIALOGUE_DONE = new Rectangle(176, 80, 16, 16);

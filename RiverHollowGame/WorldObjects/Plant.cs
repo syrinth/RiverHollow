@@ -253,7 +253,7 @@ namespace RiverHollow.WorldObjects
                 }
 
                 if (CurrentState < MaxStates - 1) { _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time", "F")[CurrentState]); }
-                else { _iDaysToNextState = - 1; }
+                else { _iDaysToNextState = -1; }
 
                 if (Tiles != null && Tiles.Count > 0)
                 {
@@ -330,7 +330,7 @@ namespace RiverHollow.WorldObjects
 
         public override bool WideOnTop()
         {
-            if(_pSpriteOffset != Point.Zero)
+            if (_pSpriteOffset != Point.Zero)
             {
                 return false;
             }

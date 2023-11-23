@@ -22,10 +22,11 @@ namespace RiverHollow.GUIComponents.Screens
         GUIOldStatDisplay _gHealthDisplay;
         GUIOldStatDisplay _gStaminaDisplay;
         GUIOldStatDisplay _gMagicDisplay;
+        GUIWindow _gMoneyWindow;
         GUIMoneyDisplay _gMoney;
         GUIDungeonKeyDisplay _gDungeonKeys;
 
-        GUIImage _gBuildIcon;
+        GUIImage[] _gBuildIcons;
 
         HUDMiniInventory _gInventory;
         HUDCalendar _gCalendar;
@@ -50,15 +51,14 @@ namespace RiverHollow.GUIComponents.Screens
                 _gMagicDisplay.AnchorAndAlignWithSpacing(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             }
 
-            GUIWindow win = new GUIWindow(GUIUtils.WINDOW_BROWN, ScaleIt(48), ScaleIt(26));
+            _gMoneyWindow = new GUIWindow(GUIUtils.WINDOW_BROWN, ScaleIt(48), ScaleIt(26));
             
             _gMoney = new GUIMoneyDisplay();
-            _gMoney.AnchorToInnerSide(win, SideEnum.TopLeft);
-
-            win.AnchorAndAlignWithSpacing(PlayerManager.MagicUnlocked ? _gMagicDisplay : _gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, 2);
+            _gMoney.AnchorToInnerSide(_gMoneyWindow, SideEnum.TopLeft);
+            _gMoneyWindow.AnchorAndAlignWithSpacing(PlayerManager.MagicUnlocked ? _gMagicDisplay : _gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, 2);
 
             _gDungeonKeys = new GUIDungeonKeyDisplay();
-            _gDungeonKeys.AnchorAndAlignWithSpacing(win, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
+            _gDungeonKeys.AnchorAndAlignWithSpacing(_gMoneyWindow, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
 
             _gInventory = new HUDMiniInventory();
             _gInventory.AnchorToScreen(SideEnum.Bottom, 1);
@@ -66,8 +66,16 @@ namespace RiverHollow.GUIComponents.Screens
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 3);
 
-            _gBuildIcon = new GUIImage(GUIUtils.ICON_HAMMER);
-            _gBuildIcon.AnchorAndAlignWithSpacing(_gCalendar, SideEnum.Left, SideEnum.CenterY, 4);
+            _gBuildIcons = new GUIImage[4];
+            for (int i = 0; i < 4; i++)
+            {
+                _gBuildIcons[i] = new GUIImage(GUIUtils.ICON_BUILD);
+            }
+
+            _gBuildIcons[0].AnchorToScreen(SideEnum.TopLeft, 4);
+            _gBuildIcons[1].AnchorToScreen(SideEnum.TopRight, 4);
+            _gBuildIcons[2].AnchorToScreen(SideEnum.BottomLeft, 4);
+            _gBuildIcons[3].AnchorToScreen(SideEnum.BottomRight, 4);
         }
 
         public override void Update(GameTime gTime)
@@ -76,7 +84,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             HandleInput();
 
-            _gBuildIcon.Show(InTownMode());
+            ShowHideComponents();
 
             //If there are items queued to display and there is not currently a display up, create one.
             if (InventoryManager.AddedItemList.Count > 0 && _addedItem == null)
@@ -110,6 +118,23 @@ namespace RiverHollow.GUIComponents.Screens
                     _addedItem = null;
                 }
             }
+        }
+
+        private void ShowHideComponents()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                _gBuildIcons[i].Show(InTownMode());
+            }
+
+            _gCalendar.Show(!InTownMode());
+            _gMoneyWindow.Show(!InTownMode());
+            _gMoney.Show(!InTownMode());
+            _gDungeonKeys.Show(!InTownMode());
+            _gHealthDisplay.Show(!InTownMode());
+            _gStaminaDisplay.Show(!InTownMode());
+            _gMagicDisplay?.Show(!InTownMode());
+            _gInventory.Show(!InTownMode());
         }
 
         protected override void HandleInput()
