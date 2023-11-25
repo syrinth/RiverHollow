@@ -8,6 +8,7 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents;
 using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.GUIComponents.Screens.HUDComponents;
 
 namespace RiverHollow.Game_Managers
 {
@@ -98,9 +99,10 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static bool IsMenuOpen() { return CurrentScreen.IsMenuOpen(); }
         public static void OpenMenu() { CurrentScreen.OpenMenu(); }
         public static void CloseMenu() { CurrentScreen.CloseMenu(); }
+        public static bool IsMenuOpen() { return CurrentScreen.IsMenuOpen(); }
+        public static HUDMenu GetMenu() { return CurrentScreen.GetMenu(); }
 
         public static void QueueTextWindow(TextEntry txt)
         {

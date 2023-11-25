@@ -1,5 +1,4 @@
 ﻿using RiverHollow.Game_Managers;
-using System.Collections.Generic;
 
 namespace RiverHollow.WorldObjects
 {
@@ -8,8 +7,11 @@ namespace RiverHollow.WorldObjects
     /// </summary>
     public class Wall : AdjustableObject
     {
-        public Wall(int id) : base(id)
+        public Wall(int id) : base(id) { }
+
+        protected override void LoadSprite()
         {
+            base.LoadSprite(DataManager.FILE_WALLS);
         }
     }
 }

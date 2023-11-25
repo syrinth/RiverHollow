@@ -95,7 +95,7 @@ namespace RiverHollow.WorldObjects
         {
             base.SelectObject(val);
             _liPlants.ForEach(x => x.SelectObject(val));
-            _dropDisplay.SelectObject(val);
+            _dropDisplay?.SelectObject(val);
         }
 
         public void SetSeedID(int id)

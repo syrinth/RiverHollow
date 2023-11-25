@@ -111,9 +111,10 @@ namespace RiverHollow.GUIComponents.Screens
             _gHoverObject?.Draw(spriteBatch);
         }
 
-        public virtual bool IsMenuOpen() { return _gMenu != null; }
-        public virtual void OpenMenu(bool mainMenu = true) { }
+        public virtual void OpenMenu() { }
         public virtual void CloseMenu() { }
+        public virtual bool IsMenuOpen() { return _gMenu != null; }
+        public HUDMenu GetMenu() { return _gMenu; }
 
         protected virtual void HandleInput() { }
 

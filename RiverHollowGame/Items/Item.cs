@@ -205,7 +205,7 @@ namespace RiverHollow.Items
             switch (_eItemType)
             {
                 case ItemEnum.Buildable:
-                    BuildableEnum type = DataManager.GetEnumByIDKey<BuildableEnum>(ID - Constants.BUILDABLE_ID_OFFSET, "Type", DataType.WorldObject);
+                    BuildableEnum type = DataManager.GetEnumByIDKey<BuildableEnum>(ID - Constants.BUILDABLE_ID_OFFSET, "Subtype", DataType.WorldObject);
                     if (type == BuildableEnum.Floor || type == BuildableEnum.Wall) { return true; }
                     else { return false; }
                 case ItemEnum.Blueprint:

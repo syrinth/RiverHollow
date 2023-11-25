@@ -11,7 +11,7 @@
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Buildable][Subtype:Field][Image:7-53][Size:3-3][Base:0-0-3-3][Field]</Value>
+      <Value>[Type:Buildable][Subtype:Floor][Image:0-0][Earth]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -311,7 +311,7 @@
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Buildable][Subtype:Floor][Image:0-2][ReqItems:0-1]</Value>
+      <Value>[Type:Buildable][Subtype:Floor][Image:8-0][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>78</Key>
@@ -455,11 +455,11 @@
     </Item>
     <Item>
       <Key>113</Key>
-      <Value>[Type:Buildable][Subtype:Wall][Image:0-8][Size:1-2][Base:0-1-1-1][ReqItems:0-1]</Value>
+      <Value>[Type:Buildable][Subtype:Wall][Image:4-0][Size:1-2][Base:0-1-1-1][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>114</Key>
-      <Value>[Type:Buildable][Subtype:Wall][Image:0-17][Size:1-2][Base:0-1-1-1][ReqItems:2-2]</Value>
+      <Value>[Type:Buildable][Subtype:Wall][Image:0-0][Size:1-2][Base:0-1-1-1][ReqItems:2-2]</Value>
     </Item>
     <Item>
       <Key>115</Key>

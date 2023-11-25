@@ -417,9 +417,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Wallpaper")]
             public int wallpaperData;
-
-            [XmlElement(ElementName = "Tilled")]
-            public bool tilled;
         }
         public struct WorldObjectData
         {

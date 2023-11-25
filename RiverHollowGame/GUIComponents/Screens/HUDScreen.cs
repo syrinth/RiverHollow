@@ -134,7 +134,6 @@ namespace RiverHollow.GUIComponents.Screens
             _gHealthDisplay.Show(!InTownMode());
             _gStaminaDisplay.Show(!InTownMode());
             _gMagicDisplay?.Show(!InTownMode());
-            _gInventory.Show(!InTownMode());
         }
 
         protected override void HandleInput()
@@ -176,14 +175,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyBuild))
                 {
-                    if (!IsMenuOpen())
-                    {
-                        OpenMenu(false);
-                    }
-                    else
-                    {
-                        CloseMenu();
-                    }
+                    OpenMenuObject(new HUDTownCrafting(CloseMenu));
                 }
             }
         }
@@ -236,18 +228,14 @@ namespace RiverHollow.GUIComponents.Screens
         #endregion
 
         #region Menu
-        public bool IsMenuOpen() { return _gMenu != null; }
-        public void OpenMenu(bool mainMenu = true)
+        public override bool IsMenuOpen() { return _gMenu != null; }
+        public override void OpenMenu()
         {
             GUICursor.ResetCursor();
             _gMenu = new HUDMenu(CloseMenu);
-            if(!mainMenu)
-            {
-                _gMenu.NewButtonMenu(HUDMenuEnum.Build);
-            }
             AddControl(_gMenu);
         }
-        public void CloseMenu()
+        public override void CloseMenu()
         {
             if (_gMenu != null)
             {

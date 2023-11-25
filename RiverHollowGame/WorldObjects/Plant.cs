@@ -233,6 +233,10 @@ namespace RiverHollow.WorldObjects
                         SetState(++CurrentState);
                     }
                 }
+                else
+                {
+                    break;
+                }
             }
         }
 

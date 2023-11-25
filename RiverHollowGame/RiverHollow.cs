@@ -165,6 +165,10 @@ namespace RiverHollow
                             MapManager.ProcessHover(mousePoint);
                         }
                     }
+                    else
+                    {
+                        GUICursor.ResetCursor();
+                    }
                 }
 
                 //Do not move this. Needs to be after checks

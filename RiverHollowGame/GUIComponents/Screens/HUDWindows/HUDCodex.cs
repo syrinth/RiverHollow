@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens.HUDComponents;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,11 +46,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _btnRight.PositionAndMove(_winMain, 169, 158);
 
             _gTabToggles = new GUIToggle[5];
-            AddTab(0, ShowVillagers, GUIUtils.TOGGLE_VILLAGERS_ON, GUIUtils.TOGGLE_VILLAGERS_OFF);
-            AddTab(1, ShowMerchants, GUIUtils.TOGGLE_MERCHANTS_ON, GUIUtils.TOGGLE_MERCHANTS_OFF);
-            AddTab(2, ShowTravelers, GUIUtils.TOGGLE_TRAVELERS_ON, GUIUtils.TOGGLE_TRAVELERS_OFF);
-            AddTab(3, ShowMobs, GUIUtils.TOGGLE_MOBS_ON, GUIUtils.TOGGLE_MOBS_OFF);
-            AddTab(4, ShowItems, GUIUtils.TOGGLE_ITEMS_ON, GUIUtils.TOGGLE_ITEMS_OFF);
+            AddTab(0, ShowVillagers, GUIUtils.TOGGLE_VILLAGERS_OFF, GUIUtils.TOGGLE_VILLAGERS_ON);
+            AddTab(1, ShowMerchants, GUIUtils.TOGGLE_MERCHANTS_OFF, GUIUtils.TOGGLE_MERCHANTS_ON);
+            AddTab(2, ShowTravelers, GUIUtils.TOGGLE_TRAVELERS_OFF, GUIUtils.TOGGLE_TRAVELERS_ON);
+            AddTab(3, ShowMobs, GUIUtils.TOGGLE_MOBS_OFF, GUIUtils.TOGGLE_MOBS_ON);
+            AddTab(4, ShowItems, GUIUtils.TOGGLE_ITEMS_OFF, GUIUtils.TOGGLE_ITEMS_ON);
 
             int index = 0;
             _gItemToggles = new GUIToggle[5];

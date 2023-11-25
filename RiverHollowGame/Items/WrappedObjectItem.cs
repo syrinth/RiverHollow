@@ -35,7 +35,7 @@ namespace RiverHollow.Items
                     texture = DataManager.FILE_FLOORING;
                     break;
                 case BuildableEnum.Wall:
-                    texture = DataManager.FILE_WORLDOBJECTS;
+                    texture = DataManager.FILE_WALLS;
                     break;
                 default:
                     texture = DataManager.FILE_DECOR;

@@ -9,6 +9,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.MainObjects;
+using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Items.Tools;
@@ -16,13 +17,9 @@ using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Xml.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -1879,32 +1876,36 @@ namespace RiverHollow.Map_Handling
                 {
                     if (MouseTile.HasObject())
                     {
-                        WorldObject targetObj = MouseTile.RetrieveObjectFromLayer(true).Pickup;
-                        if (targetObj != null && targetObj.PlayerCanEdit())
+                        WorldObject targetObj = MouseTile.RetrieveObjectFromLayer(true);
+                        if (targetObj != null)
                         {
-                            Buildable b = (Buildable)targetObj;
-                            switch (b.GetEnumByIDKey<BuildableEnum>("Subtype"))
+                            targetObj = targetObj.Pickup;
+                            if (targetObj != null && targetObj.PlayerCanEdit())
                             {
-                                case BuildableEnum.Building:
-                                    RemoveDoor((Building)targetObj);
-                                    GUICursor.ResetCursor();
-                                    goto default;
-                                case BuildableEnum.Decor:
-                                    Decor obj = (Decor)targetObj;
-                                    if (obj.HasDisplay)
-                                    {
-                                        obj.StoreDisplayEntity();
-                                        break;
-                                    }
-                                    else
-                                    {
+                                Buildable b = (Buildable)targetObj;
+                                switch (b.GetEnumByIDKey<BuildableEnum>("Subtype"))
+                                {
+                                    case BuildableEnum.Building:
+                                        RemoveDoor((Building)targetObj);
+                                        GUICursor.ResetCursor();
                                         goto default;
-                                    }
-                                default:
-                                    PickUpWorldObject(mouseLocation, targetObj);
-                                    break;
+                                    case BuildableEnum.Decor:
+                                        Decor obj = (Decor)targetObj;
+                                        if (obj.HasDisplay)
+                                        {
+                                            obj.StoreDisplayEntity();
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            goto default;
+                                        }
+                                    default:
+                                        PickUpWorldObject(mouseLocation, targetObj);
+                                        break;
+                                }
+                                rv = true;
                             }
-                            rv = true;
                         }
                     }
                 }
@@ -1925,15 +1926,24 @@ namespace RiverHollow.Map_Handling
                 if (HeldObject.Type == ObjectTypeEnum.Plant && HeldObject.GetBoolByIDKey("SeedID")) { dummyItem = DataManager.GetItem(HeldObject.GetIntByIDKey("SeedID")); }
                 else  { dummyItem = DataManager.GetItem((Buildable)HeldObject); }
 
-                if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && (HeldObject.Type == ObjectTypeEnum.Plant || !((Buildable)HeldObject).Unique))
+                if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && (HeldObject.Type == ObjectTypeEnum.Plant || !((Buildable)HeldObject).Unique) && !HeldObject.IsDirectBuild())
                 {
                     InventoryManager.AddToInventory(dummyItem.ID, 1, true, true);
                     GameManager.EmptyHeldObject();
                 }
                 else if (TownModeBuild())
                 {
-                    GameManager.EmptyHeldObject();
                     PostBuildingCleanup(true);
+                    GameManager.EmptyHeldObject();
+                }
+                else if(TownModeEdit() && HeldObject.IsDirectBuild())
+                {
+                    foreach(var i in ((Buildable)HeldObject).RequiredToMake)
+                    {
+                        InventoryManager.AddToInventory(i.Key, i.Value);
+                    }
+
+                    GameManager.EmptyHeldObject();
                 }
                 else if(dummyItem == null)
                 {
@@ -1955,7 +1965,7 @@ namespace RiverHollow.Map_Handling
 
             //If we're moving the object, set it as the object to be placed. Otherwise, we need
             //to make a new object based off the one we're holding.
-            if (TownModeBuild() || templateObject.Unique) { placeObject = templateObject; }
+            if (TownModeBuild() && templateObject.Unique) { placeObject = templateObject; }
             else
             {
                 placeObject = (Buildable)DataManager.CreateWorldObjectByID(templateObject.ID);
@@ -1975,29 +1985,33 @@ namespace RiverHollow.Map_Handling
                     TaskManager.AdvanceTaskProgress(placeObject);
                 }
 
-                if(placeObject.BuildableType(BuildableEnum.Floor) || placeObject.BuildableType(BuildableEnum.Wall))
+                if(placeObject.IsDirectBuild())
                 {
                     ((AdjustableObject)placeObject).AdjustObject();
                 }
 
                 Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
+                bool canDirectBuild = TownModeBuild() && placeObject.IsDirectBuild() && InventoryManager.HasSufficientItems(placeObject.RequiredToMake);
                 //Check for if we are done placing the object of that type
-                if (dummyItem == null || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
+                if (!canDirectBuild)
                 {
-                    GameManager.EmptyHeldObject();
-
-                    if (TownModeBuild())
+                    if (dummyItem == null || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                     {
-                        if (placeObject.BuildableType(BuildableEnum.Building))
+                        GameManager.EmptyHeldObject();
+
+                        if (TownModeBuild())
                         {
-                            TownManager.IncreaseTravelerBonus();
+                            if (placeObject.BuildableType(BuildableEnum.Building))
+                            {
+                                TownManager.IncreaseTravelerBonus();
+                            }
+                            PostBuildingCleanup(false);
                         }
-                        PostBuildingCleanup(placeObject.BuildOnScreen());
                     }
-                }
-                else if (InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
-                {
-                    InventoryManager.RemoveItemsFromInventory(dummyItem.ID, 1);
+                    else if (InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
+                    {
+                        InventoryManager.RemoveItemsFromInventory(dummyItem.ID, 1);
+                    }
                 }
 
                 rv = true;
@@ -2080,13 +2094,11 @@ namespace RiverHollow.Map_Handling
 
             if (openMenu)
             {
-                //Re-open the Building Menu
                 GUIManager.OpenMenu();
+                GUIManager.GetMenu().BtnBuild();
             }
-            else
-            {
-                GameManager.ExitTownMode();
-            }
+
+            GameManager.ExitTownMode();
         }
 
         public void RemoveWorldObject(WorldObject o, bool immediately = false)
@@ -2230,7 +2242,7 @@ namespace RiverHollow.Map_Handling
             //We can place flooring anywhere there isn't flooring as long as the base tile is passable.
             if (obj.BuildableType(BuildableEnum.Floor))
             {
-                if (testTile.Flooring == null && (testTile.Passable() || testTile.WorldObject.CompareType(ObjectTypeEnum.Buildable)))
+                if (testTile.Flooring == null && (testTile.TileIsPassable() && testTile.WorldObject == null))
                 {
                     rv = true;
                 }
@@ -2698,13 +2710,6 @@ namespace RiverHollow.Map_Handling
         internal void LoadData(MapData mData)
         {
             Visited = mData.visited;
-            foreach (var data in mData.specialTiles)
-            {
-                if (data.tilled)
-                {
-                    _arrTiles[data.x, data.y].TillTile(false);
-                }
-            }
 
             foreach (WorldObjectData data in mData.worldObjects)
             {

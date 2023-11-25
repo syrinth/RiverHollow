@@ -471,6 +471,11 @@ namespace RiverHollow.WorldObjects
         public bool WallObject() { return _ePlacement == ObjectPlacementEnum.Wall; }
         public bool FlooringObject() { return _ePlacement == ObjectPlacementEnum.Floor; }
 
+        public bool IsDirectBuild()
+        {
+            return BuildableType(BuildableEnum.Floor) || BuildableType(BuildableEnum.Wall);
+        }
+
         public void SetShopItem()
         {
             ShopItem = true;

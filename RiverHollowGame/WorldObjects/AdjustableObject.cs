@@ -4,6 +4,7 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using System.Collections.Generic;
 using RiverHollow.Utilities;
+using System.Reflection;
 
 namespace RiverHollow.WorldObjects
 {
@@ -14,32 +15,47 @@ namespace RiverHollow.WorldObjects
         protected override void LoadSprite(string texture)
         {
             Sprite = LoadAdjustableSprite(texture);
+            
         }
         /// <summary>
         /// Loads in the different sprite versions required for an AdjustableObject
         /// so that they can be easily played and referenced in the future.
         /// </summary>
-        protected AnimatedSprite LoadAdjustableSprite(string texture)
+        protected AnimatedSprite LoadAdjustableSprite(string texture, string suffix = "", int xOffset = 0)
         {
             AnimatedSprite spr = new AnimatedSprite(texture);
-            spr.AddAnimation("None", _pImagePos.X, _pImagePos.Y, _pSize);
-            spr.AddAnimation("NS", _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
-            spr.AddAnimation("EW", _pImagePos.X + Constants.TILE_SIZE * 2, _pImagePos.Y, _pSize);
-            spr.AddAnimation("SW", _pImagePos.X + Constants.TILE_SIZE * 3, _pImagePos.Y, _pSize);
-            spr.AddAnimation("NW", _pImagePos.X + Constants.TILE_SIZE * 4, _pImagePos.Y, _pSize);
-            spr.AddAnimation("NE", _pImagePos.X + Constants.TILE_SIZE * 5, _pImagePos.Y, _pSize);
-            spr.AddAnimation("SE", _pImagePos.X + Constants.TILE_SIZE * 6, _pImagePos.Y, _pSize);
-            spr.AddAnimation("NSE", _pImagePos.X + Constants.TILE_SIZE * 7, _pImagePos.Y, _pSize);
-            spr.AddAnimation("NSW", _pImagePos.X + Constants.TILE_SIZE * 8, _pImagePos.Y, _pSize);
-            spr.AddAnimation("NEW", _pImagePos.X + Constants.TILE_SIZE * 9, _pImagePos.Y, _pSize);
-            spr.AddAnimation("SEW", _pImagePos.X + Constants.TILE_SIZE * 10, _pImagePos.Y, _pSize);
-            spr.AddAnimation("NSEW", _pImagePos.X + Constants.TILE_SIZE * 11, _pImagePos.Y, _pSize);
-            spr.AddAnimation("W", _pImagePos.X + Constants.TILE_SIZE * 12, _pImagePos.Y, _pSize);
-            spr.AddAnimation("E", _pImagePos.X + Constants.TILE_SIZE * 13, _pImagePos.Y, _pSize);
-            spr.AddAnimation("S", _pImagePos.X + Constants.TILE_SIZE * 14, _pImagePos.Y, _pSize);
-            spr.AddAnimation("N", _pImagePos.X + Constants.TILE_SIZE * 15, _pImagePos.Y, _pSize);
-
+            LoadAnimations(ref spr);
+            if (!string.IsNullOrEmpty(suffix))
+            {
+                LoadAnimations(ref spr, suffix, xOffset);
+            }
             return spr;
+        }
+
+        protected void LoadAnimations(ref AnimatedSprite spr, string suffix = "", int xOffset = 0)
+        {
+            Point size = new Point(Width, Height);
+            Point startPos = new Point(_pImagePos.X + xOffset, _pImagePos.Y);
+            spr.AddAnimation(suffix + "None", startPos.X, startPos.Y, _pSize);
+            spr.AddAnimation(suffix + "S", startPos.X, startPos.Y + size.Y, _pSize);
+            spr.AddAnimation(suffix + "NS", startPos.X, startPos.Y + (size.Y * 2), _pSize);
+            spr.AddAnimation(suffix + "N", startPos.X, startPos.Y + (size.Y * 3), _pSize);
+
+            spr.AddAnimation(suffix + "SE", startPos.X + size.X, startPos.Y, _pSize);
+            spr.AddAnimation(suffix + "SEW", startPos.X + (size.X * 2), startPos.Y, _pSize);
+            spr.AddAnimation(suffix + "SW", startPos.X + (size.X * 3), startPos.Y, _pSize);
+
+            spr.AddAnimation(suffix + "NSE", startPos.X + size.X, startPos.Y + size.Y, _pSize);
+            spr.AddAnimation(suffix + "NSEW", startPos.X + (size.X * 2), startPos.Y + size.Y, _pSize);
+            spr.AddAnimation(suffix + "NSW", startPos.X + (size.X * 3), startPos.Y + size.Y, _pSize);
+
+            spr.AddAnimation(suffix + "NE", startPos.X + size.X, startPos.Y + (size.Y * 2), _pSize);
+            spr.AddAnimation(suffix + "NEW", startPos.X + (size.X * 2), startPos.Y + (size.Y * 2), _pSize);
+            spr.AddAnimation(suffix + "NW", startPos.X + (size.X * 3), startPos.Y + (size.Y * 2), _pSize);
+
+            spr.AddAnimation(suffix + "E", startPos.X + size.X, (size.Y * 3), _pSize);
+            spr.AddAnimation(suffix + "EW", startPos.X + (size.X * 2), (size.Y * 3), _pSize);
+            spr.AddAnimation(suffix + "W", startPos.X + (size.X * 3), (size.Y * 3), _pSize);
         }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
@@ -158,7 +174,7 @@ namespace RiverHollow.WorldObjects
             if (tile != null)
             {
                 WorldObject wObj = tile.GetWorldObject(false);
-                if (wObj != null && wObj.Type == Type)
+                if (wObj != null && wObj.ID == ID)
                 {
                     obj = (AdjustableObject)wObj;
                     rv = true;

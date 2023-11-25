@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-using System.Collections.Generic;
-using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
@@ -44,13 +42,69 @@ namespace RiverHollow.WorldObjects
                 WorldObject floorObj = tile.GetFloorObject();
                 if (floorObj != null && floorObj.BuildableType(BuildableEnum.Floor)) { obj = (Floor)floorObj; }
 
-                if (obj != null && obj.Type == Type)
+                if (obj != null && obj.ID == ID)
                 {
                     rv = true;
                 }
             }
 
             return rv;
+        }
+    }
+
+    public class Earth : Floor
+    {
+        const string WATERED = "Watered-";
+        public bool HasBeenWatered { get; private set; }
+        public Earth(int id) : base(id) { }
+
+        protected override void LoadSprite()
+        {
+            Sprite = LoadAdjustableSprite(DataManager.FILE_FLOORING, WATERED, 64);
+        }
+
+        public override void Rollover()
+        {
+            base.Rollover();
+            if (EnvironmentManager.IsRaining() && CurrentMap.IsOutside) { SetWatered(true); }
+            else { SetWatered(false); }
+
+            if (Tiles[0].WorldObject == null)
+            {
+                if (RHRandom.Instance().RollPercent(10))
+                {
+                    CurrentMap.RemoveWorldObject(this);
+                }
+            }
+        }
+
+        public override bool PlaceOnMap(RHMap map, bool ignoreActors = false)
+        {
+            bool rv = base.PlaceOnMap(map, ignoreActors);
+
+            if (rv)
+            {
+                CurrentMap.AddSpecialTile(Tiles[0]);
+            }
+
+            return rv;
+        }
+
+        public void SetWatered(bool value)
+        {
+            HasBeenWatered = value;
+            if (HasBeenWatered)
+            {
+                Sprite.PlayAnimation(WATERED + Sprite.CurrentAnimation);
+            }
+            else
+            {
+                var split =Sprite.CurrentAnimation.Split('-');
+                if (split.Length > 1)
+                {
+                    Sprite.PlayAnimation(split[1]);
+                }
+            }
         }
     }
 }

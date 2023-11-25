@@ -2,16 +2,12 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
-using RiverHollow.Items;
 using System.Collections.Generic;
-using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens.HUDComponents
 {
     public class HUDMenu : GUIObject
     {
-        HUDMenuEnum _eCurrentState = HUDMenuEnum.Main;
-
         const int BTN_PADDING = 10;
         List<GUIObject> _liButtons;
 
@@ -26,42 +22,23 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             _closeMenu = closeMenu;
 
             _liButtons = new List<GUIObject>();
-            NewButtonMenu(HUDMenuEnum.Main);
+            NewButtonMenu();
             
             _bOpen = true;
         }
 
-        public void NewButtonMenu(HUDMenuEnum menuType)
+        public void NewButtonMenu()
         {
-            _eCurrentState = menuType;
-
             _liButtons.ForEach(x => RemoveControl(x));
             _liButtons.Clear();
 
-            switch (menuType)
-            {
-                case HUDMenuEnum.Build:
-                    var btn = new GUIButton("Structures", BtnStructure);
-                    btn.Enable(MapManager.CurrentMap.IsOutside && MapManager.CurrentMap.IsTown);
-
-                    _liButtons.Add(btn);
-                    _liButtons.Add(new GUIButton("Crafting", BtnCrafting));
-                    _liButtons.Add(new GUIButton("Edit Town", BtnEdit));
-                    _liButtons.Add(new GUIButton("Back", BtnBackToMain));
-                    break;
-                case HUDMenuEnum.Main:
-                    _liButtons.Add(new GUIButton("Inventory", BtnInventory));
-
-                    GUIButton btnBuild = new GUIButton("Build", BtnBuild);
-                    btnBuild.Enable(!MapManager.CurrentMap.Modular);
-                    _liButtons.Add(btnBuild);
-
-                    _liButtons.Add(new GUIButton("Task Log", BtnTaskLog));
-                    _liButtons.Add(new GUIButton("Codex", BtnCodex));
-                    _liButtons.Add(new GUIButton("Options", BtnOptions));
-                    _liButtons.Add(new GUIButton("Exit Game", BtnExitGame));
-                    break;
-            }
+            _liButtons.Add(new GUIButton("Inventory", BtnInventory));
+            _liButtons.Add(new GUIButton("Build", BtnBuild));
+            _liButtons.Add(new GUIButton("Edit Town", BtnEdit));
+            _liButtons.Add(new GUIButton("Task Log", BtnTaskLog));
+            _liButtons.Add(new GUIButton("Codex", BtnCodex));
+            _liButtons.Add(new GUIButton("Options", BtnOptions));
+            _liButtons.Add(new GUIButton("Exit Game", BtnExitGame));
 
             AddControls(_liButtons);
             GUIUtils.CreateSpacedColumn(_liButtons, -_liButtons[0].Width, 0, RiverHollow.ScreenHeight, BTN_PADDING);
@@ -90,26 +67,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                 if (_bClose && o.Position().X == -o.Width) { /*Finished closing */ }
             }
             if (_openingFinished == _liButtons.Count) { _bOpen = false; }
-        }
-
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if (_eCurrentState == HUDMenuEnum.Build)
-            {
-                rv = true;
-                if (GUIManager.IsMainObjectOpen())
-                {
-                    GUIManager.CloseMainObject();
-                }
-                else
-                {
-                    NewButtonMenu(HUDMenuEnum.Main);
-                }
-            }
-
-            return rv;
         }
 
         #region Buttons
@@ -142,30 +99,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 
         public void BtnBuild()
         {
-            if (!MapManager.CurrentMap.Modular)
-            {
-                NewButtonMenu(HUDMenuEnum.Build);
-            }
-        }
-
-        public void BtnStructure()
-        {
-            var _gMenuObject = new HUDCraftStructures(_closeMenu);
+            var _gMenuObject = new HUDTownCrafting(_closeMenu);
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
-        }
-
-        public void BtnCrafting()
-        {
-            var _gMenuObject = new HUDCraftRecipes();
-            _gMenuObject.CenterOnScreen();
-            GUIManager.OpenMainObject(_gMenuObject);
-        }
-
-        public void BtnBackToMain()
-        {
-            NewButtonMenu(HUDMenuEnum.Main);
-            GUIManager.CloseMainObject();
         }
 
         public void BtnEdit()

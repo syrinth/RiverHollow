@@ -69,6 +69,7 @@ namespace RiverHollow.Game_Managers
 
         public static void TriggerCutscene(int id, RHTask triggerTask = null)
         {
+            GUICursor.ResetCursor();
             _currentCutscene = _diCutscenes[id];
             _currentCutscene.Setup(triggerTask);
             Playing = true;

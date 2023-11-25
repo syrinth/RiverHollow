@@ -35,9 +35,9 @@ namespace RiverHollow.Map_Handling
         public bool IsRoad { get; private set; }
 
         public bool IsWaterTile => ContainsProperty("Water", out string value) && value.Equals("true");
-        private bool _bTilled;
-        public bool IsTilled => _bTilled || (Flooring != null && Flooring.GetBoolByIDKey("Field"));
-        public bool HasBeenWatered { get; private set; }
+
+        public bool IsTilled => Flooring != null && Flooring.GetBoolByIDKey("Earth");
+        public bool HasBeenWatered => GetEarth() != null && GetEarth().HasBeenWatered;
 
         bool _bArea = false;
         bool _bSelected = false;
@@ -56,15 +56,6 @@ namespace RiverHollow.Map_Handling
         public void Draw(SpriteBatch spriteBatch)
         {
             _objWallpaper?.Draw(spriteBatch);
-
-            if (_bTilled && CurrentMap() == MapManager.TownMap)
-            {
-                Rectangle dirtRectangle;
-                if (HasBeenWatered) { dirtRectangle = new Rectangle(16, 304, 16, 16); }
-                else { dirtRectangle = new Rectangle(0, 304, 16, 16); }
-
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), CollisionBox, dirtRectangle, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
-            }
         }
 
         public bool ProcessRightClick()
@@ -165,16 +156,19 @@ namespace RiverHollow.Map_Handling
         }
         public WorldObject RetrieveObjectFromLayer(bool getEditable)
         {
+            WorldObject rv = null;
             if (getEditable)
             {
-                if (WorldObject != null && WorldObject.PlayerCanEdit()) { return WorldObject.Pickup; }
-                else if (ShadowStructure() != null && ShadowStructure().PlayerCanEdit()) { return ShadowStructure(); }
-                else { return Flooring; }
+                if (WorldObject != null && WorldObject.PlayerCanEdit()) { rv = WorldObject.Pickup; }                
+                else if (Flooring != null) { rv = Flooring; }
+                else if (ShadowStructure() != null && ShadowStructure().PlayerCanEdit()) { rv = ShadowStructure(); }
             }
             else
             {
-                return WorldObject ?? ShadowStructure() ?? Flooring;
+                rv = WorldObject ?? ShadowStructure() ?? Flooring;
             }
+
+            return rv;
         }
 
         public void RemoveWorldObject()
@@ -272,62 +266,32 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
-            if (EnvironmentManager.IsRaining() && CurrentMap().IsOutside) { HasBeenWatered = true; }
-            else { HasBeenWatered = false; }
-
-            if (_bTilled && WorldObject == null)
+            var earth = GetEarth();
+            if (earth != null)
             {
-                if (RHRandom.Instance().RollPercent(20))
-                {
-                    UntillTile();
-                }
+                earth.Rollover();
             }
         }
 
-        public void TillTile(bool useEnergy)
+
+        public Earth GetEarth()
         {
-            if (ContainsProperty("Tillable", out string value))
+            Earth rv = null;
+
+            if (IsTilled)
             {
-                if (WorldObject != null && WorldObject.Type == ObjectTypeEnum.Plant)
-                {
-                    Plant p = (Plant)WorldObject;
-                    var seedID = WorldObject.GetIntByIDKey("SeedID", -1);
-                    if (p.CurrentState == 0 && seedID != -1)
-                    {
-                        MapManager.RemoveWorldObject(WorldObject);
-                        MapManager.DropItemOnMap(DataManager.GetItem(seedID), CollisionBox.Location);
-                    }
-                }
-                else if (WorldObject == null && GetFloorObject() == null)
-                {
-                    if (useEnergy)
-                    {
-                        PlayerManager.ToolLoseEnergy();
-                    }
-
-                    _bTilled = !_bTilled;
-                    if (_bTilled)
-                    {
-                        HasBeenWatered = EnvironmentManager.IsRaining();
-                        CurrentMap().AddSpecialTile(this);
-                    }
-                    else
-                    {
-                        UntillTile();
-                    }
-                }
+                return Flooring as Earth;
             }
-        }
 
-        public void UntillTile()
-        {
-            HasBeenWatered = false;
-            CurrentMap().RemoveSpecialTile(this);
+            return rv;
         }
 
         public void WaterTile()
         {
-            HasBeenWatered = true;
+            if (IsTilled)
+            {
+                GetEarth().SetWatered(true);
+            }
         }
 
         #region TileTraversal
@@ -494,7 +458,6 @@ namespace RiverHollow.Map_Handling
             {
                 x = X,
                 y = Y,
-                tilled = _bTilled,
                 wallpaperData = _objWallpaper == null ? -1 : _objWallpaper.ID
             };
 

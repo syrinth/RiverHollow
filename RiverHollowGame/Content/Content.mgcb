@@ -3549,6 +3549,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Tree_Whispering.png
 
+#begin Textures/WorldObjects/Walls.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WorldObjects/Walls.png
+
 #begin Textures/WorldObjects/World_Objects.png
 /importer:TextureImporter
 /processor:TextureProcessor

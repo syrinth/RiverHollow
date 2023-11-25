@@ -9,8 +9,6 @@
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Bed };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Donate, PetFollow, PetUnfollow, GetBaby }
 
-        public enum HUDMenuEnum { Main, Build };
-
         public enum SpawnTypeEnum { Item, Object, Mob };
         public enum RarityEnum { C, U, R, M };
         public enum WeatherEnum { Sunny, Raining, Snowing };
@@ -22,6 +20,7 @@
         public enum DisplayTypeEnum { None, Inventory, PlayerInventory };
         public enum ItemBoxDraw { Always, Never, OnlyStacks };
         public enum CodexPageEnum { Villagers, Merchants, Travelers, Mobs, Items };
+        public enum BuildPageEnum { Structures, Flooring, Walls, Furniture, Lighting };
 
         public enum SeasonEnum { None, Spring, Summer, Fall, Winter };
         public enum DayEnum { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday };

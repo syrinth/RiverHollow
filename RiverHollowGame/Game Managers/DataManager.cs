@@ -50,6 +50,7 @@ namespace RiverHollow.Game_Managers
         public const string FILE_DECOR = FOLDER_WORLDOBJECTS + @"Decor";
         public const string FILE_PLANTS = FOLDER_WORLDOBJECTS + @"Plants";
         public const string FILE_FLOORING = FOLDER_WORLDOBJECTS + @"texFlooring";
+        public const string FILE_WALLS = FOLDER_WORLDOBJECTS + @"Walls";
         public const string FILE_MACHINES = FOLDER_WORLDOBJECTS + @"texMachines";
 
         public const string UPGRADE_ICONS = GUI_COMPONENTS + @"\GUI_Upgrade_Icons";
@@ -631,7 +632,8 @@ namespace RiverHollow.Game_Managers
                             case BuildableEnum.Field:
                                 return new Field(id);
                             case BuildableEnum.Floor:
-                                return new Floor(id);
+                                if (GetBoolByIDKey(id, "Earth", DataType.WorldObject)) { return new Earth(id); }
+                                else { return new Floor(id); }
                             case BuildableEnum.Mailbox:
                                 return new Mailbox(id);
                             case BuildableEnum.Structure:

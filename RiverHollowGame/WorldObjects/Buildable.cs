@@ -42,12 +42,18 @@ namespace RiverHollow.WorldObjects
 
         public bool CanBuild()
         {
+            return !OutsideOnly || (OutsideOnly && MapManager.CurrentMap.IsOutside);
+        }
+
+        public bool UniqueNotBuilt()
+        {
+            bool rv = true;
             if (Unique && TownManager.GetNumberTownObjects(ID) != 0)
             {
-                return false;
+                rv = false;
             }
 
-            return !OutsideOnly || (OutsideOnly && MapManager.CurrentMap.IsOutside);
+            return rv;
         }
 
         public bool BuildOnScreen()
