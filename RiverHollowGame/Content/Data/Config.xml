@@ -6,8 +6,8 @@
       <Value>[ItemID:140/121/132/133/139]</Value>
     </Item>
     <Item>
-      <Key>2</Key>
-      <Value>[ObjectID:50]</Value>
+      <Key>1</Key>
+      <Value>[ItemID:215-5]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -31,19 +31,19 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Wall:50][Floor:24]</Value>
+      <Value></Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[ObjectID:40]</Value>
+      <Value></Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[ObjectID:63]</Value>
+      <Value></Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[ObjectID:52]</Value>
+      <Value></Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[MoveAction:0][UseItem:1]</Value>
+      <Value></Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[ObjectID:26]</Value>
+      <Value></Value>
     </Item>
   </Asset>
 </XnaContent>

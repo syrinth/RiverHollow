@@ -26,8 +26,8 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Name][Text:I've got food stockpiled but not a lot of really varied ingredients. When you get a chance, you should spend some time whipping up some food here for the travelers that stop by.
-	  Everyone has their own likes and dislikes though, so try to keep it varied if you can. Happy travelers will spend more money in town before they leave.]</Value>
+      <Value>[Name][Text:I've got some food prepared, but I'm not exactly a good cook. Whenever you get a chance, you should spend some time whipping up some food here for the travelers that stop by.
+	  Everyone has their own likes and dislikes, so try to keep it varied if you can. Happy Travelers will spend more money in town before they leave.]</Value>
     </Item>
   </Asset>
 </XnaContent>

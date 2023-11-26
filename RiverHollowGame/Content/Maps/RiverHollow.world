@@ -34,6 +34,13 @@
             "width": 592,
             "x": 96,
             "y": -912
+        },
+        {
+            "fileName": "Misc/mapDwarfCave_Small.tmx",
+            "height": 416,
+            "width": 320,
+            "x": 688,
+            "y": -944
         }
     ],
     "onlyShowAdjacentMaps": false,

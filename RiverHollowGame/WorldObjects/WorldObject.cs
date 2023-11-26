@@ -264,7 +264,7 @@ namespace RiverHollow.WorldObjects
             if (GetBoolByIDKey("OpenStock") && GameManager.CurrentBuilding != null)
             {
                 rv = true;
-                GUIManager.OpenMainObject(new HUDInventoryDisplay(TownManager.Inventory, DisplayTypeEnum.Inventory));
+                GUIManager.OpenMainObject(new HUDInventoryDisplay(TownManager.Pantry, DisplayTypeEnum.Inventory));
             }
 
             if (GetBoolByIDKey("Bed"))

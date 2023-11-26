@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Build][StartNPC:60][AssignTrigger:GameStart][TargetObjectID:6][EndBuildingID:6][CutsceneID:14][ItemRewardID:218/76-9]</Value>
+      <Value>[Type:Build][StartNPC:60][AssignTrigger:GameStart][TargetObjectID:6][EndBuildingID:6][CutsceneID:14][ItemRewardID:218]</Value>
     </Item>
   </Asset>
 </XnaContent>

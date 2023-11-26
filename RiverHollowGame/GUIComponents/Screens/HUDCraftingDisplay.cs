@@ -149,7 +149,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (_objMachine.GetBoolByIDKey("Kitchen"))
             {
-                InventoryManager.InitExtraInventory(TownManager.Inventory);
+                InventoryManager.InitExtraInventory(TownManager.Pantry);
                 _gInventory = new GUIInventoryWindow(false);
                 _gInventory.AnchorAndAlignWithSpacing(_gComponents, SideEnum.Bottom, SideEnum.CenterX, 2, GUIUtils.ParentRuleEnum.ForceToParent);
             }

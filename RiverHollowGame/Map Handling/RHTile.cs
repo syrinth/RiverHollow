@@ -159,7 +159,7 @@ namespace RiverHollow.Map_Handling
             WorldObject rv = null;
             if (getEditable)
             {
-                if (WorldObject != null && WorldObject.PlayerCanEdit()) { rv = WorldObject.Pickup; }                
+                if (WorldObject != null && WorldObject.PlayerCanEdit()) { rv = WorldObject.Pickup; }
                 else if (Flooring != null) { rv = Flooring; }
                 else if (ShadowStructure() != null && ShadowStructure().PlayerCanEdit()) { rv = ShadowStructure(); }
             }

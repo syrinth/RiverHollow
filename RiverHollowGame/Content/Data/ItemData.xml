@@ -539,7 +539,7 @@
     </Item>
     <Item>
       <Key>134</Key>
-      <Value>[Type:Tool][Subtype:Hoe][Image:0-2][Level:1][SoundEffect:Pick][AnimationData:0-384/3-4/5/0.08][Stam:2][HitAt:1]</Value>
+      <Value>[Type:Resource][Subtype:None]</Value>
     </Item>
     <Item>
       <Key>135</Key>

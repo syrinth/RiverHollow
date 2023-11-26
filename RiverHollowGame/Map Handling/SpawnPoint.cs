@@ -220,12 +220,15 @@ namespace RiverHollow.Map_Handling
             if (copy.Count > 0)
             {
                 List<RHTile> validTiles = TilesInArea(true);
-                SpawnData copyData = Util.RollOnRarityTable(copy);
+                if (validTiles.Count > 0)
+                {
+                    SpawnData copyData = Util.RollOnRarityTable(copy);
 
-                Mob m = DataManager.CreateMob(copyData.ID);
-                RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
-                _map.AddMobByPosition(m, t.Position);
-                m.SetInitialPoint(t.Position);
+                    Mob m = DataManager.CreateMob(copyData.ID);
+                    RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
+                    _map.AddMobByPosition(m, t.Position);
+                    m.SetInitialPoint(t.Position);
+                }
             }
         }
 
