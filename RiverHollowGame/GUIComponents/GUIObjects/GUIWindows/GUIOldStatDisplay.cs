@@ -7,16 +7,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUIOldStatDisplay : GUIWindow
     {
-        BitmapFont _font;
+        readonly BitmapFont _font;
 
-        GUIImage _gFill;
-        GUIText _gText;
+        readonly GUIImage _gFill;
+        readonly GUIText _gText;
 
         float _fMax;
         float _fCurr;
 
         public delegate void DelegateRetrieveValues(ref float curr, ref float max);
-        DelegateRetrieveValues _delAction;
+        readonly DelegateRetrieveValues _delAction;
 
         public GUIOldStatDisplay(DelegateRetrieveValues del, Color c, int width = 200) : base(GUIUtils.WINDOW_DISPLAY, width, GameManager.ScaledTileSize/2)
         {
@@ -65,6 +65,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected override void EndHover()
         {
+            _gText.SetText("");
             _gText.Show(false);
         }
     }

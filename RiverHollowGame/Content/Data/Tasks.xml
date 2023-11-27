@@ -27,11 +27,11 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Population][StartNPC:16][AssignTrigger:Task-0][Count:7][ItemRewardID:180][TriggerTask:7][GoalNPC:16]</Value>
+      <Value>[Type:Population][StartNPC:16][AssignTrigger:Task-0][Count:5][ItemRewardID:180][TriggerTask:7][GoalNPC:16]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Build][StartNPC:16][AssignTrigger:Task-6][TargetObjectID:38][EndBuildingID:38]</Value>
+      <Value>[Type:Build]</Value>
     </Item>
     <Item>
       <Key>8</Key>

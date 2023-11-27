@@ -16,6 +16,8 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDScreen : GUIScreen
     {
+        bool _bTownMode = false;
+
         List<HUDNewAlert> _liTaskIcons;
 
         GUIButton _btnSkipCutscene;
@@ -70,6 +72,7 @@ namespace RiverHollow.GUIComponents.Screens
             for (int i = 0; i < 4; i++)
             {
                 _gBuildIcons[i] = new GUIImage(GUIUtils.ICON_BUILD);
+                _gBuildIcons[i].Show(false);
             }
 
             _gBuildIcons[0].AnchorToScreen(SideEnum.TopLeft, 4);
@@ -84,7 +87,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             HandleInput();
 
-            ShowHideComponents();
+            ShowHideHUD();
 
             //If there are items queued to display and there is not currently a display up, create one.
             if (InventoryManager.AddedItemList.Count > 0 && _addedItem == null)
@@ -120,20 +123,24 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        private void ShowHideComponents()
+        private void ShowHideHUD()
         {
-            for (int i = 0; i < 4; i++)
+            if (_bTownMode != InTownMode())
             {
-                _gBuildIcons[i].Show(InTownMode());
-            }
+                _bTownMode = InTownMode();
+                for (int i = 0; i < 4; i++)
+                {
+                    _gBuildIcons[i].Show(InTownMode());
+                }
 
-            _gCalendar.Show(!InTownMode());
-            _gMoneyWindow.Show(!InTownMode());
-            _gMoney.Show(!InTownMode());
-            _gDungeonKeys.Show(!InTownMode());
-            _gHealthDisplay.Show(!InTownMode());
-            _gStaminaDisplay.Show(!InTownMode());
-            _gMagicDisplay?.Show(!InTownMode());
+                _gCalendar.Show(!InTownMode());
+                _gMoneyWindow.Show(!InTownMode());
+                _gMoney.Show(!InTownMode());
+                _gDungeonKeys.Show(!InTownMode());
+                _gHealthDisplay.Show(!InTownMode());
+                _gStaminaDisplay.Show(!InTownMode());
+                _gMagicDisplay?.Show(!InTownMode());
+            }
         }
 
         protected override void HandleInput()
