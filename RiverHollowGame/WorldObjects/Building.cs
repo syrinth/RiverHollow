@@ -10,6 +10,7 @@ using System.Linq;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.Buildings
 {
@@ -23,6 +24,9 @@ namespace RiverHollow.Buildings
         public string BuildingMapName => "map" + GetStringByIDKey("Texture");
 
         public Rectangle SelectionBox => new Rectangle(MapPosition.X, MapPosition.Y, Sprite.Width, Sprite.Height);
+        private Rectangle _rShadowTarget;
+        private Rectangle _rShadowSource;
+
 
         public Rectangle TravelBox { get; private set; }
 
@@ -52,6 +56,21 @@ namespace RiverHollow.Buildings
                 startX += _pSize.X * Constants.TILE_SIZE;
             }
             Sprite.PlayAnimation("1");
+
+            if (GetBoolByIDKey("Shadow"))
+            {
+                var shadow = GetRectangleByIDKey("Shadow");
+                _rShadowSource = new Rectangle(shadow.X * Constants.TILE_SIZE, shadow.Y * Constants.TILE_SIZE, shadow.Width * Constants.TILE_SIZE, shadow.Height * Constants.TILE_SIZE);
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            if (GetBoolByIDKey("Shadow"))
+            {
+                spriteBatch.Draw(Sprite.Texture, _rShadowTarget, _rShadowSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
+            }
         }
 
         public override bool ProcessLeftClick() { return true; }
@@ -100,6 +119,10 @@ namespace RiverHollow.Buildings
 
                 SyncLightPositions();
                 map.AddLights(GetLights());
+
+                _rShadowTarget = _rShadowSource;
+                _rShadowTarget.Location = CollisionBox.Location;
+                _rShadowTarget.Offset(0, CollisionBox.Height - Constants.TILE_SIZE);
             }
 
             return rv;

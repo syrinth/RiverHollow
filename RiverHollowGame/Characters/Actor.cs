@@ -391,10 +391,9 @@ namespace RiverHollow.Characters
         public void MoveActor(Vector2 v, bool faceDir = true)
         {
             var tile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
-            if (!IgnoreCollisions && tile.CollisionBox.Intersects(CollisionBox) && tile.WorldObject != null && tile.WorldObject.CompareType(ObjectTypeEnum.Plant))
+            if (!IgnoreCollisions && tile.CollisionBox.Intersects(CollisionBox) && tile.WorldObject != null && tile.WorldObject is Plant plantObj)
             {
-                Plant obj = (Plant)tile.WorldObject;
-                obj.InitiatePlantShake();
+                plantObj.InitiatePlantShake();
             }
 
             MovePosition(_vbMovement.AddMovement(v));

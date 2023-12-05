@@ -18,6 +18,7 @@ using RiverHollow.Items.Tools;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.GUIObjects;
+using System.Linq;
 
 namespace RiverHollow.Game_Managers
 {
@@ -334,6 +335,15 @@ namespace RiverHollow.Game_Managers
         {
             return _liCrafting;
         }
+
+        public static List<int> GetNonUniqueByTypes(List<BuildableEnum> enumTypes)
+        {
+            var rv = GetCraftingList().FindAll(x => !((Buildable)DataManager.CreateWorldObjectByID(x)).Unique);
+            rv = rv.Where(x => enumTypes.Contains(DataManager.GetEnumByIDKey<BuildableEnum>(x, "Subtype", DataType.WorldObject))).ToList();
+
+            return rv;
+        }
+
         public static bool AddToCraftingDictionary(int id, bool displayAlert = true)
         {
             bool rv = false;

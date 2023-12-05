@@ -93,8 +93,10 @@
     <Compile Include="Game Managers\FishingManager.cs" />
     <Compile Include="Game Managers\TownManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIToggle.cs" />
+    <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUITabWindow.cs" />
     <Compile Include="GUIComponents\GUIUtils.cs" />
     <Compile Include="GUIComponents\Screens\DefeatedScreen.cs" />
+    <Compile Include="GUIComponents\Screens\HUDComponents\DisplayUpgradeWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMenu.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\ItemDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\NPCDisplayWindow.cs" />
@@ -107,7 +109,13 @@
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDGiftWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDMerchantWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMiniInventory.cs" />
-    <Compile Include="GUIComponents\Screens\HUDWindows\HUDUpgrade.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDBuildingUpgrade.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDCodexActorPage.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDCodexItems.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownCraftingPage.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownHallOverview.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownHallUpgradePage.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownStructurePage.cs" />
     <Compile Include="GUIComponents\Screens\WorldMapScreen.cs" />
     <Compile Include="Items\MapItem.cs" />
     <Compile Include="Items\Tools\CapeOfBlinking.cs" />
@@ -159,7 +167,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIItemDescriptionWindow.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUISprite.cs" />
     <Compile Include="GUIComponents\GUIObjects\QuantityWindow.cs" />
-    <Compile Include="GUIComponents\MainObjects\TownInfoWindow.cs" />
+    <Compile Include="GUIComponents\MainObjects\HUDTownManagement.cs" />
     <Compile Include="GUIComponents\MainObjects\WarpPointWindow.cs" />
     <Compile Include="GUIComponents\Screens\ConfigScreen.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDOptions.cs" />

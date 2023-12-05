@@ -17,6 +17,8 @@ namespace RiverHollow.SpriteAnimations
         public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth + (_bLinkBelow ? -Constants.SPRITE_LINKED_MOD : Constants.SPRITE_LINKED_MOD)) : (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (Position.X / 10000f);
 
         readonly Texture2D _texture;                         // The texture that holds the images for this sprite
+
+        public Texture2D Texture => _texture;
         public Color SpriteColor { get; private set; } = Color.White;
         public float Alpha { get; private set; } = 1;
 

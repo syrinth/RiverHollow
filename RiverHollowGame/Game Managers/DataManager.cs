@@ -708,6 +708,13 @@ namespace RiverHollow.Game_Managers
             else { return null; }
         }
 
+        public static List<int> GetWorldObjectsWithKey(string key)
+        {
+            var list = _diWorldObjects.Where(x => GetBoolByIDKey(x.Key, key, DataType.WorldObject)).Select(y => y.Key).ToList();
+
+            return list;
+        }
+
         public static int NumberOfClasses()
         {
             return _diJobs.Count;
@@ -819,6 +826,22 @@ namespace RiverHollow.Game_Managers
                 rv = null;
             }
             return (Traveler)rv;
+        }
+
+        public static List<Actor> GetAllTravelers()
+        {
+            var actors = new List<Actor>();
+            TownManager.DITravelerInfo.Keys.ToList().ForEach(x => actors.Add(CreateTraveler(x)));
+
+            return actors;
+        }
+
+        public static List<Actor> GetAllMobs()
+        {
+            var actors = new List<Actor>();
+            PlayerManager.DIMobInfo.Keys.ToList().ForEach(x => actors.Add(CreateMob(x)));
+
+            return actors;
         }
         public static Animal CreateAnimal(int id)
         {

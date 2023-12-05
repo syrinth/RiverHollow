@@ -166,28 +166,32 @@ namespace RiverHollow.WorldObjects
         {
             _bShaken = false;
 
-            if (!NeedsWatering || Tiles[0].HasBeenWatered)
+            if (!NeedsWatering || CurrentMap != MapManager.TownMap)
             {
+                Grow();
+            }
+        }
 
-                if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
+        public void Grow()
+        {
+            if (_iDaysToNextState > 0) //Decrement the number of days until the next phase
+            {
+                _iDaysToNextState--;
+                if (_iDaysToNextState == 0 && !FinishedGrowing())
                 {
-                    _iDaysToNextState--;
-                    if (_iDaysToNextState == 0 && !FinishedGrowing())
-                    {
-                        SetState(++CurrentState);
-                    }
+                    SetState(++CurrentState);
                 }
+            }
 
-                if (FinishedGrowing() && GetBoolByIDKey("Spread"))
+            if (FinishedGrowing() && GetBoolByIDKey("Spread"))
+            {
+                var spreadParams = Util.FindIntParams(GetStringByIDKey("Spread"));
+                if (RHRandom.Instance().RollPercent(spreadParams[0]))
                 {
-                    var spreadParams = Util.FindIntParams(GetStringByIDKey("Spread"));
-                    if (RHRandom.Instance().RollPercent(spreadParams[0]))
+                    var targetTile = Util.GetRandomItem(CurrentMap.GetAllTilesInRange(Tiles[0], spreadParams[1]));
+                    if (targetTile != null && targetTile.WorldObject == null && targetTile.Flooring == null)
                     {
-                        var targetTile = Util.GetRandomItem(CurrentMap.GetAllTilesInRange(Tiles[0], spreadParams[1]));
-                        if (targetTile != null && targetTile.WorldObject == null && targetTile.Flooring == null)
-                        {
-                            DataManager.CreateAndPlaceNewWorldObject(ID, targetTile.Position, CurrentMap);
-                        }
+                        DataManager.CreateAndPlaceNewWorldObject(ID, targetTile.Position, CurrentMap);
                     }
                 }
             }

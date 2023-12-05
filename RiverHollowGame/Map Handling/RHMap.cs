@@ -474,10 +474,12 @@ namespace RiverHollow.Map_Handling
                 {
                     for (int i = 0; i < objects.Count; i++)
                     {
-                        var obj = (Plant)objects[i];
-                        if (obj.FinishedGrowing())
+                        if (objects[i] is Plant plantObj)
                         {
-                            rv++;
+                            if (plantObj.FinishedGrowing())
+                            {
+                                rv++;
+                            }
                         }
                     }
                 }
@@ -679,11 +681,13 @@ namespace RiverHollow.Map_Handling
                     possibleTiles.Remove(t);
                 }
 
-                if (!refresh && obj.CompareType(ObjectTypeEnum.Plant))
+                if (obj is Plant plantObj)
                 {
-                    var p = (Plant)obj;
-                    if (p.NeedsWatering) { p.FinishGrowth(); }
-                    else { p.RandomizeState(); }
+                    if (!refresh)
+                    {
+                        if (plantObj.NeedsWatering) { plantObj.FinishGrowth(); }
+                        else { plantObj.RandomizeState(); }
+                    }
                 }
             }
         }
@@ -813,9 +817,9 @@ namespace RiverHollow.Map_Handling
                             if (tiledObj.Properties.ContainsKey("ObjectID"))
                             {
                                 WorldObject obj = DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Properties);
-                                if (obj.CompareType(ObjectTypeEnum.Plant))
+                                if (obj is Plant plantObj)
                                 {
-                                    ((Plant)obj).FinishGrowth();
+                                    plantObj.FinishGrowth();
                                 }
 
                                 if (obj.PlaceOnMap(new Point(x, y), this))
@@ -1622,7 +1626,7 @@ namespace RiverHollow.Map_Handling
                             if (obj.Name.Equals("Town_Display"))
                             {
                                 rv = true;
-                                GUIManager.OpenMainObject(new TownInfoWindow());
+                                GUIManager.OpenMainObject(new HUDTownManagement());
                             }
                             else if (obj.Name.Equals("Display_Upgrade"))
                             {
@@ -1866,9 +1870,9 @@ namespace RiverHollow.Map_Handling
                                 break;
                         }
                     }
-                    else if (toBuild.CompareType(ObjectTypeEnum.Plant))
+                    else if (toBuild is Plant plantObj)
                     {
-                        rv = TownPlaceSeed((Plant)toBuild);
+                        rv = TownPlaceSeed(plantObj);
                     }
                     SoundManager.PlayEffect(rv ? SoundEffectEnum.Thump : SoundEffectEnum.Cancel);
                 }
@@ -2272,10 +2276,9 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            if(obj.Type == ObjectTypeEnum.Plant)
+            if(obj is Plant plantObj)
             {
-                Plant p = (Plant)obj;
-                if (GameManager.HeldObject != null && obj.ID == GameManager.HeldObject.ID && p.NeedsWatering && !testTile.IsTilled)
+                if (GameManager.HeldObject != null && plantObj.ID == GameManager.HeldObject.ID && plantObj.NeedsWatering && !testTile.IsTilled)
                 {
                     rv = false;
                 }

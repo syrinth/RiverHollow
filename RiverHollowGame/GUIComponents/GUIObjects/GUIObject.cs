@@ -16,6 +16,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         internal List<GUIObject> Controls;
 
         public delegate void EmptyDelegate();
+        public delegate void IntDelegate(int i);
 
         public GUIObject Parent { get; private set; }
 
@@ -143,11 +144,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             bool rv = false;
 
-            foreach(GUIObject c in Controls)
+            foreach (GUIObject c in Controls)
             {
                 if (c.Contains(mouse))
                 {
-                     rv = c.ProcessLeftButtonClick(mouse);
+                    rv = c.ProcessLeftButtonClick(mouse);
                     if (rv) { break; }
                 }
             }
@@ -400,6 +401,13 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
+        public virtual void RemoveControls(params GUIObject[] obj)
+        {
+            foreach (GUIObject o in obj)
+            {
+                RemoveControl(o);
+            }
+        }
         protected void RemoveScreen()
         {
             Screen?.RemoveControl(this);

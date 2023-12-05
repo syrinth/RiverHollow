@@ -49,10 +49,9 @@ namespace RiverHollow.WorldObjects
                 RHTile closestPlantTile = Tiles[0];
                 foreach (RHTile t in MapManager.Maps[Tiles[0].MapName].GetAllTilesInRange(Tiles[0], 7))
                 {
-                    if (t.WorldObject != null && t.WorldObject.CompareType(ObjectTypeEnum.Plant))
+                    if (t.WorldObject != null && t.WorldObject is Plant plantObj)
                     {
-                        Plant p = (Plant)t.WorldObject;
-                        if (p != null && p.HoneyID != -1 && p.FinishedGrowing() && (closestPlantTile == Tiles[0] || Util.GetRHTileDelta(Tiles[0], t) < Util.GetRHTileDelta(Tiles[0], closestPlantTile)))
+                        if (plantObj.HoneyID != -1 && plantObj.FinishedGrowing() && (closestPlantTile == Tiles[0] || Util.GetRHTileDelta(Tiles[0], t) < Util.GetRHTileDelta(Tiles[0], closestPlantTile)))
                         {
                             closestPlantTile = t;
                         }

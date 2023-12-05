@@ -77,38 +77,29 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle TOGGLE_UNMUTE = new Rectangle(336, 128, 16, 16);
         internal static Rectangle TOGGLE_CHECK= new Rectangle(96, 218, 10, 10);
         internal static Rectangle TOGGLE_UNCHECK = new Rectangle(96, 208, 10, 10);
-        internal static Rectangle TOGGLE_VILLAGERS_OFF = new Rectangle(23, 139, 22, 21);
-        internal static Rectangle TOGGLE_VILLAGERS_ON = new Rectangle(0, 143, 22, 17);
-        internal static Rectangle TOGGLE_MERCHANTS_OFF = new Rectangle(71, 139, 22, 21);
-        internal static Rectangle TOGGLE_MERCHANTS_ON = new Rectangle(48, 143, 22, 17);
-        internal static Rectangle TOGGLE_TRAVELERS_OFF = new Rectangle(23, 171, 22, 21);
-        internal static Rectangle TOGGLE_TRAVELERS_ON = new Rectangle(0, 175, 22, 17);
-        internal static Rectangle TOGGLE_MOBS_OFF = new Rectangle(71, 171, 22, 21);
-        internal static Rectangle TOGGLE_MOBS_ON = new Rectangle(48, 175, 22, 17);
-        internal static Rectangle TOGGLE_ITEMS_OFF = new Rectangle(23, 203, 22, 21);
-        internal static Rectangle TOGGLE_ITEMS_ON = new Rectangle(0, 207, 22, 17);
 
-        internal static Rectangle TOGGLE_RESOURCE_ON = new Rectangle(96, 160, 16, 16);
-        internal static Rectangle TOGGLE_RESOURCE_OFF = new Rectangle(96, 176, 16, 16);
-        internal static Rectangle TOGGLE_POTIONS_ON = new Rectangle(112, 160, 16, 16);
-        internal static Rectangle TOGGLE_POTIONS_OFF = new Rectangle(112, 176, 16, 16);
-        internal static Rectangle TOGGLE_TOOLS_ON = new Rectangle(128, 160, 16, 16);
-        internal static Rectangle TOGGLE_TOOLS_OFF = new Rectangle(128, 176, 16, 16);
-        internal static Rectangle TOGGLE_SPECIAL_ON = new Rectangle(144, 160, 16, 16);
-        internal static Rectangle TOGGLE_SPECIAL_OFF = new Rectangle(144, 176, 16, 16);
-        internal static Rectangle TOGGLE_FOOD_ON = new Rectangle(160, 160, 16, 16);
-        internal static Rectangle TOGGLE_FOOD_OFF = new Rectangle(160, 176, 16, 16);
+        internal static Rectangle TAB_UNSELECTED = new Rectangle(23, 139, 22, 21);
+        internal static Rectangle TAB_SELECTED = new Rectangle(0, 143, 22, 17);
+        internal static Rectangle TAB_VILLAGER_ICON = new Rectangle(0, 160, 14, 12);
+        internal static Rectangle TAB_MERCHANT_ICON = new Rectangle(14, 160, 14, 12);
+        internal static Rectangle TAB_TRAVELER_ICON = new Rectangle(28, 160, 14, 12);
+        internal static Rectangle TAB_MOB_ICON = new Rectangle(0, 172, 14, 12);
+        internal static Rectangle TAB_ITEM_ICON = new Rectangle(14, 172, 14, 12);
+        internal static Rectangle TAB_STRUCTURE_ICON = new Rectangle(28, 172, 14, 12);
+        internal static Rectangle TAB_FLOOR_ICON = new Rectangle(0, 184, 14, 12);
+        internal static Rectangle TAB_WALL_ICON = new Rectangle(14, 184, 14, 12);
+        internal static Rectangle TAB_FURNITURE_ICON = new Rectangle(28, 184, 14, 12);
+        internal static Rectangle TAB_LIGHTING_ICON = new Rectangle(0, 196, 14, 12);
+        internal static Rectangle TAB_OVERVIEW_ICON = new Rectangle(14, 196, 14, 12);
+        internal static Rectangle TAB_TOWN_UPGRADE_ICON = new Rectangle(28, 196, 14, 12);
 
-        internal static Rectangle TOGGLE_STRUCTURES_OFF = new Rectangle(23, 267, 22, 21);
-        internal static Rectangle TOGGLE_STRUCTURES_ON = new Rectangle(0, 271, 22, 17);
-        internal static Rectangle TOGGLE_FLOORING_OFF = new Rectangle(71, 267, 22, 21);
-        internal static Rectangle TOGGLE_FLOORING_ON = new Rectangle(48, 271, 22, 17);
-        internal static Rectangle TOGGLE_WALLS_OFF = new Rectangle(23, 299, 22, 21);
-        internal static Rectangle TOGGLE_WALLS_ON = new Rectangle(0, 303, 22, 17);
-        internal static Rectangle TOGGLE_FURNITURE_OFF = new Rectangle(71, 299, 22, 21);
-        internal static Rectangle TOGGLE_FURNITURE_ON = new Rectangle(48, 303, 22, 17);
-        internal static Rectangle TOGGLE_LIGHTING_OFF = new Rectangle(23, 331, 22, 21);
-        internal static Rectangle TOGGLE_LIGHTING_ON = new Rectangle(0, 335, 22, 17);
+        internal static Rectangle TOGGLE_ITEMS_ON = new Rectangle(48, 160, 16, 16);
+        internal static Rectangle TOGGLE_ITEMS_OFF = new Rectangle(64, 160, 16, 16);
+        internal static Rectangle TOGGLE_ITEMS_RESOURCES_ICON = new Rectangle(80, 160, 16, 16);
+        internal static Rectangle TOGGLE_ITEMS_POTIONS_ICON = new Rectangle(48, 176, 16, 16);
+        internal static Rectangle TOGGLE_ITEMS_TOOLS_ICON = new Rectangle(64, 176, 16, 16);
+        internal static Rectangle TOGGLE_ITEMS_FOOD_ICON = new Rectangle(80, 176, 16, 16);
+        internal static Rectangle TOGGLE_ITEMS_SPECIAL_ICON = new Rectangle(48, 192, 16, 16);
 
         internal static Rectangle HUD_FILL = new Rectangle(177, 161, 14, 14);
         internal static Rectangle HUD_COLOR_PICK = new Rectangle(177, 176, 7, 9);
@@ -122,7 +113,7 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle WIN_IMAGE_CRAFTING = new Rectangle(192, 0, 160, 71);
         internal static Rectangle WIN_UPGRADE = new Rectangle(0, 0, 162, 119);
-        internal static Rectangle LEVEL_TAB = new Rectangle(48, 192, 44, 16);
+        internal static Rectangle LEVEL_TAB = new Rectangle(48, 144, 44, 16);
 
         internal static Rectangle PLAYER_INVENTORY_PANE = new Rectangle(256, 160, 28, 40);
         internal static Rectangle INVENTORY_ICON_HAT = new Rectangle(208, 144, 16, 16);

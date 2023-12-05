@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:2][Collection:7/188][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Eldra][ArrivalDay:Summer-14]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:14][Collection:7/188][ShopData:1][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Eldra][ArrivalDay:Summer-14]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -55,7 +55,7 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:38][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][Key:Isabelle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][Key:Isabelle]</Value>
     </Item>
     <Item>
       <Key>14</Key>

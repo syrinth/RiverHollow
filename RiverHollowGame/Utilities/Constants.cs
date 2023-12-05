@@ -6,7 +6,7 @@
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
 #if DEBUG
-        public const bool DRAW_ADJACENCY = true;
+        public const bool DRAW_ADJACENCY = false;
 #else
         public const bool DRAW_ADJACENCY = false;
 #endif

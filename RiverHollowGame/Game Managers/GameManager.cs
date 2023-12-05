@@ -9,6 +9,7 @@ using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
+using static RiverHollow.GUIComponents.Screens.HUDComponents.HUDMenu;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
@@ -263,6 +264,18 @@ namespace RiverHollow.Game_Managers
                     v.DetermineValidSchedule();
                     v.RecalculatePath();
                 }
+            }
+        }
+
+        public static void BuildInTownMode(Dictionary<int, int> requiredToMake, Buildable obj, CloseMenuDelegate _closeMenu)
+        {
+            if (InventoryManager.HasSufficientItems(requiredToMake))
+            {
+                GameManager.EnterTownModeBuild(false);
+                GameManager.PickUpWorldObject(obj);
+
+                GUIManager.CloseMainObject();
+                _closeMenu();
             }
         }
         #endregion

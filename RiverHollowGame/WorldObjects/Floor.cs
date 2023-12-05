@@ -63,9 +63,20 @@ namespace RiverHollow.WorldObjects
             Sprite = LoadAdjustableSprite(DataManager.FILE_FLOORING, WATERED, 64);
         }
 
+        public override bool PlayerCanEdit()
+        {
+            return Tiles[0].WorldObject == null;
+        }
+
         public override void Rollover()
         {
             base.Rollover();
+
+            if (HasBeenWatered && Tiles[0].WorldObject != null && Tiles[0].WorldObject.CompareType(ObjectTypeEnum.Plant))
+            {
+                (Tiles[0].WorldObject as Plant).Grow();
+            }
+
             if (EnvironmentManager.IsRaining() && CurrentMap.IsOutside) { SetWatered(true); }
             else { SetWatered(false); }
 

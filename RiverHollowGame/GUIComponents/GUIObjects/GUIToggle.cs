@@ -1,22 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
     internal class GUIToggle : GUIObject
     {
         public bool Selected { get; private set; }
+        private bool _bTab = false;
         GUIImage _gUnselected;
         GUIImage _gSelected;
+        GUIImage _gIcon;
         GUIToggle[] toggleGroup;
 
         EmptyDelegate _delAction;
-        public GUIToggle(Rectangle unselected, Rectangle selected, string texture, EmptyDelegate del)
+        public GUIToggle(Rectangle icon, string texture, EmptyDelegate del)
         {
             _delAction = del;
+            _bTab = true;
 
-            _gUnselected = new GUIImage(unselected, texture);
-            _gSelected = new GUIImage(selected, texture);
+            _gUnselected = new GUIImage(GUIUtils.TAB_UNSELECTED, texture);
+            _gSelected = new GUIImage(GUIUtils.TAB_SELECTED, texture);
+            _gIcon = new GUIImage(icon, texture);
             _gSelected.MoveBy(0, _gUnselected.Height - _gSelected.Height);
 
             Width = _gUnselected.Width;
@@ -24,20 +29,25 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             AddControl(_gSelected);
             AddControl(_gUnselected);
+            AddControl(_gIcon);
 
             Select(false);
         }
-        public GUIToggle(Point unselected, Point selected, Point size, string texture, EmptyDelegate del)
+        public GUIToggle(Rectangle unselected, Rectangle selected, Rectangle icon, string texture, EmptyDelegate del)
         {
             _delAction = del;
+            _bTab = false;
 
-            Width = GameManager.ScaleIt(size.X);
-            Height = GameManager.ScaleIt(size.Y);
-            _gUnselected = new GUIImage(new Rectangle(unselected, size), Width, Height, texture);
-            _gSelected = new GUIImage(new Rectangle(selected, size), Width, Height, texture);
+            _gUnselected = new GUIImage(unselected, texture);
+            _gSelected = new GUIImage(selected, texture);
+            _gIcon = new GUIImage(icon, texture);
 
-            AddControl(_gUnselected);
+            Width = _gUnselected.Width;
+            Height = _gUnselected.Height;
+
             AddControl(_gSelected);
+            AddControl(_gUnselected);
+            AddControl(_gIcon);
 
             Select(false);
         }
@@ -60,11 +70,23 @@ namespace RiverHollow.GUIComponents.GUIObjects
             return rv;
         }
 
-        public void Select(bool value)
+        private void Select(bool value)
         {
             Selected = value;
             _gSelected.Show(Selected);
             _gUnselected.Show(!Selected);
+
+            if (_bTab)
+            {
+                if (Selected)
+                {
+                    _gIcon.PositionAndMove(_gSelected, 4, 4);
+                }
+                else
+                {
+                    _gIcon.PositionAndMove(_gUnselected, 4, 4);
+                }
+            }
         }
 
         private void SyncToggles()
@@ -78,7 +100,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 }
             }
         }
-        public void AssignToggleGroup(params GUIToggle[] toggles)
+        public void AssignToggleGroup(bool fireDelegate, params GUIToggle[] toggles)
         {
             toggleGroup = new GUIToggle[toggles.Length];
             for (int i = 0; i < toggles.Length; i++)
@@ -88,6 +110,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
 
             Select(true);
+
+            if (fireDelegate)
+            {
+                _delAction();
+            }
         }
         public void AssignToggleGroup(GUIToggle primeToggle, GUIToggle[] toggles)
         {
