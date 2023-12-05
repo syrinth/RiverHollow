@@ -38,6 +38,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
         public HUDTownCraftingPage(GUIWindow winMain, List<int> recipes, CloseMenuDelegate closeMenu)
         {
             _mainWindow = winMain;
+            _closeMenu = closeMenu;
+
             _liRequiredItems = new List<GUIItemBox>();
             _liItemDisplay = new List<GUIItemBoxHover>();
 
@@ -147,7 +149,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
                             if (!obj.IsDirectBuild())
                             {
-                                if (PlayerManager.ExpendResources(requiredToMake))
+                                if (InventoryManager.HasSpaceInInventory(objID, 1) && PlayerManager.ExpendResources(requiredToMake))
                                 {
                                     InventoryManager.AddToInventory(DataManager.GetItem(obj));
                                     SetupCraftingWindows();

@@ -29,7 +29,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
             _gTabToggles[0].AssignToggleGroup(true, _gTabToggles.Where(x => x != _gTabToggles[0]).ToArray());
         }
-        
+
         #region PageToggles
         public void ShowStructures()
         {

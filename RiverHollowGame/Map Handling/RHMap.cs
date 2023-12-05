@@ -9,7 +9,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.MainObjects;
-using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Items.Tools;

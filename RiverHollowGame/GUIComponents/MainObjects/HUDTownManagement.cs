@@ -16,57 +16,6 @@ namespace RiverHollow.GUIComponents.MainObjects
             _gTabToggles[0].AssignToggleGroup(true, _gTabToggles.Where(x => x != _gTabToggles[0]).ToArray());
         }
 
-        public override bool ProcessLeftButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if(_gTabObject != null)
-            {
-                rv = _gTabObject.ProcessLeftButtonClick(mouse);
-            }
-
-            if (!rv)
-            {
-                rv = base.ProcessLeftButtonClick(mouse);
-            }
-
-            return rv;
-        }
-
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if (_gTabObject != null)
-            {
-                rv = _gTabObject.ProcessRightButtonClick(mouse);
-            }
-
-            if (!rv)
-            {
-                rv = base.ProcessRightButtonClick(mouse);
-            }
-
-            return rv;
-        }
-
-        public override bool ProcessHover(Point mouse)
-        {
-            bool rv = false;
-
-            if (_gTabObject != null)
-            {
-                rv = _gTabObject.ProcessHover(mouse);
-            }
-
-            if (!rv)
-            {
-                rv = base.ProcessHover(mouse);
-            }
-
-            return rv;
-        }
-
         private void ShowOverview()
         {
             CleanTabWindow();
