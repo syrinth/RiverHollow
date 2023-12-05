@@ -367,6 +367,7 @@ namespace RiverHollow
             EnvironmentManager.UnloadEnvironment();
             GameManager.ExitTownMode();
 
+            SaveManager.Initialize();
             GameManager.Initialize();
             DungeonManager.Instantiate();
             MapManager.LoadContent(Content, GraphicsDevice);

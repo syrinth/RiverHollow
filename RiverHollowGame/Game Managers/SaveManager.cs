@@ -505,6 +505,11 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
+        public static void Initialize()
+        {
+            _iSaveID = -1;
+        }
+
         public static void StartSaveThread()
         {
             _thrSave = new Thread(SaveAtEndOfDay);
