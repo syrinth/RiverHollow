@@ -47,6 +47,7 @@
         public const int MAX_ITEM_DESC_SIZE = 550;
         public const int NORMAL_SCALE = 4;
         public const int TILE_SIZE = 16;
+        public const int BUILDING_SHADOW_HEIGHT = 2 * TILE_SIZE;
         public const int MAX_LAYER_DEPTH = 999999;
         public const float ITEM_BOUNCE_SPEED = 0.2f;
 

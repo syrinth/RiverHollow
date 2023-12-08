@@ -617,7 +617,6 @@ namespace RiverHollow.Game_Managers
             {
                 switch (GetEnumByIDKey<ObjectTypeEnum>(id, "Type", DataType.WorldObject))
                 {
-                    
                     case ObjectTypeEnum.Buildable:
                         switch (GetEnumByIDKey<BuildableEnum>(id, "Subtype", DataType.WorldObject))
                         {

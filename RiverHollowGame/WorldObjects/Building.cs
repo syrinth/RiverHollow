@@ -57,20 +57,13 @@ namespace RiverHollow.Buildings
             }
             Sprite.PlayAnimation("1");
 
-            if (GetBoolByIDKey("Shadow"))
-            {
-                var shadow = GetRectangleByIDKey("Shadow");
-                _rShadowSource = new Rectangle(shadow.X * Constants.TILE_SIZE, shadow.Y * Constants.TILE_SIZE, shadow.Width * Constants.TILE_SIZE, shadow.Height * Constants.TILE_SIZE);
-            }
+            _rShadowSource = new Rectangle(0, Sprite.Height, Sprite.Width, Constants.BUILDING_SHADOW_HEIGHT);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            if (GetBoolByIDKey("Shadow"))
-            {
-                spriteBatch.Draw(Sprite.Texture, _rShadowTarget, _rShadowSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
-            }
+            spriteBatch.Draw(Sprite.Texture, _rShadowTarget, _rShadowSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
         }
 
         public override bool ProcessLeftClick() { return true; }
@@ -121,8 +114,8 @@ namespace RiverHollow.Buildings
                 map.AddLights(GetLights());
 
                 _rShadowTarget = _rShadowSource;
-                _rShadowTarget.Location = CollisionBox.Location;
-                _rShadowTarget.Offset(0, CollisionBox.Height - Constants.TILE_SIZE);
+                _rShadowTarget.Location = Sprite.Position;
+                _rShadowTarget.Offset(0, Sprite.Height - Constants.TILE_SIZE);
             }
 
             return rv;
