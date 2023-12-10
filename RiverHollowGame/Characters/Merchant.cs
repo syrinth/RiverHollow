@@ -59,7 +59,6 @@ namespace RiverHollow.Characters
                     if (DefaultMerchant() || MyWeek())
                     {
                         TownManager.SetMerchant(this);
-                        DIShops[ShopID].Randomize();
                     }
                 }
             }
@@ -70,11 +69,6 @@ namespace RiverHollow.Characters
             OnTheMap = false;
             _iRequestIndex = Util.GetLoopingValue(_iRequestIndex, 0, RequestIDs.Length - 1, 1);
             CurrentMap?.RemoveCharacterImmediately(this);
-            if (ShopID != -1)
-            {
-                DIShops[ShopID].ClearItemSpots();
-                DIShops[ShopID].ClearRandom();
-            }
         }
 
         /// <summary>
@@ -173,17 +167,6 @@ namespace RiverHollow.Characters
 
             SetPosition(Util.SnapToGrid(new Point(TownManager.Market.MapPosition.X + TownManager.Market.SpecialCoords.X, TownManager.Market.MapPosition.Y + TownManager.Market.SpecialCoords.Y)));
             PlayAnimation(VerbEnum.Idle, DirectionEnum.Down);
-
-            if (ShopID != -1)
-            {
-                Shop marketShop = DIShops[ShopID];
-                marketShop.ClearItemSpots();
-                foreach (Structure.SubObjectInfo info in TownManager.Market.ObjectInfo)
-                {
-                    marketShop.AddItemSpot(new ShopItemSpot(CurrentMapName, (TownManager.Market.MapPosition + info.Position + new Point(8, -13)).ToVector2()));
-                }
-                marketShop.PlaceStock(true);
-            }
         }
 
         public MerchantData SaveData()

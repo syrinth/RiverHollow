@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -112,9 +113,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _guiItem?.SetColor(c);
         }
 
-        public bool CompareNumToPlayer()
+        public bool CompareNumToInventory(Container c)
         {
-            return _guiItem.SetCompareNumToPlayer();
+            return _guiItem.CompareNumToInventory(c);
         }
 
         public void SetAlpha(float val)
@@ -131,7 +132,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
     public class GUIItemBoxHover : GUIItemBox
     {
         public delegate void HoverMethod(GUIItemBoxHover obj);
-        private HoverMethod _delAction;
+        private readonly HoverMethod _delAction;
 
         public GUIItemBoxHover(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks, HoverMethod action = null) : base(it, e)
         {

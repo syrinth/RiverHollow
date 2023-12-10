@@ -1,12 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
+using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
-using RiverHollow.Utilities;
-using System;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -184,7 +181,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         GUIImage _gInvisible;
         GUIText _gText;
         public ItemBoxDraw DrawNumbers { get; private set; }
-        public bool CompareNumToPlayer = false;
+        public bool CompareToInventory = false;
 
         public GUIItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
         {
@@ -209,7 +206,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override void Update(GameTime gTime)
         {
-            if (!CompareNumToPlayer)
+            if (!CompareToInventory)
             {
                 _gText?.SetText(ItemObject.Number.ToString());
                 SetTextPosition();
@@ -244,16 +241,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gText.SetColor(c);
         }
 
-        public bool SetCompareNumToPlayer()
+        public bool CompareNumToInventory(Container c)
         {
             bool rv = true;
-            CompareNumToPlayer = true;
+            CompareToInventory = true;
             DrawNumbers = ItemBoxDraw.Always;
-            int playerNum = InventoryManager.GetNumberInInventory(ItemObject.ID);
-            _gText.SetText(string.Format("{0}/{1}", playerNum, ItemObject.Number));
+            int inventoryNumber = InventoryManager.GetNumberInInventory(ItemObject.ID, c == null ? InventoryManager.PlayerInventory : c.Inventory);
+            _gText.SetText(string.Format("{0}/{1}", inventoryNumber, ItemObject.Number));
             SetTextPosition();
 
-            if (!InventoryManager.HasItemInPlayerInventory(ItemObject.ID, ItemObject.Number))
+            if (inventoryNumber < ItemObject.Number)
             {
                 rv = false;
                 SetColor(Color.Red);

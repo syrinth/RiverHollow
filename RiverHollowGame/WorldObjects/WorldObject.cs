@@ -33,8 +33,6 @@ namespace RiverHollow.WorldObjects
         public string MapName { get; protected set; } = string.Empty;
         public RHMap CurrentMap => MapManager.Maps.ContainsKey(MapName) ? MapManager.Maps[MapName] : null;
 
-        public bool ShopItem { get; protected set; } = false;
-
         protected bool _bWalkable = false;
         public bool Selected { get; protected set; } = false;
 
@@ -138,6 +136,11 @@ namespace RiverHollow.WorldObjects
                 _bWalkable = true;
             }
 
+            if (GetBoolByIDKey("DrawUnder"))
+            {
+                _bDrawUnder = true;
+            }
+
             LoadSprite();
         }
 
@@ -233,23 +236,6 @@ namespace RiverHollow.WorldObjects
             {
                 spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), CollisionBox, GUIUtils.BLACK_BOX, Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth - 1);
             }
-
-            if (ShopItem && !GameManager.GamePaused() && !CutsceneManager.Playing && Sprite.SpriteRectangle.Contains(GUICursor.GetWorldMousePosition()))
-            {
-                int value = GetIntByIDKey("Value");
-
-                BitmapFont font = DataManager.GetBitMapFont(@"Fonts\FontBattle");
-                Size2 size = font.MeasureString(value.ToString());
-                int delta = (int)size.Width - Sprite.SpriteRectangle.Width;
-                spriteBatch.DrawString(font, value.ToString(), Sprite.Position.ToVector2() + new Vector2(-delta / 2, -8), Color.White, Constants.MAX_LAYER_DEPTH);
-
-                if (!GUIManager.IsHoverWindowOpen())
-                {
-                    var win = new GUIItemDescriptionWindow(this);
-                    win.AnchorToScreen(SideEnum.BottomRight);
-                    GUIManager.OpenHoverObject(win, Sprite.SpriteRectangle, false);
-                }
-            }
         }
         public void DrawItem(SpriteBatch spriteBatch, MapItem i)
         {
@@ -284,7 +270,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual bool PlayerCanEdit()
         {
-            return !ShopItem && CompareType(ObjectTypeEnum.Buildable);
+            return CompareType(ObjectTypeEnum.Buildable);
         }
 
         public virtual void SelectObject(bool val, bool selectParent = true)
@@ -474,11 +460,6 @@ namespace RiverHollow.WorldObjects
         public bool IsDirectBuild()
         {
             return BuildableType(BuildableEnum.Floor) || BuildableType(BuildableEnum.Wall);
-        }
-
-        public void SetShopItem()
-        {
-            ShopItem = true;
         }
 
         public virtual bool CanPickUp() { return false; }

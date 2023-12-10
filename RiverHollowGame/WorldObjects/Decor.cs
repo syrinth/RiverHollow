@@ -66,26 +66,19 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = false;
 
-            if (ShopItem)
+            //Currently, only display Decor objects can be interacted with.
+            if (CanDisplay)
             {
-                MapManager.CurrentMap.TheShop?.Interact(MapManager.CurrentMap, GUICursor.Position);
-            }
-            else
-            {
-                //Currently, only display Decor objects can be interacted with.
-                if (CanDisplay)
+                rv = true;
+                if (!Archive || _itemDisplay == null)
                 {
-                    rv = true;
-                    if (!Archive || _itemDisplay == null)
-                    {
-                        GameManager.SetSelectedWorldObject(this);
+                    GameManager.SetSelectedWorldObject(this);
 
-                        var display = new Item[1, 1];
-                        display[0, 0] = _itemDisplay;
+                    var display = new Item[1, 1];
+                    display[0, 0] = _itemDisplay;
 
-                        InventoryManager.ExtraHoldSingular = true;
-                        GUIManager.OpenMainObject(new HUDInventoryDisplay(display, DisplayTypeEnum.Inventory));
-                    }
+                    InventoryManager.ExtraHoldSingular = true;
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay(display, DisplayTypeEnum.Inventory));
                 }
             }
 

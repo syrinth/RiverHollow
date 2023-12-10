@@ -422,26 +422,6 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        public static bool ExpendResources(Dictionary<int, int> requiredItems, int batch = 1)
-        {
-            bool rv = false;
-            if (requiredItems == null)
-            {
-                return false;
-            }
-
-            if (InventoryManager.HasSufficientItems(requiredItems))
-            {
-                rv = true;
-                foreach (KeyValuePair<int, int> kvp in requiredItems)
-                {
-                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value * batch);
-                }
-            }
-
-            return rv;
-        }
-
         public static void TakeMoney(int x)
         {
             Money -= x;
@@ -619,11 +599,6 @@ namespace RiverHollow.Game_Managers
         public static void AddUniqueItemToList(int id)
         {
             Util.AddUniquelyToList(ref _liUniqueItemsBought, id);
-
-            foreach (Shop s in GameManager.DIShops.Values)
-            {
-                s.CheckForUniqueItems();
-            }
         }
         public static bool AlreadyBoughtUniqueItem(int id)
         {
@@ -971,7 +946,7 @@ namespace RiverHollow.Game_Managers
             {
                 for (int j = 0; j < InventoryManager.maxItemColumns; j++)
                 {
-                    int index = i * InventoryManager.maxItemColumns + j;
+                    int index = Util.ListIndexFromMultiArray(i, j, InventoryManager.maxItemColumns);
                     ItemData item = saveData.Items[index];
                     Item newItem = DataManager.GetItem(item.itemID, item.num);
 

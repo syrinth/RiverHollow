@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Windows.Input;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -349,14 +351,6 @@ namespace RiverHollow.Map_Handling
                 objectList.ForEach(x => x.Draw(spriteBatch));
             }
 
-            if (TheShop != null)
-            {
-                foreach (ShopItemSpot itemSpot in TheShop.ItemSpots)
-                {
-                    itemSpot.Draw(spriteBatch);
-                }
-            }
-
             if (HeldObject != null && (!GameManager.GamePaused() || Scrying()))
             {
                 foreach (RHTile t in _liTestTiles)
@@ -496,6 +490,21 @@ namespace RiverHollow.Map_Handling
             }
             return rv;
         }
+
+        public List<WorldObject> GetObjectsByType<T>()
+        {
+            List<WorldObject> rv = new List<WorldObject>();
+
+            foreach (var obj in _diWorldObjects.Values)
+            {
+                if (obj[0] is T)
+                {
+                    rv.AddRange(obj);
+                }
+            }
+
+            return rv;
+        }
         #endregion
 
         #region Resource Generation
@@ -545,8 +554,6 @@ namespace RiverHollow.Map_Handling
                     MobsSpawned = MobSpawnStateEnum.Night;
                 }
             }
-
-            StockShop();
         }
         private void GenerateMapObjects()
         {
@@ -739,15 +746,7 @@ namespace RiverHollow.Map_Handling
                 {
                     foreach (TiledMapObject obj in ol.Objects)
                     {
-                        if (obj.Name.Equals("ShopItem"))
-                        {
-                            TheShop.AddItemSpot(new ShopItemSpot(this.Name, obj.Position, obj.Size.Width, obj.Size.Height));
-                        }
-                        else if (obj.Name.Equals("ShopObject"))
-                        {
-                            TheShop.AddObjectSpot(GetTileByPixelPosition(obj.Position.ToPoint()));
-                        }
-                        else if (obj.Name.Equals("Spirit"))
+                        if (obj.Name.Equals("Spirit"))
                         {
                             Spirit s = new Spirit(obj.Properties)
                             {
@@ -809,9 +808,9 @@ namespace RiverHollow.Map_Handling
                 {
                     int objWidth = Constants.TILE_SIZE;
                     int objHeight = Constants.TILE_SIZE;
-                    for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += objWidth)
+                    for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += objHeight)
                     {
-                        for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += objHeight)
+                        for (int x = (int)tiledObj.Position.X; x < (int)tiledObj.Position.X + tiledObj.Size.Width; x += objWidth)
                         {
                             if (tiledObj.Properties.ContainsKey("ObjectID"))
                             {
@@ -973,14 +972,6 @@ namespace RiverHollow.Map_Handling
             PopulateMap(Randomize);
             CheckSpirits();
             _liItems.Clear();
-        }
-
-        public void StockShop()
-        {
-            if (this != MapManager.TownMap && TownManager.TownObjectBuilt(BuildingID))
-            {
-                TheShop?.PlaceStock(false);
-            }
         }
 
         /// <summary>
@@ -1578,11 +1569,6 @@ namespace RiverHollow.Map_Handling
                 //Do nothing if no tile could be retrieved
                 if (tile != null)
                 {
-                    if (TheShop != null && TheShop.Interact(this, mouseLocation))
-                    {
-                        rv = true;
-                    }
-
                     if (!rv)
                     {
                         rv = tile.ProcessRightClick();
@@ -1981,7 +1967,7 @@ namespace RiverHollow.Map_Handling
             //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
             placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
 
-            if (placeObject.PlaceOnMap(this) && (!TownModeBuild() || PlayerManager.ExpendResources(placeObject.RequiredToMake)))
+            if (placeObject.PlaceOnMap(this) && (!TownModeBuild() || InventoryManager.ExpendResources(placeObject.RequiredToMake)))
             {
                 if (this == MapManager.TownMap)
                 {
@@ -2066,7 +2052,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (TargetTile.IsWallpaperWall && PlayerManager.ExpendResources(wallpaperObject.RequiredToMake))
+            if (TargetTile.IsWallpaperWall && InventoryManager.ExpendResources(wallpaperObject.RequiredToMake))
             {
                 rv = true;
 

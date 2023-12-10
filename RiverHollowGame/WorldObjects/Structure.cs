@@ -13,7 +13,6 @@ namespace RiverHollow.WorldObjects
     {
         readonly protected List<SubObjectInfo> _liSubObjectInfo;
         public IList<SubObjectInfo> ObjectInfo => _liSubObjectInfo.AsReadOnly();
-        public Point SpecialCoords => GetPointByIDKey("SpecialCoords");
 
         public Structure(int id) : base(id)
         {

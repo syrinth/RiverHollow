@@ -73,8 +73,5 @@
  <objectgroup id="5" name="Character Layer">
   <object id="16" name="Pottery" x="50.2008" y="68.6059" width="12.1696" height="11.2477"/>
   <object id="18" name="NPC_55" x="112" y="64" width="16" height="16"/>
-  <object id="108" name="ShopObject" x="16" y="144" width="16" height="16"/>
-  <object id="128" name="ShopObject" x="96" y="144" width="16" height="16"/>
-  <object id="131" name="ShopObject" x="160" y="144" width="16" height="16"/>
  </objectgroup>
 </map>

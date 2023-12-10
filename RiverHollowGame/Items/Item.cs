@@ -116,14 +116,14 @@ namespace RiverHollow.Items
         /// <param name="number"></param>
         public void Add(int number, bool playerInventory = true)
         {
-            if (_iNum + number <= 999)
+            if (_iNum + number <= Constants.MAX_STACK_SIZE)
             {
                 _iNum += number;
             }
             else
             {
-                int leftOver = _iNum + number - 999;
-                _iNum = 999;
+                int leftOver = _iNum + number - Constants.MAX_STACK_SIZE;
+                _iNum = Constants.MAX_STACK_SIZE;
 
                 InventoryManager.AddToInventory(ID, leftOver, playerInventory);
             }

@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[ItemID:151-3/216-3][Shopkeeper:20]</Value>
+      <Value>[ItemID][Shopkeeper]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[ItemID:76-5/135-200/137-250/209-500/185-500/188-1000/141-3000][Shopkeeper:11][BuildingID:25]</Value>
+      <Value>[ItemID:151-3/216-3/76-5/135-200/137-250/209-500/185-500/188-1000/141-3000][Shopkeeper:11][BuildingID:25]</Value>
     </Item>
     <Item>
       <Key>4</Key>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
@@ -137,7 +138,7 @@ namespace RiverHollow.Game_Managers
                             //If there is an item there, check to see if it has the same ID, can stack,
                             //and if the number we want to add is less than the max item stack. Once we find a matching stack
                             //we need to exit, we are done.
-                            if (testItem.ID == itemID && testItem.Stacks() && testItem.Number + num < 999)
+                            if (testItem.ID == itemID && testItem.Stacks() && testItem.Number + num < Constants.MAX_STACK_SIZE)
                             {
                                 rv = true;
                                 validRow = i;
@@ -157,13 +158,18 @@ namespace RiverHollow.Game_Managers
         /// <summary>
         /// Helper to redirect to the Players Inventory
         /// </summary>
-        public static int GetNumberInInventory(int itemID)
+        public static int GetNumberInPlayerInventory(int itemID)
+        {
+            return GetNumberInInventory(itemID, PlayerInventory);
+        }
+
+        public static int GetNumberInInventory(int itemID, Item[,] inventory)
         {
             int rv = 0;
 
             int maxRows = 0;
             int maxColumns = 0;
-            GetDimensions(PlayerInventory, ref maxRows, ref maxColumns);
+            GetDimensions(inventory, ref maxRows, ref maxColumns);
 
             if (itemID != -1)
             {
@@ -171,7 +177,7 @@ namespace RiverHollow.Game_Managers
                 {
                     for (int j = 0; j < maxColumns; j++)
                     {
-                        Item testItem = PlayerInventory[i, j];
+                        Item testItem = inventory[i, j];
                         if (testItem != null && testItem.ID == itemID)
                         {
                             rv += testItem.Number;
@@ -189,6 +195,11 @@ namespace RiverHollow.Game_Managers
         public static bool HasItemInPlayerInventory(int itemID, int x)
         {
             return HasItemInInventory(itemID, x, PlayerInventory);
+        }
+
+        public static bool HasItemInStashInventory(int itemID, int x, Container m)
+        {
+            return HasItemInInventory(itemID, x, m.Inventory);
         }
 
         /// <summary>
@@ -235,9 +246,9 @@ Exit:
         /// <summary>
         /// Helper for RemoveItemsFromInventory
         /// </summary>
-        public static void RemoveItemsFromInventory(int itemID, int number, bool playerInventory = true)
+        public static void RemoveItemsFromInventory(int itemID, int number, Container c = null)
         {
-            RemoveItemsFromInventory(itemID, number, PlayerInventory);
+            RemoveItemsFromInventory(itemID, number, c == null ? PlayerInventory : c.Inventory);
         }
 
         /// <summary>
@@ -358,9 +369,9 @@ Exit:
                     //If we are trying to add more items than the stack can hold, we need to
                     //break it up, remove the added numbers, and then attempt to add what's
                     //left to the indicated inventory.
-                    if (inventory[validRow, validCol].Number + itemToAdd.Number > 999)
+                    if (inventory[validRow, validCol].Number + itemToAdd.Number > Constants.MAX_STACK_SIZE)
                     {
-                        int numToAdd = 999 - inventory[validRow, validCol].Number;
+                        int numToAdd = Constants.MAX_STACK_SIZE - inventory[validRow, validCol].Number;
 
                         inventory[validRow, validCol].Add(numToAdd, inventory == PlayerInventory);
                         itemToAdd.Remove(numToAdd);
@@ -443,7 +454,7 @@ Exit:
                 }
                 else
                 {
-                    if (inventory[row, column].ID == item.ID && inventory[row, column].Stacks() && 999 >= (inventory[row, column].Number + item.Number))
+                    if (inventory[row, column].ID == item.ID && inventory[row, column].Stacks() && Constants.MAX_STACK_SIZE >= (inventory[row, column].Number + item.Number))
                     {
                         inventory[row, column].Add(item.Number, inventory == PlayerInventory);
                         rv = true;
@@ -538,6 +549,37 @@ Exit:
         }
         #endregion
 
+        public static bool ExpendResources(Dictionary<int, int> requiredItems, Container c = null)
+        {
+            bool rv = false;
+            if (requiredItems == null)
+            {
+                return false;
+            }
+
+            if (InventoryManager.HasSufficientItems(requiredItems, c))
+            {
+                rv = true;
+
+                if(c != null)
+                {
+                    InitExtraInventory(c.Inventory);
+                }
+
+                foreach (KeyValuePair<int, int> kvp in requiredItems)
+                {
+                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value, c);
+                }
+
+                if (c != null)
+                {
+                    ClearExtraInventory();
+                }
+            }
+
+            return rv;
+        }
+
         public static Item GetCurrentItem()
         {
             return PlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
@@ -549,19 +591,30 @@ Exit:
         }
 
         /// <summary>
-        /// Runs through the given list and checks that the player has the required items.
+        /// Runs through the given list and checks that the Inventory has the required items.
         /// </summary>
         /// <param name="requiredItems">The list of required items and the numbers of each item</param>
         /// <returns></returns>
-        public static bool HasSufficientItems(Dictionary<int, int> requiredItems, int batch = 1)
+        public static bool HasSufficientItems(Dictionary<int, int> requiredItems, Container c = null)
         {
             bool rv = true;
             foreach (KeyValuePair<int, int> kvp in requiredItems)
             {
-                if (!HasItemInPlayerInventory(kvp.Key, kvp.Value * batch))
+                if (c == null)
                 {
-                    rv = false;
-                    break;
+                    if (!HasItemInPlayerInventory(kvp.Key, kvp.Value))
+                    {
+                        rv = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (!HasItemInInventory(kvp.Key, kvp.Value, c.Inventory))
+                    {
+                        rv = false;
+                        break;
+                    }
                 }
             }
 

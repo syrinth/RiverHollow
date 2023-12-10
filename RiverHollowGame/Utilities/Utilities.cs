@@ -912,6 +912,11 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+
+        public static int ListIndexFromMultiArray(int currRow, int currColumn, int totalColumns)
+        {
+            return currRow * totalColumns + currColumn;
+        }
     }
 
     public class RHRandom : Random

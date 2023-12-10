@@ -200,7 +200,7 @@
     <Compile Include="GUIComponents\Screens\DayEndScreen.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIOldStatDisplay.cs" />
     <Compile Include="GUIComponents\Screens\HUDInventoryDisplay.cs" />
-    <Compile Include="GUIComponents\Screens\HUDCraftingDisplay.cs" />
+    <Compile Include="GUIComponents\Screens\HUDRecipeBook.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIButton.cs" />
     <Compile Include="GUIComponents\Screens\GUIScreen.cs" />

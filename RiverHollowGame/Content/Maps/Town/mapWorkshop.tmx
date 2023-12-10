@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="47">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="48">
  <properties>
   <property name="BuildingID" type="int" value="39"/>
   <property name="MapType" value="Town"/>
@@ -345,6 +345,12 @@
    </properties>
   </object>
   <object id="44" name="Talk_Workshop" x="48" y="64" width="16" height="32"/>
+  <object id="47" name="WorldObject" x="16" y="96" width="16" height="16">
+   <properties>
+    <property name="ItemID" value="55-20/60-20"/>
+    <property name="ObjectID" type="int" value="165"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="39" name="Workshop_NPC" x="48" y="160" width="16" height="16">

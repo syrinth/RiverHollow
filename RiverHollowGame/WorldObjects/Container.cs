@@ -1,6 +1,9 @@
-﻿using RiverHollow.Game_Managers;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
+using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -31,6 +34,23 @@ namespace RiverHollow.WorldObjects
             InventoryManager.ClearExtraInventory();
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            if (GetBoolByIDKey("ShopTable"))
+            {
+                var strData = GetStringParamsByIDKey("ShopTable");
+                var point = Util.ParsePoint(strData[0]);
+                var offset = int.Parse(strData[1]);
+                for (int i = 0; i < Columns; i++)
+                {
+                    Inventory[0, i]?.Draw(spriteBatch, new Rectangle(MapPosition.X + point.X, MapPosition.Y + point.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1);
+
+                    point.X += offset;
+                }
+            }
+        }
+
         public override bool ProcessRightClick()
         {
             GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, DisplayTypeEnum.Inventory));
@@ -38,14 +58,32 @@ namespace RiverHollow.WorldObjects
             return true;
         }
 
-        public bool HasItem()
+        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
-            bool rv = false;
-            foreach (Item i in Inventory)
+            bool rv = base.PlaceOnMap(pos, map, ignoreActors);
+
+            bool isStash = GetBoolByIDKey("Stash");
+            bool isShopTable = GetBoolByIDKey("ShopTable");
+            if (rv && (isStash || isShopTable))
             {
-                if(i != null)
+                var machines = CurrentMap.GetObjectsByType<Machine>();
+
+                foreach(var obj in machines)
                 {
-                    rv = true;
+                    if (isStash)
+                    {
+                        if (obj is Machine m)
+                        {
+                            m.SetStash(this);
+                        }
+                    }
+                    else if (isShopTable)
+                    {
+                        if (obj is Machine m)
+                        {
+                            m.AddShopTable(this);
+                        }
+                    }
                 }
             }
             return rv;
@@ -66,19 +104,23 @@ namespace RiverHollow.WorldObjects
             base.LoadData(data);
 
             string[] strData = Util.FindParams(data.stringData);
-            for (int i = 0; i < Rows; i++)
+            if (strData.Length > 0)
             {
-                for (int j = 0; j < Columns; j++)
+                for (int i = 0; i < Rows; i++)
                 {
-                    if (!string.IsNullOrEmpty(strData[i * Rows + j]))
+                    for (int j = 0; j < Columns; j++)
                     {
-                        string[] itemData = Util.FindArguments(strData[i * Rows + j]);
-                        Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
-                        if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
+                        int index = Util.ListIndexFromMultiArray(i, j, Columns);
+                        if (!string.IsNullOrEmpty(strData[index]))
+                        {
+                            string[] itemData = Util.FindArguments(strData[index]);
+                            Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
+                            if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
 
-                        InventoryManager.InitExtraInventory(this.Inventory);
-                        InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
-                        InventoryManager.ClearExtraInventory();
+                            InventoryManager.InitExtraInventory(this.Inventory);
+                            InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
+                            InventoryManager.ClearExtraInventory();
+                        }
                     }
                 }
             }

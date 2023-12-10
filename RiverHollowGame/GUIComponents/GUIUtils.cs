@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
@@ -111,7 +112,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle HUD_SCROLL_L = new Rectangle(209, 96, 142, 3);
         internal static Rectangle HUD_DIVIDER = new Rectangle(106, 122, 8, 1);
 
-        internal static Rectangle WIN_IMAGE_CRAFTING = new Rectangle(192, 0, 160, 71);
+        internal static Rectangle WIN_IMAGE_CRAFTING = new Rectangle(192, 0, 160, 50);
         internal static Rectangle WIN_UPGRADE = new Rectangle(0, 0, 162, 119);
         internal static Rectangle LEVEL_TAB = new Rectangle(48, 144, 44, 16);
 
@@ -144,7 +145,7 @@ namespace RiverHollow.GUIComponents
 
             return rv;
         }
-        public static bool CreateRequiredItemsList(ref List<GUIItemBox> _liRequiredItems, Dictionary<int, int> requiredItemList, int batchSize = 1)
+        public static bool CreateRequiredItemsList(ref List<GUIItemBox> _liRequiredItems, Dictionary<int, int> requiredItemList, Container c = null)
         {
             bool rv = true;
 
@@ -153,8 +154,9 @@ namespace RiverHollow.GUIComponents
 
             foreach (KeyValuePair<int, int> kvp in requiredItemList)
             {
-                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value * batchSize));
-                if (!newItem.CompareNumToPlayer())
+                GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
+                
+                if (!newItem.CompareNumToInventory(c))
                 {
                     rv = false;
                 }

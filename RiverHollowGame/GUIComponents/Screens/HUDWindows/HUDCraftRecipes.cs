@@ -26,8 +26,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         readonly List<int> _liCraftingRecipes;
         readonly List<GUIItemBoxHover> _liItemDisplay;
         private List<GUIItemBox> _liRequiredItems;
-
-        CraftFilterEnum _eFilter = CraftFilterEnum.All;
         
         public HUDCraftRecipes()
         {
@@ -75,7 +73,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
                         Dictionary<int, int> requiredToMake = obj.RequiredToMake;
 
-                        if (PlayerManager.ExpendResources(requiredToMake))
+                        if (InventoryManager.ExpendResources(requiredToMake))
                         {
                             InventoryManager.AddToInventory(DataManager.GetItem(obj));
                             SetUpItemWindows();

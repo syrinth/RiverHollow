@@ -167,7 +167,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         private void Upgrade()
         {
-            if (PlayerManager.ExpendResources(_diUpgradeItems) && PlayerManager.Money >= _iCost)
+            if (InventoryManager.ExpendResources(_diUpgradeItems) && PlayerManager.Money >= _iCost)
             {
                 PlayerManager.TakeMoney(_iCost);
                 _building.QueueUpgrade();

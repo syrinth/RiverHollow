@@ -439,9 +439,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "LockedItems")]
             public string merchUnlockedString;
-
-            [XmlElement(ElementName = "Randomized")]
-            public string randomized;
         }
         public struct ToolData
         {

@@ -73,8 +73,5 @@
  <objectgroup id="5" name="Character Layer">
   <object id="16" name="Talk_Bookstore" x="32" y="96" width="16" height="32"/>
   <object id="18" name="NPC_54" x="32" y="96" width="16" height="16"/>
-  <object id="20" name="ShopItem" x="150" y="51" width="16" height="29"/>
-  <object id="21" name="ShopItem" x="168" y="51" width="16" height="29"/>
-  <object id="22" name="ShopItem" x="186" y="51" width="16" height="29"/>
  </objectgroup>
 </map>

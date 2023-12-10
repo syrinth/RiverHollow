@@ -358,7 +358,7 @@ namespace RiverHollow.Misc
         {
             if (_targetItem != null)
             {
-                var currentNumber = InventoryManager.GetNumberInInventory(_targetItem.ID);
+                var currentNumber = InventoryManager.GetNumberInPlayerInventory(_targetItem.ID);
                 if (currentNumber >= NeededCount)
                 {
                     TargetsAccomplished = NeededCount;

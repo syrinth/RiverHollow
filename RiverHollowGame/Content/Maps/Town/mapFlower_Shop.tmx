@@ -88,14 +88,5 @@
  <objectgroup id="5" name="Character Layer">
   <object id="16" name="Florist" x="50.2008" y="68.6059" width="12.1696" height="11.2477"/>
   <object id="18" name="NPC_14" x="112" y="64" width="16" height="16"/>
-  <object id="19" name="ShopItem" x="24" y="131" width="16" height="29"/>
-  <object id="20" name="ShopItem" x="150" y="131" width="16" height="29"/>
-  <object id="21" name="ShopItem" x="168" y="131" width="16" height="29"/>
-  <object id="22" name="ShopItem" x="186" y="131" width="16" height="29"/>
-  <object id="23" name="ShopItem" x="150" y="99" width="16" height="29"/>
-  <object id="24" name="ShopItem" x="168" y="99" width="16" height="29"/>
-  <object id="25" name="ShopItem" x="186" y="99" width="16" height="29"/>
-  <object id="27" name="ShopItem" x="166" y="67" width="16" height="29"/>
-  <object id="28" name="ShopItem" x="186" y="67" width="16" height="29"/>
  </objectgroup>
 </map>

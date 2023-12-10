@@ -21,6 +21,8 @@ namespace RiverHollow.WorldObjects
 
         public bool Unique { get; protected set; }
 
+        public Point SpecialCoords => GetPointByIDKey("SpecialCoords");
+
         public Buildable(int id) : base(id)
         {
             _rBase.Y = _pSize.Y - BaseHeight;

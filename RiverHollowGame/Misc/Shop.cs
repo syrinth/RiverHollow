@@ -17,10 +17,6 @@ namespace RiverHollow.Misc
         public int ShopkeeperID { get; private set; }
         int _iShopID;
         int _iShopBuildingID = -1;
-        public string RandomIndices { get; private set; } = string.Empty;
-        List<ShopItemSpot> _liShopItemSpots;
-        List<RHTile> _liShopObjectSpots;
-        public IList<ShopItemSpot> ItemSpots => _liShopItemSpots.AsReadOnly();
         List<Merchandise> _liMerchandise;
         public int Count => _liMerchandise.Count;
 
@@ -29,14 +25,15 @@ namespace RiverHollow.Misc
         public Shop(int id, Dictionary<string, string> stringDictionary)
         {
             _iShopID = id;
-            _liShopItemSpots = new List<ShopItemSpot>();
-            _liShopObjectSpots = new List<RHTile>();
 
             _iShopBuildingID = Util.AssignValue("BuildingID", stringDictionary);
 
             if (stringDictionary.ContainsKey("Shopkeeper"))
             {
-                ShopkeeperID = int.Parse(stringDictionary["Shopkeeper"]);
+                if (int.TryParse(stringDictionary["Shopkeeper"], out id))
+                {
+                    ShopkeeperID = id;
+                }
             }
 
             _liMerchandise = new List<Merchandise>();
@@ -62,54 +59,6 @@ namespace RiverHollow.Misc
             SelectedMerchandise.GenerateSaleItem();
         }
 
-        public bool Interact(RHMap map, Point mouseLocation)
-        {
-            foreach (ShopItemSpot itemSpot in _liShopItemSpots)
-            {
-                if (itemSpot.Contains(mouseLocation) && PlayerManager.InRangeOfPlayer(itemSpot.Box))
-                {
-                    if (TownManager.DIVillagers.ContainsKey(ShopkeeperID) && map.ContainsActor(TownManager.DIVillagers[ShopkeeperID]) ||
-                        TownManager.DIMerchants.ContainsKey(ShopkeeperID) && map.ContainsActor(TownManager.DIMerchants[ShopkeeperID]))
-                    {
-                        itemSpot.Buy();
-                        return true;
-                    }
-                    else { GUIManager.OpenTextWindow("BuyMerch_NoShopkeep"); }
-                }
-            }
-
-            RHTile tile = map.GetMouseOverTile();
-            WorldObject obj = tile.WorldObject;
-            if (tile != null && obj != null && obj.ShopItem)
-            {
-                var merch = _liMerchandise.Find(x => x.MerchID == obj.ID);
-                var item = merch.MerchItem;
-                if (PlayerManager.Money < item.Value)
-                {
-                    GUIManager.OpenTextWindow("BuyMerch_NoMoney");
-                }
-                else if (!InventoryManager.HasSpaceInInventory(item.ID, 1))
-                {
-                    GUIManager.OpenTextWindow("BuyMerch_NoSpace");
-                }
-                else
-                {
-                    GUIManager.CloseHoverWindow();
-                    SetSelectedMerchandise(merch);
-                    if (!item.Stacks())
-                    {
-                        GUIManager.OpenTextWindow("BuyMerch_Confirm", item.Name(), merch.Price);
-                    }
-                    else
-                    {
-                        GUIManager.OpenMainObject(new QuantityWindow());
-                    }
-                }
-            }
-
-            return false;
-        }
-
         public void Purchase(Merchandise merch)
         {
             if (PlayerManager.Money >= merch.TotalPrice)
@@ -128,100 +77,6 @@ namespace RiverHollow.Misc
                 }
 
                 merch.CleanSaleItem();
-            }
-        }
-
-        public void AddObjectSpot(RHTile t)
-        {
-            _liShopObjectSpots.Add(t);
-        }
-        public void ClearObjectSpots()
-        {
-            _liShopObjectSpots.Clear();
-        }
-
-        public void AddItemSpot(ShopItemSpot spot)
-        {
-            _liShopItemSpots.Add(spot);
-        }
-        public void ClearItemSpots()
-        {
-            _liShopItemSpots.Clear();
-        }
-
-        public void ClearRandom()
-        {
-            RandomIndices = string.Empty;
-        }
-        public void Randomize()
-        {
-            ClearItemSpots();
-
-            if (string.IsNullOrEmpty(RandomIndices))
-            {
-                int totalMerch = _liMerchandise.Count;
-
-                List<int> indices = new List<int>();
-                for (int i = 0; i < totalMerch; i++) { indices.Add(i); }
-
-                for (int i = 0; i < TownManager.Market.ObjectInfo.Count && i < totalMerch; i++)
-                {
-                    int index = RHRandom.Instance().Next(indices.Count);
-                    RandomIndices += indices[index] + "/";
-                    indices.RemoveAt(index);
-                }
-
-                RandomIndices = RandomIndices.Remove(RandomIndices.Length - 1);
-            }
-        }
-
-        public void PlaceStock(bool randomize)
-        {
-            _liShopItemSpots.ForEach(x => x.SetMerchandise(null));
-            _liShopObjectSpots.ForEach(x => x.WorldObject?.RemoveSelfFromTiles());
-
-            string[] random = Util.FindParams(RandomIndices);
-
-            List<Merchandise> copies = new List<Merchandise>(_liMerchandise.Where(x => !PlayerManager.AlreadyBoughtUniqueItem(x.MerchID) && x.MerchType == Merchandise.MerchTypeEnum.Item && ValidateMerchandise(x.MerchID)));
-
-            int totalMerch = copies.Count;
-            for (int i = 0; i < _liShopItemSpots.Count && i < totalMerch; i++)
-            {
-                if (randomize && !string.IsNullOrEmpty(RandomIndices) && random.Length > i)
-                {
-                    int rand = int.Parse(random[i]);
-                    if (copies.Count > rand)
-                    {
-                        Merchandise m = copies[rand];
-                        _liShopItemSpots[i].SetMerchandise(m);
-                    }
-                }
-                else { _liShopItemSpots[i].SetMerchandise(copies[i]); }
-            }
-
-            copies = new List<Merchandise>(_liMerchandise.Where(x => x.MerchType == Merchandise.MerchTypeEnum.WorldObject));
-            totalMerch = copies.Count;
-            for (int i = 0; i < _liShopObjectSpots.Count && i < totalMerch; i++)
-            {
-                Merchandise m;
-
-                if (randomize && !string.IsNullOrEmpty(RandomIndices) && random.Length > i) { m = copies[int.Parse(random[i])]; }
-                else { m = copies[i]; }
-
-                WorldObject obj = DataManager.CreateWorldObjectByID(m.MerchID);
-                obj.SetShopItem();
-                obj.PlaceOnMap(_liShopObjectSpots[i].Position, MapManager.Maps[_liShopObjectSpots[i].MapName]);
-            }
-        }
-
-        public void CheckForUniqueItems()
-        {
-            for (int i = 0; i < _liShopItemSpots.Count; i++)
-            {
-                if (PlayerManager.AlreadyBoughtUniqueItem(_liShopItemSpots[i].MerchID))
-                {
-                    _liShopItemSpots[i].SetMerchandise(null);
-                }
             }
         }
 
@@ -298,7 +153,6 @@ namespace RiverHollow.Misc
             {
                 shopID = _iShopID,
                 merchUnlockedString = value,
-                randomized = RandomIndices
             };
             return sData;
         }
@@ -306,7 +160,6 @@ namespace RiverHollow.Misc
         public void LoadData(ShopData data)
         {
             UnlockMerchandise(data.merchUnlockedString);
-            RandomIndices = data.randomized;
         }
     }
 

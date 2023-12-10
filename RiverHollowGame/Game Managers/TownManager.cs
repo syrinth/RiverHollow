@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers
         #region Key Buildings
         public static Building Inn { get; private set; }
         public static Building Home { get; private set; }
-        public static Structure Market { get; private set; }
+        public static Buildable Market { get; private set; }
         public static Mailbox TownMailbox { get; private set; }
         #endregion
 
@@ -444,10 +444,10 @@ namespace RiverHollow.Game_Managers
         {
             if (map == MapManager.TownMap)
             {
-                if (obj.GetBoolByIDKey("Inn")) { Inn = (Building)obj; }
-                if (obj.GetBoolByIDKey("Home")) { Home = (Building)obj; }
-                if (obj.GetBoolByIDKey("Market")) { Market = (Structure)obj; }
-                if (obj.GetBoolByIDKey("Mailbox")) { TownMailbox = (Mailbox)obj; }
+                if (obj.GetBoolByIDKey("Inn")) { Inn = obj as Building; }
+                if (obj.GetBoolByIDKey("Home")) { Home = obj as Building; }
+                if (obj.GetBoolByIDKey("Market")) { Market = obj as Buildable; }
+                if (obj.GetBoolByIDKey("Mailbox")) { TownMailbox = obj as Mailbox; }
             }
         }
         public static int GetNumberTownObjects(int objID)
