@@ -1541,7 +1541,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (!PlayerManager.PlayerActor.HasHP || GamePaused() || CutsceneManager.Playing)
+            if (!PlayerManager.PlayerActor.HasHP || GamePaused() || CutsceneManager.Playing || PlayerManager.ToolInUse != null)
             {
                 return rv;
             }
@@ -1654,7 +1654,7 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = false;
 
-            if (!PlayerManager.PlayerActor.HasHP)
+            if (!PlayerManager.PlayerActor.HasHP || PlayerManager.GrabbedObject != null)
             {
                 return rv;
             }
