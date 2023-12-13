@@ -17,7 +17,7 @@
         public enum HazardTypeEnum { Passive, Timed, Triggered };
 
         public enum GameScreenEnum { Info, World };
-        public enum DisplayTypeEnum { None, Inventory, PlayerInventory };
+        public enum DisplayTypeEnum { None, Inventory, PlayerInventory, ShopTable };
         public enum ItemBoxDraw { Always, Never, OnlyStacks };
         public enum CodexPageEnum { Villagers, Merchants, Travelers, Mobs, Items };
         public enum BuildPageEnum { Structures, Flooring, Walls, Furniture, Lighting };

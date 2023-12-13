@@ -15,6 +15,7 @@
         public const float MOUSE_PRESS_INTERVAL = 0.5f;
 
         public const string TOWN_MAP_NAME = "mapTown";
+        public const string INN_MAP_NAME = "mapInn";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
         public const float PLAYER_STARTING_HP = 10;
         public const float PLAYER_STARTING_ENERGY = 150;
@@ -78,8 +79,6 @@
         public const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
         public const float SPRITE_LINKED_MOD = 0.0001f;
 
-        public const int KITCHEN_STOCK_ROW = 2;
-        public const int KITCHEN_STOCK_COLUMN = 4;
         public const int MAX_RECIPE_DISPLAY = 5;
 
         public const int MERCHANT_REQUEST_NUM = 3;

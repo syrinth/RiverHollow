@@ -53,7 +53,27 @@ namespace RiverHollow.WorldObjects
 
         public override bool ProcessRightClick()
         {
-            GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, DisplayTypeEnum.Inventory));
+            DisplayTypeEnum displayType = DisplayTypeEnum.Inventory;
+            List<int> validIDs = null;
+            if (GetBoolByIDKey("ShopTable"))
+            {
+                displayType = DisplayTypeEnum.ShopTable;
+                var machines = CurrentMap.GetObjectsByType<Machine>();
+
+                if (machines.Count > 0)
+                {
+                    validIDs = new List<int>();
+                    foreach (var obj in machines)
+                    {
+                        if (obj is Machine m)
+                        {
+                            validIDs.AddRange(m.GetCraftingList());
+                        }
+                    }
+                }
+            }
+
+            GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, displayType, false, validIDs));
             InventoryManager.SetHoldItem(GetEnumByIDKey<ItemEnum>("ItemType"));
             return true;
         }
@@ -86,6 +106,12 @@ namespace RiverHollow.WorldObjects
                     }
                 }
             }
+
+            if (isShopTable && GetBoolByIDKey("Pantry"))
+            {
+                TownManager.TownManagerCheck(CurrentMap, this);
+            }
+
             return rv;
         }
 

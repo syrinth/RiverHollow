@@ -65,6 +65,11 @@ namespace RiverHollow.Characters
 
         string _sScheduleKey;
 
+        protected override string SpriteName()
+        {
+            return DataManager.VILLAGER_FOLDER + GetStringByIDKey("Key");
+        }
+
         public Villager(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
             _liHousingRequests = new List<Request>();

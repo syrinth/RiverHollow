@@ -311,6 +311,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Quentin]</Value>
     </Item>
     <Item>
+      <Key>Actor_61</Key>
+      <Value>[Name:Villain]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:Defend]</Value>
     </Item>
@@ -2077,6 +2081,18 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_173</Key>
       <Value>[Name:Field Bottom Fence]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_174</Key>
+      <Value>[Name:Kitchen Pantry]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_175</Key>
+      <Value>[Name:Merchant Counter]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_176</Key>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

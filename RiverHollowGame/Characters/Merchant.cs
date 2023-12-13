@@ -2,13 +2,9 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
-using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -22,6 +18,9 @@ namespace RiverHollow.Characters
     {
         ItemGroupEnum Needs => GetEnumByIDKey<ItemGroupEnum>("Needs");
         ItemGroupEnum Wants => GetEnumByIDKey<ItemGroupEnum>("Wants");
+
+        public override Rectangle HoverBox => new Rectangle(Position, Size + new Point(0, Constants.TILE_SIZE));
+
         private DayEnum MerchantDay()
         {
             var split = Util.FindArguments(GetStringByIDKey("Day"));
@@ -48,6 +47,11 @@ namespace RiverHollow.Characters
         {
             OnTheMap = false;
             _diRequiredObjectIDs = new Dictionary<int, int>();
+        }
+
+        protected override string SpriteName()
+        {
+            return DataManager.MERCHANT_FOLDER + GetStringByIDKey("Key");
         }
 
         public override void RollOver()

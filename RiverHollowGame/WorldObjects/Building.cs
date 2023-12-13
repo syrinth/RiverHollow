@@ -7,8 +7,6 @@ using RiverHollow.WorldObjects;
 using RiverHollow.Utilities;
 using RiverHollow.Misc;
 using System.Linq;
-
-using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -139,6 +137,16 @@ namespace RiverHollow.Buildings
                 rv += upgrade.Profit;
             }
             return rv / 100;
+        }
+
+        public int GetDailyCraftingLimit()
+        {
+            int rv = GetIntByIDKey("CraftAmount");
+            foreach (var upgrade in GetUnlockedUpgrades())
+            {
+                rv += upgrade.CraftAmount;
+            }
+            return rv;
         }
 
         public int GetFormulaLevel()

@@ -28,6 +28,9 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_ACTOR = TEXTURES + @"Actors\";
 
         public const string NPC_FOLDER = FOLDER_ACTOR + @"NPCs\";
+        public const string MERCHANT_FOLDER = FOLDER_ACTOR + @"NPCs\Merchants\";
+        public const string TRAVELER_FOLDER = FOLDER_ACTOR + @"NPCs\Travelers\";
+        public const string VILLAGER_FOLDER = FOLDER_ACTOR + @"NPCs\Villagers\";
         public const string PORTRAIT_FOLDER = FOLDER_ACTOR + @"Portraits\";
 
         public const string FOLDER_ITEMS = TEXTURES + @"Items\";

@@ -127,7 +127,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 rv = true;
                 if (GameManager.HeldItem != null)
                 {
-                    if (!HoldsItem(GameManager.HeldItem))
+                    if (!HoldsItem(GameManager.HeldItem, !_bPlayerInventory))
                     {
                         return false;
                     }
@@ -205,7 +205,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 GUIItemBox i = GetItemBox(mouse);
                 if (i != null && i.BoxItem != null)
                 {
-                    if (!HoldsItem(i.BoxItem))
+                    if (!HoldsItem(i.BoxItem, _bPlayerInventory))
                     {
                         return false;
                     }
@@ -290,9 +290,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             return rv;
         }
 
-        private bool HoldsItem(Item i)
+        private bool HoldsItem(Item i, bool goingToPlayerInventory)
         {
-            return _bPlayerInventory || InventoryManager.HoldItem == ItemEnum.None || i.ItemType == InventoryManager.HoldItem;
+            bool playerInventoryCheck = _bPlayerInventory || InventoryManager.HoldItem == ItemEnum.None || i.ItemType == InventoryManager.HoldItem;
+            bool validIDsCheck = !goingToPlayerInventory || InventoryManager.ValidIDs == null || InventoryManager.ValidIDs.Contains(i.ID);
+            bool shopToolCheck = InventoryManager.CurrentInventoryDisplay != DisplayTypeEnum.ShopTable || !i.CompareType(ItemEnum.Special, ItemEnum.Tool);
+
+            return playerInventoryCheck && validIDsCheck && shopToolCheck;
         }
 
         private GUIItemBox GetItemBox(Point mouse)

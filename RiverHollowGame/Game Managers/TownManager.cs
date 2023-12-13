@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers
         #region Key Buildings
         public static Building Inn { get; private set; }
         public static Building Home { get; private set; }
-        public static Buildable Market { get; private set; }
+        public static Structure Market { get; private set; }
         public static Mailbox TownMailbox { get; private set; }
         #endregion
 
@@ -41,7 +41,7 @@ namespace RiverHollow.Game_Managers
         public static List<Animal> TownAnimals { get; set; }
         public static List<Traveler> Travelers { get; set; }
 
-        public static Item[,] Pantry { get; private set; }
+        public static Container Pantry { get; private set; }
 
         public static void Initialize()
         {
@@ -57,8 +57,6 @@ namespace RiverHollow.Game_Managers
             {
                 _diMailbox[MailboxEnum.Unsent].Add(key);
             }
-
-            Pantry = new Item[Constants.KITCHEN_STOCK_ROW, Constants.KITCHEN_STOCK_COLUMN];
 
             DIMerchants = new Dictionary<int, Merchant>();
             DIVillagers = new Dictionary<int, Villager>();
@@ -99,12 +97,7 @@ namespace RiverHollow.Game_Managers
 
         public static void NewGame()
         {
-            var pantry = Util.FindParams(DataManager.Config[1]["ItemID"]);
-            foreach (var str in pantry)
-            {
-                var itemData = Util.FindIntArguments(str);
-                AddToKitchen(DataManager.GetItem(itemData[0], itemData[1]));
-            }
+
         }
 
         public static void SetTownName(string x)
@@ -148,9 +141,14 @@ namespace RiverHollow.Game_Managers
             Income = 0;
             if (Travelers.Count > 0)
             {
-                InventoryManager.InitExtraInventory(Pantry);
+                foreach(var traveler in Travelers)
+                {
+                    traveler.PurchaseItem();
+                }
 
-                List<Food> sortedFood = Util.MultiArrayToList(Pantry).FindAll(x => x.CompareType(ItemEnum.Food)).ConvertAll(x => (Food)x);
+                InventoryManager.InitExtraInventory(Pantry.Inventory);
+
+                List<Food> sortedFood = Util.MultiArrayToList(Pantry.Inventory).FindAll(x => x.CompareType(ItemEnum.Food)).ConvertAll(x => (Food)x);
                 sortedFood = sortedFood.OrderBy(x => x.FoodType).ThenByDescending(x => x.Value).ToList();
 
                 foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
@@ -178,9 +176,9 @@ namespace RiverHollow.Game_Managers
 
         public static void AddToKitchen(Item i)
         {
-            bool closeAfter = InventoryManager.ExtraInventory != Pantry;
+            bool closeAfter = InventoryManager.ExtraInventory != Pantry.Inventory;
 
-            InventoryManager.InitExtraInventory(Pantry);
+            InventoryManager.InitExtraInventory(Pantry.Inventory);
             InventoryManager.AddToInventory(i, false);
             AddToArchive(i.ID);
             if (closeAfter)
@@ -189,19 +187,6 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static bool CheckKitchenSpace(Item i)
-        {
-            bool closeAfter = InventoryManager.ExtraInventory != Pantry;
-
-            InventoryManager.InitExtraInventory(Pantry);
-            bool rv = InventoryManager.HasSpaceInInventory(i.ID, i.Number, false);
-            if (closeAfter)
-            {
-                InventoryManager.ClearExtraInventory();
-            }
-
-            return rv;
-        }
         public static void AddAnimal(Animal npc)
         {
             TownAnimals.Add(npc);
@@ -228,12 +213,6 @@ namespace RiverHollow.Game_Managers
         }
         private static void SpawnTravelers()
         {
-            //No Market, no Travelers
-            if (TownManager.Market == null)
-            {
-                return;
-            }
-
             for (int i = 0; i < Travelers.Count; i++)
             {
                 Travelers[i].CurrentMap.RemoveCharacterImmediately(Travelers[i]);
@@ -445,9 +424,16 @@ namespace RiverHollow.Game_Managers
             if (map == MapManager.TownMap)
             {
                 if (obj.GetBoolByIDKey("Inn")) { Inn = obj as Building; }
-                if (obj.GetBoolByIDKey("Home")) { Home = obj as Building; }
-                if (obj.GetBoolByIDKey("Market")) { Market = obj as Buildable; }
-                if (obj.GetBoolByIDKey("Mailbox")) { TownMailbox = obj as Mailbox; }
+                else if (obj.GetBoolByIDKey("Home")) { Home = obj as Building; }
+                else if (obj.GetBoolByIDKey("Market")) { Market = obj as Structure; }
+                else if (obj.GetBoolByIDKey("Mailbox")) { TownMailbox = obj as Mailbox; }
+            }
+            else if (map == MapManager.InnMap)
+            {
+                if (obj.GetBoolByIDKey("Pantry"))
+                {
+                    Pantry = obj as Container;
+                }
             }
         }
         public static int GetNumberTownObjects(int objID)
@@ -528,7 +514,6 @@ namespace RiverHollow.Game_Managers
                 MerchantData = new List<MerchantData>(),
                 TravelerData = new List<TravelerData>(),
                 CodexEntries = new List<CodexEntryData>(),
-                Inventory = new List<ItemData>(),
                 MailboxSent = new List<string>(),
                 MailboxUnsent = new List<string>(),
                 MailboxWaiting = new List<string>(),
@@ -561,11 +546,6 @@ namespace RiverHollow.Game_Managers
                     numVisits = kvp.Value.Item2
                 };
                 data.TravelerData.Add(travelerData);
-            }
-
-            foreach (Item i in Pantry)
-            {
-                data.Inventory.Add(Item.SaveData(i));
             }
 
             foreach (var kvp in DIArchive)
@@ -631,21 +611,6 @@ namespace RiverHollow.Game_Managers
                     DIArchive[data.id] = new ValueTuple<bool, bool>(data.found, data.archived);
                 }
             }
-
-            InventoryManager.InitExtraInventory(Pantry);
-            for (int i = 0; i < Constants.KITCHEN_STOCK_ROW; i++)
-            {
-                for (int j = 0; j < Constants.KITCHEN_STOCK_COLUMN; j++)
-                {
-                    int index = i * Constants.KITCHEN_STOCK_COLUMN + j;
-                    ItemData item = saveData.Inventory[index];
-
-                    Item newItem = DataManager.GetItem(item.itemID, item.num);
-                    newItem?.ApplyUniqueData(item.strData);
-                    InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
-                }
-            }
-            InventoryManager.ClearExtraInventory();
 
             _bTravelersCame = saveData.travelersCame;
 

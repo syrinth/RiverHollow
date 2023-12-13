@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
+using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
@@ -24,9 +25,10 @@ namespace RiverHollow.GUIComponents.Screens
             CenterOnScreen();
         }
 
-        public HUDInventoryDisplay(Item[,] inventory, DisplayTypeEnum display, bool lockExtraInventory = false)
+        public HUDInventoryDisplay(Item[,] inventory, DisplayTypeEnum display, bool lockExtraInventory = false, List<int> _liValidIDs = null)
         {
             InventoryManager.LockedInventory = lockExtraInventory;
+            InventoryManager.ValidIDs = _liValidIDs;
 
             InventoryManager.ClearExtraInventory();
             InventoryManager.InitExtraInventory(inventory);

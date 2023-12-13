@@ -198,6 +198,8 @@ namespace RiverHollow.Characters
         /// <returns>The dialog string for the entry.</returns>
         public TextEntry GetDailyDialogue()
         {
+            TextEntry rv = new TextEntry();
+
             _bHasTalked = true;
             PriorityQueue<TextEntry> keyPool = new PriorityQueue<TextEntry>();
             foreach (TextEntry entry in _diDialogue.Values)
@@ -208,9 +210,13 @@ namespace RiverHollow.Characters
                 }
             }
 
-            List<TextEntry> possibles = keyPool.DequeueAllLowest();
+            if (keyPool.Count > 0)
+            {
+                List<TextEntry> possibles = keyPool.DequeueAllLowest();
+                rv = possibles[RHRandom.Instance().Next(0, possibles.Count - 1)];
+            }
 
-            return possibles[RHRandom.Instance().Next(0, possibles.Count - 1)];
+            return rv;
         }
 
         /// <summary>

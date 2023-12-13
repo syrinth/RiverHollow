@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="35" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="78">
  <properties>
-  <property name="FillerID" value="60-100/52-10"/>
+  <property name="FillerID" value="60-70/52-30"/>
   <property name="FillerPercent" type="float" value="0.3"/>
   <property name="ItemID" value="23-U"/>
   <property name="MapType" value="Cave"/>

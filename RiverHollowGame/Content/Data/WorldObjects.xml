@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:55-10/60-20][UpgradeID:0-1][Traveller:10][Upgradable:3/48-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:55-10/60-20][UpgradeID:0-1][Traveller:10][Upgradable:3/48-0-16-16][CraftAmount:2]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:55-20/60-20][UpgradeID:0-1][Profit:50][Traveller:25][Upgradable:4/64-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:55-20/60-20][UpgradeID:0-1][Profit:-20][Traveller:25][Upgradable:4/64-0-16-16]</Value>
     </Item>
     <Item>
       <Key>26</Key>
@@ -115,7 +115,7 @@
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/32-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/32-0-16-16][CraftAmount:3]</Value>
     </Item>
     <Item>
       <Key>29</Key>
@@ -159,7 +159,7 @@
     </Item>
     <Item>
       <Key>39</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Workshop][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][ReqItems:55-5/60-5][UpgradeID:2][Upgradable:1/16-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Workshop][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][ReqItems:55-5/60-5][UpgradeID:2][Upgradable:1/16-0-16-16][CraftAmount:20]</Value>
     </Item>
     <Item>
       <Key>40</Key>
@@ -355,7 +355,7 @@
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Machine][Image:0-16][Size:3-3][Base:0-1-3-2][Makes:167/168/57/58][WorkEffect:Cauldron][Daily][CraftAmount:1]</Value>
+      <Value>[Type:Machine][Image:0-16][Size:3-3][Base:0-1-3-2][Makes:167/168/57/58][WorkEffect:Cauldron][Daily]</Value>
     </Item>
     <Item>
       <Key>89</Key>
@@ -371,11 +371,11 @@
     </Item>
     <Item>
       <Key>92</Key>
-      <Value>[Type:Machine][Image:0-14][MachineType:Processor][Size:2-2][Makes:60/205-2][Base:0-1-2-1][WorkAnimation:2-0.1][CraftAmount:30]</Value>
+      <Value>[Type:Machine][Image:0-14][MachineType:Processor][Size:2-2][Makes:60/205-2][Base:0-1-2-1][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>93</Key>
-      <Value>[Type:Machine][Image:0-12][Makes:55/68-2][Size:2-2][Base:0-1-2-1][WorkAnimation:2-0.1][CraftAmount:30]</Value>
+      <Value>[Type:Machine][Image:0-12][Makes:55/68-2][Size:2-2][Base:0-1-2-1][WorkAnimation:2-0.1]</Value>
     </Item>
     <Item>
       <Key>94</Key>
@@ -451,7 +451,7 @@
     </Item>
     <Item>
       <Key>112</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:0-53][Size:5-5][Base:0-0-5-5][ReqItems:55-20/60-20][SpecialCoords:48-48][Unique][Market][Placement:Floor][DrawUnder]</Value>
+      <Value>[Type:Buildable][Subtype:Structure][Image:0-54][Size:5-4][Base:0-0-5-4][ReqItems:60-15/66-10][SpecialCoords:32-16][SubObjects:175-16-32][Unique][Market]</Value>
     </Item>
     <Item>
       <Key>113</Key>
@@ -696,6 +696,18 @@
     <Item>
       <Key>173</Key>
       <Value>[Type:WorldObject][Image:8-60][Size:5-2][Base:0-1-5-1]</Value>
+    </Item>
+    <Item>
+      <Key>174</Key>
+      <Value>[Type:Buildable][Subtype:Container][Image:7-38][Size:4-2][Base:0-1-4-1][Texture:Decor][ShopTable:6-3/18][Rows:1][Cols:3][Pantry]</Value>
+    </Item>
+    <Item>
+      <Key>175</Key>
+      <Value>[Type:Buildable][Subtype:Basic][Image:14-38][Size:3-2][Base:0-1-3-1][ReqItems][MerchantCounter]</Value>
+    </Item>
+    <Item>
+      <Key>176</Key>
+      <Value>[Type:WorldObject]</Value>
     </Item>
   </Asset>
 </XnaContent>

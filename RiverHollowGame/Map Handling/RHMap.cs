@@ -2683,7 +2683,7 @@ namespace RiverHollow.Map_Handling
                 {
                     foreach (WorldObject wObj in objectList)
                     {
-                        if (!wObj.Reset)
+                        if (!wObj.Reset && !(wObj is SubObject))
                         {
                             mapData.worldObjects.Add(wObj.SaveData());
                         }

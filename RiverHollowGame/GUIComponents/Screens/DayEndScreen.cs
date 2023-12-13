@@ -7,10 +7,6 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.NetworkInformation;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.Utilities.Enums;
@@ -301,7 +297,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         bool _bPopped = false;
         int _iFoodID = -1;
-        TravelerMoodEnum _eMood = TravelerMoodEnum.Angry;    
+        int _iItemID = -1;
 
         GUIImage _gCoin;
 
@@ -310,7 +306,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             Income = t.Income;
             _iFoodID = t.FoodID;
-            _eMood = t.MoodVerb;
+            _iItemID = t.ItemID;
 
             if (Income > 0)
             {
@@ -343,7 +339,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (Income > -1)
             {
                 _gCoin?.Show(false);
-                var status = new TravelerStatus(_iFoodID, _eMood);
+                var status = new TravelerStatus(_iFoodID, _iItemID);
                 status.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
                 GUIManager.OpenHoverObject(status, DrawRectangle, true);
             }
@@ -365,46 +361,34 @@ namespace RiverHollow.GUIComponents.Screens
         private class TravelerStatus : GUIObject
         {
             const int FLICKER_TIMER = 1;
+            readonly GUIItem _gFood;
             readonly GUIItem _gItem;
-            readonly GUIImage _gMood;
             readonly RHTimer _timer;
 
-            public TravelerStatus(int foodID, TravelerMoodEnum e)
+            public TravelerStatus(int foodID, int itemID)
             {
                 _timer = new RHTimer(FLICKER_TIMER, true);
                 if (foodID > -1)
                 {
-                    _gItem = new GUIItem(DataManager.GetItem(foodID), ItemBoxDraw.Never);
+                    _gFood = new GUIItem(DataManager.GetItem(foodID), ItemBoxDraw.Never);
                 }
 
-                _gMood = null;
-                switch (e)
+                if (itemID > -1)
                 {
-                    case TravelerMoodEnum.Angry:
-                        _gMood = new GUIImage(GUIUtils.TRAVELER_ANGRY);
-                        break;
-                    case TravelerMoodEnum.Sad:
-                        _gMood = new GUIImage(GUIUtils.TRAVELER_SAD);
-                        break;
-                    case TravelerMoodEnum.Neutral:
-                        _gMood = new GUIImage(GUIUtils.TRAVELER_NEUTRAL);
-                        break;
-                    case TravelerMoodEnum.Happy:
-                        _gMood = new GUIImage(GUIUtils.TRAVELER_HAPPY);
-                        break;
+                    _gItem = new GUIItem(DataManager.GetItem(itemID), ItemBoxDraw.Never);
                 }
 
-                AddControls(_gItem, _gMood);
+                AddControls(_gFood, _gItem);
                 DetermineSize();
                 Show(true);
             }
 
             public override void Update(GameTime gTime)
             {
-                if (Visible && _gItem != null && _timer.TickDown(gTime, true))
+                if (Visible && _gFood != null && _gItem != null && _timer.TickDown(gTime, true))
                 {
-                    _gMood.Show(!_gMood.Visible);
-                    _gItem.Show(!_gItem.Visible);
+                    _gItem?.Show(!_gItem.Visible);
+                    _gFood?.Show(!_gFood.Visible);
                 }
             }
 
@@ -415,8 +399,19 @@ namespace RiverHollow.GUIComponents.Screens
                 if (val)
                 {
                     _timer.Reset(FLICKER_TIMER);
-                    _gMood.Show(true);
-                    _gItem?.Show(false);
+                    if(_gFood != null && _gItem != null)
+                    {
+                        _gItem?.Show(true);
+                        _gFood?.Show(false);
+                    }
+                    else if (_gFood != null)
+                    {
+                        _gFood?.Show(true);
+                    }
+                    else if (_gItem != null)
+                    {
+                        _gItem?.Show(true);
+                    }
                 }
             }
         }

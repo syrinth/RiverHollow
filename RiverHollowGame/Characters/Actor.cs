@@ -36,7 +36,7 @@ namespace RiverHollow.Characters
         public int Width => Size.X;
         public int Height => Size.Y;
 
-        public Rectangle HoverBox => new Rectangle(Position, Size);
+        public virtual Rectangle HoverBox => new Rectangle(Position, Size);
         public Point Center => HoverBox.Center;
 
         #region CollisionBox
@@ -166,7 +166,7 @@ namespace RiverHollow.Characters
             return DataManager.GetTextData(ID, "Name", DataType.Actor);
         }
 
-        protected string SpriteName()
+        protected virtual string SpriteName()
         {
             return DataManager.NPC_FOLDER + GetStringByIDKey("Key");
         }
@@ -178,10 +178,6 @@ namespace RiverHollow.Characters
         /// <param name="listAnimations">A list of AnimationData to add to the sprite</param>
         /// <param name="textureName">The texture name for the AnimatedSprite</param>
         protected AnimatedSprite LoadSpriteAnimations(List<AnimationData> listAnimations, string textureName)
-        {
-            return LoadSpriteAnimations(listAnimations, textureName, Width, Height);
-        }
-        protected AnimatedSprite LoadSpriteAnimations(List<AnimationData> listAnimations, string textureName, int width, int height)
         {
             AnimatedSprite sprite = new AnimatedSprite(textureName);
 

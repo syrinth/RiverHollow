@@ -9,11 +9,6 @@ using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents.Screens;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended;
-using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.GUIComponents.GUIObjects;
-using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using RiverHollow.GUIComponents;
 
 namespace RiverHollow.WorldObjects
@@ -247,22 +242,10 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = false;
 
-            if (GetBoolByIDKey("OpenStock") && GameManager.CurrentBuilding != null)
-            {
-                rv = true;
-                GUIManager.OpenMainObject(new HUDInventoryDisplay(TownManager.Pantry, DisplayTypeEnum.Inventory));
-            }
-
             if (GetBoolByIDKey("Bed"))
             {
                 rv = true;
                 GUIManager.OpenTextWindow("Selection_Bed");
-            }
-
-            if (GetBoolByIDKey("Field"))
-            {
-                rv = true;
-                //ToDo: Implement Field planting
             }
 
             return rv;

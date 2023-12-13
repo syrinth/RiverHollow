@@ -20,7 +20,6 @@ namespace RiverHollow.GUIComponents.Screens
 
         private GUIImage _gSelection;
         private GUIImage _gComponents;
-        private GUIInventoryWindow _gInventory;
 
         private GUIText _gName;
         private GUIItemBoxHover[] _arrRecipes;
@@ -105,13 +104,6 @@ namespace RiverHollow.GUIComponents.Screens
             _gComponents.AddControl(_gName);
 
             AddControl(_gComponents);
-
-            if (_objMachine.GetBoolByIDKey("Kitchen"))
-            {
-                InventoryManager.InitExtraInventory(TownManager.Pantry);
-                _gInventory = new GUIInventoryWindow(false);
-                _gInventory.AnchorAndAlignWithSpacing(_gComponents, SideEnum.Bottom, SideEnum.CenterX, 2, GUIUtils.ParentRuleEnum.ForceToParent);
-            }
 
             DetermineSize();
             CenterOnScreen();

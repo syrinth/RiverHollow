@@ -783,7 +783,7 @@
     </Item>
     <Item>
       <Key>195</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:8-0][FoodType:Plain][FoodValue:20][Stam:10][ReqItems:150-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:8-0][FoodType:Plain][Value:10][Stam:10][ReqItems:150-2]</Value>
     </Item>
     <Item>
       <Key>196</Key>
@@ -855,15 +855,15 @@
     </Item>
     <Item>
       <Key>213</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:9-0][FoodType:Healthy][FoodValue:30][Stam:5][ReqItems:23-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:9-0][FoodType:Healthy][Value:30][Stam:5][ReqItems:23-2]</Value>
     </Item>
     <Item>
       <Key>214</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:8-1][FoodType:Seafood][FoodValue:35][Stam:12][ReqItems:210-1/211-1]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:8-1][FoodType:Seafood][Value:35][Stam:12][ReqItems:210-1/211-1]</Value>
     </Item>
     <Item>
       <Key>215</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:9-1][FoodType:Fancy][FoodValue:40][Stam:15][ReqItems:154-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:9-1][FoodType:Fancy][Value:20][Stam:15][ReqItems:154-2]</Value>
     </Item>
     <Item>
       <Key>216</Key>
@@ -871,7 +871,7 @@
     </Item>
     <Item>
       <Key>217</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:8-2][FoodType:Dessert][FoodValue:50][Stam:5][ReqItems:151-1/150-1/216-1][CraftAmount:3]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:8-2][FoodType:Dessert][Value:50][Stam:5][ReqItems:151-1/150-1/216-1][CraftAmount:3]</Value>
     </Item>
     <Item>
       <Key>218</Key>

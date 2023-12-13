@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="181">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="48" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="182">
  <properties>
   <property name="FillerID" value="103-50/51-5/60-5/147-10/65-15"/>
   <property name="FillerPercent" type="float" value="0.4"/>
@@ -280,11 +280,7 @@
   <object id="172" name="Skip" x="144" y="416" width="16" height="48"/>
   <object id="173" name="Skip" x="416" y="416" width="16" height="48"/>
   <object id="174" name="Skip" x="272" y="384" width="80" height="48"/>
-  <object id="180" name="Building" x="512" y="416" width="112" height="64">
-   <properties>
-    <property name="ObjectID" type="int" value="18"/>
-   </properties>
-  </object>
+  <object id="181" name="Skip" x="240" y="336" width="64" height="32"/>
  </objectgroup>
  <objectgroup id="6" name="Character"/>
 </map>

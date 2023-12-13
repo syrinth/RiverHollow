@@ -113,11 +113,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         drawRect = GUIUtils.ICON_TRAVELER;
                         bonusValue = nextUpgrade.Chance.ToString();
                     }
-                    else if (nextUpgrade.CraftingSlots > 0)
+                    else if (nextUpgrade.CraftAmount > 0)
                     {
                         icon = GameIconEnum.Hammer;
                         drawRect = GUIUtils.ICON_HAMMER;
-                        bonusValue = nextUpgrade.CraftingSlots.ToString();
+                        bonusValue = nextUpgrade.CraftAmount.ToString();
                     }
                     else if (nextUpgrade.FormulaLevel > 0)
                     {

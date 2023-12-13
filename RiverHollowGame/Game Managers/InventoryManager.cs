@@ -21,6 +21,7 @@ namespace RiverHollow.Game_Managers
         public static Item[,] ExtraInventory { get; private set; }
 
         public static List<Item> AddedItemList;
+        public static List<int> ValidIDs;
 
         #endregion
 
@@ -640,6 +641,7 @@ Exit:
 
             ExtraHoldSingular = false;
             LockedInventory = false;
+            ValidIDs = null;
             CurrentInventoryDisplay = DisplayTypeEnum.None;
             GameManager.SetSelectedWorldObject(null);
         }

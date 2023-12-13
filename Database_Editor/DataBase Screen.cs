@@ -1605,7 +1605,7 @@ namespace Database_Editor
                     defaultTags = "Speed:3,Damage:1,Size:16-16,CollisionOffset:,CollisionSize:,Idle:0-0-1-1-T,KO:16-0-1-0.1-F";
                     break;
                 case ActorTypeEnum.Traveler:
-                    defaultTags = DEFAULT_ACTOR_TAGS + ",Angry:0-32-1-0-F,Sad:0-32-1-0-F,Neutral:0-32-1-0-F,Happy:0-32-1-0-F,Building:,Value:,FavFood:,Disliked:,";
+                    defaultTags = DEFAULT_ACTOR_TAGS + ",FavFood:,Disliked:,Building:";
                     break;
                 case ActorTypeEnum.Villager:
                     defaultTags = DEFAULT_ACTOR_TAGS + ",HouseID:,Collection:";

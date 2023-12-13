@@ -26,8 +26,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Name][Text:I've got some food prepared, but I'm not exactly a good cook. Whenever you get a chance, you should spend some time whipping up some food here for the travelers that stop by.
-	  Everyone has their own likes and dislikes, so try to keep it varied if you can. Happy Travelers will spend more money in town before they leave.]</Value>
+      <Value>[Name][Text:Travelers will be glad to get a nice meal while they're staying here. If you can keep me supplied, I can cook for them and earn some extra money as well.]</Value>
     </Item>
   </Asset>
 </XnaContent>

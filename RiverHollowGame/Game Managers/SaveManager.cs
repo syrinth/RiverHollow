@@ -193,9 +193,6 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Visitors")]
             public List<int> Travelers;
 
-            [XmlArray(ElementName = "Inventory")]
-            public List<ItemData> Inventory;
-
             [XmlElement(ElementName = "TravelersCame")]
             public bool travelersCame;
 

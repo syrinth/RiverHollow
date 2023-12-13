@@ -1,26 +1,25 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Buildings;
+﻿using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
     public class Traveler : TalkingActor
     {
-        private float _fFoodModifier = Constants.HUNGER_MOD;
         public int FoodID { get; private set;} = -1;
+        public int ItemID { get; private set;} = -1;
         public int Income { get; private set; } = 0;
-
-        public TravelerMoodEnum MoodVerb { get;  private set; } = TravelerMoodEnum.Angry;
 
         public int BuildingID()
         {
-            return GetIntByIDKey( "Building");
+            return GetIntByIDKey("Building");
         }
 
         private int NPC()
@@ -28,14 +27,14 @@ namespace RiverHollow.Characters
             return GetIntByIDKey("NPC");
         }
 
-        private int Value()
-        {
-            return GetIntByIDKey("Value");
-        }
-
         public bool Rare()
         {
             return GetBoolByIDKey("Rare");
+        }
+
+        protected override string SpriteName()
+        {
+            return DataManager.TRAVELER_FOLDER + GetStringByIDKey("Key");
         }
 
         public TravelerGroupEnum Group()
@@ -53,11 +52,6 @@ namespace RiverHollow.Characters
             return GetEnumByIDKey<FoodTypeEnum>("Disliked");
         }
 
-        public bool HasEaten()
-        {
-            return FoodID != -1;
-        }
-
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _fBaseSpeed = Constants.NPC_WALK_SPEED;
@@ -73,34 +67,58 @@ namespace RiverHollow.Characters
             return GetDailyDialogue();
         }
 
+        public bool Validate()
+        {
+            return (BuildingID() == -1 || TownManager.TownObjectBuilt(BuildingID())) &&
+                        (NPC() == -1 || TownManager.DIVillagers[NPC()].LivesInTown);
+        }
+
+        public bool HasEaten()
+        {
+            return FoodID != -1;
+        }
         public void TryEat(Food f)
         {
             if (!HasEaten() && f.Remove(1, false))
             {
                 FoodID = f.ID;
-                _fFoodModifier = (f.FoodValue / 100f);
-
-                if (f.FoodType == FavoriteFood())
-                {
-                    MoodVerb = TravelerMoodEnum.Happy;
-                    _fFoodModifier += .5f;
-                }
-                else if (NeutralFood(f.FoodType))
-                {
-                    MoodVerb = TravelerMoodEnum.Neutral;
-                }
-                else if (f.FoodType == DislikedFood())
-                {
-                    MoodVerb = TravelerMoodEnum.Sad;
-                    _fFoodModifier -= .5f;
-                }
             }
         }
 
-        public bool Validate()
+        public void PurchaseItem()
         {
-            return (BuildingID() == -1 || TownManager.TownObjectBuilt(BuildingID())) &&
-                        (NPC() == -1 || TownManager.DIVillagers[NPC()].LivesInTown);
+            if (BuildingID() != -1)
+            {
+                var building = TownManager.GetBuildingByID(BuildingID());
+                var map = MapManager.Maps[building.BuildingMapName];
+
+                var containers = map.GetObjectsByType<Container>().Cast<Container>().ToList();
+                var shopTables = containers.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
+
+                var merchTables = new List<Container>();
+                foreach (var table in shopTables)
+                {
+                    foreach (var item in table.Inventory)
+                    {
+                        if (item != null)
+                        {
+                            merchTables.Add(table);
+                            break;
+                        }
+                    }
+                }
+
+                if (merchTables.Count > 0)
+                {
+                    var randomTable = Util.GetRandomItem(merchTables);
+                    var randomItem = Util.GetRandomItem(Util.MultiArrayToList(randomTable.Inventory));
+
+                    InventoryManager.InitExtraInventory(randomTable.Inventory);
+                    randomItem.Remove(1, false);
+                    InventoryManager.ClearExtraInventory();
+                    ItemID = randomItem.ID;
+                }
+            }
         }
 
         public bool NeutralFood(FoodTypeEnum e)
@@ -111,14 +129,20 @@ namespace RiverHollow.Characters
 
         public int CalculateIncome()
         {
-            Building shop = TownManager.GetBuildingByID(BuildingID());
-            if (shop != null)
-            {
-                var modifier = FoodID == -1 ? 0 : (1 + shop.GetShopProfitModifier() + _fFoodModifier);
-                Income = (int)(Value() * modifier);
-            }
+            CalculateProfit(ItemID, TownManager.GetBuildingByID(BuildingID()));
+            CalculateProfit(FoodID, TownManager.Inn);
 
             return Income;
+        }
+
+        private void CalculateProfit(int itemID, Building b)
+        {
+            if (itemID > -1 && b != null)
+            {
+                int value = (DataManager.GetIntByIDKey(itemID, "Value", DataType.Item));
+                float profitMod = (1 + b.GetShopProfitModifier());
+                Income += (int)(value * profitMod);
+            }
         }
     }
 }

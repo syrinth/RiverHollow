@@ -183,23 +183,23 @@
     </Item>
     <Item>
       <Key>45</Key>
-      <Value>[Type:Traveler][Subtype:Human][Key:Traveller1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:35][Value:10][FavFood:Plain][Disliked:Healthy][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
+      <Value>[Type:Traveler][Subtype:Human][Key:Traveller1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][FavFood:Plain][Disliked:Healthy][Building:25]</Value>
     </Item>
     <Item>
       <Key>46</Key>
-      <Value>[Type:Traveler][Subtype:Human][Key:Traveller2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Rare][FavFood:Healthy][Disliked:Dessert][Angry:0-32-1-0-F][Sad:0-32-1-0-F][Neutral:0-32-1-0-F][Happy:0-32-1-0-F]</Value>
+      <Value>[Type:Traveler][Subtype:Human][Key:Traveller2][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][FavFood:Healthy][Disliked:Dessert][Building:18][Rare]</Value>
     </Item>
     <Item>
       <Key>47</Key>
-      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:35][Value:10][FavFood:Seafood][Disliked:Healthy]</Value>
+      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][FavFood:Seafood][Disliked:Healthy][Building:35]</Value>
     </Item>
     <Item>
       <Key>48</Key>
-      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer2][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][Rare][FavFood:Plain][Disliked:Seafood]</Value>
+      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer2][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][FavFood:Plain][Disliked:Seafood][Building:18][Rare]</Value>
     </Item>
     <Item>
       <Key>49</Key>
-      <Value>[Type:Traveler][Subtype:None][Key:Neutral1][PortRow:1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][Building:18][Value:10][FavFood:Plain][Disliked:Dessert]</Value>
+      <Value>[Type:Traveler][Subtype:None][Key:Neutral1][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][FavFood:Plain][Disliked:Dessert][Building:18]</Value>
     </Item>
     <Item>
       <Key>50</Key>
@@ -244,6 +244,10 @@
     <Item>
       <Key>60</Key>
       <Value>[Type:Villager][Key:Quentin][Size:16-34][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][HouseID:6][Collection:0/1/2][ArrivalDay:Spring-5]</Value>
+    </Item>
+    <Item>
+      <Key>61</Key>
+      <Value>[Type:Traveler][Subtype:Human][Key:Villain][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][FavFood:Plain][Disliked:Dessert]</Value>
     </Item>
   </Asset>
 </XnaContent>
