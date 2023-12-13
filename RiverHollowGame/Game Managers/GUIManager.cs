@@ -33,6 +33,7 @@ namespace RiverHollow.Game_Managers
         public static bool Fading  => _eFade != Fade.None;
         public static bool FadingIn => _eFade == Fade.In;
         public static bool NotFading => _eFade == Fade.None;
+        public static bool FullFade => _fFadeVal == 1;
 
         public static void LoadContent()
         {
@@ -56,7 +57,6 @@ namespace RiverHollow.Game_Managers
             if (Fading)
             {
                 _fadeImg.Draw(spriteBatch, _fFadeVal);
-
             }
             else
             {

@@ -1537,11 +1537,90 @@ namespace RiverHollow.Map_Handling
         }
 
         #region Input Processing
+        private bool SkipClickProcessing()
+        {
+            return GamePaused() || CutsceneManager.Playing || PlayerManager.ToolInUse != null || !PlayerManager.PlayerActor.HasHP || PlayerManager.GrabbedObject != null || !GUIManager.NotFading;
+        }
+        /// <summary>
+        /// The Map's left-click handler
+        /// </summary>
+        /// <param name="mouseLocation"></param>
+        /// <returns></returns>
+        public bool ProcessLeftButtonClick(Point mouseLocation)
+        {
+            bool rv = false;
+
+            if (SkipClickProcessing())
+            {
+                return rv;
+            }
+            else if (!PlayerManager.Busy && !CutsceneManager.Playing)
+            {
+                //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
+                TargetTile = MouseTile;
+
+                if (InTownMode())
+                {
+                    rv = TownModeLeftClick(mouseLocation);
+                }
+                else
+                {
+                    if (GamePaused()) { return false; }
+
+                    Item i = InventoryManager.GetCurrentItem();
+
+                    if (i != null && i.HasUse() && i.CompareType(ItemEnum.Tool))
+                    {
+                        int distance = 0;
+                        if (PlayerManager.PlayerInRangeGetDist(GUICursor.GetWorldMousePosition(), 3 * Constants.TILE_SIZE, ref distance))
+                        {
+                            PlayerManager.FaceCursor();
+                        }
+
+                        RHTile playerTile = GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter);
+                        TargetTile = playerTile.GetTileByDirection(PlayerManager.PlayerActor.Facing);
+
+                        i.ItemBeingUsed();
+                    }
+                    else
+                    {
+                        if (TargetTile != null)
+                        {
+                            //Retrieves any object associated with the tile, this will include
+                            //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
+                            //as being on the tile.
+                            WorldObject obj = TargetTile.GetWorldObject(false);
+                            if (TargetTile.IsTilled && !TargetTile.HasBeenWatered)
+                            {
+                                PlayerManager.FaceCursor();
+                                PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.WateringCan));
+                            }
+                            else if (obj != null && obj.Tiles.Any(x => PlayerManager.InRangeOfPlayer(x.CollisionBox)))
+                            {
+                                rv = obj.ProcessLeftClick();
+                            }
+                            else if (TargetTile.IsWaterTile)
+                            {
+                                PlayerManager.FaceCursor();
+                                PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.FishingRod));
+                            }
+                        }
+                    }
+                }
+            }
+            else if (FishingManager.ProcessLeftButtonClick())
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+
         public bool ProcessRightButtonClick(Point mouseLocation)
         {
             bool rv = false;
 
-            if (!PlayerManager.PlayerActor.HasHP || GamePaused() || CutsceneManager.Playing || PlayerManager.ToolInUse != null)
+            if (SkipClickProcessing())
             {
                 return rv;
             }
@@ -1640,81 +1719,6 @@ namespace RiverHollow.Map_Handling
 
                     }
                 }
-            }
-
-            return rv;
-        }
-
-        /// <summary>
-        /// The Map's left-click handler
-        /// </summary>
-        /// <param name="mouseLocation"></param>
-        /// <returns></returns>
-        public bool ProcessLeftButtonClick(Point mouseLocation)
-        {
-            bool rv = false;
-
-            if (!PlayerManager.PlayerActor.HasHP || PlayerManager.GrabbedObject != null)
-            {
-                return rv;
-            }
-            else if (!PlayerManager.Busy && !CutsceneManager.Playing)
-            {
-                //Ensure that we have a tile that we clicked on and that the player is close enough to interact with it.
-                TargetTile = MouseTile;
-
-                if (InTownMode())
-                {
-                    rv = TownModeLeftClick(mouseLocation);
-                }
-                else
-                {
-                    if (GamePaused()) { return false; }
-
-                    Item i = InventoryManager.GetCurrentItem();
-
-                    if (i != null && i.HasUse() && i.CompareType(ItemEnum.Tool))
-                    {
-                        int distance = 0;
-                        if (PlayerManager.PlayerInRangeGetDist(GUICursor.GetWorldMousePosition(), 3 * Constants.TILE_SIZE, ref distance))
-                        {
-                            PlayerManager.FaceCursor();
-                        }
-
-                        RHTile playerTile = GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter);
-                        TargetTile = playerTile.GetTileByDirection(PlayerManager.PlayerActor.Facing);
-
-                        i.ItemBeingUsed();
-                    }
-                    else
-                    {
-                        if (TargetTile != null)
-                        {
-                            //Retrieves any object associated with the tile, this will include
-                            //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
-                            //as being on the tile.
-                            WorldObject obj = TargetTile.GetWorldObject(false);
-                            if (TargetTile.IsTilled && !TargetTile.HasBeenWatered)
-                            {
-                                PlayerManager.FaceCursor();
-                                PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.WateringCan));
-                            }
-                            else if (obj != null && obj.Tiles.Any(x => PlayerManager.InRangeOfPlayer(x.CollisionBox)))
-                            {
-                                rv = obj.ProcessLeftClick();
-                            }
-                            else if (TargetTile.IsWaterTile)
-                            {
-                                PlayerManager.FaceCursor();
-                                PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.FishingRod));
-                            }
-                        }
-                    }
-                }
-            }
-            else if (FishingManager.ProcessLeftButtonClick())
-            {
-                rv = true;
             }
 
             return rv;

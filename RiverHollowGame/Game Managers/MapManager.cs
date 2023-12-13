@@ -177,7 +177,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            if (GUIManager.FadingIn || GUIManager.NotFading)
+            if (GUIManager.FullFade)
             {
                 if (!_newMapInfo.Equals(default(NewMapInfo)))
                 {
