@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="58" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="25" nextobjectid="259">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="58" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="25" nextobjectid="260">
  <properties>
   <property name="FillerID" value="103-60-Spread-80/51-5/60-5/147-20"/>
   <property name="FillerPercent" type="float" value="0.3"/>
@@ -7,7 +7,7 @@
   <property name="MapType" value="Forest"/>
   <property name="Mobs" value="4-7"/>
   <property name="Outside" type="bool" value="true"/>
-  <property name="ResourceItemID" value="162-C/163-R"/>
+  <property name="ResourceItemID" value="162-C/227-U/163-R"/>
   <property name="ResourceObjectID" value="106-U"/>
   <property name="ResourceRate" type="int" value="1"/>
   <property name="ResourceTotal" value="10"/>
@@ -334,37 +334,37 @@
   </object>
   <object id="192" name="Mob" x="128" y="256" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-R"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
   <object id="193" name="Mob" x="512" y="384" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-R"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
   <object id="194" name="Mob" x="768" y="672" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-R"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
   <object id="195" name="Mob" x="352" y="96" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-R"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
   <object id="201" name="Mob" x="144" y="1040" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-R"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
   <object id="202" name="Mob" x="561.333" y="990.667" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-R"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
   <object id="203" name="Mob" x="320" y="1136" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-R"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
   <object id="204" name="Resource" x="448" y="304" width="16" height="16">
@@ -461,16 +461,21 @@
     <property name="ResourcesToSpawn" value="14"/>
    </properties>
   </object>
-  <object id="254" name="Heart Root" x="832" y="640" width="16" height="16">
+  <object id="254" name="Esseraine Leaf" x="832" y="640" width="16" height="16">
    <properties>
-    <property name="ItemID" value="163"/>
+    <property name="ItemID" value="227"/>
+   </properties>
+  </object>
+  <object id="259" name="Esseraine Leaf" x="192" y="384" width="16" height="16">
+   <properties>
+    <property name="ItemID" value="227"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="Character" visible="0">
+ <objectgroup id="6" name="Character">
   <object id="200" name="NPC" x="320" y="544" width="16" height="16">
    <properties>
-    <property name="NPC_ID" type="int" value="43"/>
+    <property name="NPC_ID" type="int" value="7"/>
    </properties>
   </object>
  </objectgroup>

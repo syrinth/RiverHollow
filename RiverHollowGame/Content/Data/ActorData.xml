@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:65][TotalMoneyEarnedReq:5000][ShopData:8][Key:Eric]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:8][Key:Eric][Size:16-32][StartMap:mapWoods_Small]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -131,11 +131,11 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56-C/11-U][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56-C/222-C/225-U/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Mossy_Slime][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8-C/5-U][HP:4][Damage:1][Day][Size:16-24][Speed:1][Weight:Medium][Wander:0.5-4-16]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Mossy_Slime][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8-C/219-C/5-R][HP:2][Damage:1][Day][Size:16-24][Speed:1][Weight:Medium][Wander:0.5-4-16]</Value>
     </Item>
     <Item>
       <Key>34</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:167/168/57/58/162][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:169/170/171/98][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -175,7 +175,7 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][StartMap:mapWoods_Small][HouseID:18][Size:16-26]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][TotalMoneyEarnedReq:5000][HouseID:18][Size:16-26]</Value>
     </Item>
     <Item>
       <Key>44</Key>
@@ -203,7 +203,7 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Mob][Subtype:Shooter][Key:Spitter][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9-C/16-U][HP:4][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium][Wander:0.5-4-16]</Value>
+      <Value>[Type:Mob][Subtype:Shooter][Key:Spitter][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9-C/221-C/16-R][HP:1][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium][Wander:0.5-4-16]</Value>
     </Item>
     <Item>
       <Key>51</Key>

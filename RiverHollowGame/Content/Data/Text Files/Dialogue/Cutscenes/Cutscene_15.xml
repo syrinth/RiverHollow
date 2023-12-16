@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name][Text:Hm, small and simple. Nothing to complain about I guess, thanks.
+	  Here, tell me where to set up my field and I'll grow whatever crops you need.]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

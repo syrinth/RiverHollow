@@ -5,8 +5,8 @@
       <Key>0</Key>
       <Value>
         <Item></Item>
-        <Item>[Player][Actors:2-CS0/32-CS0_Mob][Deactivate:2]</Item>
-        <Item>[Speak:2-1][Activate:2][Move:2-9-Up][Move:2-7-Right][Speak:2-2][Join:2][Move:2-2-Right/Player-7-Left][Combat:32]</Item>
+        <Item>[Map:mapWoodWorker][Actors:7-Entrance][Face:7-Up][Deactivate:7]</Item>
+        <Item>[Speed:Player-0.5/7-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:7][Move:7-4-Up][Face:Player-Up][Face:7-Down][Speak:7-0][MoveToTown:7]</Item>
       </Value>
     </Item>
     <Item>
@@ -119,6 +119,14 @@
         <Item></Item>
         <Item>[Map:mapFarmhouse][Actors:60-Entrance][Face:60-Up][Deactivate:60]</Item>
         <Item>[Speed:Player-0.5/60-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:60][Move:60-4-Up][Face:Player-Up][Face:60-Down][Speak:60-0][MoveToTown:60]</Item>
+      </Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapWoodworker][Actors:7-Entrance][Face:7-Up][Deactivate:7]</Item>
+        <Item>[Speed:Player-0.5/7-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:7][Move:7-4-Up][Face:Player-Up][Face:7-Down][Speak:7-0][MoveToTown:7]</Item>
       </Value>
     </Item>
   </Asset>

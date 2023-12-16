@@ -96,83 +96,86 @@ namespace RiverHollow.WorldObjects
             if (Stash != null && mapProperties.ContainsKey("BuildingID") && int.TryParse(mapProperties["BuildingID"], out int buildingID))
             {
                 Building b = TownManager.GetBuildingByID(buildingID);
-
-                int craftsLeft = b.GetDailyCraftingLimit();
-                var craftingList = GetCraftingList();
-                var validItems = WhatCanWeCraft(craftingList);
-
-                //Create a Dictionary to represent the stock we currently have
-                var shopInventory = CreateShopInventory(craftingList);
-                bool emptySlotFound = shopInventory.ContainsKey(-1);
-
-                while (craftsLeft > 0)
+                if (b != null)
                 {
-                    if (validItems.Count > 0)
+
+                    int craftsLeft = b.GetDailyCraftingLimit();
+                    var craftingList = GetCraftingList();
+                    var validItems = WhatCanWeCraft(craftingList);
+
+                    //Create a Dictionary to represent the stock we currently have
+                    var shopInventory = CreateShopInventory(craftingList);
+                    bool emptySlotFound = shopInventory.ContainsKey(-1);
+
+                    while (craftsLeft > 0)
                     {
-                        var tempItems = validItems;
-                        bool success = false;
-                        if (_liShopTables.Count > 0)
+                        if (validItems.Count > 0)
                         {
-                            //Determine if there are any items missing in stock
-                            var missingItems = tempItems.Where(x => !shopInventory.ContainsKey(x.ID)).ToList();
-
-                            //We found at least one missing item and an empty slot so make it
-                            if (missingItems.Count > 0 && emptySlotFound)
+                            var tempItems = validItems;
+                            bool success = false;
+                            if (_liShopTables.Count > 0)
                             {
-                                var item = missingItems[0];
-                                var table = Util.GetRandomItem(shopInventory[-1].Item2);
-                                if (TryCraftAtTarget(item, table, craftingList, ref validItems))
+                                //Determine if there are any items missing in stock
+                                var missingItems = tempItems.Where(x => !shopInventory.ContainsKey(x.ID)).ToList();
+
+                                //We found at least one missing item and an empty slot so make it
+                                if (missingItems.Count > 0 && emptySlotFound)
                                 {
-                                    success = true;
-
-                                    //Update the ShopInventory with the new item
-                                    AddItemToShopInventory(ref shopInventory, item, table);
-
-                                    //Remove one instance of table from the shopInventory. If there are multiple empty slots in the table
-                                    //It will be present multiple times.
-                                    shopInventory[-1].Item2.Remove(table);
-                                    if (shopInventory[-1].Item2.Count == 0)
+                                    var item = missingItems[0];
+                                    var table = Util.GetRandomItem(shopInventory[-1].Item2);
+                                    if (TryCraftAtTarget(item, table, craftingList, ref validItems))
                                     {
-                                        shopInventory.Remove(-1);
-                                        emptySlotFound = shopInventory.ContainsKey(-1);
+                                        success = true;
+
+                                        //Update the ShopInventory with the new item
+                                        AddItemToShopInventory(ref shopInventory, item, table);
+
+                                        //Remove one instance of table from the shopInventory. If there are multiple empty slots in the table
+                                        //It will be present multiple times.
+                                        shopInventory[-1].Item2.Remove(table);
+                                        if (shopInventory[-1].Item2.Count == 0)
+                                        {
+                                            shopInventory.Remove(-1);
+                                            emptySlotFound = shopInventory.ContainsKey(-1);
+                                        }
+                                    }
+                                }
+                                else  //Unable to make a new item, make whichever item we have the fewest of
+                                {
+                                    List<Tuple<int, int>> numberList = new List<Tuple<int, int>>();
+                                    foreach (var key in shopInventory.Keys)
+                                    {
+                                        if (key > -1)
+                                        {
+                                            numberList.Add(new Tuple<int, int>(key, shopInventory[key].Item1));
+                                        }
+                                    }
+
+                                    numberList = numberList.OrderBy(x => x.Item2).ToList();
+
+                                    var item = DataManager.GetItem(numberList[0].Item1);
+                                    var table = Util.GetRandomItem(shopInventory[item.ID].Item2);
+                                    if (TryCraftAtTarget(item, table, craftingList, ref validItems))
+                                    {
+                                        success = true;
+                                        AddItemToShopInventory(ref shopInventory, item, table);
                                     }
                                 }
                             }
-                            else  //Unable to make a new item, make whichever item we have the fewest of
+                            else
                             {
-                                List<Tuple<int, int>> numberList = new List<Tuple<int, int>>();
-                                foreach (var key in shopInventory.Keys)
-                                {
-                                    if (key > -1)
-                                    {
-                                        numberList.Add(new Tuple<int, int>(key, shopInventory[key].Item1));
-                                    }
-                                }
-
-                                numberList = numberList.OrderBy(x => x.Item2).ToList();
-
-                                var item = DataManager.GetItem(numberList[0].Item1);
-                                var table = Util.GetRandomItem(shopInventory[item.ID].Item2);
-                                if (TryCraftAtTarget(item, table, craftingList, ref validItems))
+                                var craftedItem = DataManager.CraftItem(validItems[0].ID);
+                                if (TryCraftAtTarget(craftedItem, Stash, craftingList, ref validItems))
                                 {
                                     success = true;
-                                    AddItemToShopInventory(ref shopInventory, item, table);
                                 }
                             }
-                        }
-                        else
-                        {
-                            var craftedItem = DataManager.CraftItem(validItems[0].ID);
-                            if (TryCraftAtTarget(craftedItem, Stash, craftingList, ref validItems))
-                            {
-                                success = true;
-                            }
-                        }
 
-                        if (!success) { break; }
-                        else { craftsLeft--; }
+                            if (!success) { break; }
+                            else { craftsLeft--; }
+                        }
+                        else { break; }
                     }
-                    else { break; }
                 }
             }
         }

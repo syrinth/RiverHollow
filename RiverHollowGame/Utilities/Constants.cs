@@ -18,7 +18,7 @@
         public const string INN_MAP_NAME = "mapInn";
         public const string PLAYER_HOME_NAME = "mapHouse_Player";
         public const float PLAYER_STARTING_HP = 10;
-        public const float PLAYER_STARTING_ENERGY = 150;
+        public const float PLAYER_STARTING_ENERGY = 100;
         public const float PLAYER_STARTING_MAGIC = 20;
         public const int PLAYER_GEAR_ROWS = 3;
         public const int PLAYER_GEAR_COLUMNS = 2;

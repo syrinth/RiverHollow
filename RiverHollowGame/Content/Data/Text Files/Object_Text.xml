@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>Task_1</Key>
-      <Value>[Name:$Actor_43$ needs a heart][Description:$Actor_43$ needs a $Item_163$ so she can get back on her feet.]</Value>
+      <Value>[Name:I belief you've got it!][Description:$Actor_7$ needs a few $Item_227$ before he gets to work.]</Value>
     </Item>
     <Item>
       <Key>Task_2</Key>
@@ -64,6 +64,10 @@
     <Item>
       <Key>Task_15</Key>
       <Value>[Name:Hoes in the ground][Description:$Actor_60$ needs a place to live before he can get to work]</Value>
+    </Item>
+    <Item>
+      <Key>Task_16</Key>
+      <Value>[Name:Wood Morning!][Description:$Actor_7$ needs a place to work his woodweaving wonders.]</Value>
     </Item>
     <Item>
       <Key>Actor_0</Key>
@@ -904,7 +908,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_98</Key>
-      <Value>[Name:Divining Wand][Description:A wand used by seers to help them predict the future.]</Value>
+      <Value>[Name:Inky Rod][Description:A wand used by mages. Attuned to Darkness.]</Value>
     </Item>
     <Item>
       <Key>Item_99</Key>
@@ -1000,7 +1004,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_122</Key>
-      <Value>[Name:Cloth Robes][Description:Robes made of simple cloth]</Value>
+      <Value>[Name:Blue Shirt][Description:Robes made of simple cloth]</Value>
     </Item>
     <Item>
       <Key>Item_123</Key>
@@ -1188,15 +1192,15 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_169</Key>
-      <Value>[Name:Intelligence Powder][Description:These mushrooms will expand your mind]</Value>
+      <Value>[Name:Apprentice's Rod][Description:A magic rod for beginner's.]</Value>
     </Item>
     <Item>
       <Key>Item_170</Key>
-      <Value>[Name:Tunic][Description:A Blue Tunic]</Value>
+      <Value>[Name:Soaker Rod][Description:A beginner's rod attuned to water magic]</Value>
     </Item>
     <Item>
       <Key>Item_171</Key>
-      <Value>[Name:Blue Shirt][Description:A Blue Shirt]</Value>
+      <Value>[Name:Breezy Rod]</Value>
     </Item>
     <Item>
       <Key>Item_172</Key>
@@ -1387,6 +1391,46 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Bountiful Fields]</Value>
     </Item>
     <Item>
+      <Key>Item_219</Key>
+      <Value>[Name:Water Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_220</Key>
+      <Value>[Name:Fire Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_221</Key>
+      <Value>[Name:Lightning Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_222</Key>
+      <Value>[Name:Wind Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_223</Key>
+      <Value>[Name:Ice Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_224</Key>
+      <Value>[Name:Earth Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_225</Key>
+      <Value>[Name:Dark Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_226</Key>
+      <Value>[Name:Light Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_227</Key>
+      <Value>[Name:Esserine Leaves]</Value>
+    </Item>
+    <Item>
+      <Key>Item_228</Key>
+      <Value>[Name:Flint Scale]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -1476,7 +1520,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_22</Key>
-      <Value>[Name:Carpenter's]</Value>
+      <Value>[Name:Wand Maker's]</Value>
     </Item>
     <Item>
       <Key>WorldObject_23</Key>
@@ -1748,7 +1792,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_90</Key>
-      <Value>[Name:Grindstone]</Value>
+      <Value>[Name:Wandcrafting Table]</Value>
     </Item>
     <Item>
       <Key>WorldObject_91</Key>
@@ -2096,7 +2140,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>
-      <Value>[Name:Combat_Intro]</Value>
+      <Value>[Name:Enough Wood]</Value>
     </Item>
     <Item>
       <Key>Cutscene_1</Key>
@@ -2153,6 +2197,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Cutscene_14</Key>
       <Value>[Name:Time for a Hoedown]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_15</Key>
+      <Value>[Name:Enough Wood]</Value>
     </Item>
   </Asset>
 </XnaContent>

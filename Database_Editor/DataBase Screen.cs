@@ -1630,7 +1630,7 @@ namespace Database_Editor
                     defaultTags = DEFAULT_ITEM_TAGS + ",NPC_ID:";
                     break;
                 case ItemEnum.Resource:
-                    defaultTags = DEFAULT_ITEM_TAGS + ",ItemGroups:None,Value:";
+                    defaultTags = DEFAULT_ITEM_TAGS;
                     break;
                 case ItemEnum.Seed:
                     defaultTags = DEFAULT_ITEM_TAGS + ",ObjectID:,Season:";

@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Carpenter][Size:7-8][Base:0-4-7-4][Entrance:3-6-1-2][ReqItems:55-5/60-5]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Woodworker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:55-10/60-20][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/144-0-16-16]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Town_Hall][Size:11-11][Base:0-7-11-4][Entrance:5-9-1-2][ReqItems:55-40/60-20]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Town_Hall][Size:11-10][Base:0-6-11-4][Entrance:5-8-1-2][ReqItems:55-40/60-20]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -363,7 +363,7 @@
     </Item>
     <Item>
       <Key>90</Key>
-      <Value>[Type:Machine][Image:3-16][Work:3-0.15][Size:2-3][Makes:169][Base:0-1-2-2]</Value>
+      <Value>[Type:Machine][Image:5-16][Size:3-3][Base:0-1-3-2][Makes:169/170/171/98]</Value>
     </Item>
     <Item>
       <Key>91</Key>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="47">
  <properties>
-  <property name="Building" type="bool" value="true"/>
+  <property name="BuildingID" type="int" value="22"/>
   <property name="MapType" value="Town"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
@@ -17,10 +17,10 @@
 588,895,895,895,895,895,895,895,895,895,699,699,699,699,588,
 588,895,895,895,895,895,895,895,895,895,721,721,721,721,588,
 588,895,895,895,895,895,895,895,895,895,743,743,743,743,588,
-588,588,588,895,895,895,895,895,895,895,895,895,895,895,588,
-588,588,588,895,895,895,895,895,895,895,895,895,895,895,588,
-588,588,588,895,895,895,895,895,895,895,895,895,895,895,588,
-588,588,588,895,895,895,895,895,895,895,895,895,895,895,588,
+588,588,588,588,895,895,895,895,895,895,895,895,895,895,588,
+588,588,588,588,895,895,895,895,895,895,895,895,895,895,588,
+588,588,588,588,895,895,895,895,895,895,895,895,895,895,588,
+588,588,588,588,895,895,895,895,895,895,895,895,895,895,588,
 588,588,588,588,588,588,588,895,588,588,588,588,588,588,588
 </data>
  </layer>
@@ -77,19 +77,14 @@
     <property name="ObjectID" type="int" value="90"/>
    </properties>
   </object>
-  <object id="41" name="Talk_Woodworker" x="96" y="96" width="16" height="32"/>
+  <object id="41" name="Talk_Woodworker" x="128" y="96" width="16" height="32"/>
   <object id="38" name="WorldObject" x="64" y="64" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="165"/>
    </properties>
   </object>
-  <object id="46" name="WorldObject" x="160" y="160" width="64" height="16">
-   <properties>
-    <property name="ObjectID" type="int" value="142"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="44" name="NPC_7" x="96" y="96" width="16" height="16"/>
+  <object id="44" name="NPC_7" x="128" y="96" width="16" height="16"/>
  </objectgroup>
 </map>

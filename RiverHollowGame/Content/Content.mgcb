@@ -179,6 +179,11 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Cutscenes/Cutscene_14.xml
 
+#begin Data/Text Files/Dialogue/Cutscenes/Cutscene_15.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Cutscenes/Cutscene_15.xml
+
 #begin Data/Text Files/Dialogue/Cutscenes/Cutscene_2.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -710,11 +715,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapBoutique.tmx
 
-#begin Maps/Town/mapCarpenter.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapCarpenter.tmx
-
 #begin Maps/Town/mapCoop.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -819,6 +819,11 @@
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapWeaver.tmx
+
+#begin Maps/Town/mapWoodworker.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapWoodworker.tmx
 
 #begin Maps/Town/mapWorkshop.tmx
 /importer:TiledMapImporter
@@ -3213,18 +3218,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Boutique.png
 
-#begin Textures/WorldObjects/Buildings/Carpenter.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/WorldObjects/Buildings/Carpenter.png
-
 #begin Textures/WorldObjects/Buildings/Coop.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3464,6 +3457,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/TownStore.png
+
+#begin Textures/WorldObjects/Buildings/Woodworker.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WorldObjects/Buildings/Woodworker.png
 
 #begin Textures/WorldObjects/Buildings/Workshop.png
 /importer:TextureImporter

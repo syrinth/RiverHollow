@@ -3,14 +3,13 @@
  <properties>
   <property name="FillerID" value="103-60-Spread-80/51-5/60-5/147-20"/>
   <property name="FillerPercent" type="float" value="0.3"/>
-  <property name="ItemID" value="162-U/163-R"/>
   <property name="MapType" value="Forest"/>
   <property name="Mobs" value="1-2"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="Randomize" type="bool" value="true"/>
-  <property name="ResourceItemID" value="162-C/163-R"/>
+  <property name="ResourceItemID" value="162-C/227-C/163-R"/>
   <property name="ResourceObjectID" value="106-U"/>
-  <property name="ResourceTotal" value="1-3"/>
+  <property name="ResourceTotal" value="3-5"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>
@@ -97,12 +96,12 @@
  <objectgroup id="5" name="MapObject">
   <object id="66" name="Mob" x="288" y="96" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-U"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
   <object id="67" name="Mob" x="112" y="208" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C/56-U"/>
+    <property name="MobID" value="32-C/33-C/50-C"/>
    </properties>
   </object>
  </objectgroup>

@@ -28,16 +28,17 @@
     <Item>
       <Key>6</Key>
       <Value>[Name:Task_0_Start][Text:We have to build a $WorldObject_112$ so that visiting merchants will have a place to trade goods. You'll need wooden planks and some clay to build it.
-	  I've got some extra planks in the chest there, but you'll need to find the clay yourself. I think I saw a cave in the woods that should have some clay.
+	  I've got some extra planks in the chest there, but you'll need to find the clay yourself. I think I saw a cave in the woods where you that should be able to find some. Just follow the cleared path to the West.
 	  Once you've got that, choose a spot, set it up, and let me know when you're done, OK?][UnlockObjectID:112]</Value>
     </Item>
     <Item>
       <Key>7</Key>
       <Value>[Name:Task_0_End][Text:Is the $WorldObject_112$ finished? Great! The Merchant's Guild knows we're here, so there should be someone along soon but that leaves the little problem of us not having anything to sell  yet.
-	  ...
-	  A member of the Alchemist's Guild was supposed to meet us. I was expecting her today but I'm worried something happened to her.
-	  Could you check the woods to the West for me? Maybe she got lost or ran into some monsters.
-	  Oh, and before I forget, here. Take a look through these notes when you have a minute.][Face:Happy]</Value>
+...
+So, before we left, I reached out to my colleagues to see what would be a good idea to start with. They pointed out that Kethris Tower isn't too far away, so we'd likely get a lot of mages coming through to the North.
+ A Wandmaker was supposed to have arrived today, to supply the apprentices with weapons but he hasn't arrived yet.
+	  Could you check the woods again for me?
+	  Oh, and before I forget, here's a chest for you to hold items in. Place it anywhere you want, and take a look through these notes when you have a minute.][Face:Happy]</Value>
     </Item>
     <Item>
       <Key>8</Key>
