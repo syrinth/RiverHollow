@@ -16,17 +16,15 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDMiniInventory : GUIWindow
     {
         private enum StateEnum { None, FadeOut, FadeIn };
-        GUIItemBox[] _liItems;
-        GUIButton _btnChangeRow;
+        readonly GUIItemBox[] _liItems;
+        readonly GUIButton _btnChangeRow;
+        readonly GUIImage _gSelected;
 
         StateEnum _eFadeState = StateEnum.FadeIn;
+        SideEnum _eSnapPosition = SideEnum.Center;
 
         float _fAlphaValue;
         const float MIN_FADE = 0.1f;
-
-        SideEnum _eSnapPosition = SideEnum.Center;
-
-        GUIImage _gSelected;
 
         public HUDMiniInventory() : base(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
         {
@@ -46,6 +44,7 @@ namespace RiverHollow.GUIComponents.Screens
             _btnChangeRow = new GUIButton(GUIUtils.BTN_DOWN_SMALL, RowUp);
             _btnChangeRow.AnchorAndAlign(this, SideEnum.Right, SideEnum.CenterY, GUIUtils.ParentRuleEnum.ForceToObject);
             _btnChangeRow.FadeOnDisable(false);
+            _btnChangeRow.Show(PlayerManager.BackpackLevel != 1);
 
             _fAlphaValue = GameManager.HideMiniInventory ? MIN_FADE : 1.0f;
 
@@ -59,7 +58,7 @@ namespace RiverHollow.GUIComponents.Screens
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!CutsceneManager.Playing && InventoryManager.CurrentInventoryDisplay == Enums.DisplayTypeEnum.None)
+            if (!CutsceneManager.Playing && !GUIManager.IsMainObjectOpen() && !GUIManager.IsTextWindowOpen())
             {
                 base.Draw(spriteBatch);
             }
@@ -70,8 +69,6 @@ namespace RiverHollow.GUIComponents.Screens
             if (Show())
             {
                 HandleInput();
-
-                _btnChangeRow.Show(PlayerManager.BackpackLevel != 1);
 
                 base.Update(gTime);
                 float startFade = _fAlphaValue;
@@ -121,6 +118,12 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 Snap(SideEnum.Bottom);
             }
+        }
+
+        internal override void Show(bool val)
+        {
+            base.Show(val);
+            _btnChangeRow.Show(PlayerManager.BackpackLevel != 1);
         }
 
         private void HandleInput()
