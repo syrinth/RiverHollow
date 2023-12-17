@@ -52,7 +52,7 @@ namespace RiverHollow.Characters
         public bool LivesInTown => _eSpawnStatus == SpawnStateEnum.HasHome;
         public bool SpawnsOnAMap => _eSpawnStatus != SpawnStateEnum.OffMap;
 
-        List<Request> _liHousingRequests;
+        readonly List<Request> _liHousingRequests;
 
         int _iNextTimeKeyID = 0;
 
@@ -132,6 +132,10 @@ namespace RiverHollow.Characters
             {
                 var ids = Util.FindIntParams(stringData["MiserableID"]);
                 ids.ForEach(x => _diItemMoods[x] = MoodEnum.Miserable);
+            }
+            if (stringData.ContainsKey("Inactive"))
+            {
+                Activate(false);
             }
         }
 
@@ -327,7 +331,7 @@ namespace RiverHollow.Characters
         /// </summary>
         public override void MoveToSpawn()
         {
-            OnTheMap = _eSpawnStatus != SpawnStateEnum.OffMap;
+            //OnTheMap = _eSpawnStatus != SpawnStateEnum.OffMap;
  
             string mapName = GetSpawnMapName();
 

@@ -41,7 +41,6 @@ namespace RiverHollow.Misc
         
 
         bool _bFinishOnCompletion;
-        int _iActivateID;
         bool _bHiddenGoal;
         #region Rewards
         private int _iUnlockObjectID = -1;        
@@ -66,7 +65,6 @@ namespace RiverHollow.Misc
         {
             _iCutsceneID = -1;
             _bFinishOnCompletion = false;
-            _iActivateID = -1;
             ID = -1;
             FriendTarget = string.Empty;
             StartNPC = null;
@@ -205,7 +203,6 @@ namespace RiverHollow.Misc
             }
 
             Util.AssignValue(ref _bFinishOnCompletion, "Immediate", stringData);
-            _iActivateID = Util.AssignValue("Activate", stringData);
             _iCutsceneID = Util.AssignValue("CutsceneID", stringData);
             Util.AssignValue(ref _bHiddenGoal, "HideGoal", stringData);
         }
@@ -453,11 +450,6 @@ namespace RiverHollow.Misc
                     PlayerManager.AddToCraftingDictionary(_iUnlockObjectID);
                 }
 
-                if (_iActivateID > -1)
-                {
-                    TownManager.DIVillagers[_iActivateID].Activate(true);
-                }
-
                 if (DataManager.TaskData[ID].ContainsKey("SendToTown"))
                 {
                     ((Villager)GoalNPC).ReadySmokeBomb();
@@ -469,8 +461,22 @@ namespace RiverHollow.Misc
                     GameManager.GoToHUDScreen();
                 }
 
+                ActivateNPCs();
+
                 TaskManager.TaskLog.Remove(this);
                 GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Finished").GetFormattedText());
+            }
+        }
+
+        private void ActivateNPCs()
+        {
+            if (DataManager.GetBoolByIDKey(ID, "ActivateNPC", DataType.Task))
+            {
+                var npc = DataManager.GetIntByIDKey(ID, "ActivateNPC", DataType.Task);
+                if (TownManager.DIVillagers.ContainsKey(npc))
+                {
+                    TownManager.DIVillagers[npc].Activate(true);
+                }
             }
         }
 
@@ -628,7 +634,7 @@ namespace RiverHollow.Misc
                 {
                     Item newItem = DataManager.GetItem(i.itemID, i.num);
 
-                    if (newItem != null) { newItem.ApplyUniqueData(i.strData); }
+                    newItem?.ApplyUniqueData(i.strData);
                     LiRewardItems.Add(newItem);
                 }
             }
@@ -639,7 +645,15 @@ namespace RiverHollow.Misc
 
             if (ReadyForHandIn && TaskState != TaskStateEnum.Completed)
             {
-                SetReadyForHandIn(true);
+                if (GoalNPC != null && _iBuildingEndID == -1)
+                {
+                    GoalNPC.ModifyTaskGoalValue(1);
+                }
+            }
+
+            if (TaskState == TaskStateEnum.Completed)
+            {
+                ActivateNPCs();
             }
         }
     }
