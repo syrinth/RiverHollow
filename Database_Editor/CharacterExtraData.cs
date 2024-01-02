@@ -65,9 +65,11 @@ namespace Database_Editor
                 row.Cells["colCharExtraID"].Value = value.ID;
                 row.Cells["colCharExtraName"].Value = value.Name;
             }
-
-            SelectRow(dgvCharExtraData, _iIndex);
-            LoadDataInfo(StringData[_iIndex]);
+            if (StringData.Count > 0)
+            {
+                SelectRow(dgvCharExtraData, _iIndex);
+                LoadDataInfo(StringData[_iIndex]);
+            }
         }
         private void LoadDataGridViewList()
         {
@@ -175,6 +177,11 @@ namespace Database_Editor
         }
         private void SaveDictionaryData()
         {
+            if(dgvCharExtraData.Rows.Count == 0)
+            {
+                return;
+            }
+
             DataGridViewRow row = dgvCharExtraData.Rows[_iIndex];
 
             XMLData data;

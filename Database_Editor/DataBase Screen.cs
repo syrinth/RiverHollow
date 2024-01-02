@@ -891,20 +891,33 @@ namespace Database_Editor
         }
         private void btnDialogue_Click(object sender, EventArgs e)
         {
-            string npcKey = @"\NPC_" + _diBasicXML[ACTOR_XML_FILE][int.Parse(tbActorID.Text)].GetTagValue("Key") + ".xml";
+            XMLData data = _diBasicXML[ACTOR_XML_FILE][int.Parse(tbActorID.Text)];
+            string npcKey = @"\NPC_" + data.GetTagValue("Key") + ".xml";
             FormCharExtraData frm;
             if (cbEditableCharData.SelectedItem.ToString() == "Dialogue")
             {
-                string key = PATH_TO_VILLAGER_DIALOGUE + npcKey;
-                if (!_diNPCDialogue.ContainsKey(key))
+                string key = string.Empty;
+                switch (Util.ParseEnum<ActorTypeEnum>(data.GetTagValue("Type")))
                 {
-                    _diNPCDialogue[key] = new List<XMLData>();
+                    case ActorTypeEnum.Villager:
+                        key = PATH_TO_VILLAGER_DIALOGUE + npcKey;
+                        break;
+                    case ActorTypeEnum.Traveler:
+                        key = PATH_TO_TRAVELER_DIALOGUE + npcKey;
+                        break;
                 }
+                if (!string.IsNullOrEmpty(key))
+                {
+                    if (!_diNPCDialogue.ContainsKey(key))
+                    {
+                        _diNPCDialogue[key] = new List<XMLData>();
+                    }
 
-                frm = new FormCharExtraData("Dialogue", _diNPCDialogue[key], ref _diObjectText);
-                frm.ShowDialog();
+                    frm = new FormCharExtraData("Dialogue", _diNPCDialogue[key], ref _diObjectText);
+                    frm.ShowDialog();
 
-                _diNPCDialogue[key] = frm.StringData;
+                    _diNPCDialogue[key] = frm.StringData;
+                }
             }
             else if (cbEditableCharData.SelectedItem.ToString() == "Schedule")
             {

@@ -10,11 +10,11 @@ It's nice to meet you! I'm $Actor_7$, Wandmaker by trade.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:I hear you're an artisan right? That sounds so much more interesting than what I do. Do you enjoy it?][Default][Name:1]</Value>
+      <Value>[Name:1][Text:I hear you're an artisan right? That sounds so much more interesting than what I do. Do you enjoy it?][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Text:Hey, $Name$. You ever have one of those days where you just feel like you can't do anything right? Yeah. Hope your day is going better at least.][Default][Name:2]</Value>
+      <Value>[Name:2][Text:Hey, $Name$. You ever have one of those days where you just feel like you can't do anything right? Yeah. Hope your day is going better at least.][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -22,11 +22,11 @@ It's nice to meet you! I'm $Actor_7$, Wandmaker by trade.]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Text:What? I haven't done anything to deserve this. Thank you.][Name:Gift]</Value>
+      <Value>[Name:Gift][Text:What? I haven't done anything to deserve this. Thank you.]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Text:Hey.][Selection:VillageTalk][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:Hey.][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -34,13 +34,13 @@ It's nice to meet you! I'm $Actor_7$, Wandmaker by trade.]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:This is!? No. how did you get this? I don't... I can't...
+      <Value>[Name:Collection][Text:This is!? No. how did you get this? I don't... I can't...
 Really?
-Thank you so much!][Name:Collection]</Value>
+Thank you so much!]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:My mother used to tell me stories of monsters that came out when it was raining. I know she just made them up but, sometimes, I can't help but wonder, you know?][Weather:Raining][Name:Raining|1]</Value>
+      <Value>[Name:Raining|1][Text:My mother used to tell me stories of monsters that came out when it was raining. I know she just made them up but, sometimes, I can't help but wonder, you know?][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>9</Key>

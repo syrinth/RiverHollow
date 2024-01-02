@@ -319,6 +319,22 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Villain]</Value>
     </Item>
     <Item>
+      <Key>Actor_62</Key>
+      <Value>[Name:White Magi]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_63</Key>
+      <Value>[Name:Black Magi]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_64</Key>
+      <Value>[Name:Red Magi]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_65</Key>
+      <Value>[Name:Traveling Mage]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:Defend]</Value>
     </Item>

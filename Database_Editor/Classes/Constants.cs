@@ -15,6 +15,7 @@
         public static readonly string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
         public static readonly string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
         public static readonly string PATH_TO_VILLAGER_DIALOGUE = PATH_TO_DIALOGUE + @"\Villagers";
+        public static readonly string PATH_TO_TRAVELER_DIALOGUE = PATH_TO_DIALOGUE + @"\Travelers";
         public static readonly string PATH_TO_CUTSCENE_DIALOGUE = PATH_TO_DIALOGUE + @"\Cutscenes";
         public static readonly string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
 

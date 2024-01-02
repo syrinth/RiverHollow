@@ -49,7 +49,7 @@
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum ActorTypeEnum { Animal, Child, Critter, Effect, Merchant, Mob, Mount, Pet, Projectile, Spirit, TalkingActor, Traveler, Villager };
         public enum MobTypeEnum { Basic, Mage, Shooter, Summoner };
-        public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Noble};
+        public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Magi, Noble};
         public enum PlayerColorEnum { None, yes, Hair, Skin };
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };
 

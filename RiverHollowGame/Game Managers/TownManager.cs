@@ -264,7 +264,7 @@ namespace RiverHollow.Game_Managers
 
         private static void MakeGroup(ref List<Traveler> travelerList, int successChance, TravelerGroupEnum group)
         {
-            int chainSuccess = successChance * 2;
+            int chainSuccess = (int)(successChance * 1.5f);
             do
             {
                 if (RHRandom.Instance().RollPercent(chainSuccess))

@@ -249,5 +249,21 @@
       <Key>61</Key>
       <Value>[Type:Traveler][Subtype:Human][Key:Villain][Size:16-16][Idle:0-0-4-.2-F][Walk:0-16-4-.15-F][FavFood:Plain][Disliked:Dessert]</Value>
     </Item>
+    <Item>
+      <Key>62</Key>
+      <Value>[Type:Traveler][Subtype:Magi][Key:Magi1][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Healthy][Disliked:Dessert][Building:22]</Value>
+    </Item>
+    <Item>
+      <Key>63</Key>
+      <Value>[Type:Traveler][Subtype:Magi][Key:Magi2][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Plain][Disliked:Healthy][Building:22]</Value>
+    </Item>
+    <Item>
+      <Key>64</Key>
+      <Value>[Type:Traveler][Subtype:Magi][Key:Magi3][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Dessert][Disliked:Seafood][Building:22]</Value>
+    </Item>
+    <Item>
+      <Key>65</Key>
+      <Value>[Type:Traveler][Subtype:Adventurer][Key:Adventurer_1][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Dessert][Disliked:Seafood][Building:22]</Value>
+    </Item>
   </Asset>
 </XnaContent>
