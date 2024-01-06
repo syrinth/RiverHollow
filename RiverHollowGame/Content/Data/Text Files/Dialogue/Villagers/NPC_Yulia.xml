@@ -3,12 +3,14 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Text:Who's there? Oh! You startled me. It's been some time since anyone has come this way... What brings you out here?
-	  Oh? A town you say? That sounds... lovely. It will be nice to see people around I suppose. I've been alone here for a long time.][Name:Introduction]</Value>
+      <Value>[Name:Introduction][Text:Hm? Oh my, I didn't expect to see anyone else out here.
+...
+You're looking for me, are you? Oh, would you look at the time... I guess I got a bit distracted. Sorry about that!
+I'm $Actor_26$, it's very nice to meet you.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Hello dear, having a good day?][Default][Name:1]</Value>
+      <Value>[Name:1][Text:Hello dear, having a good day?][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -36,27 +38,29 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:The sound of the rain is pretty isn't it? It always makes me think of when I was younger. My family used to settle in on those rainy nights around the fireplace and tell each other stories. I hope Jesse comes home soon.][Weather:Raining][Name:Raining|2]</Value>
+      <Value>[Name:Raining|2][Text:The sound of the rain is pretty isn't it? It always makes me think of when I was younger. My family used to settle in on those rainy nights around the fireplace and tell each other stories. I hope Jesse comes home soon.][Weather:Raining]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Text:... hm? Oh, hello dear. I was lost in my thoughts. It's alovely day out, isn't it? My husband and I used to go out for walks on days like this.][Weather:Snowing][Name:Snowing|1]</Value>
+      <Value>[Name:Snowing|1][Text:... hm? Oh, hello dear. I was lost in my thoughts. It's alovely day out, isn't it? My husband and I used to go out for walks on days like this.][Weather:Snowing]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Text:You know... now that I've settled in, I was thinking. This town could really use an $Building_24$. It's been so long since I've taught anyone. My Jesse would sit at my knees and listen to my tell him the names of all the plants and herbs...
-If you could build me such a place, that would make an old woman very happy.][ShopTargetID:2][UnlockItemID:137][Once][Default][Priority:50][Name:Apothecary_Request]</Value>
+      <Value>[Name][Text]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Text:I was wondering if you could help me. A few days ago, a monster crept into my house and scared the daylights out of me! The worst part though, was that the little thief stole my book of recipes and made off towards the Forest Temple to the North!
-	  You look like someone equipped to deal with monsters, would it be too much trouble to ask you to go and get it for me? I've had that book for years, and all of my most important recipes are in it.
-	  Thank you so much!
-	  It ran North, to the Forest Temple. You'll need to make an offering at the door to get it open, so make sure you find a $Item_162$. I've got some $Item_142$ that I've been saving, but you'll need it as well, so here. Good luck, and be careful!][Name:Task_3_Start][ItemID:142]</Value>
+      <Value>[Name:Task_1_Start][Text:Wait, before we go could I get you to lend me a hand? I was looking for some $Item_227$. It's a type of plant with some minor magical properties and very useful for making rods. If you could look for a few for me, that'd be very helpful.]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Text:That's it! Thank you so much!][Name:Task_3_End]</Value>
+      <Value>[Name:Task_1_End][Text:You found some? Marvelous! This will keep me stocked for a few days at least.
+
+Town was this way you said? I'll see you there!]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Name:Task_16_Start][Text:Not quite what I'd call a town, but it's a lovely start. Could I bother you to build a little something for me? Once that's done, I can get to work.][UnlockObjectID:22]</Value>
     </Item>
   </Asset>
 </XnaContent>

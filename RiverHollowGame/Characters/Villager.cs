@@ -351,7 +351,7 @@ namespace RiverHollow.Characters
                     switch (_eSpawnStatus)
                     {
                         case SpawnStateEnum.WaitAtInn:
-                            SetPosition(map.GetRandomPosition(map.DictionaryCharacterLayer["Inn_Floor"]));
+                            SetPosition(map.GetRandomPosition(map.GetCharacterObject("Inn_Floor")));
                             break;
                         case SpawnStateEnum.HasHome:
                         case SpawnStateEnum.NonTownMap:

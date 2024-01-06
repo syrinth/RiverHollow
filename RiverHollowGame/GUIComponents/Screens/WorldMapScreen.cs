@@ -82,7 +82,7 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                     else
                     {
-                        TravelPoint entryPoint = map.DictionaryTravelPoints[node.MapInfo.MapConnection];
+                        TravelPoint entryPoint = map.GetTravelPoint(node.MapInfo.MapConnection);
 
                         DirectionEnum entryDir = entryPoint.EntranceDir;
                         Point newPos = entryPoint.Center;

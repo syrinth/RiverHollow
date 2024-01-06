@@ -19,8 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Windows.Input;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -78,9 +76,11 @@ namespace RiverHollow.Map_Handling
         private List<MobSpawn> _liMobSpawns;
         private List<int> _liCutscenes;
         protected List<MapItem> _liItems;
-        public Dictionary<string, TravelPoint> DictionaryTravelPoints { get; }
-        public Dictionary<string, Rectangle> DictionaryCharacterLayer { get; }
-        private List<TiledMapObject> _liMapObjects;
+        private Dictionary<string, TravelPoint> _diTravelPoints;
+        public IReadOnlyDictionary<string, TravelPoint> TravelPoints => _diTravelPoints;
+        private Dictionary<string, Rectangle> _diCharacterLayer;
+        public IReadOnlyDictionary<string, Rectangle> CharacterObjects => _diCharacterLayer;
+        private readonly List<TiledMapObject> _liMapObjects;
         private int _iShopID = -1;
         public Shop TheShop => (_iShopID > -1) ? GameManager.DIShops[_iShopID] : null;
 
@@ -108,8 +108,8 @@ namespace RiverHollow.Map_Handling
             _liLights = new List<Light>();
             _liCutscenes = new List<int>();
 
-            DictionaryTravelPoints = new Dictionary<string, TravelPoint>();
-            DictionaryCharacterLayer = new Dictionary<string, Rectangle>();
+            _diTravelPoints = new Dictionary<string, TravelPoint>();
+            _diCharacterLayer = new Dictionary<string, Rectangle>();
 
             _liItemsToRemove = new List<MapItem>();
             _liActorsToRemove = new List<Actor>();
@@ -430,7 +430,7 @@ namespace RiverHollow.Map_Handling
         }
         #endregion
 
-        #region WorldObject Accessors
+        #region Accessors
         public IReadOnlyDictionary<int, List<WorldObject>> GetObjects()
         {
             return _diWorldObjects;
@@ -501,6 +501,30 @@ namespace RiverHollow.Map_Handling
                 {
                     rv.AddRange(obj);
                 }
+            }
+
+            return rv;
+        }
+
+        public TravelPoint GetTravelPoint(string key)
+        {
+            TravelPoint rv = null;
+
+            if (_diTravelPoints.ContainsKey(key))
+            {
+                rv = _diTravelPoints[key];
+            }
+
+            return rv;
+        }
+
+        public Rectangle GetCharacterObject(string key)
+        {
+            Rectangle rv = Rectangle.Empty;
+
+            if (_diCharacterLayer.ContainsKey(key))
+            {
+                rv = _diCharacterLayer[key];
             }
 
             return rv;
@@ -737,8 +761,8 @@ namespace RiverHollow.Map_Handling
                                 CreateDoor(trvlPt, mapObject.Position.X, mapObject.Position.Y, mapObject.Size.Width, mapObject.Size.Height);
                             }
 
-                            if (!string.IsNullOrEmpty(trvlPt.MapLink)) { DictionaryTravelPoints.Add(trvlPt.MapLink, trvlPt); }
-                            else { DictionaryTravelPoints.Add(Util.GetEnumString(trvlPt.EntranceDir), trvlPt); }
+                            if (!string.IsNullOrEmpty(trvlPt.MapLink)) { _diTravelPoints.Add(trvlPt.MapLink, trvlPt); }
+                            else { Util.SafeAddToDictionary(ref _diTravelPoints, Util.GetEnumString(trvlPt.EntranceDir), trvlPt); }
                         }
                     }
                 }
@@ -760,12 +784,12 @@ namespace RiverHollow.Map_Handling
                         {
                             if (obj.Properties.ContainsKey("NPC_ID"))
                             {
-                                DictionaryCharacterLayer.Add("NPC_" + obj.Properties["NPC_ID"], Util.RectFromTiledMapObject(obj));
+                                Util.SafeAddToDictionary(ref _diCharacterLayer, "NPC_" + obj.Properties["NPC_ID"], Util.RectFromTiledMapObject(obj));
                             }
                         }
                         else
                         {
-                            DictionaryCharacterLayer.Add(obj.Name, Util.RectFromTiledMapObject(obj));
+                            Util.SafeAddToDictionary(ref _diCharacterLayer, obj.Name, Util.RectFromTiledMapObject(obj));
                         }
                     }
                 }
@@ -855,7 +879,8 @@ namespace RiverHollow.Map_Handling
 
         private void SpawnMobs()
         {
-            if (Map.Properties.ContainsKey("Mobs")) {
+            if (Map.Properties.ContainsKey("Mobs") && _liMobSpawns.Count > 0)
+            {
                 for (int i = 0; i < _liMobs.Count; i++)
                 {
                     RemoveActor(_liMobs[i]);
@@ -863,8 +888,15 @@ namespace RiverHollow.Map_Handling
                 _liMobs.Clear();
 
                 string[] mobRange = Util.FindArguments(Map.Properties["Mobs"]);
-                int roll = RHRandom.Instance().Next(int.Parse(mobRange[0]), int.Parse(mobRange[1]));
+                int min = int.Parse(mobRange[0]);
+                int max = int.Parse(mobRange[1]);
 
+                if (_liMobSpawns.Count < max)
+                {
+                    max = _liMobSpawns.Count;
+                }
+
+                int roll = RHRandom.Instance().Next(min, max);
                 List<SpawnPoint> spawnCopy = new List<SpawnPoint>();
                 spawnCopy.AddRange(_liMobSpawns);
 
@@ -982,17 +1014,17 @@ namespace RiverHollow.Map_Handling
         public void CreateBuildingEntrance(Building b)
         {
             TravelPoint buildPoint = new TravelPoint(b, this.Name, b.ID);
-            DictionaryTravelPoints.Add(b.BuildingMapName, buildPoint); //TODO: FIX THIS
+            _diTravelPoints.Add(b.BuildingMapName, buildPoint); //TODO: FIX THIS
             CreateDoor(buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
 
         public void UpdateBuildingEntrance(string initialMapName, string newMapName)
         {
-            if (DictionaryTravelPoints.ContainsKey(initialMapName))
+            if (_diTravelPoints.ContainsKey(initialMapName))
             {
-                TravelPoint pt = DictionaryTravelPoints[initialMapName];
-                DictionaryTravelPoints.Remove(initialMapName);
-                DictionaryTravelPoints[newMapName] = pt;
+                TravelPoint pt = _diTravelPoints[initialMapName];
+                _diTravelPoints.Remove(initialMapName);
+                _diTravelPoints[newMapName] = pt;
             }
         }
 
@@ -1023,7 +1055,7 @@ namespace RiverHollow.Map_Handling
         public void RemoveDoor(Building b)
         {
             string mapName = b.BuildingMapName;
-            TravelPoint pt = DictionaryTravelPoints[mapName];
+            TravelPoint pt = _diTravelPoints[mapName];
 
             foreach (Point vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, Constants.TILE_SIZE))
             {
@@ -1034,7 +1066,7 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            DictionaryTravelPoints.Remove(mapName);
+            _diTravelPoints.Remove(mapName);
         }
 
         public List<RHTile> FindFreeTiles()
@@ -1432,7 +1464,7 @@ namespace RiverHollow.Map_Handling
         {
             if (!c.Wandering && (c.ActorType == ActorTypeEnum.Villager || c == PlayerManager.PlayerActor))
             {
-                foreach (KeyValuePair<string, TravelPoint> kvp in DictionaryTravelPoints)
+                foreach (KeyValuePair<string, TravelPoint> kvp in _diTravelPoints)
                 {
                     if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
                     {
@@ -1495,7 +1527,7 @@ namespace RiverHollow.Map_Handling
             MapItem displayItem = new MapItem(DataManager.GetItem(itemID))
             {
                 PickupState = ItemPickupState.None,
-                Position = DictionaryCharacterLayer[npcIndex + "Col" + index].Location
+                Position = _diCharacterLayer[npcIndex + "Col" + index].Location
             };
             _liItems.Add(displayItem);
         }
@@ -1529,9 +1561,9 @@ namespace RiverHollow.Map_Handling
         public Point GetCharacterSpawn(string val)
         {
             Point rv = Point.Zero;
-            if (DictionaryCharacterLayer.ContainsKey(val))
+            if (_diCharacterLayer.ContainsKey(val))
             {
-                rv = DictionaryCharacterLayer[val].Location;
+                rv = _diCharacterLayer[val].Location;
             }
             return rv;
         }
@@ -2595,7 +2627,7 @@ namespace RiverHollow.Map_Handling
 
         public void RemoveTilesNearTravelPoints(ref List<RHTile> tiles)
         {
-            foreach(var travelPoint in DictionaryTravelPoints)
+            foreach(var travelPoint in _diTravelPoints)
             {
                 foreach(var t in GetTilesFromRectangleExcludeEdgePoints(travelPoint.Value.CollisionBox))
                 {

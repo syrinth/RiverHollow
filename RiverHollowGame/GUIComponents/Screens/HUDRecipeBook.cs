@@ -68,10 +68,10 @@ namespace RiverHollow.GUIComponents.Screens
                 Item newItem = null;
                 if (recipes.Count > i)
                 {
-                    newItem = DataManager.GetItem(recipes[i]);
+                    newItem = DataManager.CraftItem(recipes[i]);
                 }
 
-                var displayWindow = new GUIItemBoxHover(newItem, ItemBoxDraw.Never, UpdateInfo);
+                var displayWindow = new GUIItemBoxHover(newItem, ItemBoxDraw.MoreThanOne, UpdateInfo);
 
                 if (newItem != null)
                 {
@@ -91,7 +91,7 @@ namespace RiverHollow.GUIComponents.Screens
             GUIUtils.CreateSpacedGrid(new List<GUIObject>(_arrRecipes), _winMain, new Point(7, 6), COLUMNS, 3, 3);
 
 
-            _gSelection = new GUIImage(GUIUtils.SELECT_CORNER);
+            _gSelection = new GUIImage(GUIUtils.SELECT_HIGHLIGHT);
             _winMain.AddControl(_gSelection);
             _gSelection.CenterOnObject(_arrRecipes[0]);
 

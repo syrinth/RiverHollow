@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Woodworker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:55-10/60-20][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/144-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-30][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/144-0-16-16]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:55-20/60-20][UpgradeID:0-1][Profit:-20][Traveller:25][Upgradable:4/64-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:0-20/60-30][UpgradeID:0-1][Profit:-20][Traveller:25][Upgradable:4/64-0-16-16]</Value>
     </Item>
     <Item>
       <Key>26</Key>
@@ -119,7 +119,7 @@
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Lodge][Size:7-8][Base:0-4-7-4][Entrance:7-8-1-2][UpgradeTime:3][ReqItems:0-2/2-3]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Mason][Size:6-7][Base:0-4-6-3][Entrance:2-5-1-2][ReqItems:0-60/60-40]</Value>
     </Item>
     <Item>
       <Key>30</Key>
@@ -159,7 +159,7 @@
     </Item>
     <Item>
       <Key>39</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Workshop][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][ReqItems:55-5/60-5][UpgradeID:2][Upgradable:1/16-0-16-16][CraftAmount:20]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Carpenter][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][UpgradeID:2][Upgradable:1/16-0-16-16][CraftAmount:30]</Value>
     </Item>
     <Item>
       <Key>40</Key>
@@ -708,6 +708,10 @@
     <Item>
       <Key>176</Key>
       <Value>[Type:WorldObject]</Value>
+    </Item>
+    <Item>
+      <Key>177</Key>
+      <Value>[Type:Buildable][Subtype:Container][Image:4-41][Size:1-2][Base:0-1-1-1][Rows:1][Cols:4][Stash]</Value>
     </Item>
   </Asset>
 </XnaContent>

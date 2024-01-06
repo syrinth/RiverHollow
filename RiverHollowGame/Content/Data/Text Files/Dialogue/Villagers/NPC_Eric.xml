@@ -44,17 +44,15 @@ Thank you so much!]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Name:Task_1_Start][Text:Wait, before we go could I get you to lend me a hand? I was looking for some $Item_227$. It's a type of plant with some minor magical properties and very useful for making rods. If you could look for a few for me, that'd be very helpful.]</Value>
+      <Value>[Name][Text]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Name:Task_1_End][Text:You found some? Marvelous! This will keep me stocked for a few days at least.
-
-Town was this way you said? I'll see you there!]</Value>
+      <Value>[Name][Text]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Name:Task_16_Start][Text:Not what I'd call a town, but it's a lovely start. Could I bother you to build a little something for me? I need to place to work and relax you understand.][UnlockObjectID:22]</Value>
+      <Value>[Name][Text]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -91,7 +91,7 @@ namespace RiverHollow.Game_Managers
                         DungeonManager.InitializeProceduralDungeon(MapManager.CurrentMap.DungeonName, MapManager.CurrentMap.Name, travelPoint);
                     }
 
-                    entryPoint = linkedMap.DictionaryTravelPoints[string.Format("{0}{1}", currMap, travelPoint.MapConnector)];
+                    entryPoint = linkedMap.GetTravelPoint(string.Format("{0}{1}", currMap, travelPoint.MapConnector));
 
                     Point newPos;
                     if (travelPoint.IsDoor)
@@ -118,7 +118,7 @@ namespace RiverHollow.Game_Managers
             {
                 RHMap linkedMap = Maps[travelPoint.LinkedMap];
 
-                entryPoint = linkedMap.DictionaryTravelPoints[currMap];
+                entryPoint = linkedMap.GetTravelPoint(currMap);
 
                 Maps[currMap].RemoveActor(actor);
                 linkedMap.AddActor(actor);

@@ -125,8 +125,8 @@
       <Key>15</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapWoodworker][Actors:7-Entrance][Face:7-Up][Deactivate:7]</Item>
-        <Item>[Speed:Player-0.5/7-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:7][Move:7-4-Up][Face:Player-Up][Face:7-Down][Speak:7-0][MoveToTown:7]</Item>
+        <Item>[Map:mapWandmaker][Actors:26-Entrance][Face:26-Up][Deactivate:26]</Item>
+        <Item>[Speed:Player-0.5/26-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:26][Move:26-4-Up][Face:Player-Up][Face:26-Down][Speak:26-0][MoveToTown:26]</Item>
       </Value>
     </Item>
   </Asset>

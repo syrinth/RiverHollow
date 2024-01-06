@@ -253,7 +253,7 @@ namespace RiverHollow.WorldObjects
                 rv = true;
 
                 InventoryManager.InitExtraInventory(targetContainer.Inventory);
-                InventoryManager.AddToInventory(chosenItem, false, true);
+                InventoryManager.AddToInventory(DataManager.CraftItem(chosenItem.ID), false, true);
                 InventoryManager.ClearExtraInventory();
 
                 validItems = WhatCanWeCraft(craftingList);
@@ -280,19 +280,22 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = base.PlaceOnMap(pos, map, ignoreActors);
 
-            var containers = CurrentMap.GetObjectsByType<Container>();
-            var stash = containers.Where(x => x.GetBoolByIDKey("Stash")).ToList();
-
-            if (stash != null && stash.Count > 0 && stash[0] is Container c)
+            if (rv)
             {
-                SetStash(c);
-            }
+                var containers = CurrentMap.GetObjectsByType<Container>();
+                var stash = containers.Where(x => x.GetBoolByIDKey("Stash")).ToList();
 
-            var shopTables = containers.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
+                if (stash != null && stash.Count > 0 && stash[0] is Container c)
+                {
+                    SetStash(c);
+                }
 
-            if (shopTables != null && shopTables.Count > 0 && shopTables[0] is Container t)
-            {
-                AddShopTable(t);
+                var shopTables = containers.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
+
+                if (shopTables != null && shopTables.Count > 0 && shopTables[0] is Container t)
+                {
+                    AddShopTable(t);
+                }
             }
 
             return rv;
@@ -300,7 +303,7 @@ namespace RiverHollow.WorldObjects
 
         public void SetStash(Container obj)
         {
-            if(Stash == null)
+            if (Stash == null)
             {
                 Stash = obj;
             }

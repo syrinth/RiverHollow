@@ -89,15 +89,15 @@
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_25.xml
 
+#begin Data/Schedules/NPC_Caleb.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Schedules/NPC_Caleb.xml
+
 #begin Data/Schedules/NPC_Harrison.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Schedules/NPC_Harrison.xml
-
-#begin Data/Schedules/NPC_Kyle.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Schedules/NPC_Kyle.xml
 
 #begin Data/Shops.xml
 /importer:XmlImporter
@@ -249,6 +249,11 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Ander.xml
 
+#begin Data/Text Files/Dialogue/Villagers/NPC_Caleb.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Text Files/Dialogue/Villagers/NPC_Caleb.xml
+
 #begin Data/Text Files/Dialogue/Villagers/NPC_Damien.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
@@ -323,11 +328,6 @@
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Villagers/NPC_Kevin.xml
-
-#begin Data/Text Files/Dialogue/Villagers/NPC_Kyle.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/Villagers/NPC_Kyle.xml
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Leanne.xml
 /importer:XmlImporter
@@ -545,6 +545,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapForest_Glade_1.tmx
 
+#begin Maps/Misc/mapForest_Glade_2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapForest_Glade_2.tmx
+
 #begin Maps/Misc/mapMageCaves.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -720,6 +725,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapBoutique.tmx
 
+#begin Maps/Town/mapCarpenter.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapCarpenter.tmx
+
 #begin Maps/Town/mapCoop.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -765,15 +775,15 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapInn.tmx
 
-#begin Maps/Town/mapLumberMill.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapLumberMill.tmx
-
 #begin Maps/Town/mapMagicShop.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapMagicShop.tmx
+
+#begin Maps/Town/mapMason.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapMason.tmx
 
 #begin Maps/Town/mapMushroomery.tmx
 /importer:TiledMapImporter
@@ -820,20 +830,15 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapTown_Hall.tmx
 
+#begin Maps/Town/mapWandmaker.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapWandmaker.tmx
+
 #begin Maps/Town/mapWeaver.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:Maps/Town/mapWeaver.tmx
-
-#begin Maps/Town/mapWoodworker.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapWoodworker.tmx
-
-#begin Maps/Town/mapWorkshop.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Town/mapWorkshop.tmx
 
 #begin Sound/Original/Effects/Blip_Select2.wav
 /importer:WavImporter
@@ -1603,6 +1608,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Villagers/Ander.png
 
+#begin Textures/Actors/NPCs/Villagers/Caleb.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Villagers/Caleb.png
+
 #begin Textures/Actors/NPCs/Villagers/Damien.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1782,18 +1799,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Villagers/Kevin.png
-
-#begin Textures/Actors/NPCs/Villagers/Kyle.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/Villagers/Kyle.png
 
 #begin Textures/Actors/NPCs/Villagers/Leanne.png
 /importer:TextureImporter
@@ -2335,6 +2340,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Portraits/V_Ander.png
 
+#begin Textures/Actors/Portraits/V_Caleb.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Portraits/V_Caleb.png
+
 #begin Textures/Actors/Portraits/V_Damien.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2502,18 +2519,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Portraits/V_June.png
-
-#begin Textures/Actors/Portraits/V_Kyle.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/Portraits/V_Kyle.png
 
 #begin Textures/Actors/Portraits/V_Leah.png
 /importer:TextureImporter
@@ -3271,6 +3276,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Boutique.png
 
+#begin Textures/WorldObjects/Buildings/Carpenter.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WorldObjects/Buildings/Carpenter.png
+
 #begin Textures/WorldObjects/Buildings/Coop.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3415,6 +3432,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Manor.png
 
+#begin Textures/WorldObjects/Buildings/Mason.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WorldObjects/Buildings/Mason.png
+
 #begin Textures/WorldObjects/Buildings/Mushroomery.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3511,7 +3540,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/TownStore.png
 
-#begin Textures/WorldObjects/Buildings/Woodworker.png
+#begin Textures/WorldObjects/Buildings/Wandmaker.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3521,19 +3550,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/WorldObjects/Buildings/Woodworker.png
-
-#begin Textures/WorldObjects/Buildings/Workshop.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/WorldObjects/Buildings/Workshop.png
+/build:Textures/WorldObjects/Buildings/Wandmaker.png
 
 #begin Textures/WorldObjects/DarkWoodTree.png
 /importer:TextureImporter

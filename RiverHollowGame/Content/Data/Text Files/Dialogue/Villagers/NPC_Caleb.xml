@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name:Introduction][Text:Hey. $Name$ right? Glad you made it. I'm $Actor_16$, and I'm here to help you with building the town itself.]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Name:1][Text:Hey there, $Name$,hope you're feeling well today!][Default]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Name:2][Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.][Default]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name:ShopOpen][Text:Oh, hello $Name$, What can I do for you?][Selection:Shop]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Name:Gift][Text:Wow! Thanks!]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Name:Selection][Text:Hey.][Selection:VillageTalk]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Name:Task_0_Start][Text:We have to build a $WorldObject_112$ so that visiting merchants will have a place to trade goods. You'll need wooden planks and some clay to build it.
+	  I've got some extra planks in the chest there, but you'll need to find the clay yourself. I think I saw a cave in the woods where you that should be able to find some. Just follow the cleared path to the West.
+	  Once you've got that, choose a spot, set it up, and let me know when you're done, OK?][UnlockObjectID:112]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Name:Task_0_End][Text:Is the $WorldObject_112$ finished? Great! The Merchant's Guild knows we're here, so there should be someone along soon but that leaves the little problem of us not having anything to sell  yet.
+...
+So, before we left, I reached out to my colleagues to see what would be a good idea to start with. They pointed out that Kethris Tower isn't too far away, so we'd likely get a lot of mages coming through to the North.
+A Wandmaker was supposed to have arrived today, to supply the apprentices with weapons but she hasn't arrived yet.
+	  Could you check the woods again for me?
+	  Oh, and before I forget, here's a chest for you to hold items in. Place it anywhere you want, and take a look through these notes when you have a minute.][Face:Happy]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Name:Task_6_Start][Text:NEED MORE PEOPLE]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Name:Task_6_End][Text:BIG TOWN!]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:Task_7_Start][Text:BUILD TOWN HALL]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Name:Task_7_End][Text:ITS BUILT!]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Name:Collection][Text:This is just what I've been looking for!]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Name:Gift_Happy][Text:This is great, thanks!]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Name:Gift_Pleased][Text:Thanks a lot!]</Value>
+    </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[Name:Gift_Neutral][Text:Oh, uh. Thanks.]</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>[Name:Gift_Sad][Text:That's ok, I'd rather not.]</Value>
+    </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>[Name:Gift_Miserable][Text:Why would you think I'd like this?]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

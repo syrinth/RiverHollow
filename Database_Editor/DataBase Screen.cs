@@ -1,7 +1,6 @@
 ﻿using Database_Editor.Classes;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,7 +25,7 @@ namespace Database_Editor
         static List<XMLData> _liGameText; 
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<string, List<XMLData>> _diBasicXML;
-        Dictionary<string, TMXData> _diMapData;
+        //Dictionary<string, TMXData> _diMapData;
 
         Dictionary<XMLTypeEnum, XMLCollection> _diTabCollections;
 
@@ -67,17 +66,17 @@ namespace Database_Editor
                 { "Upgrades", 0 }
             };
 
-            _diMapData = new Dictionary<string, TMXData>();
-            foreach (string s in Directory.GetDirectories(PATH_TO_MAPS))
-            {
-                foreach (string mapName in Directory.GetFiles(s))
-                {
-                    if (mapName.EndsWith(".tmx"))
-                    {
-                        _diMapData[mapName] = new TMXData(mapName);
-                    }
-                }
-            }
+            //_diMapData = new Dictionary<string, TMXData>();
+            //foreach (string s in Directory.GetDirectories(PATH_TO_MAPS))
+            //{
+            //    foreach (string mapName in Directory.GetFiles(s))
+            //    {
+            //        if (mapName.EndsWith(".tmx"))
+            //        {
+            //            _diMapData[mapName] = new TMXData(mapName);
+            //        }
+            //    }
+            //}
             
             _diNPCDialogue = new Dictionary<string, List<XMLData>>();
             string[] dialogueFiles = Directory.GetFiles(PATH_TO_VILLAGER_DIALOGUE);
@@ -449,10 +448,10 @@ namespace Database_Editor
         private void FindLinkedTMXObjects(XMLData data)
         {
             //Find any maps that reference the ItemID
-            foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
-            {
-                kvp.Value.ReferencesXMLObject(data);
-            }
+            //foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
+            //{
+            //    kvp.Value.ReferencesXMLObject(data);
+            //}
         }
         private void FindLinkedCutscenes(XMLData theData, ref Dictionary<int, List<string>> dictionaryData)
         {
@@ -1168,15 +1167,15 @@ namespace Database_Editor
             SaveXMLDictionaryIntKeyList(_diCutscenes, CUTSCENE_XML_FILE, XMLTypeEnum.Cutscene, sWriter);
             //SaveXMLDictionaryList(_diCutsceneDialogue, PATH_TO_CUTSCENE_DIALOGUE, sWriter, "int");
 
-            string mapPath = PATH_TO_MAPS;
-            if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
-            foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
-            {
-                kvp.Value.StripSpecialCharacter();
-                DirectoryInfo dirInfo = Directory.GetParent(kvp.Key);
-                if (!Directory.Exists(dirInfo.FullName)) { Directory.CreateDirectory(dirInfo.FullName); }
-                SaveTMXData(kvp.Value, kvp.Key);
-            }
+            //string mapPath = PATH_TO_MAPS;
+            //if (!Directory.Exists(mapPath)) { Directory.CreateDirectory(mapPath); }
+            //foreach (KeyValuePair<string, TMXData> kvp in _diMapData)
+            //{
+            //    kvp.Value.StripSpecialCharacter();
+            //    DirectoryInfo dirInfo = Directory.GetParent(kvp.Key);
+            //    if (!Directory.Exists(dirInfo.FullName)) { Directory.CreateDirectory(dirInfo.FullName); }
+            //    SaveTMXData(kvp.Value, kvp.Key);
+            //}
 
             CloseStreamWriter(ref sWriter);
 

@@ -3,7 +3,7 @@
     public static class Enums
     {
         public enum ButtonEnum { Left, Right, Middle };
-        public enum DataType { Actor, Job, Item, Light, Monster, StatusEffect, Task, WorldObject, Upgrade };
+        public enum DataType { Actor, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
         public enum BuildTypeEnum { Structure, WorldObject };
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Bed };
@@ -18,7 +18,7 @@
 
         public enum GameScreenEnum { Info, World };
         public enum DisplayTypeEnum { None, Inventory, PlayerInventory, ShopTable };
-        public enum ItemBoxDraw { Always, Never, OnlyStacks };
+        public enum ItemBoxDraw { Always, Never, OnlyStacks, MoreThanOne };
         public enum CodexPageEnum { Villagers, Merchants, Travelers, Mobs, Items };
         public enum BuildPageEnum { Structures, Flooring, Walls, Furniture, Lighting };
 

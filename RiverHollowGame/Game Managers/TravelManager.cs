@@ -150,20 +150,20 @@ namespace RiverHollow.Game_Managers
                 if (fromMap != testMapStr)
                 {
                     //Find the location of the new endpoint on the target map
-                    TravelPoint linkedPoint = theTestMap.DictionaryTravelPoints[fromMap];
+                    TravelPoint linkedPoint = theTestMap.GetTravelPoint(fromMap);
                     start = linkedPoint.GetMovedCenter();
                 }
 
                 //If the testMap contains the key that we're looking for then we need to pathfind from the entrance to the key
-                if (theTestMap.DictionaryCharacterLayer.ContainsKey(findKey))
+                if (theTestMap.GetCharacterObject(findKey) != Rectangle.Empty)
                 {
                     //Set the initial values for the map pathfinding
                     //To make this work with the reversal later on, start
                     //at the key, and then walk back to the entrance to the map.
                     mapName = testMapStr;
-                    newStart = MapManager.Maps[testMap].DictionaryCharacterLayer[findKey].Location;
+                    newStart = MapManager.Maps[testMap].GetCharacterObject(findKey).Location;
 
-                    List<RHTile> pathToExit = FindPathToLocation(ref start, MapManager.Maps[testMap].DictionaryCharacterLayer[findKey].Location, testMapStr);
+                    List<RHTile> pathToExit = FindPathToLocation(ref start, MapManager.Maps[testMap].GetCharacterObject(findKey).Location, testMapStr);
                     fromMap = mapCameFrom[testMapStr];          //Do the backtracking
 
                     List<List<RHTile>> liTotalPath = new List<List<RHTile>> { pathToExit };  //The pathfor this segment
@@ -196,7 +196,7 @@ namespace RiverHollow.Game_Managers
                 }
 
                 //Iterate over the exits in the map we're testing and pathfind to them from the starting location
-                foreach (KeyValuePair<string, TravelPoint> exit in theTestMap.DictionaryTravelPoints)
+                foreach (KeyValuePair<string, TravelPoint> exit in theTestMap.TravelPoints)
                 {
                     if (exit.Value.Modular) { continue; }
                     TravelPoint exitPoint = exit.Value;

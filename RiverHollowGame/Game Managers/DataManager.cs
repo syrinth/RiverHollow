@@ -91,9 +91,6 @@ namespace RiverHollow.Game_Managers
         static Dictionary<int, Dictionary<string, string>> _diTaskData;
         public static IReadOnlyDictionary<int, Dictionary<string, string>> TaskData => _diTaskData;
 
-        static Dictionary<int, Dictionary<string, string>> _diMonsterData;
-
-        static Dictionary<int, Dictionary<string, string>> _diJobs;
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
 
         public static Dictionary<int, Dictionary<string, string>> Config;
@@ -133,10 +130,8 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
             LoadDictionary(ref _diActorData, @"Data\ActorData", Content, null);
-            LoadDictionary(ref _diMonsterData, @"Data\Monsters", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
-            LoadDictionary(ref _diJobs, @"Data\Classes", Content, null);
             LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
             LoadDictionary(ref _diUpgradeData, @"Data\Upgrades", Content, null);
             LoadDictionary(ref _diDungeonData, @"Data\DungeonData", Content, null);
@@ -356,17 +351,11 @@ namespace RiverHollow.Game_Managers
                     case DataType.Actor:
                         if (_diActorData[id].ContainsKey(key)) { return _diActorData[id][key]; }
                         break;
-                    case DataType.Job:
-                        if (_diJobs[id].ContainsKey(key)) { return _diJobs[id][key]; }
-                        break;
                     case DataType.Item:
                         if (_diItemData[id].ContainsKey(key)) { return _diItemData[id][key]; }
                         break;
                     case DataType.Light:
                         if (_diLightData[id].ContainsKey(key)) { return _diLightData[id][key]; }
-                        break;
-                    case DataType.Monster:
-                        if (_diMonsterData[id].ContainsKey(key)) { return _diMonsterData[id][key]; }
                         break;
                     case DataType.StatusEffect:
                         if (_diStatusEffects[id].ContainsKey(key)) { return _diStatusEffects[id][key]; }
@@ -418,17 +407,11 @@ namespace RiverHollow.Game_Managers
                 case DataType.Actor:
                     if (_diActorData.ContainsKey(id) && _diActorData[id].ContainsKey(key)) { return _diActorData[id].ContainsKey(key); }
                     break;
-                case DataType.Job:
-                    if (_diJobs.ContainsKey(id) && _diJobs[id].ContainsKey(key)) { return _diJobs[id].ContainsKey(key); }
-                    break;
                 case DataType.Item:
                     if (_diItemData.ContainsKey(id) && _diItemData[id].ContainsKey(key)) { return _diItemData[id].ContainsKey(key); }
                     break;
                 case DataType.Light:
                     if (_diLightData.ContainsKey(id) && _diLightData[id].ContainsKey(key)) { return _diLightData[id].ContainsKey(key); }
-                    break;
-                case DataType.Monster:
-                    if (_diMonsterData.ContainsKey(id) && _diMonsterData[id].ContainsKey(key)) { return _diMonsterData[id].ContainsKey(key); }
                     break;
                 case DataType.StatusEffect:
                     if (_diStatusEffects.ContainsKey(id) && _diStatusEffects[id].ContainsKey(key)) { return _diStatusEffects[id].ContainsKey(key); }
@@ -715,11 +698,6 @@ namespace RiverHollow.Game_Managers
             var list = _diWorldObjects.Where(x => GetBoolByIDKey(x.Key, key, DataType.WorldObject)).Select(y => y.Key).ToList();
 
             return list;
-        }
-
-        public static int NumberOfClasses()
-        {
-            return _diJobs.Count;
         }
 
         public static Actor CreateNPCByIndex(int id)

@@ -89,7 +89,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
             bool sufficientItems = GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, obj.RequiredToMake);
 
-            _btnBuild.Enable(sufficientItems && obj.CanBuild());
+            _btnBuild.Enable(sufficientItems && obj.CanBuild() && MapManager.CurrentMap == MapManager.TownMap);
             _gStructure.Alpha(sufficientItems ? 1 : 0.3f);
 
             _gName = new GUIText(obj.Name());

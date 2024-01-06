@@ -37,8 +37,8 @@ namespace RiverHollow.Game_Managers
         public static void AddMapToDungeon(string dungeonName, bool procedural, RHMap map) {
             if (!_diDungeons.ContainsKey(dungeonName))
             {
-                if (procedural) { _diDungeons[dungeonName] = new ProceduralDungeon(dungeonName); }
-                else { _diDungeons[dungeonName] = new Dungeon(dungeonName); }
+               // if (procedural) { _diDungeons[dungeonName] = new ProceduralDungeon(dungeonName); }
+                //else { _diDungeons[dungeonName] = new Dungeon(dungeonName); }
             }
 
             _diDungeons[dungeonName].AddMap(map);
@@ -80,7 +80,7 @@ namespace RiverHollow.Game_Managers
 
         public static void InitializeProceduralDungeon(string dungeonName, string currentMap, TravelPoint pt)
         {
-            ((ProceduralDungeon)_diDungeons[dungeonName]).InitializeDungeon(currentMap, pt);
+           // ((ProceduralDungeon)_diDungeons[dungeonName]).InitializeDungeon(currentMap, pt);
         }
     }
 }

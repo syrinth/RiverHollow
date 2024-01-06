@@ -292,7 +292,7 @@ namespace RiverHollow.Game_Managers
                                     if (sCommandData.Length > 2) { d = Util.ParseEnum<DirectionEnum>(sCommandData[2]); }
 
                                     Point collisionCenter = c.CollisionCenter;
-                                    var path = TravelManager.FindPathToLocation(ref collisionCenter, _cutsceneMap.DictionaryCharacterLayer[sCommandData[1]].Location);
+                                    var path = TravelManager.FindPathToLocation(ref collisionCenter, _cutsceneMap.GetCharacterObject(sCommandData[1]).Location);
                                     c.SetPath(path);
                                     c.SetMoveTo(path[0].Position);
                                     if (!_diMoving.ContainsKey(c))

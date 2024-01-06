@@ -624,6 +624,21 @@ namespace RiverHollow.Utilities
             return rv;
         }
 
+        public static bool SafeAddToDictionary<T, T1>(ref Dictionary<T, T1> dictionary, T key, T1 value)
+        {
+            bool rv = false;
+            if (!dictionary.ContainsKey(key)){
+                rv = true;
+                dictionary[key] =  value;
+            }
+            else
+            {
+                ErrorManager.TrackError();
+            }
+
+            return rv;
+        }
+
         public static void AddToListDictionary<T, T1>(ref Dictionary<T, List<T1>> dictionary, T key, T1 value)
         {
             if (!dictionary.ContainsKey(key))

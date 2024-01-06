@@ -227,6 +227,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         _gText.Draw(spriteBatch);
                     }
                     break;
+                case ItemBoxDraw.MoreThanOne:
+                    if(ItemObject.Number > 1)
+                    {
+                        _gText.Draw(spriteBatch);
+                    }
+                    break;
             }
         }
 

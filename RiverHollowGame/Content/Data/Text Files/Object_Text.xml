@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>Task_1</Key>
-      <Value>[Name:I belief you've got it!][Description:$Actor_7$ needs a few $Item_227$ before he gets to work.]</Value>
+      <Value>[Name:I belief you've got it!][Description:$Actor_26$ needs a few $Item_227$ before she gets to work.]</Value>
     </Item>
     <Item>
       <Key>Task_2</Key>
@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>Task_16</Key>
-      <Value>[Name:Wood Morning!][Description:$Actor_7$ needs a place to work his woodweaving wonders.]</Value>
+      <Value>[Name:Wood Morning!][Description:$Actor_26$ needs a place to work her wandmaking wonders.]</Value>
     </Item>
     <Item>
       <Key>Actor_0</Key>
@@ -135,7 +135,7 @@
     </Item>
     <Item>
       <Key>Actor_16</Key>
-      <Value>[Name:Kyle]</Value>
+      <Value>[Name:Caleb]</Value>
     </Item>
     <Item>
       <Key>Actor_17</Key>
@@ -508,7 +508,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_8</Key>
-      <Value>[Name:Furniture Shop]</Value>
+      <Value>[Name:Carpentry Shop]</Value>
     </Item>
     <Item>
       <Key>Shop_9</Key>
@@ -1208,7 +1208,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_169</Key>
-      <Value>[Name:Apprentice's Rod][Description:A magic rod for beginner's.]</Value>
+      <Value>[Name:Apprentice's Rod][Description:Even the most dim trainee can be trusted to not cause too much havoc with this.]</Value>
     </Item>
     <Item>
       <Key>Item_170</Key>
@@ -1564,7 +1564,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_29</Key>
-      <Value>[Name:Lodge]</Value>
+      <Value>[Name:Mason's]</Value>
     </Item>
     <Item>
       <Key>WorldObject_30</Key>
@@ -1604,7 +1604,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_39</Key>
-      <Value>[Name:Workshop]</Value>
+      <Value>[Name:Carpenter's]</Value>
     </Item>
     <Item>
       <Key>WorldObject_40</Key>
@@ -2153,6 +2153,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_176</Key>
       <Value>[Name:]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_177</Key>
+      <Value>[Name:Small Stash]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

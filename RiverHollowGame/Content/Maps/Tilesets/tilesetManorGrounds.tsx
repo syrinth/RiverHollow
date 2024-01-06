@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.0" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
+<tileset version="1.10" tiledversion="1.10.2" name="tilesetManorGrounds" tilewidth="16" tileheight="16" tilecount="625" columns="25">
  <image source="tilesetManorGrounds.png" trans="ffffff" width="400" height="400"/>
  <tile id="6">
   <properties>
@@ -790,6 +790,21 @@
   </properties>
  </tile>
  <tile id="390">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="397">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="398">
+  <properties>
+   <property name="Impassable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="399">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
   </properties>
