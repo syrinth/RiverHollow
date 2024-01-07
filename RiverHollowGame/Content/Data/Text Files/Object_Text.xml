@@ -812,7 +812,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_70</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Juicy Flan]</Value>
     </Item>
     <Item>
       <Key>Item_71</Key>
@@ -832,7 +832,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_75</Key>
-      <Value>[Name: ]</Value>
+      <Value>[Name:Juicy Mushroom]</Value>
     </Item>
     <Item>
       <Key>Item_76</Key>
@@ -1384,7 +1384,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_213</Key>
-      <Value>[Name:Sauteed Mushrooms]</Value>
+      <Value>[Name:Mushroom Steaks]</Value>
     </Item>
     <Item>
       <Key>Item_214</Key>
@@ -1445,6 +1445,14 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Item_228</Key>
       <Value>[Name:Flint Scale]</Value>
+    </Item>
+    <Item>
+      <Key>Item_229</Key>
+      <Value>[Name:Nature Essence]</Value>
+    </Item>
+    <Item>
+      <Key>Item_230</Key>
+      <Value>[Name:Twining Rod]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>

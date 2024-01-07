@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][ArrivalDay:Spring-2][Size:16-33]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][ArrivalDay:Spring-3][Size:16-33]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Yulia][Size:16-32][StartMap:mapForest_Glade_2][Inactive]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Yulia][Size:16-31][StartMap:mapForest_Glade_2][Inactive]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -131,7 +131,7 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56-C/222-C/225-U/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56-C/222-C/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
     </Item>
     <Item>
       <Key>33</Key>
@@ -203,7 +203,7 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Mob][Subtype:Shooter][Key:Spitter][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9-C/221-C/16-R][HP:1][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium][Wander:0.5-4-16]</Value>
+      <Value>[Type:Mob][Subtype:Shooter][Key:Spitter][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9-C/229-C/16-R][HP:1][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium][Wander:0.5-4-16]</Value>
     </Item>
     <Item>
       <Key>51</Key>

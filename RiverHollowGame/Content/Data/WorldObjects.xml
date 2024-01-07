@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:0-20/60-30][UpgradeID:0-1][Profit:-20][Traveller:25][Upgradable:4/64-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:0-30/60-50][UpgradeID:0-1][Profit:-20][Traveller:25][Upgradable:4/64-0-16-16]</Value>
     </Item>
     <Item>
       <Key>26</Key>
@@ -363,7 +363,7 @@
     </Item>
     <Item>
       <Key>90</Key>
-      <Value>[Type:Machine][Image:5-16][Size:3-3][Base:0-1-3-2][Makes:169/170/171/98]</Value>
+      <Value>[Type:Machine][Image:5-16][Size:3-3][Base:0-1-3-2][Makes:169/230/170/171/98]</Value>
     </Item>
     <Item>
       <Key>91</Key>
@@ -595,7 +595,7 @@
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Machine][Image:0-19][Size:2-3][Base:0-2-2-1][Makes:195/213/214/215/217][Kitchen]</Value>
+      <Value>[Type:Machine][Image:0-19][Size:2-3][Base:0-2-2-1][Makes:70/75/195/213/214/215/217][Kitchen]</Value>
     </Item>
     <Item>
       <Key>149</Key>

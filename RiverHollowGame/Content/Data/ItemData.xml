@@ -283,7 +283,7 @@
     </Item>
     <Item>
       <Key>70</Key>
-      <Value>[Type:Resource][Subtype:None][Image:5-8]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:0-3][FoodType:Desert][Value:10][Stam:4][ReqItems:162-2]</Value>
     </Item>
     <Item>
       <Key>71</Key>
@@ -303,7 +303,7 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:Seed][Image:9-8][Value:3][ObjectID:107][Season:Summer]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:1-3][FoodType:Healthy][Value:15][Stam:10][ReqItems:23-1/162-1]</Value>
     </Item>
     <Item>
       <Key>76</Key>
@@ -395,7 +395,7 @@
     </Item>
     <Item>
       <Key>98</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:3-11][ReqItems:2-1/225-1][Value:60]</Value>
+      <Value>[Type:Resource][Subtype:Magic][Image:6-11][ReqItems:2-1/225-1][Value:60]</Value>
     </Item>
     <Item>
       <Key>99</Key>
@@ -687,7 +687,7 @@
     </Item>
     <Item>
       <Key>171</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:2-11][ReqItems:2-1/96-1/222-1][Value:100]</Value>
+      <Value>[Type:Resource][Subtype:Magic][Image:3-11][ReqItems:2-1/96-1/222-1][Value:100]</Value>
     </Item>
     <Item>
       <Key>172</Key>
@@ -855,7 +855,7 @@
     </Item>
     <Item>
       <Key>213</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:9-0][FoodType:Healthy][Value:30][Stam:5][ReqItems:23-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:9-0][FoodType:Healthy][Value:10][Stam:5][ReqItems:23-2]</Value>
     </Item>
     <Item>
       <Key>214</Key>
@@ -916,6 +916,14 @@
     <Item>
       <Key>228</Key>
       <Value>[Type:Resource][Subtype:None][Image:5-9][Value:5]</Value>
+    </Item>
+    <Item>
+      <Key>229</Key>
+      <Value>[Type:Resource][Subtype:None][Image:8-13][Value:5]</Value>
+    </Item>
+    <Item>
+      <Key>230</Key>
+      <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/61-3][Value:20]</Value>
     </Item>
   </Asset>
 </XnaContent>
