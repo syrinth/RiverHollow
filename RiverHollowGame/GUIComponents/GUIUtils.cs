@@ -41,6 +41,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle ICON_HAMMER = new Rectangle(320, 80, 14, 14);
         internal static Rectangle ICON_KEY = new Rectangle(320, 112, 16, 16);
         internal static Rectangle ICON_TRAVELER = new Rectangle(336, 80, 14, 15);
+        internal static Rectangle ICON_CAPACITY = new Rectangle(336, 64, 14, 14);
         internal static Rectangle ICON_FACE = new Rectangle(288, 112, 16, 16);
         internal static Rectangle ICON_MAP_MARKER = new Rectangle(304, 112, 16, 16);
         internal static Rectangle ICON_HEART = new Rectangle(208, 72, 10, 9);

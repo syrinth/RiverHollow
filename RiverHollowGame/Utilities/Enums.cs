@@ -72,7 +72,7 @@
         public enum VillagerRequestEnum { Close, Far, TownWide };
         public enum MailboxEnum { Unsent, Sent, Waiting };
 
-        public enum GameIconEnum { None, Book, Coin, Hammer, Traveler };
+        public enum GameIconEnum { None, Book, Coin, Hammer, Traveler, Capacity };
 
         public enum PlayerResourceEnum { Energy, Health, Magic };
 

@@ -301,5 +301,9 @@
       <Key>74</Key>
       <Value>[Name:Upgrade_Recipe][Text:Unlocks new recipes.]</Value>
     </Item>
+	<Item>
+      <Key>75</Key>
+      <Value>[Name:Icon_Capacity][Text:How many items the Merchant can buy.]</Value>
+    </Item>
   </Asset>
 </XnaContent>

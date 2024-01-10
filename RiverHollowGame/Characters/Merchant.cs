@@ -41,6 +41,8 @@ namespace RiverHollow.Characters
         private int[] RequestIDs => DataManager.GetIntParamsByIDKey(ID, "RequestIDs", DataType.Actor);
         private int _iRequestIndex = 0;
 
+        public int Capacity { get; private set; } = 0;
+
         public int ShopID => DataManager.GetIntByIDKey(ID, "ShopData", DataType.Actor);
 
         public Merchant(int index, Dictionary<string, string> stringData) : base(index, stringData)
@@ -116,6 +118,18 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        public void UpdateCapacity(int numSold)
+        {
+            if(numSold <= Capacity)
+            {
+                Capacity -= numSold;
+            }
+            else
+            {
+                Capacity = 0;
+            }
+        }
+
         public int EvaluateItem(Item it)
         {
             Color c = Color.Black;
@@ -159,11 +173,12 @@ namespace RiverHollow.Characters
                 }
             }
 
-            return offer * it.Number;
+            return offer * (it.Number <= Capacity ? it.Number : Capacity);
         }
 
         public override void MoveToSpawn()
         {
+            Capacity = Constants.MERCHANT_BASE_CAPACITY;
             OnTheMap = true;
 
             CurrentMapName = Constants.TOWN_MAP_NAME;

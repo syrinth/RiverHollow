@@ -11,14 +11,14 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     public class HUDMerchantWindow : GUIMainObject
     {
-        Item[,] _arrToSell;
-        Merchant _merchant;
-        GUIInventoryWindow _inventory;
-        GUIText _gSellValue;
-        GUIButton _btnSell;
+        readonly Item[,] _arrToSell;
+        readonly Merchant _merchant;
 
-        GUIWindow _gMerchantWindow;
-        GUIInventory _gToSell;
+        readonly GUIWindow _gMerchantWindow;
+        readonly GUIInventoryWindow _inventory;
+        readonly GUIText _gSellValue;
+        readonly GUIText _gCapacity;
+        readonly GUIButton _btnSell;
 
         public HUDMerchantWindow(Merchant m)
         {
@@ -50,9 +50,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             img.ScaledMoveBy(7, 42);
             _gMerchantWindow.AddControl(img);
 
-            _gToSell = new GUIInventory();
-            _gToSell.ScaledMoveBy(7, 47);
-            _gMerchantWindow.AddControl(_gToSell);
+            var sellInventory = new GUIInventory();
+            sellInventory.ScaledMoveBy(7, 47);
+            _gMerchantWindow.AddControl(sellInventory);
 
             _btnSell = new GUIButton(GUIUtils.BTN_BUY, BtnSell);
             _btnSell.ScaledMoveBy(89, 48);
@@ -68,6 +68,17 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _inventory = new GUIInventoryWindow(true);
             _inventory.AnchorToObject(_gMerchantWindow, SideEnum.Bottom, GameManager.ScaleIt(2));
             AddControl(_inventory);
+
+            var capacityWindow = new GUIWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(40), GameManager.ScaleIt(26));
+            capacityWindow.PositionAndMove(_gMerchantWindow, 115, 47);
+            AddControl(capacityWindow);
+
+            var icon = new GUIIcon(GUIUtils.ICON_CAPACITY, GameIconEnum.Capacity);
+            icon.AnchorToInnerSide(capacityWindow, SideEnum.TopLeft, 1);
+            capacityWindow.AddControl(icon);
+
+            _gCapacity = new GUIText(_merchant.Capacity);
+            _gCapacity.AnchorAndAlignWithSpacing(icon, SideEnum.Right, SideEnum.CenterY, 4);
 
             Width = _inventory.Width;
             Height = _inventory.Bottom - _gMerchantWindow.Top;
@@ -99,8 +110,26 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         public void BtnSell()
         {
-            PlayerManager.AddMoney(_merchant.EvaluateItem(_arrToSell[0,0]));
-            InventoryManager.RemoveItemFromInventory(_arrToSell[0, 0], false);
+            var merch = _arrToSell[0, 0];
+            int capacity = _merchant.Capacity;
+
+            _merchant.UpdateCapacity(merch.Number);
+            _gCapacity.SetText(_merchant.Capacity);
+
+            if(_merchant.Capacity == 0)
+            {
+                _gCapacity.SetColor(Color.Red);
+            }
+
+            PlayerManager.AddMoney(_merchant.EvaluateItem(merch));
+            if (merch.Number < capacity)
+            {
+                InventoryManager.RemoveItemFromInventory(merch, false);
+            }
+            else
+            {
+                merch.Remove(capacity, false);
+            }
 
             _gSellValue.SetText(0);
             _gSellValue.AnchorAndAlignWithSpacing(_btnSell, SideEnum.Left, SideEnum.CenterY, 2);
