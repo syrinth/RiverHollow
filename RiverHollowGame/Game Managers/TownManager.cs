@@ -577,9 +577,20 @@ namespace RiverHollow.Game_Managers
             }
 
             saveData.Travelers.ForEach(x => AddTraveler(x));
-            _diMailbox[MailboxEnum.Unsent] = saveData.MailboxUnsent;
-            _diMailbox[MailboxEnum.Sent] = saveData.MailboxSent;
-            _diMailbox[MailboxEnum.Waiting] = saveData.MailboxWaiting;
+            var unsentMessages = new List<string>(_diMailbox[MailboxEnum.Unsent]);
+            foreach(var messageID in unsentMessages)
+            {
+                if (saveData.MailboxSent.Contains(messageID))
+                {
+                    _diMailbox[MailboxEnum.Unsent].Remove(messageID);
+                    _diMailbox[MailboxEnum.Sent].Add(messageID);
+                }
+                else if (saveData.MailboxWaiting.Contains(messageID))
+                {
+                    _diMailbox[MailboxEnum.Unsent].Remove(messageID);
+                    _diMailbox[MailboxEnum.Waiting].Add(messageID);
+                }
+            }
 
             foreach (VillagerData data in saveData.VillagerData)
             {

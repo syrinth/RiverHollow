@@ -63,6 +63,18 @@ namespace RiverHollow.WorldObjects
             Sprite = LoadAdjustableSprite(DataManager.FILE_FLOORING, WATERED, 64);
         }
 
+        protected override void PlayAnimation(string adjString)
+        {
+            if(HasBeenWatered)
+            {
+                Sprite.PlayAnimation(WATERED + adjString);
+            }
+            else
+            {
+                base.PlayAnimation(adjString);
+            }
+        }
+
         public override bool PlayerCanEdit()
         {
             return Tiles[0].WorldObject == null;
@@ -96,6 +108,10 @@ namespace RiverHollow.WorldObjects
             if (rv)
             {
                 CurrentMap.AddSpecialTile(Tiles[0]);
+                if (EnvironmentManager.IsRaining() && CurrentMap.IsOutside)
+                {
+                    SetWatered(true);
+                }
             }
 
             return rv;

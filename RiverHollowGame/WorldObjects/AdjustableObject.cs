@@ -69,6 +69,11 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
+        protected virtual void PlayAnimation(string adjString)
+        {
+            Sprite.PlayAnimation(adjString);
+        }
+
         /// <summary>
         /// Calls the AdjustmentHelper on the main base RHTile after first
         /// removing it from the map.
@@ -116,7 +121,7 @@ namespace RiverHollow.WorldObjects
             MakeAdjustments("E", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X + 1), (int)(startTile.Y))));
             MakeAdjustments("W", ref sAdjacent, ref liAdjacentTiles, MapManager.Maps[mapName].GetTileByGridCoords(new Point((int)(startTile.X - 1), (int)(startTile.Y))));
 
-            Sprite.PlayAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
+            PlayAnimation(string.IsNullOrEmpty(sAdjacent) ? "None" : sAdjacent);
 
             //Find all matching objects in the adjacent tiles and call
             //this method without recursion on them.

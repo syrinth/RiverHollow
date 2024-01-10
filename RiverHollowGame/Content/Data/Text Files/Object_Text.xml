@@ -27,11 +27,11 @@
     </Item>
     <Item>
       <Key>Task_6</Key>
-      <Value>[Name:Time to Grow][Description:The next step is building a Town Hall. We'll need to make the town a bit bigger first.]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>Task_7</Key>
-      <Value>[Name:N/A]</Value>
+      <Value>[Name:Build a $WorldObject_38$]</Value>
     </Item>
     <Item>
       <Key>Task_8</Key>
@@ -1484,43 +1484,43 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_7</Key>
-      <Value>[Name:$Character_17$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_8</Key>
-      <Value>[Name:$Character_18$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_9</Key>
-      <Value>[Name:$Character_19$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_10</Key>
-      <Value>[Name:$Character_20$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_11</Key>
-      <Value>[Name:$Character_25$'s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_12</Key>
-      <Value>[Name:$Character_3$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_13</Key>
-      <Value>[Name:$Character_3$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_14</Key>
-      <Value>[Name:$Character_5$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_15</Key>
-      <Value>[Name:$Character_6$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_16</Key>
-      <Value>[Name:$Character_7$s House]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_17</Key>
@@ -1548,7 +1548,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_23</Key>
-      <Value>[Name:Cottage]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_24</Key>
@@ -1560,7 +1560,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_26</Key>
-      <Value>[Name:Home]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_27</Key>
@@ -1604,7 +1604,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_37</Key>
-      <Value>[Name:Tower]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>WorldObject_38</Key>

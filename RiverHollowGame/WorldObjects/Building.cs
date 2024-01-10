@@ -61,7 +61,10 @@ namespace RiverHollow.Buildings
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.Draw(Sprite.Texture, _rShadowTarget, _rShadowSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
+            if (GameManager.HeldObject != this)
+            {
+                spriteBatch.Draw(Sprite.Texture, _rShadowTarget, _rShadowSource, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
+            }
         }
 
         public override bool ProcessLeftClick() { return true; }

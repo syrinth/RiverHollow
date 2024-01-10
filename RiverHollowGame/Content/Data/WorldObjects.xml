@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_12][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][ReqItems:55-20/60-20][LightID:3-30-86/3-80-86][SkipArticle]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:House_12][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][ReqItems:60-40/0-10][LightID:3-30-86/3-80-86][SkipArticle]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-30][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/144-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/144-0-16-16]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -111,7 +111,7 @@
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Coop][Size:5-5][Base:0-3-5-2][Entrance:2-3-1-2][ReqItems:55-10/60-30][MaxAnimals:5][Upgradable:6/96-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Coop][Size:5-5][Base:0-3-5-2][Entrance:2-3-1-2][ReqItems:60-30][MaxAnimals:5][Upgradable:6/96-0-16-16]</Value>
     </Item>
     <Item>
       <Key>28</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Town_Hall][Size:11-10][Base:0-6-11-4][Entrance:5-8-1-2][ReqItems:55-40/60-20]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Town_Hall][Size:11-10][Base:0-6-11-4][Entrance:5-8-1-2][ReqItems:60-50/0-30]</Value>
     </Item>
     <Item>
       <Key>39</Key>

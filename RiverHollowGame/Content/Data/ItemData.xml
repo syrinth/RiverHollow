@@ -679,7 +679,7 @@
     </Item>
     <Item>
       <Key>169</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:0-11][ReqItems:2-1/227-1][Value:20]</Value>
+      <Value>[Type:Resource][Subtype:Magic][Image:0-11][ReqItems:2-1/227-2][Value:20]</Value>
     </Item>
     <Item>
       <Key>170</Key>
@@ -923,7 +923,7 @@
     </Item>
     <Item>
       <Key>230</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/61-3][Value:20]</Value>
+      <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/61-5][Value:20]</Value>
     </Item>
   </Asset>
 </XnaContent>

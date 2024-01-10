@@ -266,11 +266,7 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
-            var earth = GetEarth();
-            if (earth != null)
-            {
-                earth.Rollover();
-            }
+            GetEarth()?.Rollover();
         }
 
 

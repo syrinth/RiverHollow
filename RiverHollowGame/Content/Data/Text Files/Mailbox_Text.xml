@@ -10,5 +10,9 @@ $Actor_36$ has a keen eye for monster parts and relics from before the war, whil
 I suggest you make yourself ready.
 Yours, Delian Fortenay, Guild of Merchants][Day:2][Month:1][Year:1]</Value>
     </Item>
+	<Item>
+	  <Key>1</Key>
+      <Value>[Name:$World_Object_38$][Text:Now that we're getting settled in, we need a Town Hall. It'll help with organizing the town.][UnlockObjectID:38][Villager:12]</Value>
+    </Item>
   </Asset>
 </XnaContent>

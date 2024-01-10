@@ -51,7 +51,7 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDay:Spring-5][TaxValue:2][PetID:44-1][Size:16-31][TotalMoneyEarnedReq:500]</Value>
+      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDay:Spring-5][TaxValue:2][PetID:44-1][Size:16-31]</Value>
     </Item>
     <Item>
       <Key>13</Key>
@@ -219,7 +219,7 @@
     </Item>
     <Item>
       <Key>54</Key>
-      <Value>[Type:Villager][Key:Paige][PortRow:1][HouseID:153][Collection:7/167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredPopulation:5][ArrivalDelay:0][Size:16-29]</Value>
+      <Value>[Type:Villager][Key:Paige][PortRow:1][HouseID:153][Collection:7/167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredPopulation:99][Size:16-29]</Value>
     </Item>
     <Item>
       <Key>55</Key>
@@ -243,7 +243,7 @@
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:Villager][Key:Quentin][Size:16-34][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][HouseID:6][Collection:0/1/2][ArrivalDay:Spring-5]</Value>
+      <Value>[Type:Villager][Key:Quentin][Size:16-34][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][HouseID:6][Collection:0/1/2][ArrivalDay:Spring-28]</Value>
     </Item>
     <Item>
       <Key>61</Key>

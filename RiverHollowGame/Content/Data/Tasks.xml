@@ -27,11 +27,11 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Population][StartNPC:16][AssignTrigger:Task-0][Count:5][ItemRewardID:180][TriggerTask:7]</Value>
+      <Value>[Type:Population]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Build]</Value>
+      <Value>[Type:Build][StartNPC:16][TargetObjectID:38]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Build][StartNPC:26][AssignTrigger:Task-1][TargetObjectID:22][EndBuildingID:22][CutsceneID:15][ItemRewardID:227-5][Money:50]</Value>
+      <Value>[Type:Build][StartNPC:26][AssignTrigger:Task-1][TargetObjectID:22][EndBuildingID:22][CutsceneID:15][ItemRewardID:227-5][Money:50][TriggerTask:7]</Value>
     </Item>
   </Asset>
 </XnaContent>
