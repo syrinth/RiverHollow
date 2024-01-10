@@ -80,6 +80,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gCapacity = new GUIText(_merchant.Capacity);
             _gCapacity.AnchorAndAlignWithSpacing(icon, SideEnum.Right, SideEnum.CenterY, 4);
 
+            CapacityCheck();
+
             Width = _inventory.Width;
             Height = _inventory.Bottom - _gMerchantWindow.Top;
 
@@ -108,6 +110,14 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             return rv;
         }
 
+        private void CapacityCheck()
+        {
+            if (_merchant.Capacity == 0)
+            {
+                _gCapacity.SetColor(Color.Red);
+            }
+        }
+
         public void BtnSell()
         {
             var merch = _arrToSell[0, 0];
@@ -116,10 +126,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _merchant.UpdateCapacity(merch.Number);
             _gCapacity.SetText(_merchant.Capacity);
 
-            if(_merchant.Capacity == 0)
-            {
-                _gCapacity.SetColor(Color.Red);
-            }
+            CapacityCheck();
 
             PlayerManager.AddMoney(_merchant.EvaluateItem(merch));
             if (merch.Number < capacity)
