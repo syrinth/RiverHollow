@@ -296,12 +296,15 @@ namespace RiverHollow.Characters
         /// <returns>The list of items to be given to the player</returns>
         public void DropLoot()
         {
-            var lootDictionary = new Dictionary<RarityEnum, List<int>>
+            int noLoot = GetIntByIDKey("NoDropChance", Constants.MOB_NO_DROP_CHANCE);
+            if (RHRandom.Instance().RollPercent(noLoot))
             {
-                [RarityEnum.C] = new List<int>() { -1 }
-            };
+                return;
+            }
 
-            foreach (string s in LootData)
+            var lootDictionary = new Dictionary<RarityEnum, List<int>>();
+
+            foreach (string s in LootData)    
             {
                 int resourceID = -1;
                 RarityEnum rarity = RarityEnum.C;
@@ -310,7 +313,7 @@ namespace RiverHollow.Characters
                 Util.AddToListDictionary(ref lootDictionary, rarity, resourceID);
             }
 
-            Item drop = DataManager.GetItem(Util.RollOnRarityTable(lootDictionary));
+            Item drop = DataManager.GetItem(Util.RollOnRarityTable(lootDictionary, -1));
             if (drop != null)
             {
                 MapManager.CurrentMap.SpawnItemOnMap(drop, CollisionBoxLocation, false);

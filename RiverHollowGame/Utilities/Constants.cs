@@ -37,6 +37,7 @@
         public const float WANDER_COUNTDOWN = 2.5f;
         public const float PUSH_COOLDOWN = 0.1f;
 
+        public const int MOB_NO_DROP_CHANCE = 20;
         public const int FLIER_MAX_DIST = 6 * TILE_SIZE;
         public const int FLIER_MIN_DIST = 3 * TILE_SIZE;
         public const float FLIER_RATE_OF_CHANGE = 0.4f;
