@@ -38,7 +38,7 @@ namespace RiverHollow.GUIComponents.Screens
             _gName = new GUIText("");
 
             _diCraftingList = new Dictionary<int, bool>();
-            foreach (var item in m.GetCraftingList())
+            foreach (var item in m.GetFullCraftingList())
             {
                 _diCraftingList[item.Item1] = item.Item2;
             }
@@ -139,7 +139,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void UpdateInfo(GUIItemBoxHover obj)
         {
-            if (obj.BoxItem != null)
+            if (obj.BoxItem != null && _diCraftingList[obj.BoxItem.ID])
             {
                 _gSelection.CenterOnObject(obj);
 

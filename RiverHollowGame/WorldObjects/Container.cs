@@ -68,7 +68,7 @@ namespace RiverHollow.WorldObjects
                     {
                         if (obj is Machine m)
                         {
-                            validIDs.AddRange(m.GetCraftingList().Select(x => x.Item1));
+                            validIDs.AddRange(m.GetCurrentCraftingList());
                         }
                     }
                 }
