@@ -13,7 +13,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public bool Found { get; private set; }
         const float FADE = 0.8f;
 
-        public NPCDisplayWindow(Actor npc) : base(GUIUtils.WINDOW_CODEX_NPC, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
+        public NPCDisplayWindow(Actor npc, bool showHeart = true) : base(GUIUtils.WINDOW_CODEX_NPC, GameManager.ScaleIt(32), GameManager.ScaleIt(44))
         {
             HoverControls = false;
 
@@ -31,7 +31,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
                 {
                     spr.SetColor(Color.Black * FADE);
                 }
-                else
+                else if(showHeart)
                 {
                     Found = true;
 

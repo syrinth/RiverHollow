@@ -7,10 +7,12 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
 using RiverHollow.Misc;
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.Items;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.GameManager;
+using RiverHollow.GUIComponents.Screens.HUDComponents;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -20,17 +22,33 @@ namespace RiverHollow.GUIComponents.Screens
         GUIMoneyDisplay _gMoney;
         GUIList _gList;
 
+        GUIInventoryWindow _playerInventory;
+
         public HUDShopWindow(List<Merchandise> merch)
         {
             _liMerch = merch;
-            _winMain = SetMainWindow();
+            _playerInventory = new GUIInventoryWindow(true);
+            _winMain = new GUIWindow(GUIUtils.WINDOW_BROWN, _playerInventory.Width, _playerInventory.Height);
+
+            _playerInventory.AnchorAndAlignWithSpacing(_winMain, SideEnum.Bottom, SideEnum.CenterX, 2);
+
+            InventoryManager.ClearExtraInventory();
+            InventoryManager.CurrentInventoryDisplay = DisplayTypeEnum.Inventory;
 
             ShowDisplay();
 
-            _gMoney = new GUIMoneyDisplay();
-            _gMoney.AnchorAndAlign(_winMain, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
+            //_gMoney = new GUIMoneyDisplay();
+            //_gMoney.AnchorAndAlign(_winMain, GUIObject.SideEnum.Top, GUIObject.SideEnum.Left);
 
-            AddControl(_gMoney);
+            AddControls(_winMain, _playerInventory);
+
+            DetermineSize();
+
+            CenterOnScreen();
+
+            var display = new NPCDisplayWindow(GameManager.CurrentNPC, false);
+            display.AnchorAndAlignWithSpacing(_winMain, SideEnum.Left, SideEnum.Top, 2);
+            AddControl(display);
         }
 
         private void ShowDisplay()
@@ -55,12 +73,25 @@ namespace RiverHollow.GUIComponents.Screens
                 items.Add(newBox);
             }
 
-            _gList = new GUIList(items, 10, 1, _winMain, _winMain.InnerHeight());
+            _gList = new GUIList(items, 4, 1, _winMain, _winMain.InnerHeight(), true);
+        }
+
+        public override bool ProcessLeftButtonClick(Point mouse)
+        {
+            bool rv = base.ProcessLeftButtonClick(mouse);
+
+            if (!rv)
+            {
+                rv = _gList.ProcessLeftButtonClick(mouse);
+            }
+
+            return rv;
         }
 
         public override void CloseMainWindow()
         {
             GameManager.CurrentNPC?.StopTalking();
+            base.CloseMainWindow();
         }
     }
 

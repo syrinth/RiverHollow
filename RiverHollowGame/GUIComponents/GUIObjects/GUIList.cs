@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -19,11 +20,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         /// <summary>
         /// The constructor for GUIList. GUILists will display a subset of an array of GUIObjects and allow for scrolling if necessary.
         /// </summary>
-        /// <param name="objects">The array of GUIObjects to be displayed by the GUIList</param>
+        /// <param name="objects">The array of GUIObjects to be displayed by the GUIList</param> 
         /// <param name="maxItems">The maximum number of objects that should be displayed in the List at any given time.</param>
         /// <param name="spacing">The amount of space (in px) to set inbetween items in the List.</param>
         /// <param name="maxHeight">The maximum height the GUIList is allowed to take up on the screen. If set, it will override maxItems if necessary.</param>
-        public GUIList(List<GUIObject> objects, int maxItems, int spacing, GUIObject obj, int maxHeight = 0)
+        public GUIList(List<GUIObject> objects, int maxItems, int spacing, GUIObject obj, int maxHeight = 0, bool buttonsBesideWindow = false)
         {
             _iMaxShownItems = maxItems;
             Objects = objects;
@@ -70,10 +71,18 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (_iMaxShownItems < objects.Count)
             {
                 _btnUp = new GUIButton(GUIUtils.BTN_UP_SMALL, BtnUpClick);
-                _btnUp.AnchorAndAlign(Objects[0], SideEnum.Right, SideEnum.CenterY);
-
                 _btnDown = new GUIButton(GUIUtils.BTN_DOWN_SMALL, BtnDownClick);
-                _btnDown.AnchorAndAlign(Objects[_iMaxShownItems - 1], SideEnum.Right, SideEnum.CenterY);
+
+                if (buttonsBesideWindow)
+                {
+                    _btnUp.AnchorAndAlignWithSpacing(obj, SideEnum.Right, SideEnum.Top, 1);
+                    _btnDown.AnchorAndAlignWithSpacing(obj, SideEnum.Right, SideEnum.Bottom, 1);
+                }
+                else
+                {
+                    _btnUp.AnchorAndAlign(Objects[0], SideEnum.Right, SideEnum.CenterY);
+                    _btnDown.AnchorAndAlign(Objects[_iMaxShownItems - 1], SideEnum.Right, SideEnum.CenterY);
+                }
 
                 AddControls(_btnDown, _btnUp);
 
