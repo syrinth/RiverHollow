@@ -550,7 +550,7 @@ namespace Database_Editor
                 case ItemEnum.Consumable:
                     cbItemSubtype.Visible = true;
                     cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.None.ToString());
-                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Medicine.ToString());
+                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Potion.ToString());
                     break;
                 case ItemEnum.Food:
                     cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Food.ToString());
@@ -1379,7 +1379,7 @@ namespace Database_Editor
                             AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ItemGroupEnum.Food), Util.GetEnumString(ItemGroupEnum.Meal) });
                             break;
                         case ItemEnum.Consumable:
-                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ItemGroupEnum.None), Util.GetEnumString(ItemGroupEnum.Medicine) });
+                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ItemGroupEnum.None), Util.GetEnumString(ItemGroupEnum.Potion) });
                             break;
                         default:
                             AddContextMenuItem(s, dgvItemsContextMenuClick, false);

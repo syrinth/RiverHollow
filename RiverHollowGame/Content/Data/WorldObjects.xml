@@ -175,7 +175,7 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Buildable][Subtype:Decor][Image:0-34][WallObject][Value:500]</Value>
+      <Value>[Type:Buildable][Subtype:Decor][Image:0-34][Value:500][Placement:Wall]</Value>
     </Item>
     <Item>
       <Key>44</Key>

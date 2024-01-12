@@ -231,11 +231,11 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Resource][Subtype:Medicine][Image:1-6][ItemGroups:Medicine][Value:70][ReqItems:93-1/23-1]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:1-6][ItemGroups:Potion][Value:70][ReqItems:93-1/23-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Resource][Subtype:Medicine][Image:2-6][ItemGroups:Medicine][Value:60][ReqItems:56-1/162-2]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:2-6][ItemGroups:Potion][Value:60][ReqItems:56-1/162-2]</Value>
     </Item>
     <Item>
       <Key>59</Key>
@@ -667,15 +667,15 @@
     </Item>
     <Item>
       <Key>166</Key>
-      <Value>[Type:Consumable][Subtype:Medicine][Image:1-2][Value:3000][CombatType:Harmful][Status:Poisoned]</Value>
+      <Value>[Type:Consumable][Subtype:Potion][Image:1-2][Value:3000][CombatType:Harmful][Status:Poisoned]</Value>
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Consumable][Subtype:Medicine][Image:1-0][ItemGroups:Medicine][Value:40][ReqItems:162-2][CombatType:Helpful][Hp:10]</Value>
+      <Value>[Type:Consumable][Subtype:Potion][Image:1-0][ItemGroups:Potion][Value:40][ReqItems:162-2][CombatType:Helpful][Hp:10]</Value>
     </Item>
     <Item>
       <Key>168</Key>
-      <Value>[Type:Consumable][Subtype:Medicine][Image:1-1][ItemGroups:Medicine][Value:50][ReqItems:8-1/9-1/162-1][CombatType:Helpful][Mana:20]</Value>
+      <Value>[Type:Consumable][Subtype:Potion][Image:1-1][ItemGroups:Potion][Value:50][ReqItems:8-1/9-1/162-1][CombatType:Helpful][Mana:20]</Value>
     </Item>
     <Item>
       <Key>169</Key>

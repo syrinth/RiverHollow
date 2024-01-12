@@ -100,7 +100,7 @@ namespace RiverHollow.WorldObjects
                 {
 
                     int craftsLeft = b.GetDailyCraftingLimit();
-                    var craftingList = GetCraftingList();
+                    var craftingList = GetCraftingList().Select(x => x.Item1).ToList();
                     var validItems = WhatCanWeCraft(craftingList);
 
                     //Create a Dictionary to represent the stock we currently have
@@ -266,7 +266,7 @@ namespace RiverHollow.WorldObjects
         public bool HasSufficientItems(Item targetItem)
         {
             bool rv = false;
-            if (GetCraftingList().Contains(targetItem.ID))
+            if (GetCraftingList().Select(x => x.Item1).Contains(targetItem.ID))
             {
                 if (InventoryManager.HasSufficientItems(targetItem.GetRequiredItems(), Stash))
                 {
@@ -325,9 +325,9 @@ namespace RiverHollow.WorldObjects
             return HoldItem && CraftingSlot.ID != -1 && CraftingSlot.CraftTime == 0;
         }
 
-        public List<int> GetCraftingList()
+        public List<Tuple<int, bool>> GetCraftingList()
         {
-            var craftingList = new List<int>();
+            var craftingList = new List<Tuple<int, bool>>();
             string makes = GetStringByIDKey("Makes");
             if (!string.IsNullOrEmpty(makes))
             {
@@ -336,10 +336,9 @@ namespace RiverHollow.WorldObjects
                 for (int i = 0; i < split.Length; i++)
                 {
                     string[] formula = Util.FindArguments(split[i]);
-                    if (formula.Length == 1 || (int.Parse(formula[1]) <= TownManager.GetBuildingByID(CurrentMap.BuildingID).GetFormulaLevel()))
-                    {
-                        craftingList.Add(int.Parse(formula[0]));
-                    }
+                    bool canCraft = formula.Length == 1 || (int.Parse(formula[1]) <= TownManager.GetBuildingByID(CurrentMap.BuildingID).GetFormulaLevel());
+
+                    craftingList.Add(new Tuple<int, bool>(int.Parse(formula[0]), canCraft));
                 }
             }
 

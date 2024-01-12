@@ -114,7 +114,6 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle HUD_DIVIDER = new Rectangle(106, 122, 8, 1);
 
         internal static Rectangle WIN_IMAGE_CRAFTING = new Rectangle(192, 0, 160, 50);
-        internal static Rectangle WIN_UPGRADE = new Rectangle(0, 0, 162, 119);
         internal static Rectangle LEVEL_TAB = new Rectangle(48, 144, 44, 16);
 
         internal static Rectangle PLAYER_INVENTORY_PANE = new Rectangle(256, 160, 28, 40);
@@ -131,6 +130,7 @@ namespace RiverHollow.GUIComponents
         internal static WindowData WINDOW_GREY = new WindowData(48, 240, 2, 2, 2, 2, 12);
         internal static WindowData WINDOW_DISPLAY = new WindowData(64, 240, 1, 1, 1, 1, 14);
         internal static WindowData WINDOW_WOODEN_PANEL = new WindowData(80, 240, 3, 3, 3, 3, 10);
+        internal static WindowData WINDOW_WOODEN_TITLE = new WindowData(0, 256, 17, 5, 7, 7, 10);
 
         public static bool ProcessLeftMouseButton(Point mouse, params GUIObject[] list)
         {

@@ -34,7 +34,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             typeColor = Color.DarkOrange; break;
                         case ItemGroupEnum.Magic:
                             typeColor = Color.Purple; break;
-                        case ItemGroupEnum.Medicine:
+                        case ItemGroupEnum.Potion:
                             typeColor = Color.DarkGreen; break;
                         case ItemGroupEnum.MonsterPart:
                             typeColor = Color.DarkRed; break;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
@@ -126,6 +127,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void SetItemAlpha(float val)
         {
             _guiItem?.Alpha(val);
+        }
+
+        public void SetItemColor(Color c)
+        {
+            _guiItem?.SetImageColor(c);
         }
     }
 

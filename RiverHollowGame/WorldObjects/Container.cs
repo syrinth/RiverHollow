@@ -6,6 +6,7 @@ using RiverHollow.Items;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -67,7 +68,7 @@ namespace RiverHollow.WorldObjects
                     {
                         if (obj is Machine m)
                         {
-                            validIDs.AddRange(m.GetCraftingList());
+                            validIDs.AddRange(m.GetCraftingList().Select(x => x.Item1));
                         }
                     }
                 }

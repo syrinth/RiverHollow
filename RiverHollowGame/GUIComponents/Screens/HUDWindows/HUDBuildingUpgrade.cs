@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Misc;
-using RiverHollow.Utilities;
 using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
@@ -13,7 +11,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     public class HUDBuildingUpgrade : GUIMainObject
     {
-        readonly GUIImage _gImage;
         readonly Building _building;
 
         List<GUIIconText> _liIcons;
@@ -26,46 +23,46 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _building = b;
             _liIcons = new List<GUIIconText>();
 
-            _gImage = new GUIImage(GUIUtils.WIN_UPGRADE);
-            AddControl(_gImage);
+            _winMain = new GUIWindow(GUIUtils.WINDOW_WOODEN_TITLE, GameManager.ScaleIt(162), GameManager.ScaleIt(119));
+            AddControl(_winMain);
 
             DisplayDetails();
 
-            Width = _gImage.Width;
-            Height = _gImage.Height;
+            Width = _winMain.Width;
+            Height = _winMain.Height;
 
             CenterOnScreen();
         }
 
         private void DisplayDetails()
         {
-            _gImage.CleanControls();
+            _winMain.CleanControls();
 
             var levelTab = new GUIImage(GUIUtils.LEVEL_TAB);
-            levelTab.PositionAndMove(_gImage, new Point(59, 16));
+            levelTab.PositionAndMove(_winMain, new Point(59, 16));
 
             GUIText name = new GUIText(_building.Name());
-            name.AnchorToObjectInnerSide(_gImage, SideEnum.Top, GameManager.ScaledPixel * 3);
-            _gImage.AddControl(name);
+            name.AnchorToObjectInnerSide(_winMain, SideEnum.Top, GameManager.ScaledPixel * 3);
+            _winMain.AddControl(name);
 
             GUIText lvl = new GUIText("Level " + _building.Level);
-            lvl.AnchorToObjectInnerSide(_gImage, SideEnum.Top, GameManager.ScaledPixel * 18);
-            _gImage.AddControl(lvl);
+            lvl.AnchorToObjectInnerSide(_winMain, SideEnum.Top, GameManager.ScaledPixel * 18);
+            _winMain.AddControl(lvl);
 
             //Traveler Display
             var travelerStr = string.Format("+{0}", _building.GetTravelerChance());
             var travelers = new GUIIconText(travelerStr, 3, GUIUtils.ICON_TRAVELER, GameIconEnum.Traveler, SideEnum.Bottom, SideEnum.CenterX);
-            travelers.PositionAndMove(_gImage, new Point(37, 36));
-            _gImage.AddControl(travelers);
+            travelers.PositionAndMove(_winMain, new Point(37, 36));
+            _winMain.AddControl(travelers);
 
             //Profit Display
             int profit = (int)(_building.GetShopProfitModifier() * 100);
             var profitStr = string.Format("+{0}", profit);
             var profits = new GUIIconText(profitStr, 3, GUIUtils.ICON_COIN, GameIconEnum.Coin, SideEnum.Bottom, SideEnum.CenterX);
-            profits.PositionAndMove(_gImage, new Point(111, 36));
+            profits.PositionAndMove(_winMain, new Point(111, 36));
 
             var scroll = new GUIImage(GUIUtils.HUD_SCROLL_L);
-            scroll.PositionAndMove(_gImage, new Point(10, 65));
+            scroll.PositionAndMove(_winMain, new Point(10, 65));
 
             _liIcons.Add(travelers);
             _liIcons.Add(profits);
@@ -74,7 +71,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             {
                 GUIText upgradeText = new GUIText("Upgrade in Progress");
                 upgradeText.AnchorAndAlignWithSpacing(scroll, SideEnum.Bottom, SideEnum.CenterX, 16);
-                _gImage.AddControl(upgradeText);
+                _winMain.AddControl(upgradeText);
             }
             else
             {
@@ -84,9 +81,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 if (!isMaxLevel && hasUpgrades)
                 {
                     GUIButton btn = new GUIButton(GUIUtils.BTN_BUY, Upgrade);
-                    btn.Position(_gImage.Position());
+                    btn.Position(_winMain.Position());
                     btn.ScaledMoveBy(135, 93);
-                    _gImage.AddControl(btn);
+                    _winMain.AddControl(btn);
 
                     Upgrade nextUpgrade = buildingUpgrades[_building.Level - 1];
                     Dictionary<int, int> upgradeItems = nextUpgrade.UpgradeRequirements;
@@ -127,7 +124,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     }
 
                     var bonusIcon = new GUIIconText(bonusValue, 1, drawRect, icon, SideEnum.Right, SideEnum.CenterY);
-                    bonusIcon.CenterOnObject(_gImage);
+                    bonusIcon.CenterOnObject(_winMain);
                     bonusIcon.AnchorToObject(scroll, SideEnum.Bottom, 3);
 
                     _liIcons.Add(bonusIcon);
@@ -138,11 +135,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         GUIItemBox box = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
                         if (list.Count == 0)
                         {
-                            box.Position(_gImage.Position());
+                            box.Position(_winMain.Position());
                             box.ScaledMoveBy(9, 91);
                         }
                         else { box.AnchorAndAlignWithSpacing(list[list.Count - 1], SideEnum.Right, SideEnum.Bottom, 2); }
-                        _gImage.AddControl(box);
+                        _winMain.AddControl(box);
 
                         if (!InventoryManager.HasItemInPlayerInventory(kvp.Key, kvp.Value)) { box.SetColor(Color.Red); }
 
@@ -151,7 +148,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
                     GUIText cost = new GUIText(nextUpgrade.Cost);
                     cost.AnchorAndAlignWithSpacing(btn, SideEnum.Left, SideEnum.CenterY, 2);
-                    _gImage.AddControl(cost);
+                    _winMain.AddControl(cost);
 
                     _diUpgradeItems = upgradeItems;
                     _iCost = nextUpgrade.Cost;
@@ -160,7 +157,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 {
                     GUIText upgradeText = new GUIText("Max Level");
                     upgradeText.AnchorAndAlignWithSpacing(scroll, SideEnum.Bottom, SideEnum.CenterX, 16);
-                    _gImage.AddControl(upgradeText);
+                    _winMain.AddControl(upgradeText);
                 }
             }
         }

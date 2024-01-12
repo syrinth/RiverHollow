@@ -246,6 +246,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             _gText.SetColor(c);
         }
+        public void SetImageColor(Color c)
+        {
+            _gImg.SetColor(c);
+        }
 
         public bool CompareNumToInventory(Container c)
         {
@@ -288,7 +292,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     iconDescription = "Upgrade_Profit";
                     break;
                 case GameIconEnum.Hammer:
-                    iconDescription = "Upgrade_CraftSlots";
+                    iconDescription = "Upgrade_DailyCrafts";
                     break;
                 case GameIconEnum.Book:
                     iconDescription = "Upgrade_Recipe";

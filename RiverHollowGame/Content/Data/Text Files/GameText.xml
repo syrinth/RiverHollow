@@ -295,7 +295,7 @@
     </Item>
 	<Item>
       <Key>73</Key>
-      <Value>[Name:Upgrade_CraftSlots][Text:Increases the number of Crafting Slots.]</Value>
+      <Value>[Name:Upgrade_DailyCrafts][Text:Crafts Per Day.]</Value>
     </Item>
 	<Item>
       <Key>74</Key>
