@@ -87,6 +87,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (blackout)
                 {
                     displayWindow.SetItemColor(Color.Black);
+                    displayWindow.DrawShadow(false);
                 }
 
                 if (newItem != null)
@@ -94,6 +95,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (!_objMachine.HasSufficientItems(newItem))
                     {
                         displayWindow.SetItemAlpha(0.3f);
+                        displayWindow.DrawShadow(false);
                     }
                 }
                 else

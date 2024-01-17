@@ -133,6 +133,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _guiItem?.SetImageColor(c);
         }
+
+        public void DrawShadow(bool drawShadow)
+        {
+            _guiItem?.DrawShadow(drawShadow);
+        }
     }
 
     public class GUIItemBoxHover : GUIItemBox

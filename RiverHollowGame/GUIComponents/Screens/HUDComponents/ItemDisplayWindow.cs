@@ -21,14 +21,15 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             ID = ItemID;
             Found = state.Item1;
 
-            Item item = DataManager.GetItem(ItemID);
-            GUIImage spr = new GUIImage(item.SourceRectangle, item.Texture);
+            GUIItem spr = new GUIItem(DataManager.GetItem(ItemID), ItemBoxDraw.Never);
             spr.CenterOnObject(this);
             AddControl(spr);
 
             if (!state.Item1)
             {
+                spr.DrawShadow(false);
                 spr.SetColor(Color.Black * FADE);
+                spr.SetImageColor(Color.Black * FADE);
             }
         }
 

@@ -185,8 +185,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public ItemBoxDraw DrawNumbers { get; private set; }
         public bool CompareToInventory = false;
 
-        public GUIItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
+        bool _bDrawShadow;
+
+        public GUIItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks, bool drawShadow = true)
         {
+            _bDrawShadow = drawShadow;
+
             ItemObject = it;
             DrawNumbers = e;
 
@@ -195,7 +199,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             _gShadow = new GUIImage(Constants.ITEM_SHADOW, DataManager.FILE_MISC_SPRITES);
             _gShadow.CenterOnObject(this);
-            _gShadow.AlignToObject(this, SideEnum.Bottom);
 
             _gInvisible = new GUIImage(GUIUtils.INVISIBLE);
             _gInvisible.CenterOnObject(this);
@@ -221,7 +224,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!ItemObject.CompareType(ItemEnum.Tool))
+            if (_bDrawShadow && !ItemObject.CompareType(ItemEnum.Tool))
             {
                 _gShadow.Draw(spriteBatch);
             }
@@ -260,6 +263,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public void SetImageColor(Color c)
         {
             _gImg.SetColor(c);
+        }
+
+        public void DrawShadow(bool drawShadow)
+        {
+            _bDrawShadow = drawShadow;
         }
 
         public bool CompareNumToInventory(Container c)
