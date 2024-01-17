@@ -1,4 +1,6 @@
-﻿namespace RiverHollow.Utilities
+﻿using Microsoft.Xna.Framework;
+
+namespace RiverHollow.Utilities
 {
     static class Constants
     {
@@ -108,5 +110,7 @@
         public const int TASK_ICON_OFFSET = 15;
 
         public const int BUILDABLE_ID_OFFSET = 8000;
+
+        internal static Rectangle ITEM_SHADOW = new Rectangle(0, 0, 16, 16);
     }
 }

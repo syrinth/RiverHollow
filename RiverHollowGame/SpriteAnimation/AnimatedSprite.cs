@@ -100,10 +100,13 @@ namespace RiverHollow.SpriteAnimations
         public void AddAnimation(string animationName, int startX, int startY, Point size, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false) { AddAnimation(animationName, startX, startY, size.X * Constants.TILE_SIZE, size.Y * Constants.TILE_SIZE, Frames, FrameLength, pingPong, playsOnce); }
         public void AddAnimation(string animationName, int startX, int startY, int Width, int Height, int Frames = 1, float FrameLength = 1f, bool pingPong = false, bool playsOnce = false)
         {
-            _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce));
-            if (_diFrameAnimations.Count == 1)
+            if (!_diFrameAnimations.ContainsKey(animationName))
             {
-                PlayAnimation(animationName);
+                _diFrameAnimations.Add(animationName, new FrameAnimation(startX, startY, Width, Height, Frames, FrameLength, pingPong, playsOnce));
+                if (_diFrameAnimations.Count == 1)
+                {
+                    PlayAnimation(animationName);
+                }
             }
         }
         #endregion

@@ -50,6 +50,7 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_WORLDOBJECTS = TEXTURES + @"WorldObjects\";
         public const string FOLDER_BUILDINGS = FOLDER_WORLDOBJECTS + @"Buildings\";
         public const string FILE_WORLDOBJECTS = FOLDER_WORLDOBJECTS + @"World_Objects";
+        public const string FILE_MISC_SPRITES = TEXTURES + @"Misc_Sprites";
         public const string FILE_DECOR = FOLDER_WORLDOBJECTS + @"Decor";
         public const string FILE_PLANTS = FOLDER_WORLDOBJECTS + @"Plants";
         public const string FILE_FLOORING = FOLDER_WORLDOBJECTS + @"texFlooring";
@@ -234,6 +235,7 @@ namespace RiverHollow.Game_Managers
         private static void LoadGUIs(ContentManager Content)
         {
             AddTexture(DataManager.PROJECTILE_TEXTURE, Content);
+            AddTexture(DataManager.FILE_MISC_SPRITES, Content);
         }
         private static void LoadIcons(ContentManager Content)
         {

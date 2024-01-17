@@ -307,7 +307,7 @@
     <property name="Map" value="mapForest_Glade_1"/>
    </properties>
   </object>
-  <object id="260" name="Entrance" x="80" y="528" width="32" height="4">
+  <object id="260" name="Entrance" x="80" y="544" width="32" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>
     <property name="Map" value="mapForest_Glade_2"/>

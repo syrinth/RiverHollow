@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ namespace RiverHollow.WorldObjects
 {
     public class Destructible : WorldObject
     {
+        private AnimatedSprite _spriteKO;
         public int HP {get; protected set;}
 
         protected int _iAltSprite = -1;
@@ -50,19 +53,32 @@ namespace RiverHollow.WorldObjects
             if (GetBoolByIDKey("DestructionAnim"))
             {
                 string[] splitString = GetStringArgsByIDKey("DestructionAnim");
-                Sprite.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]) * Constants.TILE_SIZE, int.Parse(splitString[1]) * Constants.TILE_SIZE, Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+                _spriteKO = new AnimatedSprite(DataManager.FILE_MISC_SPRITES);
+                _spriteKO.AddAnimation(AnimationEnum.KO, int.Parse(splitString[0]) * Constants.TILE_SIZE, int.Parse(splitString[1]) * Constants.TILE_SIZE, Constants.TILE_SIZE, Constants.TILE_SIZE, int.Parse(splitString[2]), float.Parse(splitString[3]), false, true);
+            }
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (HP <= 0)
+            {
+                _spriteKO?.Draw(spriteBatch);
+            }
+            else
+            {
+                base.Draw(spriteBatch);
             }
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+            _spriteKO?.Update(gTime);
 
             //Destructibles move when hit, so reset position
             SetSpritePos(MapPosition);
             if (HP <= 0)
             {
-                if (!Sprite.ContainsAnimation(AnimationEnum.KO) || Sprite.AnimationFinished(AnimationEnum.KO))
+                if (_spriteKO == null || _spriteKO.AnimationFinished(AnimationEnum.KO))
                 {
                     MapManager.Maps[Tiles[0].MapName].RemoveWorldObject(this);
                 }
@@ -101,7 +117,11 @@ namespace RiverHollow.WorldObjects
                         if (HP <= 0)
                         {
                             _bWalkable = true;
-                            Sprite.PlayAnimation(AnimationEnum.KO);
+                            if (_spriteKO != null)
+                            {
+                                _spriteKO.Position = Sprite.Position;
+                                _spriteKO.PlayAnimation(AnimationEnum.KO);
+                            }
 
                             MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location);
                         }

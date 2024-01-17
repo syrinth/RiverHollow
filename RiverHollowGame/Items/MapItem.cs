@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
@@ -45,7 +46,7 @@ namespace RiverHollow.Items
             {
                 layerDepth = Position.Y + Constants.TILE_SIZE + (Position.X / 100);
             }
-            spriteBatch.Draw(WrappedItem.Texture, CollisionBox, WrappedItem.SourceRectangle, WrappedItem.ItemColor, 0, Vector2.Zero, SpriteEffects.None, layerDepth);
+            WrappedItem.Draw(spriteBatch, CollisionBox, layerDepth == 0, layerDepth);
         }
 
         public void SelectObject(bool val)
@@ -61,6 +62,7 @@ namespace RiverHollow.Items
         }
         public void MoveItem(Vector2 vector)
         {
+            WrappedItem.DrawShadow(false);
             Position += _vbMovement.AddMovement(vector);
         }
         public void Pop(Point pos)
@@ -76,6 +78,10 @@ namespace RiverHollow.Items
             if (_movement != null && !_movement.Finished)
             {
                 rv = false;
+            }
+            else
+            {
+                WrappedItem.DrawShadow(true);
             }
             return rv;
         }

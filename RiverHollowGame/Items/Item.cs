@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -39,9 +41,8 @@ namespace RiverHollow.Items
         //What items and in what numbers are required to make this item
         protected Dictionary<int, int> _diReqToMake;
 
-        //Wahat this item refines into and how  many are required
-        protected KeyValuePair<int, int> _kvpRefinesInto;
-        public KeyValuePair<int, int> RefinesInto => _kvpRefinesInto;
+        private bool _bDrawShadow = false;
+
         #endregion
         public Item(int id)
         {
@@ -62,12 +63,6 @@ namespace RiverHollow.Items
 
             Util.AssignValue(ref _diReqToMake, "ReqItems", stringData);
 
-            if (stringData.ContainsKey("RefinesInto"))
-            {
-                string[] splitData = Util.FindArguments(stringData["RefinesInto"]);
-                _kvpRefinesInto = new KeyValuePair<int, int>(int.Parse(splitData[0]), int.Parse(splitData[1]));
-            }
-
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
         }
 
@@ -85,13 +80,29 @@ namespace RiverHollow.Items
 
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
         {
+            DrawShadow(spriteBatch, drawBox, LayerDepth, forcedLayerDepth, alpha);
             if (LayerDepth)
             {
                 spriteBatch.Draw(_texTexture, drawBox, SourceRectangle, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
             }
             else
             {
-                spriteBatch.Draw(_texTexture, drawBox, new Rectangle(_pSourcePos.X, _pSourcePos.Y, _iWidth, _iHeight), _c * alpha);
+                spriteBatch.Draw(_texTexture, drawBox, SourceRectangle, _c * alpha);
+            }
+        }
+
+        public void DrawShadow(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
+        {
+            if (_bDrawShadow)
+            {
+                if (LayerDepth)
+                {
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, Constants.ITEM_SHADOW, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
+                }
+                else
+                {
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, Constants.ITEM_SHADOW, _c * alpha);
+                }
             }
         }
 
@@ -193,6 +204,11 @@ namespace RiverHollow.Items
             };
 
             PlayerManager.PlayerActor.PlayAnimation(AnimationEnum.Pose);
+        }
+
+        public void DrawShadow(bool value)
+        {
+            _bDrawShadow = value;
         }
 
         public virtual void ApplyUniqueData(string str) { }

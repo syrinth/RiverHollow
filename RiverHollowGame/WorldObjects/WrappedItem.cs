@@ -1,4 +1,7 @@
-﻿using RiverHollow.Game_Managers;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
@@ -16,6 +19,15 @@ namespace RiverHollow.WorldObjects
         {
             _iItemID = itemID;
             LoadSprite();
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (!DataManager.GetBoolByIDKey(_iItemID, "WrappedImage", DataType.Item))
+            {
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), CollisionBox, Constants.ITEM_SHADOW, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
+            }
+            base.Draw(spriteBatch);
         }
 
         protected override void LoadSprite()

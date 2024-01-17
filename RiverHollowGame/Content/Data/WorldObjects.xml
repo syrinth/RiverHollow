@@ -207,11 +207,11 @@
     </Item>
     <Item>
       <Key>51</Key>
-      <Value>[Type:Destructible][Image:0-3][Tool:Axe][Hp:1][ReqLvl:1][ItemID:2-1][DestructionAnim:13-0-3-0.1]</Value>
+      <Value>[Type:Destructible][Image:0-3][Tool:Axe][Hp:1][ReqLvl:1][ItemID:2-1][DestructionAnim:0-1-3-0.1]</Value>
     </Item>
     <Item>
       <Key>52</Key>
-      <Value>[Type:Destructible][Image:3-1][Tool:Pick][Hp:1][ReqLvl:1][ItemID:66-1][DestructionAnim:13-0-3-0.1]</Value>
+      <Value>[Type:Destructible][Image:3-1][Tool:Pick][Hp:1][ReqLvl:1][ItemID:66-1][DestructionAnim:0-1-3-0.1]</Value>
     </Item>
     <Item>
       <Key>53</Key>
@@ -243,7 +243,7 @@
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:Destructible][Image:0-0/2][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:13-0-3-0.1]</Value>
+      <Value>[Type:Destructible][Image:0-0/2][Tool:Pick][Hp:1][ReqLvl:1][ItemID:0-1][DestructionAnim:0-1-3-0.1]</Value>
     </Item>
     <Item>
       <Key>61</Key>
@@ -591,7 +591,7 @@
     </Item>
     <Item>
       <Key>147</Key>
-      <Value>[Type:Plant][Image:12-3/2][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:5-12-3-0.1][States:1][Spread:10/1][NoWater]</Value>
+      <Value>[Type:Plant][Image:12-3/2][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:0-2-3-0.1][States:1][Spread:10/1][NoWater]</Value>
     </Item>
     <Item>
       <Key>148</Key>
@@ -603,7 +603,7 @@
     </Item>
     <Item>
       <Key>150</Key>
-      <Value>[Type:Destructible][Image:16-19/2][Base:0-0-1-1][Tool:Pick][Hp:4][ReqLvl:1][ItemID:67-1][DestructionAnim:13-0-3-0.1]</Value>
+      <Value>[Type:Destructible][Image:16-19/2][Base:0-0-1-1][Tool:Pick][Hp:4][ReqLvl:1][ItemID:67-1][DestructionAnim:0-1-3-0.1]</Value>
     </Item>
     <Item>
       <Key>151</Key>
@@ -631,7 +631,7 @@
     </Item>
     <Item>
       <Key>157</Key>
-      <Value>[Type:Destructible][Image:3-0/1][BaseOffset:0-0][Hp:3][Tool:Pick][ReqLvl:1][ItemID:1-1][DestructionAnim:208-0-3-0.1][BonusItemID:1-1-C]</Value>
+      <Value>[Type:Destructible][Image:3-0/1][BaseOffset:0-0][Hp:3][Tool:Pick][ReqLvl:1][ItemID:1-1][DestructionAnim:0-1-3-0.1][BonusItemID:1-1-C]</Value>
     </Item>
     <Item>
       <Key>158</Key>

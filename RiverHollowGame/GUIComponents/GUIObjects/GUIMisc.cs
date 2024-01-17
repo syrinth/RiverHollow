@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
@@ -177,9 +178,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     public class GUIItem : GUIObject
     {
         public Item ItemObject {get;}
-        GUIImage _gImg;
-        GUIImage _gInvisible;
-        GUIText _gText;
+        readonly GUIImage _gShadow;
+        readonly GUIImage _gImg;
+        readonly GUIImage _gInvisible;
+        readonly GUIText _gText;
         public ItemBoxDraw DrawNumbers { get; private set; }
         public bool CompareToInventory = false;
 
@@ -190,6 +192,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             Width = GameManager.ScaledTileSize;
             Height = GameManager.ScaledTileSize;
+
+            _gShadow = new GUIImage(Constants.ITEM_SHADOW, DataManager.FILE_MISC_SPRITES);
+            _gShadow.CenterOnObject(this);
+            _gShadow.AlignToObject(this, SideEnum.Bottom);
 
             _gInvisible = new GUIImage(GUIUtils.INVISIBLE);
             _gInvisible.CenterOnObject(this);
@@ -215,7 +221,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (!ItemObject.CompareType(ItemEnum.Tool))
+            {
+                _gShadow.Draw(spriteBatch);
+            }
             _gImg.Draw(spriteBatch);
+
             switch (DrawNumbers)
             {
                 case ItemBoxDraw.Always:
