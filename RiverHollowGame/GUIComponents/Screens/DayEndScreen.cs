@@ -296,10 +296,10 @@ namespace RiverHollow.GUIComponents.Screens
         public int Income { get; } = -1;
 
         bool _bPopped = false;
-        int _iFoodID = -1;
-        int _iItemID = -1;
+        readonly int _iFoodID = -1;
+        readonly int _iItemID = -1;
 
-        GUIImage _gCoin;
+        readonly GUIImage _gCoin;
 
         public GUIActor(Villager v) : base(v.BodySprite, true) { }
         public GUIActor(Traveler t) : base(t.BodySprite, true)
@@ -371,11 +371,13 @@ namespace RiverHollow.GUIComponents.Screens
                 if (foodID > -1)
                 {
                     _gFood = new GUIItem(DataManager.GetItem(foodID), ItemBoxDraw.Never);
+                    _gFood.DrawShadow(false);
                 }
 
                 if (itemID > -1)
                 {
                     _gItem = new GUIItem(DataManager.GetItem(itemID), ItemBoxDraw.Never);
+                    _gItem.DrawShadow(false);
                 }
 
                 AddControls(_gFood, _gItem);

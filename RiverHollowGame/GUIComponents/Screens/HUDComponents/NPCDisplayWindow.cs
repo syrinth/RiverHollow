@@ -74,7 +74,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             }
             else if (npc.IsActorType(ActorTypeEnum.Mob))
             {
-                if (PlayerManager.DIMobInfo[npc.ID] == 0)
+                if (TownManager.DIMobInfo[npc.ID] == 0)
                 {
                     spr.SetColor(Color.Black * FADE);
                 }

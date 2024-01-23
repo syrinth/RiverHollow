@@ -80,7 +80,7 @@ namespace RiverHollow.Characters
         public bool IgnoreCollisions { get; protected set; } = false;
         #endregion
 
-        public float BuffedSpeed => Wandering ? _fWanderSpeed : _fBaseSpeed * SpdMult;
+        public float BuffedSpeed => (Wandering ? _fWanderSpeed : _fBaseSpeed) * SpdMult;
         public float SpdMult = Constants.NPC_WALK_SPEED;
         protected float _fBaseSpeed = 1f;
         protected float _fWanderSpeed = 1f;

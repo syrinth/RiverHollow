@@ -43,8 +43,25 @@ namespace RiverHollow.Game_Managers
 
         public static Container Pantry { get; private set; }
 
+        #region Trackers
+        public static int TotalDefeatedMobs;
+        public static Dictionary<int, int> DIMobInfo { get; private set; }
+
+        public static int PlantsGrown { get; private set; }
+        public static int ValueGoodsSold { get; private set; }
+        private static Dictionary<ItemGroupEnum, int> _diGoodsSold;
+        #endregion
+
         public static void Initialize()
         {
+            PlantsGrown = 0;
+            ValueGoodsSold = 0;
+            _diGoodsSold = new Dictionary<ItemGroupEnum, int>();
+            foreach (ItemGroupEnum e in Enum.GetValues(typeof(ItemGroupEnum)))
+            {
+                _diGoodsSold[e] = 0;
+            }
+
             TownAnimals = new List<Animal>();
             Travelers = new List<Traveler>();
             _diMailbox = new Dictionary<MailboxEnum, List<string>>
@@ -92,6 +109,16 @@ namespace RiverHollow.Game_Managers
             {
                 ItemEnum type = DataManager.GetEnumByIDKey<ItemEnum>(id, "Type", DataType.Item);
                 DIArchive[id] = new ValueTuple<bool, bool>(false, false);
+            }
+
+            TotalDefeatedMobs = 0;
+            DIMobInfo = new Dictionary<int, int>();
+            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.ActorData)
+            {
+                if (kvp.Value["Type"] == Util.GetEnumString(ActorTypeEnum.Mob))
+                {
+                    DIMobInfo[kvp.Key] = 0;
+                }
             }
         }
 
@@ -172,19 +199,6 @@ namespace RiverHollow.Game_Managers
             SpawnTravelers();
 
             RolloverMailbox();
-        }
-
-        public static void AddToKitchen(Item i)
-        {
-            bool closeAfter = InventoryManager.ExtraInventory != Pantry.Inventory;
-
-            InventoryManager.InitExtraInventory(Pantry.Inventory);
-            InventoryManager.AddToInventory(i, false);
-            AddToArchive(i.ID);
-            if (closeAfter)
-            {
-                InventoryManager.ClearExtraInventory();
-            }
         }
 
         public static void AddAnimal(Animal npc)
@@ -418,6 +432,27 @@ namespace RiverHollow.Game_Managers
 
             return rv;
         }
+        public static void TrackDefeatedMob(Mob m)
+        {
+            DIMobInfo[m.ID] += 1;
+            TotalDefeatedMobs++;
+        }
+        public static void IncrementPlantsGrown()
+        {
+            PlantsGrown++;
+        }
+        public static void AddToSoldGoods(int itemID, int profit, int num = 1)
+        {
+            ValueGoodsSold += profit;
+
+            var item = DataManager.GetItem(itemID);
+            var itemEnum = item.GetItemGroup();
+            _diGoodsSold[itemEnum] = _diGoodsSold[itemEnum] + num;
+        }
+        public static bool CheckSoldGoods(ItemGroupEnum e, int val)
+        {
+            return _diGoodsSold[e] >= val;
+        }
 
         public static void TownManagerCheck(RHMap map, WorldObject obj)
         {
@@ -508,12 +543,16 @@ namespace RiverHollow.Game_Managers
             TownData data = new TownData
             {
                 townName = TownName,
+                plantsGrown = PlantsGrown,
+                goodsSoldValue = ValueGoodsSold,
                 TownAnimals = new List<int>(),
                 Travelers = new List<int>(),
                 VillagerData = new List<VillagerData>(),
                 MerchantData = new List<MerchantData>(),
                 TravelerData = new List<TravelerData>(),
                 CodexEntries = new List<CodexEntryData>(),
+                MobInfo = new List<ValueTuple<int, int>>(),
+                GoodsSold = new List<ValueTuple<int, int>>(),
                 MailboxSent = new List<string>(),
                 MailboxUnsent = new List<string>(),
                 MailboxWaiting = new List<string>(),
@@ -562,6 +601,16 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
+            foreach (var kvp in DIMobInfo)
+            {
+                data.MobInfo.Add(new ValueTuple<int, int>(kvp.Key, kvp.Value));
+            }
+
+            foreach(ItemGroupEnum e in _diGoodsSold.Keys)
+            {
+                data.GoodsSold.Add(new ValueTuple<int, int>((int)e, _diGoodsSold[e]));
+            }
+
             data.travelersCame = _bTravelersCame;
 
             return data;
@@ -576,6 +625,12 @@ namespace RiverHollow.Game_Managers
                 AddAnimal(m);
             }
 
+            PlantsGrown = saveData.plantsGrown;
+            ValueGoodsSold = saveData.goodsSoldValue;
+            foreach (var tpl in saveData.GoodsSold)
+            {
+                _diGoodsSold[(ItemGroupEnum)tpl.Item1] = tpl.Item2;
+            }
             saveData.Travelers.ForEach(x => AddTraveler(x));
             var unsentMessages = new List<string>(_diMailbox[MailboxEnum.Unsent]);
             foreach(var messageID in unsentMessages)
@@ -621,6 +676,12 @@ namespace RiverHollow.Game_Managers
                 {
                     DIArchive[data.id] = new ValueTuple<bool, bool>(data.found, data.archived);
                 }
+            }
+
+            foreach (var tpl in saveData.MobInfo)
+            {
+                DIMobInfo[tpl.Item1] = tpl.Item2;
+                TotalDefeatedMobs += tpl.Item2;
             }
 
             _bTravelersCame = saveData.travelersCame;

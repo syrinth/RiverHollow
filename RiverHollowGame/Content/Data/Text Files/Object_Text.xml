@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>Actor_9</Key>
-      <Value>[Name:Gail]</Value>
+      <Value>[Name:Gale]</Value>
     </Item>
     <Item>
       <Key>Actor_10</Key>
@@ -1484,11 +1484,11 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_7</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Smelter]</Value>
     </Item>
     <Item>
       <Key>WorldObject_8</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Weaver]</Value>
     </Item>
     <Item>
       <Key>WorldObject_9</Key>

@@ -123,12 +123,16 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             var merch = _arrToSell[0, 0];
             int capacity = _merchant.Capacity;
 
+            int profit = _merchant.EvaluateItem(merch);
+            PlayerManager.AddMoney(profit);
+
             _merchant.UpdateCapacity(merch.Number);
             _gCapacity.SetText(_merchant.Capacity);
 
+            TownManager.AddToSoldGoods(merch.ID, profit, capacity - _merchant.Capacity);
+
             CapacityCheck();
 
-            PlayerManager.AddMoney(_merchant.EvaluateItem(merch));
             if (merch.Number < capacity)
             {
                 InventoryManager.RemoveItemFromInventory(merch, false);

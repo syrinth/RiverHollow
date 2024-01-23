@@ -821,7 +821,7 @@ namespace RiverHollow.Game_Managers
         public static List<Actor> GetAllMobs()
         {
             var actors = new List<Actor>();
-            PlayerManager.DIMobInfo.Keys.ToList().ForEach(x => actors.Add(CreateMob(x)));
+            TownManager.DIMobInfo.Keys.ToList().ForEach(x => actors.Add(CreateMob(x)));
 
             return actors;
         }

@@ -54,9 +54,7 @@ namespace RiverHollow.Characters
 
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
-            _fBaseSpeed = Constants.NPC_WALK_SPEED;
             _fWanderSpeed = Constants.NPC_WALK_SPEED;
-
             Wandering = true;
             _eCollisionState = ActorCollisionState.Slow;
         }
@@ -141,7 +139,10 @@ namespace RiverHollow.Characters
             {
                 int value = (DataManager.GetIntByIDKey(itemID, "Value", DataType.Item));
                 float profitMod = (1 + b.GetShopProfitModifier());
-                Income += (int)(value * profitMod);
+                int profit = (int)(value * profitMod);
+                Income += profit;
+
+                TownManager.AddToSoldGoods(itemID, profit);
             }
         }
     }

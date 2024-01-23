@@ -265,6 +265,10 @@ namespace RiverHollow.Items
             }
             return rv;
         }
+        public ItemGroupEnum GetItemGroup()
+        {
+            return GetEnumByIDKey<ItemGroupEnum>("Subtype");
+        }
         public bool IsItemGroup(ItemGroupEnum e)
         {
             return GetEnumByIDKey<ItemGroupEnum>("Subtype") == e;

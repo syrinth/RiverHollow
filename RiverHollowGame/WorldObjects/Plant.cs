@@ -180,6 +180,11 @@ namespace RiverHollow.WorldObjects
                 if (_iDaysToNextState == 0 && !FinishedGrowing())
                 {
                     SetState(++CurrentState);
+
+                    if (NeedsWatering && FinishedGrowing() && CurrentMap == MapManager.TownMap)
+                    {
+                        TownManager.IncrementPlantsGrown();
+                    }
                 }
             }
 

@@ -104,9 +104,6 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Money")]
             public int money;
 
-            [XmlElement(ElementName = "TotalMoneyEarned")]
-            public int totalMoneyEarned;
-
             [XmlElement(ElementName = "BodyType")]
             public int bodyTypeIndex;
 
@@ -161,9 +158,6 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "Children")]
             public List<ChildData> ChildList;
 
-            [XmlArray(ElementName = "MobInfo")]
-            public List<ValueTuple<int, int>> MobInfo;
-
             [XmlArray(ElementName = "CraftingDictionary")]
             public List<int> CraftingList;
         }
@@ -171,6 +165,15 @@ namespace RiverHollow.Game_Managers
         {
             [XmlElement(ElementName = "Name")]
             public string townName;
+
+            [XmlElement(ElementName = "GoodsSoldValue")]
+            public int goodsSoldValue;
+
+            [XmlElement(ElementName = "GoodsSold")]
+            public List<ValueTuple<int, int>> GoodsSold;
+
+            [XmlElement(ElementName = "PlantsGrown")]
+            public int plantsGrown;
 
             [XmlArray(ElementName = "VillagerData")]
             public List<VillagerData> VillagerData;
@@ -186,6 +189,9 @@ namespace RiverHollow.Game_Managers
 
             [XmlArray(ElementName = "CodexItems")]
             public List<CodexEntryData> CodexEntries;
+
+            [XmlArray(ElementName = "MobInfo")]
+            public List<ValueTuple<int, int>> MobInfo;
 
             [XmlArray(ElementName = "TownAnimals")]
             public List<int> TownAnimals;

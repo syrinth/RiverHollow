@@ -3420,18 +3420,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/MagicShop.png
 
-#begin Textures/WorldObjects/Buildings/MagicShopNew.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/WorldObjects/Buildings/MagicShopNew.png
-
 #begin Textures/WorldObjects/Buildings/Manor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3480,7 +3468,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Pottery.png
 
-#begin Textures/WorldObjects/Buildings/Smithy.png
+#begin Textures/WorldObjects/Buildings/Smelter.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3490,7 +3478,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/WorldObjects/Buildings/Smithy.png
+/build:Textures/WorldObjects/Buildings/Smelter.png
 
 #begin Textures/WorldObjects/Buildings/Stables.png
 /importer:TextureImporter

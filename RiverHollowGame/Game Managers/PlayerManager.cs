@@ -70,7 +70,6 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-
         private static string _currentMap;
         public static string CurrentMap
         {
@@ -85,7 +84,6 @@ namespace RiverHollow.Game_Managers
         
 
         private static List<int> _liCrafting;
-        public static Dictionary<int, int> DIMobInfo { get; private set; }
 
         private static DirectionEnum _eHorizontal = DirectionEnum.None;
         private static DirectionEnum _eVertical = DirectionEnum.None;
@@ -99,8 +97,6 @@ namespace RiverHollow.Game_Managers
         private static List<Mount> _liMounts;
 
         public static string Name;
-
-        public static int TotalMoneyEarned { get; private set; } = 0;
         public static int Money { get; private set; } = 0;
 
         public static bool AllowMovement = true;
@@ -168,15 +164,6 @@ namespace RiverHollow.Game_Managers
             PlayerActor = new PlayerCharacter();
             CurrentEnergy = MaxEnergy();
             CurrentMagic = MaxMagic();
-
-            DIMobInfo = new Dictionary<int, int>();
-            foreach (KeyValuePair<int, Dictionary<string, string>> kvp in DataManager.ActorData)
-            {
-                if (kvp.Value["Type"] == Util.GetEnumString(ActorTypeEnum.Mob))
-                {
-                    DIMobInfo[kvp.Key] = 0;
-                }
-            }
         }
 
         public static void NewPlayer()
@@ -429,7 +416,6 @@ namespace RiverHollow.Game_Managers
         public static void AddMoney(int x)
         {
             Money += x;
-            TotalMoneyEarned += x;
         }
         public static void SetMoney(int x)
         {
@@ -855,7 +841,6 @@ namespace RiverHollow.Game_Managers
             {
                 name = Name,
                 money = Money,
-                totalMoneyEarned = TotalMoneyEarned,
                 bodyTypeIndex = PlayerActor.BodyType,
                 hairColor = PlayerActor.HairColor,
                 hairIndex = PlayerActor.HairIndex,
@@ -872,7 +857,6 @@ namespace RiverHollow.Game_Managers
                 liPets = new List<int>(),
                 MountList = new List<int>(),
                 ChildList = new List<ChildData>(),
-                MobInfo = new List<ValueTuple<int, int>>(),
                 CraftingList = new List<int>()
             };
 
@@ -901,11 +885,6 @@ namespace RiverHollow.Game_Managers
 
             data.CraftingList.AddRange(_liCrafting);
 
-            foreach (var kvp in DIMobInfo)
-            {
-                data.MobInfo.Add(new ValueTuple<int, int>(kvp.Key, kvp.Value));
-            }
-
             for (int i = 0; i < _liUniqueItemsBought.Count; i++)
             {
                 if (i == 0) { data.UniqueItemsBought = _liUniqueItemsBought[i].ToString(); }
@@ -919,7 +898,6 @@ namespace RiverHollow.Game_Managers
         {
             SetName(saveData.name);
             SetMoney(saveData.money);
-            TotalMoneyEarned = saveData.totalMoneyEarned;
 
             BabyCountdown = saveData.babyCountdown;
             WeddingCountdown = saveData.weddingCountdown;
@@ -983,11 +961,6 @@ namespace RiverHollow.Game_Managers
             foreach (int i in saveData.CraftingList)
             {
                 AddToCraftingDictionary(i, false);
-            }
-
-            foreach(var tpl in saveData.MobInfo)
-            {
-                DIMobInfo[tpl.Item1] = tpl.Item2;
             }
 
             if (saveData.UniqueItemsBought != null)

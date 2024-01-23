@@ -82,6 +82,7 @@ namespace RiverHollow.Characters
                     DropLoot();
                     CurrentMap.RemoveActor(this);
                     TaskManager.AdvanceTaskProgress(this);
+                    TownManager.TrackDefeatedMob(this);
                     return;
                 }
 
@@ -212,8 +213,8 @@ namespace RiverHollow.Characters
         protected override void Kill()
         {
             base.Kill();
-            PlayerManager.DIMobInfo[ID] += 1;
         }
+
         public override bool DealDamage(int value, Rectangle hitbox)
         {
             bool rv = base.DealDamage(value, hitbox);
