@@ -815,7 +815,7 @@
     </Item>
     <Item>
       <Key>203</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:3-12][ItemGroups:Magic][Value:100][ReqItems:1-1/2-1]</Value>
+      <Value>[Type:Resource][Subtype:Magic][Image:3-12][ItemGroups:Magic][Value:100][ReqItems:1-1/3-1]</Value>
     </Item>
     <Item>
       <Key>204</Key>
@@ -923,7 +923,7 @@
     </Item>
     <Item>
       <Key>230</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/61-5][Value:20]</Value>
+      <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/61-10][Value:20]</Value>
     </Item>
   </Asset>
 </XnaContent>

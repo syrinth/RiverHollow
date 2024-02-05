@@ -535,11 +535,6 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapDwarfCave_Small.tmx
 
-#begin Maps/Misc/mapFoothills_Small.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:Maps/Misc/mapFoothills_Small.tmx
-
 #begin Maps/Misc/mapForest_Glade_1.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1704,7 +1699,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Villagers/Fran.png
 
-#begin Textures/Actors/NPCs/Villagers/Gail.png
+#begin Textures/Actors/NPCs/Villagers/Gale.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1714,7 +1709,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/Villagers/Gail.png
+/build:Textures/Actors/NPCs/Villagers/Gale.png
 
 #begin Textures/Actors/NPCs/Villagers/Griselda.png
 /importer:TextureImporter

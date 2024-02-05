@@ -471,13 +471,17 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region GetMethods
-        public static Upgrade GetUpgrade(int id)
+        public static Dictionary<int, Upgrade> GetGlobalUpgrades()
         {
-            if (_diUpgradeData.ContainsKey(id))
+            var rv = new Dictionary<int, Upgrade>();
+            foreach (var upgradeData in _diUpgradeData)
             {
-                return new Upgrade(id);
+                if (Util.ParseEnum<UpgradeTypeEnum>(upgradeData.Value["Type"]) == UpgradeTypeEnum.Global)
+                {
+                    rv[upgradeData.Key] = new Upgrade(upgradeData.Key);
+                }
             }
-            return null;
+            return rv;
         }
         public static Light GetLight(int id)
         {

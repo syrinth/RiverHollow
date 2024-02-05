@@ -252,9 +252,9 @@ namespace RiverHollow.GUIComponents.Screens
         }
         #endregion
 
-        public override void NewAlertIcon(string text, Color c)
+        public override void NewAlertIcon(string textEntryName, Color c)
         {
-            HUDNewAlert newAlert = new HUDNewAlert(text, c, RemoveTaskIcon);
+            HUDNewAlert newAlert = new HUDNewAlert(textEntryName, c, RemoveTaskIcon);
 
             if (_liTaskIcons.Count == 0) { newAlert.AnchorToScreen(SideEnum.Right, 3); }
             else { newAlert.AnchorAndAlignWithSpacing(_liTaskIcons[_liTaskIcons.Count - 1], SideEnum.Top, SideEnum.Right, 1); }
@@ -303,7 +303,7 @@ namespace RiverHollow.GUIComponents.Screens
         private RemoveDelegate _delAction;
 
         bool _bSlow = false;
-        public HUDNewAlert(string text, Color c, RemoveDelegate del) : base(GUIUtils.WINDOW_BROWN, 10, 10)
+        public HUDNewAlert(string textEntryName, Color c, RemoveDelegate del) : base(GUIUtils.WINDOW_BROWN, 10, 10)
         {
             _delAction = del;
             if (c == Color.Red)
@@ -313,7 +313,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             else { _gMarker = new GUIImage(GUIUtils.ICON_EXCLAMATION); }
 
-            _gText = new GUIText(text);
+            _gText = new GUIText(DataManager.GetGameTextEntry(textEntryName).GetFormattedText());
             _gText.SetColor(c);
 
             _gMarker.AnchorToInnerSide(this, SideEnum.TopLeft);

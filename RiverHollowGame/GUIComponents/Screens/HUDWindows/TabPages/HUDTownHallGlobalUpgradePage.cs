@@ -1,42 +1,43 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.GUIObjects;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens.HUDComponents;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 {
-    internal class HUDTownHallUpgradePage : GUIObject
+    internal class HUDTownHallGlobalUpgradePage : GUIObject
     {
         const int MAX_DISPLAY = 35;
         const int COLUMNS = 7;
 
         int _iIndex = 0;
 
-        readonly private List<DisplayUpgradeWindow> _liItemDisplay;
+        readonly private List<DisplayGlobalUpgradeIcon> _liItemDisplay;
         readonly private GUIText _gLabel;
 
-        HUDBuildingUpgrade _upgradeWindow;
+        HUDGlobalUpgrade _upgradeWindow;
 
-        public HUDTownHallUpgradePage(GUIWindow mainWindow)
+        public HUDTownHallGlobalUpgradePage(GUIWindow mainWindow)
         {
-            _liItemDisplay = new List<DisplayUpgradeWindow>();
+            _liItemDisplay = new List<DisplayGlobalUpgradeIcon>();
 
             _gLabel = new GUIText("Building Info");
             _gLabel.AnchorToInnerSide(mainWindow, SideEnum.Top);
 
-            var upgradableIDs = DataManager.GetWorldObjectsWithKey("Upgradable");
+            var upgrades = TownManager.GetAllUpgrades();
+            var keys = upgrades.Keys.ToList();
             for (int i = _iIndex; i < _iIndex + MAX_DISPLAY; i++)
             {
-                if (upgradableIDs.Count <= i)
+                if (upgrades.Count <= i)
                 {
                     break;
                 }
 
-                var displayWindow = new DisplayUpgradeWindow(upgradableIDs[i], BtnOpen);
+                var displayWindow = new DisplayGlobalUpgradeIcon(upgrades[keys[i]], BtnOpen);
                 _liItemDisplay.Add(displayWindow);
             }
 
@@ -52,7 +53,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            bool rv = false;
+            bool rv;
             if (_upgradeWindow != null)
             {
                 rv = true;
@@ -68,7 +69,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            bool rv = false;
+            bool rv;
             if (_upgradeWindow != null)
             {
                 rv = true;
@@ -84,7 +85,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
         public override bool ProcessHover(Point mouse)
         {
-            bool rv = false;
+            bool rv;
             if (_upgradeWindow != null)
             {
                 rv = true;
@@ -98,14 +99,10 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
             return rv;
         }
 
-        private void BtnOpen(int buildingID)
+        private void BtnOpen(int upgradeID)
         {
             GUIManager.CloseHoverWindow();
-            var b = TownManager.GetBuildingByID(buildingID);
-            if (b != null)
-            {
-                _upgradeWindow = new HUDBuildingUpgrade(b);
-            }
+            _upgradeWindow = new HUDGlobalUpgrade(TownManager.GetGlobalUpgrade(upgradeID));
         }
     }
 }

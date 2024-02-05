@@ -96,7 +96,7 @@
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUITabWindow.cs" />
     <Compile Include="GUIComponents\GUIUtils.cs" />
     <Compile Include="GUIComponents\Screens\DefeatedScreen.cs" />
-    <Compile Include="GUIComponents\Screens\HUDComponents\DisplayUpgradeWindow.cs" />
+    <Compile Include="GUIComponents\Screens\HUDComponents\DisplayUpgradeIcon.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMenu.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\ItemDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\NPCDisplayWindow.cs" />
@@ -104,6 +104,7 @@
     <Compile Include="GUIComponents\Screens\HUDPlayerInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCodex.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftRecipes.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\HUDGlobalUpgrade.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDTownCrafting.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDExit.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDGiftWindow.cs" />
@@ -113,8 +114,9 @@
     <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDCodexActorPage.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDCodexItems.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownCraftingPage.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownHallGlobalUpgradePage.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownHallOverview.cs" />
-    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownHallUpgradePage.cs" />
+    <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownHallBuildingUpgradePage.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownStructurePage.cs" />
     <Compile Include="GUIComponents\Screens\WorldMapScreen.cs" />
     <Compile Include="Items\MapItem.cs" />

@@ -236,12 +236,12 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void NewAlertIcon(string text, Color c)
+        public static void NewAlertIcon(string textEntryName, Color c)
         {
-            CurrentScreen.NewAlertIcon(text, c);
+            CurrentScreen.NewAlertIcon(textEntryName, c);
         }
-        public static void NewAlertIcon(string text) {
-            CurrentScreen.NewAlertIcon(text, Color.Black);
+        public static void NewAlertIcon(string textEntryName) {
+            CurrentScreen.NewAlertIcon(textEntryName, Color.Black);
         }
 
         public static void AddSkipCutsceneButton()

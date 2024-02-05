@@ -471,6 +471,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Advanced Workshop]</Value>
     </Item>
     <Item>
+      <Key>Upgrade_3</Key>
+      <Value>[Name:Unseal Darkbottle Cave]</Value>
+    </Item>
+    <Item>
       <Key>Dungeon_0</Key>
       <Value>[Name:Cave]</Value>
     </Item>
@@ -1492,7 +1496,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_9</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Darkbottle Crystal]</Value>
     </Item>
     <Item>
       <Key>WorldObject_10</Key>
@@ -1560,7 +1564,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_26</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Home]</Value>
     </Item>
     <Item>
       <Key>WorldObject_27</Key>

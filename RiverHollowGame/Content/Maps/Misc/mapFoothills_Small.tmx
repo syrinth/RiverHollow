@@ -13,7 +13,6 @@
   <property name="ResourcesToSpawn" value="25-40"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
- <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>
  <layer id="19" name="Base" width="30" height="29">
   <data encoding="csv">
 27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,29,31,27,4,6,27,126,128,27,27,27,126,127,127,127,

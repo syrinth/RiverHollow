@@ -114,7 +114,7 @@
   <object id="51" name="Entrance" x="288" y="444" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Up"/>
-    <property name="Map" value="mapFoothills_Small"/>
+    <property name="Map" value="mapWoods_Small"/>
    </properties>
   </object>
   <object id="66" name="Entrance" x="528" y="288" width="16" height="4">

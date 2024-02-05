@@ -56,6 +56,7 @@ namespace RiverHollow.Map_Handling
         protected TiledMap _map;
         public TiledMap Map => _map;
 
+        protected int _iTotalFillableTiles;
         protected RHTile[,] _arrTiles;
         public List<RHTile> TileList => _arrTiles.Cast<RHTile>().ToList();
         private List<RHTile> _liSpecialTiles;
@@ -206,6 +207,21 @@ namespace RiverHollow.Map_Handling
             }
 
             _renderer = new TiledMapRenderer(GraphicsDevice);
+
+            DetermineUsableTiles();
+        }
+
+        private void DetermineUsableTiles()
+        {
+            List<RHTile> possibleTiles = TileList;
+            var impassable = possibleTiles.FindAll(x => !x.TileIsPassable());
+
+            impassable.ForEach(x => possibleTiles.Remove(x));
+
+            RemoveTilesNearTravelPoints(ref possibleTiles);
+            RemoveTilesNearSpecialObjects(ref possibleTiles);
+            RemoveSkipTiles(ref possibleTiles);
+            _iTotalFillableTiles = possibleTiles.Count;
         }
 
         public void Update(GameTime gTime)
@@ -550,6 +566,7 @@ namespace RiverHollow.Map_Handling
 
             return possibleTiles;
         }
+
         public void SpawnMapEntities(bool spawnAboveAndBelow = true)
         {
             if (!Visited)
@@ -655,19 +672,30 @@ namespace RiverHollow.Map_Handling
         {
             if (_map.Properties.ContainsKey("FillerPercent") && _map.Properties.ContainsKey("FillerID"))
             {
+                if (!float.TryParse(_map.Properties["FillerPercent"], out float fillPercent)) 
+                {
+                    ErrorManager.TrackError();
+                    return;
+                }
+
                 int totalWeight = 0;
-                int totalPreexisting = 0;
-                int totalValid = possibleTiles.Count;
+                int currentFillerObjects = 0;
                 string[] fillerParams = Util.FindParams(_map.Properties["FillerID"]);
 
                 for (int i = 0; i < fillerParams.Length; i++)
                 {
                     var fillData = Util.FindArguments(fillerParams[i]);
                     totalWeight += int.Parse(fillData[1]);
-                    totalPreexisting += GetObjectsByID(int.Parse(fillData[0])).Count;
+                    currentFillerObjects += GetObjectsByID(int.Parse(fillData[0])).Count;
                 }
 
-                int totalResources = (int)((totalValid + totalPreexisting) * float.Parse(_map.Properties["FillerPercent"]));
+                int maxFiller = (int)(_iTotalFillableTiles * fillPercent);
+
+                //We want to make sure that the filler isn't going to go over the margin
+                if (maxFiller <= currentFillerObjects)
+                {
+                    return;
+                }
 
                 for (int i = 0; i < fillerParams.Length; i++)
                 {
@@ -675,13 +703,19 @@ namespace RiverHollow.Map_Handling
 
                     int id = int.Parse(fillData[0]);
                     int currentExisting = GetObjectsByID(id).Count;
-                    int totalFill = (int)(totalResources * float.Parse(fillData[1]) / totalWeight);
-                    int spawnNumber = totalFill - currentExisting;
+                    int maxItemFiller = (int)(maxFiller * float.Parse(fillData[1]) / totalWeight);
+                    int spawnNumber = maxItemFiller - currentExisting;
 
                     //FillerRate is expressed weekly, so need to divide it by days/week
                     if (refresh && _map.Properties.ContainsKey("FillerRate"))
                     {
-                        int maxRefresh = (int)Math.Ceiling(totalFill * (float.Parse(_map.Properties["FillerRate"]) / Enum.GetNames(typeof(DayEnum)).Length));
+                        if (!float.TryParse(_map.Properties["FillerRate"], out float fillerRate))
+                        {
+                            ErrorManager.TrackError();
+                            return;
+                        }
+
+                        int maxRefresh = (int)Math.Ceiling(maxItemFiller * (fillerRate / Enum.GetNames(typeof(DayEnum)).Length));
                         if (spawnNumber > maxRefresh)
                         {
                             spawnNumber = maxRefresh;
@@ -700,11 +734,19 @@ namespace RiverHollow.Map_Handling
         {
             if (obj != null)
             {
+                bool placed;
                 do
                 {
                     var tile = Util.GetRandomItem(possibleTiles);
                     obj.SnapPositionToGrid(new Point(tile.Position.X, tile.Position.Y));
-                } while (!obj.PlaceOnMap(this));
+                    placed = obj.PlaceOnMap(this);
+
+                    if (possibleTiles.Count <= 1)
+                    {
+                        ErrorManager.TrackError();
+                        return;
+                    }
+                } while (!placed);
 
                 foreach (RHTile t in obj.Tiles)
                 {
@@ -713,11 +755,8 @@ namespace RiverHollow.Map_Handling
 
                 if (obj is Plant plantObj)
                 {
-                    if (!refresh)
-                    {
-                        if (plantObj.NeedsWatering) { plantObj.FinishGrowth(); }
-                        else { plantObj.RandomizeState(); }
-                    }
+                    if (plantObj.NeedsWatering) { plantObj.FinishGrowth(); }
+                    else if (!refresh) { plantObj.RandomizeState(); }
                 }
             }
         }
@@ -1800,6 +1839,11 @@ namespace RiverHollow.Map_Handling
                     {
                         found = true;
                         GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, t.GetWorldObject().CollisionBox);
+                    } 
+                    else if (t.GetWorldObject(false) != null && t.GetWorldObject().HasInteract())
+                    {
+                        found = true;
+                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Interact, t.GetWorldObject().CollisionBox);
                     }
 
                     MapItem hoverItem = _liItems.Find(x => x.CollisionBox.Contains(GUICursor.GetWorldMousePosition()));

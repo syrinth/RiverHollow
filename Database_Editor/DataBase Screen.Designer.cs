@@ -155,6 +155,9 @@
             this.dgvWorldObjects = new System.Windows.Forms.DataGridView();
             this.colWorldObjectsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabUpgrade = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbUpgradeType = new System.Windows.Forms.ComboBox();
             this.btnUpgradeCancel = new System.Windows.Forms.Button();
             this.dgvUpgradeTags = new System.Windows.Forms.DataGridView();
             this.colUpgradeTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -1557,6 +1560,9 @@
             // 
             // tabUpgrade
             // 
+            this.tabUpgrade.Controls.Add(this.textBox1);
+            this.tabUpgrade.Controls.Add(this.label8);
+            this.tabUpgrade.Controls.Add(this.cbUpgradeType);
             this.tabUpgrade.Controls.Add(this.btnUpgradeCancel);
             this.tabUpgrade.Controls.Add(this.dgvUpgradeTags);
             this.tabUpgrade.Controls.Add(this.label23);
@@ -1570,6 +1576,32 @@
             this.tabUpgrade.TabIndex = 17;
             this.tabUpgrade.Text = "Upgrades";
             this.tabUpgrade.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(320, 51);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(464, 53);
+            this.textBox1.TabIndex = 61;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(317, 35);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(63, 13);
+            this.label8.TabIndex = 60;
+            this.label8.Text = "Description:";
+            // 
+            // cbUpgradeType
+            // 
+            this.cbUpgradeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbUpgradeType.FormattingEnabled = true;
+            this.cbUpgradeType.Location = new System.Drawing.Point(320, 110);
+            this.cbUpgradeType.Name = "cbUpgradeType";
+            this.cbUpgradeType.Size = new System.Drawing.Size(149, 21);
+            this.cbUpgradeType.TabIndex = 59;
             // 
             // btnUpgradeCancel
             // 
@@ -1592,10 +1624,10 @@
             this.dgvUpgradeTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colUpgradeTags});
             this.dgvUpgradeTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvUpgradeTags.Location = new System.Drawing.Point(320, 33);
+            this.dgvUpgradeTags.Location = new System.Drawing.Point(320, 137);
             this.dgvUpgradeTags.Name = "dgvUpgradeTags";
             this.dgvUpgradeTags.RowHeadersVisible = false;
-            this.dgvUpgradeTags.Size = new System.Drawing.Size(464, 356);
+            this.dgvUpgradeTags.Size = new System.Drawing.Size(464, 252);
             this.dgvUpgradeTags.TabIndex = 41;
             // 
             // colUpgradeTags
@@ -1879,6 +1911,9 @@
         private System.Windows.Forms.TextBox tbActorDescription;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cbWorldObjectSubtype;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox cbUpgradeType;
     }
 }
 

@@ -45,6 +45,7 @@ namespace Database_Editor
             InitComboBox<TaskTypeEnum>(cbTaskType);
             InitComboBox<EditableNPCDataEnum>(cbEditableCharData, false);
             InitComboBox<StatusTypeEnum>(cbStatusEffect);
+            InitComboBox<UpgradeTypeEnum>(cbUpgradeType);
 
             cbActorType.Items.Clear();
             InitComboBox<ActorTypeEnum>(cbActorType, true);

@@ -193,6 +193,9 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "MobInfo")]
             public List<ValueTuple<int, int>> MobInfo;
 
+            [XmlArray(ElementName = "GlobalUpgrades")]
+            public List<ValueTuple<int, int>> GlobalUpgrades;
+
             [XmlArray(ElementName = "TownAnimals")]
             public List<int> TownAnimals;
 

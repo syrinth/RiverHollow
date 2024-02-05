@@ -307,7 +307,7 @@ namespace RiverHollow.Misc
 
                 if (talker.HasHeldItems())
                 {
-                    GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Inventory").GetFormattedText(), Color.Red);
+                    GUIManager.NewAlertIcon("Alert_Inventory", Color.Red);
                 }
             }
             if (_diTags.ContainsKey("GiveItems"))

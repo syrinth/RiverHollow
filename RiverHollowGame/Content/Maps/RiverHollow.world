@@ -2,10 +2,10 @@
     "maps": [
         {
             "fileName": "Misc/mapWoods_Small.tmx",
-            "height": 1280,
+            "height": 1632,
             "width": 928,
             "x": 0,
-            "y": 0
+            "y": -352
         },
         {
             "fileName": "Town/mapTown.tmx",
@@ -22,25 +22,18 @@
             "y": 941
         },
         {
-            "fileName": "Misc/mapFoothills_Small.tmx",
-            "height": 464,
-            "width": 480,
-            "x": 160,
-            "y": -464
-        },
-        {
             "fileName": "Misc/mapMountainPath.tmx",
             "height": 448,
             "width": 592,
             "x": 96,
-            "y": -912
+            "y": -800
         },
         {
             "fileName": "Misc/mapDwarfCave_Small.tmx",
             "height": 416,
             "width": 320,
             "x": 688,
-            "y": -944
+            "y": -896
         }
     ],
     "onlyShowAdjacentMaps": false,

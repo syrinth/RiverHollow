@@ -62,6 +62,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle CURSOR_PICKUP = new Rectangle(336, 160, 16, 16);
         internal static Rectangle CURSOR_DOOR = new Rectangle(320, 176, 16, 16);
         internal static Rectangle CURSOR_TALK = new Rectangle(336, 176, 16, 16);
+        internal static Rectangle CURSOR_INTERACT = new Rectangle(304, 176, 16, 16);
 
         internal static Rectangle BTN_MAIN = new Rectangle(176, 112, 52, 16);
         internal static Rectangle BTN_UP_SMALL = new Rectangle(295, 147, 12, 10);

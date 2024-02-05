@@ -342,7 +342,7 @@ namespace RiverHollow.Game_Managers
 
                 if (displayAlert)
                 {
-                    GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_BP").GetFormattedText());
+                    GUIManager.NewAlertIcon("Alert_BP");
                 }
             }
 
@@ -359,7 +359,7 @@ namespace RiverHollow.Game_Managers
             if (displayAlert)
             {
                 string str = unlocks.Length == 1 ? "Alert_BP" : "Alert_BPS";
-                GUIManager.NewAlertIcon(DataManager.GetGameTextEntry(str).GetFormattedText());
+                GUIManager.NewAlertIcon(str);
             }
         }
         #endregion

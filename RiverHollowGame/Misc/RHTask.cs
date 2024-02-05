@@ -276,7 +276,7 @@ namespace RiverHollow.Misc
                 
                 SpawnTaskMobs();
 
-                GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Task").GetFormattedText());
+                GUIManager.NewAlertIcon("Alert_Task");
             }
         }
 
@@ -435,7 +435,14 @@ namespace RiverHollow.Misc
 
                 foreach (Item i in LiRewardItems)
                 {
-                    InventoryManager.AddToInventory(i);
+                    if (InventoryManager.HasSpaceInInventory(i.ID, i.Number))
+                    {
+                        InventoryManager.AddToInventory(i);
+                    }
+                    else
+                    {
+                        GoalNPC.AssignItemToNPC(i.ID, i.Number);
+                    }
                 }
 
                 PlayerManager.AddMoney(RewardMoney);
@@ -464,7 +471,7 @@ namespace RiverHollow.Misc
                 ActivateNPCs();
 
                 TaskManager.TaskLog.Remove(this);
-                GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Finished").GetFormattedText());
+                GUIManager.NewAlertIcon("Alert_Finished");
             }
         }
 

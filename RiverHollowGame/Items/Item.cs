@@ -97,7 +97,7 @@ namespace RiverHollow.Items
             {
                 if (LayerDepth)
                 {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, Constants.ITEM_SHADOW, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, Constants.ITEM_SHADOW, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth - Constants.SPRITE_LINKED_MOD);
                 }
                 else
                 {

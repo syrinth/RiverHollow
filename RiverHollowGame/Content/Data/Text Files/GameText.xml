@@ -305,5 +305,13 @@
       <Key>75</Key>
       <Value>[Name:Icon_Capacity][Text:How many items the Merchant can buy.]</Value>
     </Item>
+	<Item>
+      <Key>76</Key>
+      <Value>[Name:Upgrade_3][Text:This crystal seems too tough to be easily destroyed and who knows what lays beyond it. Looks like a job for adventurers!]</Value>
+    </Item>
+	<Item>
+      <Key>77</Key>
+      <Value>[Name:Alert_Upgrade][Text:New Upgrade Unlocked]</Value>
+    </Item>
   </Asset>
 </XnaContent>

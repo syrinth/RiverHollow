@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapDwarfCave_Small][Size:16-24]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapDwarfCave_Small][Size:16-22]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Eric][Size:16-32][GoodsSoldValue:1000][GoodsSold:Meal-30]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:29][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Eric][Size:16-31][GoodsSoldValue:1000][GoodsSold:Meal-30]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillager:3][FirstArrival:7][Key:Gale]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillager:3][FirstArrival:7][Key:Gale][Size:16-35]</Value>
     </Item>
     <Item>
       <Key>10</Key>
@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:8][Key:Caleb][Size:16-34]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:8][Key:Caleb][Size:16-32]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-34]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-33]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Yulia][Size:16-31][StartMap:mapForest_Glade_2][Inactive]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Yulia][Size:16-30][StartMap:mapForest_Glade_2][Inactive]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -171,7 +171,7 @@
     </Item>
     <Item>
       <Key>42</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Kevin][StartMap:mapShroomCity][HouseID:20]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Kevin][StartMap:mapShroomCity][HouseID:20][Size:16-24]</Value>
     </Item>
     <Item>
       <Key>43</Key>

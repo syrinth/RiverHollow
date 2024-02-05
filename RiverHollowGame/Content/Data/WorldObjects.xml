@@ -23,7 +23,7 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_12][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][ReqItems:60-40/0-10][LightID:3-30-86/3-80-86][SkipArticle]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:House_12][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][ReqItems:60-60/0-20][LightID:3-30-86/3-80-86][SkipArticle]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_19][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5/60-5]</Value>
+      <Value>[Type:WorldObject][Image:0-4][Size:3-3][Base:1-1-1-2][UnlockUpgradeID:3]</Value>
     </Item>
     <Item>
       <Key>10</Key>
@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:55-10/60-20][UpgradeID:0-1][Traveller:10][Upgradable:3/48-0-16-16][CraftAmount:2]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-80/0-30][UpgradeID:0-1][Traveller:10][Upgradable:4/4-0][CraftAmount:2]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/144-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/3-0]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -103,19 +103,19 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:0-30/60-50][UpgradeID:0-1][Profit:-20][Traveller:25][Upgradable:4/64-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:0-30/60-50][UpgradeID:0-1][Profit:-20][Traveller:25][Upgradable:5/5-0]</Value>
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_Player][Size:7-8][Base:0-5-7-3][Entrance:3-6-1-2][LightID:3-30-86/3-80-86][Upgrade_1:55-10/60-10][Upgrade_2:55-20/60-20][ReqItems:55-5/60-5][Home][Upgradable:0/0-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:House_Player][Size:7-8][Base:0-5-7-3][Entrance:3-6-1-2][LightID:3-30-86/3-80-86][Upgrade_1:55-10/60-10][Upgrade_2:55-20/60-20][ReqItems:55-5/60-5][Home][Upgradable:0/0-0]</Value>
     </Item>
     <Item>
       <Key>27</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Coop][Size:5-5][Base:0-3-5-2][Entrance:2-3-1-2][ReqItems:60-30][MaxAnimals:5][Upgradable:6/96-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Coop][Size:5-5][Base:0-3-5-2][Entrance:2-3-1-2][ReqItems:60-30][MaxAnimals:5][Upgradable:6/7-0]</Value>
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/32-0-16-16][CraftAmount:3]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/2-0][CraftAmount:3]</Value>
     </Item>
     <Item>
       <Key>29</Key>
@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:MagicShop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:1-10/68-20/205-20/199-1][UpgradeID:0-1][Upgradable:8/128-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:MagicShop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:1-10/68-20/205-20/199-1][UpgradeID:0-1][Upgradable:8/9-0]</Value>
     </Item>
     <Item>
       <Key>32</Key>
@@ -143,7 +143,7 @@
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40/60-20/188][LightID:3-30-86/3-80-86][Upgradable:7/112-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40/60-20/188][LightID:3-30-86/3-80-86][Upgradable:7/8-0]</Value>
     </Item>
     <Item>
       <Key>36</Key>
@@ -159,7 +159,7 @@
     </Item>
     <Item>
       <Key>39</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Carpenter][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][UpgradeID:2][Upgradable:1/16-0-16-16][CraftAmount:30]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Carpenter][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][UpgradeID:2][Upgradable:1/1-0][CraftAmount:30]</Value>
     </Item>
     <Item>
       <Key>40</Key>
@@ -415,7 +415,7 @@
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>[Type:Plant][Tool:Scythe][States:3][Time:2/3][Image:0-6/1-5/2-5][Size:1-1/1-2/2-2][Base:0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T][DrawUnder:F/F/F][ItemID:61-0-1/61-0-2/61-0-3][BaseOffset: 0-0/0-0/8-0][Spread:5/1][NoWater]</Value>
+      <Value>[Type:Plant][Tool:Scythe][States:3][Time:2/3][Image:0-6/1-5/2-5][Size:1-1/1-2/2-2][Base:0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T][DrawUnder:F/F/F][ItemID:61-0-1/61-0-2/61-0-3][BaseOffset: 0-0/0-0/8-0][Spread:1/1][NoWater]</Value>
     </Item>
     <Item>
       <Key>104</Key>
@@ -591,7 +591,7 @@
     </Item>
     <Item>
       <Key>147</Key>
-      <Value>[Type:Plant][Image:12-3/2][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:0-2-3-0.1][States:1][Spread:10/1][NoWater]</Value>
+      <Value>[Type:Plant][Image:12-3/2][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:0-2-3-0.1][States:1][Spread:2/1][NoWater]</Value>
     </Item>
     <Item>
       <Key>148</Key>
@@ -679,7 +679,7 @@
     </Item>
     <Item>
       <Key>169</Key>
-      <Value>[Type:Buildable][Subtype:Field][Image:7-52][Size:7-5][Base:0-1-7-4][ReqItems:66-10/61-20][SubObjects:170-0-0/171-16-0/172-96-0/173-16-48][ItemID:154-101][Special:5/2/48-43][Upgradable:5/80-0-16-16]</Value>
+      <Value>[Type:Buildable][Subtype:Field][Image:7-52][Size:7-5][Base:0-1-7-4][ReqItems:66-10/61-20][SubObjects:170-0-0/171-16-0/172-96-0/173-16-48][ItemID:154-101][Special:5/2/48-43][Upgradable:5/6-0]</Value>
     </Item>
     <Item>
       <Key>170</Key>

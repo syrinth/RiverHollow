@@ -25,12 +25,13 @@ namespace RiverHollow.GUIComponents.MainObjects
         private void ShowBuildingUpgrades()
         {
             CleanTabWindow();
-            ShowTabPage(new HUDTownHallUpgradePage(_winMain));
+            ShowTabPage(new HUDTownHallBuildingUpgradePage(_winMain));
         }
 
         private void ShowTownUpgrades()
         {
             CleanTabWindow();
+            ShowTabPage(new HUDTownHallGlobalUpgradePage(_winMain));
         }
     }
 }

@@ -13,7 +13,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
     {
         readonly Building _building;
 
-        List<GUIIconText> _liIcons;
+        readonly List<GUIIconText> _liIcons;
 
         Dictionary<int, int> _diUpgradeItems;
         int _iCost;
@@ -95,39 +95,25 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         btn.Enable(false);
                     }
 
-                    string bonusValue = string.Empty;
-                    Rectangle drawRect = new Rectangle();
-                    GameIconEnum icon = GameIconEnum.None;
+                    var upgradeList = new List<GUIIconText>();
+                    if (nextUpgrade.Chance > 0)
+                    {
+                        AddNewUpgrade(ref upgradeList, GameIconEnum.Traveler, GUIUtils.ICON_TRAVELER, nextUpgrade.Chance.ToString());
+                    }
                     if (nextUpgrade.Profit > 0)
                     {
-                        icon = GameIconEnum.Coin;
-                        drawRect = GUIUtils.ICON_COIN;
-                        bonusValue = nextUpgrade.Profit.ToString();
+                        AddNewUpgrade(ref upgradeList, GameIconEnum.Coin, GUIUtils.ICON_COIN, nextUpgrade.Profit.ToString());
                     }
-                    else if (nextUpgrade.Chance > 0)
+                    if (nextUpgrade.CraftAmount > 0)
                     {
-                        icon = GameIconEnum.Traveler;
-                        drawRect = GUIUtils.ICON_TRAVELER;
-                        bonusValue = nextUpgrade.Chance.ToString();
+                        AddNewUpgrade(ref upgradeList, GameIconEnum.Hammer, GUIUtils.ICON_HAMMER, nextUpgrade.CraftAmount.ToString());
                     }
-                    else if (nextUpgrade.CraftAmount > 0)
+                    if (nextUpgrade.FormulaLevel > 0)
                     {
-                        icon = GameIconEnum.Hammer;
-                        drawRect = GUIUtils.ICON_HAMMER;
-                        bonusValue = nextUpgrade.CraftAmount.ToString();
-                    }
-                    else if (nextUpgrade.FormulaLevel > 0)
-                    {
-                        icon = GameIconEnum.Book;
-                        drawRect = GUIUtils.ICON_BOOK;
-                        bonusValue = nextUpgrade.FormulaLevel.ToString();
+                        AddNewUpgrade(ref upgradeList, GameIconEnum.Book, GUIUtils.ICON_BOOK, nextUpgrade.FormulaLevel.ToString());
                     }
 
-                    var bonusIcon = new GUIIconText(bonusValue, 1, drawRect, icon, SideEnum.Right, SideEnum.CenterY);
-                    bonusIcon.CenterOnObject(_winMain);
-                    bonusIcon.AnchorToObject(scroll, SideEnum.Bottom, 3);
-
-                    _liIcons.Add(bonusIcon);
+                    GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(upgradeList), _winMain, scroll, 16, 8);
 
                     List<GUIItemBox> list = new List<GUIItemBox>();
                     foreach (KeyValuePair<int, int> kvp in upgradeItems)
@@ -160,6 +146,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     _winMain.AddControl(upgradeText);
                 }
             }
+        }
+        
+        private void AddNewUpgrade(ref List<GUIIconText> upgradeList, GameIconEnum e, Rectangle iconRect, string value)
+        {
+            upgradeList.Add(new GUIIconText(value, 1, iconRect, e, SideEnum.Right, SideEnum.CenterY));
         }
 
         private void Upgrade()

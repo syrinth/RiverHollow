@@ -3,15 +3,19 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Cost:200][ItemID:60-10][Profit:15][Chance:10]</Value>
+      <Value>[Type:Building][Cost:200][ItemID:60-40][Profit:15][Chance:10]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Cost:300][ItemID:60-10][Profit:15]</Value>
+      <Value>[Type:Building][Cost:300][ItemID:60-10][Profit:15]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Cost:200][ItemID:55-10/60-10/37-5][Formula:2]</Value>
+      <Value>[Type:Building][Cost:200][ItemID:55-10/60-10/37-5][Formula:2]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Type:Global][Icon:0-5][Cost:200][ItemID:170-3/230-3/57-3][RemoveObjectID:mapFoothills_Small-9]</Value>
     </Item>
   </Asset>
 </XnaContent>

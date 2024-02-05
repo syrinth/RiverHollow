@@ -267,18 +267,25 @@ namespace RiverHollow.SpriteAnimations
                 }
                 else
                 {
-                    int newFrameCutoff = (int)(FrameCutoff * _iScale);
-                    int drawAtY = (int)this.Position.Y;
-                    Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
-
-                    //This is used for lopping off the top part of a sprite,specifically for hair for hats
-                    if (FrameCutoff != 0)
+                    if (_texture != null)
                     {
-                        drawAtY += newFrameCutoff;
-                        drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
-                    }
+                        int newFrameCutoff = (int)(FrameCutoff * _iScale);
+                        int drawAtY = (int)this.Position.Y;
+                        Rectangle drawThis = CurrentFrameAnimation.FrameRectangle;
 
-                    spriteBatch.Draw(_texture, new Rectangle(Position.X, drawAtY, Width, Height - newFrameCutoff), drawThis, SpriteColor * alpha);
+                        //This is used for lopping off the top part of a sprite,specifically for hair for hats
+                        if (FrameCutoff != 0)
+                        {
+                            drawAtY += newFrameCutoff;
+                            drawThis = new Rectangle(drawThis.X, FrameCutoff, drawThis.Width, drawThis.Height - FrameCutoff);
+                        }
+
+                        spriteBatch.Draw(_texture, new Rectangle(Position.X, drawAtY, Width, Height - newFrameCutoff), drawThis, SpriteColor * alpha);
+                    }
+                    else
+                    {
+                        ErrorManager.TrackError();
+                    }
                 }
             }
         }
@@ -310,10 +317,17 @@ namespace RiverHollow.SpriteAnimations
         /// <param name="layerDepth">At what depth to draw the image, 0 is at the bottom.</param>
         private void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Rectangle sourceRectangle, float visibility = 1.0f, float layerDepth = 0)
         {
-            Rectangle rotationalRect = destinationRectangle;
-            rotationalRect.X += (int)_vRotationOrigin.X;
-            rotationalRect.Y += (int)_vRotationOrigin.Y;
-            spriteBatch.Draw(_texture, rotationalRect, CurrentFrameAnimation.FrameRectangle, SpriteColor * visibility, _fRotationAngle, _vRotationOrigin, CurrentFrameAnimation.Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            if (_texture != null)
+            {
+                Rectangle rotationalRect = destinationRectangle;
+                rotationalRect.X += (int)_vRotationOrigin.X;
+                rotationalRect.Y += (int)_vRotationOrigin.Y;
+                spriteBatch.Draw(_texture, rotationalRect, CurrentFrameAnimation.FrameRectangle, SpriteColor * visibility, _fRotationAngle, _vRotationOrigin, CurrentFrameAnimation.Flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            }
+            else
+            {
+                ErrorManager.TrackError();
+            }
         }
 
         /// <summary>

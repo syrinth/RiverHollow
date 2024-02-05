@@ -13,28 +13,21 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 {
     internal class HUDTownHallOverview : GUIObject
     {
-
         public HUDTownHallOverview(GUIWindow mainWindow)
         {
             var townScore = new GUIText("Town Score: " + TownManager.GetTownScore());
             townScore.AnchorToInnerSide(mainWindow, SideEnum.Top);
 
-            int plantcount = 0;
-            foreach (KeyValuePair<int, List<WorldObject>> kvp in TownManager.GetTownObjects())
-            {
-                switch (kvp.Value[0].Type)
-                {
-                    case ObjectTypeEnum.Plant:
-                        plantcount += kvp.Value.Count;
-                        break;
-                }
-            }
+            var goodsSold = new GUIText(string.Format("Goods Sold: " + TownManager.ValueGoodsSold));
+            goodsSold.AnchorToInnerSide(mainWindow, SideEnum.TopLeft);
+            goodsSold.MoveBy(0, townScore.Height);
+            goodsSold.ScaledMoveBy(0, 10);
 
-            var buildings = new GUIText(string.Format("Buildings: 0"));
-            buildings.AnchorAndAlignWithSpacing(townScore, SideEnum.Bottom, SideEnum.Left, 10);
+            var enemiesDefeated = new GUIText(string.Format("Enemies Defeated: " + TownManager.TotalDefeatedMobs));
+            enemiesDefeated.AnchorAndAlignWithSpacing(goodsSold, SideEnum.Bottom, SideEnum.Left, 10);
 
-            var plants = new GUIText(string.Format("Plants: {0}", plantcount));
-            plants.AnchorAndAlignWithSpacing(buildings, SideEnum.Bottom, SideEnum.Left, 10);
+            var plantsGrown = new GUIText(string.Format("Plants Grown: " + TownManager.PlantsGrown));
+            plantsGrown.AnchorAndAlignWithSpacing(enemiesDefeated, SideEnum.Bottom, SideEnum.Left, 10);
         }
     }
 }

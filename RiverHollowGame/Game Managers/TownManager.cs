@@ -30,6 +30,7 @@ namespace RiverHollow.Game_Managers
         public static Mailbox TownMailbox { get; private set; }
         #endregion
 
+        private static Dictionary<int, Upgrade> _diGlobalUpgrades;
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
@@ -120,6 +121,8 @@ namespace RiverHollow.Game_Managers
                     DIMobInfo[kvp.Key] = 0;
                 }
             }
+
+            _diGlobalUpgrades = DataManager.GetGlobalUpgrades();
         }
 
         public static void NewGame()
@@ -199,12 +202,39 @@ namespace RiverHollow.Game_Managers
             SpawnTravelers();
 
             RolloverMailbox();
+
+            foreach(var upgrade in _diGlobalUpgrades.Values)
+            {
+                if(upgrade.Status == UpgradeStatusEnum.InProgress)
+                {
+                    upgrade.TriggerUpgrade();
+                }
+            }
         }
 
         public static void AddAnimal(Animal npc)
         {
             TownAnimals.Add(npc);
             npc.MoveToSpawn();
+        }
+
+        public static IReadOnlyDictionary<int, Upgrade> GetAllUpgrades()
+        {
+            return _diGlobalUpgrades;
+        }
+        public static Upgrade GetGlobalUpgrade(int upgradeID)
+        {
+            return _diGlobalUpgrades[upgradeID];
+        }
+        public static void UnlockUpgrade(int upgradeID)
+        {
+            if (_diGlobalUpgrades[upgradeID].Status == UpgradeStatusEnum.Locked)
+            {
+                _diGlobalUpgrades[upgradeID].ChangeStatus(UpgradeStatusEnum.Unlocked);
+                GUIManager.OpenTextWindow(string.Format("Upgrade_{0}", upgradeID));
+
+                GUIManager.NewAlertIcon("Alert_Upgrade");
+            }
         }
 
         #region Traveler Code
@@ -278,7 +308,7 @@ namespace RiverHollow.Game_Managers
 
         private static void MakeGroup(ref List<Traveler> travelerList, int successChance, TravelerGroupEnum group)
         {
-            int chainSuccess = (int)(successChance * 1.5f);
+            int chainSuccess = successChance;
             do
             {
                 if (RHRandom.Instance().RollPercent(chainSuccess))
@@ -552,6 +582,7 @@ namespace RiverHollow.Game_Managers
                 TravelerData = new List<TravelerData>(),
                 CodexEntries = new List<CodexEntryData>(),
                 MobInfo = new List<ValueTuple<int, int>>(),
+                GlobalUpgrades = new List<ValueTuple<int, int>>(),
                 GoodsSold = new List<ValueTuple<int, int>>(),
                 MailboxSent = new List<string>(),
                 MailboxUnsent = new List<string>(),
@@ -606,7 +637,12 @@ namespace RiverHollow.Game_Managers
                 data.MobInfo.Add(new ValueTuple<int, int>(kvp.Key, kvp.Value));
             }
 
-            foreach(ItemGroupEnum e in _diGoodsSold.Keys)
+            foreach (var kvp in _diGlobalUpgrades)
+            {
+                data.GlobalUpgrades.Add(new ValueTuple<int, int>(kvp.Key, (int)kvp.Value.Status));
+            }
+
+            foreach (ItemGroupEnum e in _diGoodsSold.Keys)
             {
                 data.GoodsSold.Add(new ValueTuple<int, int>((int)e, _diGoodsSold[e]));
             }
@@ -627,10 +663,12 @@ namespace RiverHollow.Game_Managers
 
             PlantsGrown = saveData.plantsGrown;
             ValueGoodsSold = saveData.goodsSoldValue;
+
             foreach (var tpl in saveData.GoodsSold)
             {
                 _diGoodsSold[(ItemGroupEnum)tpl.Item1] = tpl.Item2;
             }
+
             saveData.Travelers.ForEach(x => AddTraveler(x));
             var unsentMessages = new List<string>(_diMailbox[MailboxEnum.Unsent]);
             foreach(var messageID in unsentMessages)
@@ -682,6 +720,11 @@ namespace RiverHollow.Game_Managers
             {
                 DIMobInfo[tpl.Item1] = tpl.Item2;
                 TotalDefeatedMobs += tpl.Item2;
+            }
+
+            foreach (var tpl in saveData.GlobalUpgrades)
+            {
+                GetGlobalUpgrade(tpl.Item1).ChangeStatus((UpgradeStatusEnum)tpl.Item2);
             }
 
             _bTravelersCame = saveData.travelersCame;

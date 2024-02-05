@@ -246,6 +246,11 @@ namespace RiverHollow.WorldObjects
                 rv = true;
                 GUIManager.OpenTextWindow("Selection_Bed");
             }
+            if (GetBoolByIDKey("UnlockUpgradeID"))
+            {
+                rv = true;
+                TownManager.UnlockUpgrade(GetIntByIDKey("UnlockUpgradeID"));
+            }
 
             return rv;
         }
@@ -445,6 +450,7 @@ namespace RiverHollow.WorldObjects
         }
 
         public virtual bool CanPickUp() { return false; }
+        public virtual bool HasInteract() { return GetBoolByIDKey("UnlockUpgradeID"); }
 
         public void InitiateMove(Vector2 newMovement)
         {

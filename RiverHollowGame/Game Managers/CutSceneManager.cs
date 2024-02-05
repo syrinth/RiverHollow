@@ -377,7 +377,7 @@ namespace RiverHollow.Game_Managers
                         {
                             if (currentCommand.Command == CutsceneCommandEnum.ItemID && TownManager.DIVillagers[_liUsedNPCs[0].ID].HasHeldItems())
                             {
-                                GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Inventory").GetFormattedText(), Color.Red);
+                                GUIManager.NewAlertIcon("Alert_Inventory", Color.Red);
                             }
                             _iCurrentCommand++;
                         }
@@ -670,7 +670,7 @@ namespace RiverHollow.Game_Managers
 
                     if (currentCommand.Command == CutsceneCommandEnum.ItemID && TownManager.DIVillagers[_liUsedNPCs[0].ID].HasHeldItems())
                     {
-                        GUIManager.NewAlertIcon(DataManager.GetGameTextEntry("Alert_Inventory").GetFormattedText(), Color.Red);
+                        GUIManager.NewAlertIcon("Alert_Inventory", Color.Red);
                     }
 
                     //After all command tags have been processed, set the

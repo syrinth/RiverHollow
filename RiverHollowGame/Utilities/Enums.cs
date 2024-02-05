@@ -41,7 +41,8 @@
         public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Hoe, StaffOfIce, Sword, WateringCan };
         public enum EquipmentEnum { None, Hat, Shirt, Pants, Neck, Ring };
         public enum NPCTokenTypeEnum { Mount, Pet };
-        public enum CraftFilterEnum { All };
+        public enum UpgradeTypeEnum { Building, Global };
+        public enum UpgradeStatusEnum { Locked, Unlocked, InProgress, Completed };
 
         public enum ActorStateEnum { Climb, Grab, Swim, Walk };
         public enum ActorCollisionState { Block, Slow, PassThrough };
