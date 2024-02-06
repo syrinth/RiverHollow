@@ -1665,6 +1665,7 @@ namespace RiverHollow.Map_Handling
                             {
                                 PlayerManager.FaceCursor();
                                 PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.WateringCan));
+                                rv = true;
                             }
                             else if (obj != null && obj.Tiles.Any(x => PlayerManager.InRangeOfPlayer(x.CollisionBox)))
                             {
@@ -1674,6 +1675,7 @@ namespace RiverHollow.Map_Handling
                             {
                                 PlayerManager.FaceCursor();
                                 PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.FishingRod));
+                                rv = true;
                             }
                         }
                     }
@@ -1939,7 +1941,15 @@ namespace RiverHollow.Map_Handling
                     {
                         rv = TownPlaceSeed(plantObj);
                     }
-                    SoundManager.PlayEffect(rv ? SoundEffectEnum.Thump : SoundEffectEnum.Cancel);
+
+                    if (rv)
+                    {
+                        SoundManager.PlayEffect(SoundEffectEnum.Thump);
+                    }
+                    else if (InputManager.ButtonHeld)
+                    {
+                        SoundManager.PlayEffect(SoundEffectEnum.Cancel);
+                    }
                 }
                 else if (GameManager.HeldObject == null && MouseTile != null)
                 {

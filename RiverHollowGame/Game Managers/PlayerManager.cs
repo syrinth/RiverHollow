@@ -164,6 +164,8 @@ namespace RiverHollow.Game_Managers
             PlayerActor = new PlayerCharacter();
             CurrentEnergy = MaxEnergy();
             CurrentMagic = MaxMagic();
+
+            FinishedWithTool();
         }
 
         public static void NewPlayer()

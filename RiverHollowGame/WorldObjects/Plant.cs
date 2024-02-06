@@ -121,7 +121,7 @@ namespace RiverHollow.WorldObjects
 
             if (NeededTool != ToolEnum.None)
             {
-                base.ProcessLeftClick();
+                rv = base.ProcessLeftClick();
             }
             else if (FinishedGrowing() && HP > 0)
             {

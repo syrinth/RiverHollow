@@ -94,6 +94,7 @@ namespace RiverHollow.WorldObjects
                 Tool playerTool = PlayerManager.RetrieveTool(NeededTool);
                 if (HP > 0 && playerTool != null && playerTool.IsAutomatic)
                 {
+                    rv = true;
                     PlayerManager.FaceCursor();
                     PlayerManager.SetTool(playerTool);
                 }

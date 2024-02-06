@@ -13,6 +13,7 @@ namespace RiverHollow.Game_Managers
         private static Dictionary<Keys, bool> _diKeysDown;
         private static MouseState _lastMouseState = new MouseState();
         private static RHTimer _mouseTimer;
+        public static bool ButtonHeld = _mouseTimer != null;
 
         public static void Load()
         {
@@ -55,7 +56,6 @@ namespace RiverHollow.Game_Managers
                         else if (_mouseTimer.Finished())
                         {
                             interval = true;
-                            _mouseTimer.Reset();
                             return true;
                         }
                     }
@@ -127,6 +127,11 @@ namespace RiverHollow.Game_Managers
             }
 
             return rv;
+        }
+
+        public static void ConsumeHeldButton()
+        {
+            _mouseTimer.Reset();
         }
 
         private static bool IsLetter(Keys k) { return k >= Keys.A && k <= Keys.Z; }

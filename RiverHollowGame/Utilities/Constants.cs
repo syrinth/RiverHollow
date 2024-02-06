@@ -14,7 +14,7 @@ namespace RiverHollow.Utilities
 #endif
         public const int PLAYER_ADJACENCY_SIZE = TILE_SIZE / 2;
         public const int GRAB_REACH = 1;
-        public const float MOUSE_PRESS_INTERVAL = 0.5f;
+        public const float MOUSE_PRESS_INTERVAL = 0.4f;
 
         public const string TOWN_MAP_NAME = "mapTown";
         public const string INN_MAP_NAME = "mapInn";

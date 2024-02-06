@@ -224,7 +224,8 @@ namespace RiverHollow.WorldObjects
                 {
                     alpha = 0.9f;
                 }
-                Sprite.Draw(spriteBatch, true, alpha);
+                int mod = GameManager.HeldObject == this ? 1 : 0;
+                Sprite.Draw(spriteBatch, true, alpha, Sprite.LayerDepth + mod);
             }
             if (Constants.DRAW_COLLISION)
             {
