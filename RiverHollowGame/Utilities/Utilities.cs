@@ -801,9 +801,13 @@ namespace RiverHollow.Utilities
             return rv;
         }
 
-        public static DirectionEnum GetDirectionOf(Point start, Point directionOf)
+        public static DirectionEnum GetDirectionFromPlayer(Point focus)
         {
-            Point diff = start - PlayerManager.PlayerActor.Center;
+            return GetOppositeDirection(GetPlayerDirRelativeTo(focus));
+        }
+        public static DirectionEnum GetPlayerDirRelativeTo(Point focus)
+        {
+            Point diff = focus - PlayerManager.PlayerActor.Center;
 
             DirectionEnum rv;
             if (Math.Abs(diff.X) > Math.Abs(diff.Y))

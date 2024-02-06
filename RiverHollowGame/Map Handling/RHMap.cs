@@ -1657,6 +1657,13 @@ namespace RiverHollow.Map_Handling
                     {
                         if (TargetTile != null)
                         {
+                            if (!PlayerManager.InRangeOfPlayer(TargetTile.CollisionBox))
+                            {
+                                var playerTile = MapManager.CurrentMap.GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionBox.Center);
+                                var dir = Util.GetDirectionFromPlayer(TargetTile.CollisionBox.Center);
+                                TargetTile = playerTile.GetTileByDirection(dir);
+                            }
+
                             //Retrieves any object associated with the tile, this will include
                             //both actual tiles, and Shadow Tiles because the user sees Shadow Tiles
                             //as being on the tile.

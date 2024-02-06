@@ -214,7 +214,7 @@ namespace RiverHollow.Characters
             //Only do this if they are idle so as to not disturb other animations they may be performing.
             if (facePlayer && BodySprite.CurrentAnimation.StartsWith("Idle"))
             {
-                SetFacing(Util.GetDirectionOf(Center, PlayerManager.PlayerActor.Center));
+                SetFacing(Util.GetPlayerDirRelativeTo(Center));
                 PlayAnimationVerb(VerbEnum.Idle);
             }
         }

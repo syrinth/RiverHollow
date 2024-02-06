@@ -141,7 +141,7 @@ namespace RiverHollow.WorldObjects
         protected void NudgeObject(bool playEffect)
         {
             //Nudge the Object in the direction of the 'attack'
-            Point nudgePoint = Util.GetPointFromDirection(Util.GetOppositeDirection(Util.GetDirectionOf(CollisionCenter, PlayerManager.PlayerActor.Center)));
+            Point nudgePoint = Util.GetPointFromDirection(Util.GetDirectionFromPlayer(CollisionCenter));
             Sprite.Position = new Point(Sprite.Position.X + nudgePoint.X, Sprite.Position.Y + nudgePoint.Y);
 
             if (playEffect)
