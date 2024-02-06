@@ -231,7 +231,8 @@ namespace RiverHollow.Game_Managers
 
             if (Defeated())
             {
-                if(_timer == null)
+                PlayerActor.DamageTimerEnd();
+                if (_timer == null)
                 {
                     _timer = new RHTimer(2);
                 }

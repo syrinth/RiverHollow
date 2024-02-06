@@ -79,6 +79,7 @@ namespace RiverHollow.Characters
             {
                 if (BodySprite.AnimationFinished(AnimationEnum.KO))
                 {
+                    DamageTimerEnd();
                     DropLoot();
                     CurrentMap.RemoveActor(this);
                     TaskManager.AdvanceTaskProgress(this);
@@ -297,12 +298,6 @@ namespace RiverHollow.Characters
         /// <returns>The list of items to be given to the player</returns>
         public void DropLoot()
         {
-            int noLoot = GetIntByIDKey("NoDropChance", Constants.MOB_NO_DROP_CHANCE);
-            if (RHRandom.Instance().RollPercent(noLoot))
-            {
-                return;
-            }
-
             var lootDictionary = new Dictionary<RarityEnum, List<int>>();
 
             foreach (string s in LootData)    

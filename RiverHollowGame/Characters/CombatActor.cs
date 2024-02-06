@@ -64,7 +64,7 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        protected void DamageTimerEnd()
+        public void DamageTimerEnd()
         {
             _damageTimer = null;
             _flickerTimer = null;
@@ -117,7 +117,6 @@ namespace RiverHollow.Characters
         protected virtual void Kill()
         {
             _vKnockbackVelocity = Vector2.Zero;
-            DamageTimerEnd();
             PlayAnimation(AnimationEnum.KO);
         }
 
@@ -162,7 +161,7 @@ namespace RiverHollow.Characters
             }
             if(initial != dir && !HasHP)
             {
-                Kill();
+                _vKnockbackVelocity = Vector2.Zero;
             }
 
             KnockbackDecay();
