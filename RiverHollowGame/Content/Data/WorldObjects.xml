@@ -415,7 +415,7 @@
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>[Type:Plant][Tool:Scythe][States:3][Time:2/3][Image:0-6/1-5/2-5][Size:1-1/1-2/2-2][Base:0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T][DrawUnder:F/F/F][ItemID:61-0-1/61-0-2/61-0-3][BaseOffset: 0-0/0-0/8-0][Spread:1/1][NoWater]</Value>
+      <Value>[Type:Plant][Tool:Sword][States:3][Time:2/3][Image:0-6/1-5/2-5][Size:1-1/1-2/2-2][Base:0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T][DrawUnder:F/F/F][ItemID:61-0-1/61-0-2/61-0-3][BaseOffset: 0-0/0-0/8-0][Spread:1/1][NoWater]</Value>
     </Item>
     <Item>
       <Key>104</Key>
@@ -591,7 +591,7 @@
     </Item>
     <Item>
       <Key>147</Key>
-      <Value>[Type:Plant][Image:12-3/2][Tool:Scythe][Hp:1][ReqLvl:1][DestructionAnim:0-2-3-0.1][States:1][Spread:2/1][NoWater]</Value>
+      <Value>[Type:Plant][Image:12-3/2][Tool:Sword][Hp:1][ReqLvl:1][DestructionAnim:0-2-3-0.1][States:1][Spread:2/1][NoWater]</Value>
     </Item>
     <Item>
       <Key>148</Key>

@@ -55,6 +55,7 @@ namespace RiverHollow.Utilities
         public const int MAX_STACK_SIZE = 999;
         public const float ITEM_BOUNCE_SPEED = 0.2f;
 
+        public const int SOUND_MAX_SAME_SOUND = 3;
 
         public const int CALENDAR_DAYS_IN_MONTH = 28;
         public const int CALENDAR_MINUTES_PER_SECOND = 1;

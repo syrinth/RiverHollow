@@ -21,6 +21,15 @@ namespace RiverHollow.Items.Tools
 
                 RHMap map = MapManager.CurrentMap;
                 map.TestHitboxOnMobs(this);
+
+                var tiles = map.GetTilesFromRectangleIncludeEdgePoints(Hitbox);
+                tiles.AddRange(map.GetTilesFromRectangleIncludeEdgePoints(PlayerManager.PlayerActor.CollisionBox));
+
+                var areaTiles = tiles.FindAll(x => x != null && x.CollisionBox.Intersects(Hitbox));
+                foreach (var t in areaTiles)
+                {
+                    t.DamageObject(this);
+                }
             }
 
             if (CheckFinishTool(dir))

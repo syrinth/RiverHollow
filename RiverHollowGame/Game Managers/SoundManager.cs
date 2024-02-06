@@ -36,10 +36,11 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Song> _diSongs;
         static Dictionary<string, SoundEffect> _diEffects;
         static Dictionary<object, EffectData> _diCurrentEffects;
+        static List<EffectData> _liCurrentEffects;
 
         static Song BackgroundSong => MediaPlayer.Queue.ActiveSong;
 
-        delegate bool UnneededEffectTestDel(KeyValuePair<object, EffectData> kvp);
+        delegate bool UnneededEffectTestDel(EffectData kvp);
 
         public static void LoadContent(ContentManager Content)
         {
@@ -47,6 +48,7 @@ namespace RiverHollow.Game_Managers
             _diSongs = new Dictionary<string, Song>();
             _diEffects = new Dictionary<string, SoundEffect>();
             _diCurrentEffects = new Dictionary<object, EffectData>();
+            _liCurrentEffects = new List<EffectData>();
 
             MediaPlayer.Volume = MusicVolume;
             foreach (string s in Directory.GetFiles(SONG_FOLDER)) { AddSong(Content, s); }
@@ -93,36 +95,42 @@ namespace RiverHollow.Game_Managers
 
         private static void ClearUnneededEffects(UnneededEffectTestDel test)
         {
-            List<object> toRemove = new List<object>();
-            foreach (KeyValuePair<object, EffectData> kvp in _diCurrentEffects)
+            var diCopy = new List<object>(_diCurrentEffects.Keys);
+            foreach (var key in diCopy)
             {
-                if (test(kvp))
+                var value = _diCurrentEffects[key];
+                if (test(value))
                 {
-                    kvp.Value.SoundEffect.Stop();
-                    toRemove.Add(kvp.Key);
+                    value.SoundEffect.Stop();
+                    _diCurrentEffects.Remove(key);
                 }
             }
 
-            foreach (object o in toRemove)
+            var copy = new List<EffectData>(_liCurrentEffects);
+            foreach (var obj in copy)
             {
-                _diCurrentEffects.Remove(o);
+                if (test(obj))
+                {
+                    obj.SoundEffect.Stop();
+                    _liCurrentEffects.Remove(obj);
+                }
             }
         }
 
-        private static bool TestPlaying(KeyValuePair<object, EffectData> kvp)
+        private static bool TestPlaying(EffectData obj)
         {
             bool rv = false;
-            if (kvp.Value.SoundEffect.State != SoundState.Playing)
+            if (obj.SoundEffect.State != SoundState.Playing)
             {
                 rv = true;
             }
 
             return rv;
         }
-        private static bool TestCurrentMap(KeyValuePair<object, EffectData> kvp)
+        private static bool TestCurrentMap(EffectData obj)
         {
             bool rv = false;
-            if (kvp.Value.MapName != MapManager.CurrentMap.Name)
+            if (obj.MapName != MapManager.CurrentMap.Name)
             {
                 rv = true;
             }
@@ -268,12 +276,21 @@ namespace RiverHollow.Game_Managers
         {
             if (data.SoundEffect != null && (data.EffectObject == null || !_diCurrentEffects.ContainsKey(data.EffectObject)))
             {
-                data.SoundEffect.IsLooped = loop;
-                data.SoundEffect.Play();
-
+                bool playIt = true;
                 if (data.EffectObject != null)
                 {
                     _diCurrentEffects[data.EffectObject] = data;
+                }
+                else if (_liCurrentEffects.Where(x => x.EffectName.Equals(data.EffectName)).Count() < Constants.SOUND_MAX_SAME_SOUND)
+                {
+                    _liCurrentEffects.Add(data);
+                }
+                else { playIt = false; }
+
+                if (playIt)
+                {
+                    data.SoundEffect.IsLooped = loop;
+                    data.SoundEffect.Play();
                 }
             }
         }
@@ -383,10 +400,9 @@ namespace RiverHollow.Game_Managers
 
         private class EffectData
         {
-            object _obj;
-            public object EffectObject => _obj;
-            string _sMapName;
-            public string MapName => _sMapName;
+            public object EffectObject { get; private set; }
+            public string EffectName { get; private set; }
+            public string MapName { get; private set; }
             public Point Position { get; private set; }
             SoundEffectInstance _instance;
             public SoundEffectInstance SoundEffect => _instance;
@@ -395,8 +411,9 @@ namespace RiverHollow.Game_Managers
 
             public EffectData(string mapName, string effectName, object obj, float volume)
             {
-                _sMapName = mapName;
-                _obj = obj;
+                MapName = mapName;
+                EffectObject = obj;
+                EffectName = effectName;
                 _fVolume = volume;
 
                 if (_diEffects.ContainsKey(effectName))
