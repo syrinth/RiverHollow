@@ -147,11 +147,22 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
                             if (!obj.IsDirectBuild())
                             {
-                                if (InventoryManager.HasSpaceInInventory(objID, 1) && InventoryManager.ExpendResources(requiredToMake))
+                                if (!InventoryManager.HasSufficientItems(requiredToMake))
                                 {
-                                    InventoryManager.AddToInventory(DataManager.GetItem(obj));
-                                    SetupCraftingWindows();
-                                    SoundManager.PlayEffect(SoundEffectEnum.Thump);
+                                    GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_MISSING);
+                                }
+                                else
+                                {
+                                    if (InventoryManager.HasSpaceInInventory(objID, 1) && InventoryManager.ExpendResources(requiredToMake))
+                                    {
+                                        InventoryManager.AddToInventory(DataManager.GetItem(obj));
+                                        SetupCraftingWindows();
+                                        SoundManager.PlayEffect(SoundEffectEnum.Thump);
+                                    }
+                                    else
+                                    {
+                                        GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
+                                    }
                                 }
                             }
                             else

@@ -276,7 +276,7 @@ namespace RiverHollow.Misc
                 
                 SpawnTaskMobs();
 
-                GUIManager.NewAlertIcon("Alert_Task");
+                GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_TASK);
             }
         }
 
@@ -444,6 +444,7 @@ namespace RiverHollow.Misc
                         GoalNPC.AssignItemToNPC(i.ID, i.Number);
                     }
                 }
+                GoalNPC.CheckInventoryAlert();
 
                 PlayerManager.AddMoney(RewardMoney);
 
@@ -471,7 +472,7 @@ namespace RiverHollow.Misc
                 ActivateNPCs();
 
                 TaskManager.TaskLog.Remove(this);
-                GUIManager.NewAlertIcon("Alert_Finished");
+                GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_FINISHED);
             }
         }
 

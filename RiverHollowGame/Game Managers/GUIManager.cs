@@ -236,11 +236,10 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void NewAlertIcon(string textEntryName, Color c)
+        public static void NewWarningAlertIcon(string textEntryName)
         {
-            CurrentScreen.NewAlertIcon(textEntryName, c);
-        }
-        public static void NewAlertIcon(string textEntryName) {
+            CurrentScreen.NewAlertIcon(textEntryName, Color.Red);        }
+        public static void NewInfoAlertIcon(string textEntryName) {
             CurrentScreen.NewAlertIcon(textEntryName, Color.Black);
         }
 

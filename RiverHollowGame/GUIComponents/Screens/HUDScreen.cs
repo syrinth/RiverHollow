@@ -18,7 +18,7 @@ namespace RiverHollow.GUIComponents.Screens
     {
         bool _bTownMode = false;
 
-        List<HUDNewAlert> _liTaskIcons;
+        List<HUDNewAlert> _liAlertIcons;
 
         GUIButton _btnSkipCutscene;
         GUIOldStatDisplay _gHealthDisplay;
@@ -40,7 +40,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             GameManager.CurrentScreen = GameScreenEnum.World;
 
-            _liTaskIcons = new List<HUDNewAlert>();
+            _liAlertIcons = new List<HUDNewAlert>();
             _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.GetHP, Color.Red);
             _gHealthDisplay.AnchorToScreen(SideEnum.TopLeft, 3);
 
@@ -254,17 +254,29 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void NewAlertIcon(string textEntryName, Color c)
         {
-            HUDNewAlert newAlert = new HUDNewAlert(textEntryName, c, RemoveTaskIcon);
+            HUDNewAlert newAlert = new HUDNewAlert(textEntryName, c, RemoveAlertIcon);
 
-            if (_liTaskIcons.Count == 0) { newAlert.AnchorToScreen(SideEnum.Right, 3); }
-            else { newAlert.AnchorAndAlignWithSpacing(_liTaskIcons[_liTaskIcons.Count - 1], SideEnum.Top, SideEnum.Right, 1); }
+            if (_liAlertIcons.Count == 0) { newAlert.AnchorToScreen(SideEnum.Right, 3); }
+            else
+            {
+                var bottomIcon = _liAlertIcons[_liAlertIcons.Count - 1];
 
-            _liTaskIcons.Add(newAlert);
+                if (bottomIcon.Position().Y < RiverHollow.ScreenHeight *.4)
+                {
+                    newAlert.AnchorToScreen(SideEnum.Right, 3);
+                }
+                else
+                {
+                    newAlert.AnchorAndAlignWithSpacing(_liAlertIcons[_liAlertIcons.Count - 1], SideEnum.Bottom, SideEnum.Right, 1);
+                }
+            }
+
+            _liAlertIcons.Add(newAlert);
             AddControl(newAlert);
         }
-        private void RemoveTaskIcon(HUDNewAlert q)
+        private void RemoveAlertIcon(HUDNewAlert q)
         {
-            _liTaskIcons.Remove(q);
+            _liAlertIcons.Remove(q);
             RemoveControl(q);
         }
 
@@ -326,7 +338,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void Update(GameTime gTime)
         {
-            if (Alpha() <= 0) {
+            if (Alpha() <= 0 || Position().Y < 0) {
                 _delAction(this); }
             else
             {

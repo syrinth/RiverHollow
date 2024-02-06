@@ -187,7 +187,7 @@
     </Item>
 	<Item>
       <Key>46</Key>
-      <Value>[Name:Alert_BPS][Text:Blueprints Unlocked]</Value>
+      <Value>[Name:Alert_BPs][Text:Blueprints Unlocked]</Value>
     </Item>
 	<Item>
       <Key>47</Key>
@@ -312,6 +312,14 @@
 	<Item>
       <Key>77</Key>
       <Value>[Name:Alert_Upgrade][Text:New Upgrade Unlocked]</Value>
+    </Item>
+	<Item>
+      <Key>78</Key>
+      <Value>[Name:Alert_Missing][Text:Missing Items]</Value>
+    </Item>
+	<Item>
+      <Key>79</Key>
+      <Value>[Name:Alert_Energy][Text:Not Enough Energy]</Value>
     </Item>
   </Asset>
 </XnaContent>

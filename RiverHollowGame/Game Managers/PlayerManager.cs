@@ -342,7 +342,7 @@ namespace RiverHollow.Game_Managers
 
                 if (displayAlert)
                 {
-                    GUIManager.NewAlertIcon("Alert_BP");
+                    GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_BLUEPRINT);
                 }
             }
 
@@ -358,8 +358,8 @@ namespace RiverHollow.Game_Managers
 
             if (displayAlert)
             {
-                string str = unlocks.Length == 1 ? "Alert_BP" : "Alert_BPS";
-                GUIManager.NewAlertIcon(str);
+                string str = unlocks.Length == 1 ? Constants.STR_ALERT_BLUEPRINT : Constants.STR_ALERT_BLUEPRINTS;
+                GUIManager.NewInfoAlertIcon(str);
             }
         }
         #endregion
@@ -750,6 +750,7 @@ namespace RiverHollow.Game_Managers
                     else
                     {
                         ToolInUse = null;
+                        GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_ENERGY);
                     }
                 }
             }

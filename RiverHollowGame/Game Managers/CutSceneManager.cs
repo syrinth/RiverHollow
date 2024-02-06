@@ -375,9 +375,9 @@ namespace RiverHollow.Game_Managers
                         currentCommand.ActionPerformed = true;
                         if (goToNext)
                         {
-                            if (currentCommand.Command == CutsceneCommandEnum.ItemID && TownManager.DIVillagers[_liUsedNPCs[0].ID].HasHeldItems())
+                            if (currentCommand.Command == CutsceneCommandEnum.ItemID)
                             {
-                                GUIManager.NewAlertIcon("Alert_Inventory", Color.Red);
+                                TownManager.DIVillagers[_liUsedNPCs[0].ID].CheckInventoryAlert();
                             }
                             _iCurrentCommand++;
                         }
@@ -670,7 +670,7 @@ namespace RiverHollow.Game_Managers
 
                     if (currentCommand.Command == CutsceneCommandEnum.ItemID && TownManager.DIVillagers[_liUsedNPCs[0].ID].HasHeldItems())
                     {
-                        GUIManager.NewAlertIcon("Alert_Inventory", Color.Red);
+                        GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
                     }
 
                     //After all command tags have been processed, set the
@@ -708,6 +708,7 @@ namespace RiverHollow.Game_Managers
             else
             {
                 TownManager.DIVillagers[_liUsedNPCs[0].ID].AssignItemToNPC(int.Parse(sCommandData[0]), sCommandData.Length == 1 ? 1 : int.Parse(sCommandData[1]));
+                GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
             }
         }
         private void IntroduceActor(string[] sCommandData)

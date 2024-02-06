@@ -305,10 +305,7 @@ namespace RiverHollow.Misc
                     }
                 }
 
-                if (talker.HasHeldItems())
-                {
-                    GUIManager.NewAlertIcon("Alert_Inventory", Color.Red);
-                }
+                talker.CheckInventoryAlert();
             }
             if (_diTags.ContainsKey("GiveItems"))
             {

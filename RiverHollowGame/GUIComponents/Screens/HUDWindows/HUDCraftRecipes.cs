@@ -19,7 +19,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         GUIImage _gSelection;
         GUIText _gName;
         GUIImage _gScroll;
-        GUIToggle[] _gFilterTabs;
 
         readonly GUIButton _btnLeft;
         readonly GUIButton _btnRight;

@@ -112,5 +112,14 @@ namespace RiverHollow.Utilities
         public const int BUILDABLE_ID_OFFSET = 8000;
 
         internal static Rectangle ITEM_SHADOW = new Rectangle(0, 0, 16, 16);
+
+        public const string STR_ALERT_INVENTORY = "Alert_Inventory";
+        public const string STR_ALERT_MISSING = "Alert_Missing";
+        public const string STR_ALERT_BLUEPRINT = "Alert_BP";
+        public const string STR_ALERT_BLUEPRINTS = "Alert_BPs";
+        public const string STR_ALERT_UPGRADE = "Alert_Upgrade";
+        public const string STR_ALERT_TASK = "Alert_Task";
+        public const string STR_ALERT_FINISHED = "Alert_Finished";
+        public const string STR_ALERT_ENERGY = "Alert_Energy";
     }
 }

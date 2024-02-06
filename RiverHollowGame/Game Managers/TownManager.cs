@@ -233,7 +233,7 @@ namespace RiverHollow.Game_Managers
                 _diGlobalUpgrades[upgradeID].ChangeStatus(UpgradeStatusEnum.Unlocked);
                 GUIManager.OpenTextWindow(string.Format("Upgrade_{0}", upgradeID));
 
-                GUIManager.NewAlertIcon("Alert_Upgrade");
+                GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_UPGRADE);
             }
         }
 

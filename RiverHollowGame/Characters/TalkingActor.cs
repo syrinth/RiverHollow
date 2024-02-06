@@ -347,6 +347,15 @@ namespace RiverHollow.Characters
                 _liHeldItems.RemoveRange(0, lastFound + 1);
             }
         }
+
+        public void CheckInventoryAlert()
+        {
+            //One alert per set of items
+            if (HasHeldItems())
+            {
+                GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
+            }
+        }
         #endregion
     }
 }
