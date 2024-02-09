@@ -3,11 +3,21 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name][Text:So, welcome to the $WorldObject_40$. This is, the heart of any growing city, we wouldn't be anywhere without it.]</Value>
+      <Value>[Name][Text:Planks are in place, now just gotta wait for-]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Name][Text:We've got a stonecutting table and a saw mill. All you need to do is keep the materials coming and I'll turn them into the construction materials we need to build the Villager. I can make 30 of each a day, so keep that chest as stocked as you can.]</Value>
+      <Value>[Name][Text:Well speak of the Devil! Welcome to the $WorldObject_39$, you're gonna be spending some time here. Come on, I'll show you around.]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Name][Text:So I've placed the main things you need to worry about right here. Place any logs you want cut into planks in the bin on the left, and every day when I finish work, I'll place the lumber on the table in front of us. The $WorldObject_92$ is over here...]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name][Text:Like most buildings, we've got a machine here. If you interact with it, you can see what I can make as well as how much I can process in a day.
+	  We're going to need a lot of lumber going forward, so I need you to keep me stocked so we can stay ahead of any building needs we may have.
+	  Oh, and before I forget, you should know I also sell, furniture, and other decorative items for the town.]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -87,7 +87,7 @@
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="18" name="NPC_43" x="96" y="96" width="16" height="16"/>
-  <object id="41" name="Cutscene_Entrance" x="112" y="176" width="16" height="16">
+  <object id="41" name="Start" x="112" y="176" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="92"/>
    </properties>

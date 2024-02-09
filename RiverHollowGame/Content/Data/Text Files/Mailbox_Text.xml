@@ -4,10 +4,11 @@
     <Item>
       <Key>0</Key>
       <Value>[Name:Guild of Merchants Note 1][Text:Hello $Name$. I trust this letter finds you well.
-Hopefully, by the time you read this, you will have done the basic task of setting up a $WorldObject_112$ as our Merchants have been informed of your little settlement.
+Hopefully, by the time you read this, you will have done the basic task of setting up a $WorldObject_112$. It wouldn't do at all for our Merchants to arrive and find themselves without a place to trade.
 According to our records, $Actor_36$ will be arriving on Wednesday, and $Actor_38$ will be arriving on Friday.
-$Actor_36$ has a keen eye for monster parts and relics from before the war, while $Actor_38$ is looking for potions and reagents.
-I suggest you make yourself ready.
+As with all Merchants, they will be willing to purchase most things from you. However, due to their limited carrying capacity, I suggest you sell them only items that they are actively looking for.
+$Actor_36$ has a keen eye for monster parts and relics from before the war, while $Actor_38$ is looking for wands and herbs local to your area.
+May fortune favour you.
 Yours, Delian Fortenay, Guild of Merchants][Day:2][Month:1][Year:1]</Value>
     </Item>
 	<Item>

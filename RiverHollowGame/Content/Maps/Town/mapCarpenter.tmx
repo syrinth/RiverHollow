@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="49">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="53">
  <properties>
   <property name="BuildingID" type="int" value="39"/>
+  <property name="Cutscenes" value="2"/>
   <property name="MapType" value="Town"/>
   <property name="Shop" type="int" value="8"/>
  </properties>
@@ -350,5 +351,8 @@
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="41" name="NPC_16" x="112" y="64" width="16" height="16"/>
+  <object id="50" name="Start" x="48" y="128" width="16" height="16"/>
+  <object id="51" name="CS1" x="176" y="96" width="16" height="16"/>
+  <object id="52" name="CS0" x="160" y="128" width="16" height="16"/>
  </objectgroup>
 </map>

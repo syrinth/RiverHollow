@@ -7,10 +7,10 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Text:Good Morning! Did you get enough sleep? I know you got in late last night, but I hope you're well rested, we've got a lot of work ahead of us.
+      <Value>[Text:Good Morning! Did you get enough sleep? I know you got in late last night, but I hope you're well rested, we've got a lot of work ahead.
 	  ...
 	  Oh, right. I'm $Actor_16$, and I'll help you get started. You are the Builder right? You match the description they sent, but you know what they say about assuming things.
-	  You've got all the tools you need right? Take your time looking around and meet me at the $WorldObject_39$ on the East of Town when you're ready.
+	  You brought your tools yeah? You seem the professional sort. Take your time looking around, get used to swinging your tools a bit, and then meet me at the $WorldObject_39$ on the East of Town when you're ready.
 	  I'm really looking forward to working with you.]</Value>
     </Item>
   </Asset>

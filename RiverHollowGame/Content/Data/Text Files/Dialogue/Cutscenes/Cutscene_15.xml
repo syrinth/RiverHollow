@@ -3,8 +3,15 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name][Text:Hm, small and simple. Nothing to complain about I guess, thanks.
-	  Here, tell me where to set up my field and I'll grow whatever crops you need.]</Value>
+      <Value>[Name][Text:Lovely, everything looks just wonderful thank you.
+	  You know... This place reminds me a lot of... oh, nevermind. I'm just wool gathering. When you get older, it's easy to get distracted while thinking of other times...
+	  Come over here, let me show you what I'll need from you.]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Name][Text:Alright dear, now this is my $WorldObject_90$. Like most other Machines you'll see, you can interact with it to view my recipe book. That will show you everything that can be made as well as what I'll need in order to make it.
+	  Any transparent recipes are ones that I know, but don't have the components on hand. Meanwhile, I've blacked out the recipes that require more advanced equipment.
+	  Just place the items the recipe book lists in the chest here, and I'll place the finished wands in the display in front of the door for our customers.]</Value>
     </Item>
   </Asset>
 </XnaContent>

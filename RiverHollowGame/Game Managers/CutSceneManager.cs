@@ -129,7 +129,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, GoTo, Introduce, ItemID, Move, MoveToTown, Sound, Speak, Speed, Task, Text, Wait };
+        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, GoTo, Introduce, ItemID, Move, MoveToTown, Rotate, Sound, Speak, Speed, Task, Text, Wait };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -157,24 +157,25 @@ namespace RiverHollow.Game_Managers
         }
         #endregion
 
-        int _iID;
+        readonly int _iID;
         RHMap _cutsceneMap;
         RHMap _originalMap;
+        DirectionEnum _dirOrig;
         Point _pOriginalPlayerPos;
-        int _iTaskID = -1;
-        int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
-        int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
+        readonly int _iTaskID = -1;
+        readonly int _iMinTime = -1;                                         //The earliest the cutscene can be triggered
+        readonly int _iMaxTime = -1;                                         //The latest the cutscene can be triggered
         int _iCurrentCommand;
-        List<Actor> _liUsedNPCs;                                 //The list of NPCs that take part in the cutscene.
-        List<KeyValuePair<int, int>> _liReqFriendship;              //The list of required Friendships to trigger the cutscene, key is NPC index
-        List<CutSceneCommand> _liCommands;                          //The sequence of commands to follow for the cutscene
-        List<string> _liSetupCommands;
+        readonly List<Actor> _liUsedNPCs;                                 //The list of NPCs that take part in the cutscene.
+        readonly List<KeyValuePair<int, int>> _liReqFriendship;              //The list of required Friendships to trigger the cutscene, key is NPC index
+        readonly List<CutSceneCommand> _liCommands;                          //The sequence of commands to follow for the cutscene
+        readonly List<string> _liSetupCommands;
         bool _bTriggered;
         bool _bWaitForMove;
         RHTask _triggerTask;
 
-        Dictionary<Actor, DirectionEnum> _diMoving;
-        List<Actor> _liToRemove;
+        readonly Dictionary<Actor, DirectionEnum> _diMoving;
+        readonly List<Actor> _liToRemove;
 
         RHTimer _timer;
 
@@ -355,6 +356,16 @@ namespace RiverHollow.Game_Managers
                                         goToNext = true;
                                     }
                                     break;
+                                case CutsceneCommandEnum.Rotate:
+                                    actor = GetActor(sCommandData[0]);
+                                    float speed = float.Parse(sCommandData[1]);
+                                    int index = _iCurrentCommand + 1;
+                                    RotateHelper(actor.ID, DirectionEnum.Right, speed, ref index);
+                                    RotateHelper(actor.ID, DirectionEnum.Up, speed, ref index);
+                                    RotateHelper(actor.ID, DirectionEnum.Left, speed, ref index);
+                                    RotateHelper(actor.ID, DirectionEnum.Down, speed, ref index);
+                                    goToNext = true;
+                                    break;
                                 case CutsceneCommandEnum.MoveToTown:
                                     goToNext = true;
                                     MoveToTown(sCommandData);                                   
@@ -410,6 +421,12 @@ namespace RiverHollow.Game_Managers
 
             //Update the Clone map the cutscene is on
             _cutsceneMap.Update(gTime);
+        }
+
+        private void RotateHelper(int actorID, DirectionEnum e, float speed, ref int index)
+        {
+            var newCmd = new CutSceneCommand(CutsceneCommandEnum.Face, new string[] { string.Format("{0}-{1}-{2}", actorID, Util.GetEnumString(e), speed) });
+            _liCommands.Insert(index++, newCmd);
         }
 
         /// <summary>
@@ -500,6 +517,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.AddSkipCutsceneButton();
 
             _originalMap = MapManager.CurrentMap;
+            _dirOrig = PlayerManager.PlayerActor.Facing;
             _pOriginalPlayerPos = PlayerManager.PlayerActor.CollisionBoxLocation;
 
             //Iterates over all of the setup commands
@@ -748,7 +766,7 @@ namespace RiverHollow.Game_Managers
             PlayerManager.PlayerActor.SetMoveTo(Point.Zero);
             PlayerManager.PlayerActor.ClearPath();
             MapManager.Maps.Remove(_cutsceneMap.Name);
-            MapManager.FadeToNewMap(_originalMap, _pOriginalPlayerPos, PlayerManager.PlayerActor.Facing, GameManager.CurrentBuilding);
+            MapManager.FadeToNewMap(_originalMap, _pOriginalPlayerPos, _dirOrig, GameManager.CurrentBuilding);
             GUIManager.RemoveSkipCutsceneButton();
 
             _triggerTask?.EndTask();

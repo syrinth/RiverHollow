@@ -513,7 +513,7 @@ namespace RiverHollow.Game_Managers
             MapManager.CurrentMap = MapManager.Maps[Constants.PLAYER_HOME_NAME];
             CurrentMap = MapManager.CurrentMap.Name;
             PlayerActor.SetPosition(Util.SnapToGrid(MapManager.Maps[CurrentMap].GetCharacterSpawn("PlayerSpawn")));
-            PlayerActor.DetermineAnimationState(new Point(0, 1));
+            PlayerActor.SetFacing(DirectionEnum.Down);
         }
 
         public static void Rollover()

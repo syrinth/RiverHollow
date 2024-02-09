@@ -5,8 +5,8 @@
       <Key>0</Key>
       <Value>[Name:Introduction][Text:Hm? Oh my, I didn't expect to see anyone else out here.
 ...
-You're looking for me, are you? Oh, would you look at the time... I guess I got a bit distracted. Sorry about that!
-I'm $Actor_26$, it's very nice to meet you.]</Value>
+You're looking for me? But I just got here... Oh, would you look at the time... I guess I got a bit distracted. The woods are jus so lush!
+I'm $Actor_26$, it's delight to meet you.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -50,11 +50,12 @@ I'm $Actor_26$, it's very nice to meet you.]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Name:Task_1_Start][Text:Wait, before we go could I get you to lend me a hand? I was looking for some $Item_227$. It's a type of plant with some minor magical properties and very useful for making rods. If you could look for a few for me, that'd be very helpful.]</Value>
+      <Value>[Name:Task_1_Start][Text:Wait, before we go could I get you to lend me a hand? I was looking for some $Item_227$. It's a magical herb and very useful for making rods. If you could look for a few for me, that'd be very helpful.
+If you can't find any, check again tomorrow. The land here is so fertile, I'm sure something new will have grown by then.]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Name:Task_1_End][Text:You found some? Marvelous! This will keep me stocked for a few days at least.
+      <Value>[Name:Task_1_End][Text:You found some? Delightful! This will keep me stocked for a few days at least.
 
 Town was this way you said? I'll see you there!]</Value>
     </Item>

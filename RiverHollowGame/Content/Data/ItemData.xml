@@ -95,7 +95,7 @@
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Food][Subtype:Food][Image:1-0][Value:10][FoodType:Forage][Stam:3][FoodValue:0]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:1-0][Value:10][FoodType:Forage][Stam:10][FoodValue:0]</Value>
     </Item>
     <Item>
       <Key>24</Key>
@@ -283,7 +283,7 @@
     </Item>
     <Item>
       <Key>70</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:0-3][FoodType:Desert][Value:10][Stam:4][ReqItems:162-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:0-3][FoodType:Desert][Value:10][Stam:5][ReqItems:162-2]</Value>
     </Item>
     <Item>
       <Key>71</Key>
@@ -303,7 +303,7 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:1-3][FoodType:Healthy][Value:15][Stam:10][ReqItems:23-1/162-1]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:1-3][FoodType:Healthy][Value:15][Stam:15][ReqItems:23-1/162-1]</Value>
     </Item>
     <Item>
       <Key>76</Key>
@@ -655,7 +655,7 @@
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Food][Subtype:Food][Image:5-2][ItemGroups:Herb][Value:30][Stam:20][FoodType:Healthy]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:5-2][ItemGroups:Herb][Value:30][Stam:40][FoodType:Healthy]</Value>
     </Item>
     <Item>
       <Key>164</Key>
@@ -855,15 +855,15 @@
     </Item>
     <Item>
       <Key>213</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:9-0][FoodType:Healthy][Value:10][Stam:5][ReqItems:23-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:9-0][FoodType:Healthy][Value:10][Stam:25][ReqItems:23-2]</Value>
     </Item>
     <Item>
       <Key>214</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:8-1][FoodType:Seafood][Value:35][Stam:12][ReqItems:210-1/211-1]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:8-1][FoodType:Seafood][Value:35][Stam:30][ReqItems:210-1/211-1]</Value>
     </Item>
     <Item>
       <Key>215</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:9-1][FoodType:Fancy][Value:20][Stam:15][ReqItems:154-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:9-1][FoodType:Fancy][Value:20][Stam:30][ReqItems:154-2]</Value>
     </Item>
     <Item>
       <Key>216</Key>

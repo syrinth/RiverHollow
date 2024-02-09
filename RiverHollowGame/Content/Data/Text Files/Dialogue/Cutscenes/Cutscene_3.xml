@@ -3,8 +3,9 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name][Text:Hmm, bit cozy but I suppose it'll do, as long as I'm here anyway.
-	  That's all for now. You keep me supplied with herbs, and I'll make enough potions and unguents to make our merchant friends happy.]</Value>
+      <Value>[Name][Text:Hmm, bit cozy but I suppose it'll do... for now.
+	  That's all for now, you can check with my Cauldron there to see what I'll need. Adventurers are a thirsty lot, so I'll need a solid whack of supplies. Good news for you though, potion making mostly involves herbs and such, so no monster hunting required.
+	  ...Although I suppose all that means is that they'll be hunting you! So keep your wits about you, no use getting eaten!]</Value>
     </Item>
   </Asset>
 </XnaContent>

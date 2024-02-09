@@ -5,8 +5,8 @@
       <Key>0</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapWoodWorker][Actors:7-Entrance][Face:7-Up][Deactivate:7]</Item>
-        <Item>[Speed:Player-0.5/7-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:7][Move:7-4-Up][Face:Player-Up][Face:7-Down][Speak:7-0][MoveToTown:7]</Item>
+        <Item>[Map:mapCarpenter][Player][Actors:16-Workshop_NPC][Deactivate:16]</Item>
+        <Item>[Speed:Player-0.5/16-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:16][Move:16-4-Up][Face:Player-Up][Face:16-Down][Speak:16-0][Face:16-Left][Speak:16-1][Face:16-Right][Speak:16-2][Face:16-Down][Speak:16-3][Move:16-4-Down]</Item>
       </Value>
     </Item>
     <Item>
@@ -21,16 +21,16 @@
       <Key>2</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapWorkshop][Player][Actors:16-Workshop_NPC][Deactivate:16]</Item>
-        <Item>[Speed:Player-0.5/16-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:16][Move:16-4-Up][Face:Player-Up][Face:16-Down][Speak:16-0][Face:16-Left][Speak:16-1][Face:16-Right][Speak:16-2][Face:16-Down][Speak:16-3][Move:16-4-Down]</Item>
+        <Item>[Map:mapCarpenter][Player][Actors:16-Start][Deactivate:Player]</Item>
+        <Item>[Speed:Player-0.5/16-0.5][Face:16-Up][Speak:16-0][Sound:Door][Activate:Player][Face:16-Down][Speak:16-1][Move:16-2-Right][Move:Player-1-Up][Face:16-Left][Speak:16-2][GoTo:16-CS1-Down/Player-CS0][Speak:16-3]</Item>
       </Value>
     </Item>
     <Item>
       <Key>3</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapApothecary][Player][Actors:43-Cutscene_Entrance][Deactivate:43]</Item>
-        <Item>[Speed:Player-0.5/43-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:43][Move:43-4-Up][Face:Player-Up][Face:43-Down][Speak:43-0][MoveToTown:43]</Item>
+        <Item>[Map:mapApothecary][Player][Actors:43-Start][Deactivate:43]</Item>
+        <Item>[Speed:Player-0.5/43-0.5][Move:Player-2-Up][Move:Player-1-Left-Down][Activate:43][Move:43-3-Up][Face:Player-Up][Rotate:43-1][Speak:43-0][MoveToTown:43]</Item>
       </Value>
     </Item>
     <Item>
@@ -110,7 +110,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapInn][Actors:20-C_Start][Face:20-Up][Deactivate:Player]</Item>
-        <Item>[Speak:20-0][Speed:20-1][Move:20-1-Left][Move:20-2-Right][Move:20-2-Left][Move:20-1-Right-Up][Speed:20-N/Player-N][Speak:20-1][Activate:Player][Move:Player-1-Up][Wait:1.5][Face:20-Down-1][Speak:20-2][Move:Player-1-Up][Speak:20-3][Face:20-Right-1][Face:20-Up-1][Face:20-Left-1][Face:20-Down-1][Speak:20-4][Move:20-2-Right][GoTo:20-C_1/Player-C_2][Face:20-Up/Player-Up][Speak:20-5][Introduce:20]</Item>
+        <Item>[Speak:20-0][Speed:20-1][Move:20-1-Left][Move:20-2-Right][Move:20-2-Left][Move:20-1-Right-Up][Speed:20-N/Player-N][Speak:20-1][Activate:Player][Move:Player-1-Up][Wait:1.5][Face:20-Down-1][Speak:20-2][Move:Player-1-Up][Speak:20-3][Rotate:20-1][Speak:20-4][Move:20-2-Right][GoTo:20-C_1/Player-C_2][Face:20-Up/Player-Up][Speak:20-5][Introduce:20]</Item>
       </Value>
     </Item>
     <Item>
@@ -125,8 +125,8 @@
       <Key>15</Key>
       <Value>
         <Item></Item>
-        <Item>[Map:mapWandmaker][Actors:26-Entrance][Face:26-Up][Deactivate:26]</Item>
-        <Item>[Speed:Player-0.5/26-0.5][Move:Player-2-Up][Move:Player-1-Left][Face:Player-Down][Activate:26][Move:26-4-Up][Face:Player-Up][Face:26-Down][Speak:26-0][MoveToTown:26]</Item>
+        <Item>[Map:mapWandmaker][Actors:26-Start][Face:26-Up][Deactivate:26]</Item>
+        <Item>[Speed:Player-0.5/26-0.8][Move:Player-1-Up][Move:Player-3-Right-Down][Activate:26][Move:26-2-Up][Face:Player-Left][Move:26-4-Right-Up][Wait:1][GoTo:26-Craft-Up][Speak:26-0][Move:26-3-Right][Move:26-2-Up-Down][GoTo:Player-Craft-Up][Speak:26-1][MoveToTown:26]</Item>
       </Value>
     </Item>
   </Asset>

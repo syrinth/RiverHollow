@@ -1820,7 +1820,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_90</Key>
-      <Value>[Name:Wandcrafting Table]</Value>
+      <Value>[Name:Wand Shaper]</Value>
     </Item>
     <Item>
       <Key>WorldObject_91</Key>
@@ -2172,7 +2172,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>
-      <Value>[Name:Enough Wood]</Value>
+      <Value>[Name:Carpenter]</Value>
     </Item>
     <Item>
       <Key>Cutscene_1</Key>
@@ -2180,7 +2180,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Cutscene_2</Key>
-      <Value>[Name:Workshop]</Value>
+      <Value>[Name:Carpenter]</Value>
     </Item>
     <Item>
       <Key>Cutscene_3</Key>
