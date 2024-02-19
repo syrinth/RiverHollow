@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>Task_6</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Grow the Town][Description:We really need to attract more people to the town. Once we get to five, we'll be able to build a $WorldObject_38$]</Value>
     </Item>
     <Item>
       <Key>Task_7</Key>
@@ -68,6 +68,10 @@
     <Item>
       <Key>Task_16</Key>
       <Value>[Name:Wood Morning!][Description:$Actor_26$ needs a place to work her wandmaking wonders.]</Value>
+    </Item>
+    <Item>
+      <Key>Task_17</Key>
+      <Value>[Name:Thinning the Herd]</Value>
     </Item>
     <Item>
       <Key>Actor_0</Key>
@@ -816,7 +820,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_70</Key>
-      <Value>[Name:Juicy Flan]</Value>
+      <Value>[Name:Slimeberry Squish][Description:Just take two $Item_149$ and SQUEEZE.]</Value>
     </Item>
     <Item>
       <Key>Item_71</Key>
@@ -836,7 +840,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_75</Key>
-      <Value>[Name:Juicy Mushroom]</Value>
+      <Value>[Name:Capped Berry][Description:Squishy, cute and absolutely adorable!]</Value>
     </Item>
     <Item>
       <Key>Item_76</Key>
@@ -1128,11 +1132,11 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_148</Key>
-      <Value>[Name:Cave Berry]</Value>
+      <Value>[Name:Turlik]</Value>
     </Item>
     <Item>
       <Key>Item_149</Key>
-      <Value>[Name:Meat][Description:A slice of meat, used for cooking]</Value>
+      <Value>[Name:Slime Berry][Description:Fun Fact, not technically a berry!]</Value>
     </Item>
     <Item>
       <Key>Item_150</Key>
@@ -1156,7 +1160,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_155</Key>
-      <Value>[Name:Blue Jelly]</Value>
+      <Value>[Name:Forest Medley]</Value>
     </Item>
     <Item>
       <Key>Item_156</Key>
@@ -1188,7 +1192,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_163</Key>
-      <Value>[Name:Heart Root]</Value>
+      <Value>[Name:Heart Berry]</Value>
     </Item>
     <Item>
       <Key>Item_164</Key>
@@ -2169,6 +2173,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_177</Key>
       <Value>[Name:Small Stash]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_178</Key>
+      <Value>[Name:Wooden Path]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>

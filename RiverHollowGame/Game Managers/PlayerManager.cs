@@ -668,7 +668,7 @@ namespace RiverHollow.Game_Managers
 
         #region Tool Management
         public static Tool ToolInUse;
-        public static int BackpackLevel => RetrieveTool(ToolEnum.Backpack) != null ? RetrieveTool(ToolEnum.Backpack).ToolLevel : 1;
+        public static int BackpackLevel => RetrieveTool(ToolEnum.Backpack) != null ? RetrieveTool(ToolEnum.Backpack).ToolLevel : 2;
         public static int LanternLevel => RetrieveTool(ToolEnum.Lantern) != null ? RetrieveTool(ToolEnum.Lantern).ToolLevel : 1;
 
         private static Dictionary<ToolEnum, Tool> _diTools;
@@ -917,9 +917,9 @@ namespace RiverHollow.Game_Managers
             PlayerActor.SetHairColor(saveData.hairColor);
             PlayerActor.SetHairType(saveData.hairIndex);
 #endif
-            PlayerActor.SetClothing((Clothing)DataManager.GetItem(saveData.hat.itemID));
-            PlayerActor.SetClothing((Clothing)DataManager.GetItem(saveData.shirt.itemID));
-            PlayerActor.SetClothing((Clothing)DataManager.GetItem(saveData.pants.itemID));
+            PlayerActor.AssignClothing(DataManager.GetItem(saveData.hat.itemID) as Clothing);
+            PlayerActor.AssignClothing(DataManager.GetItem(saveData.shirt.itemID) as Clothing);
+            PlayerActor.AssignClothing(DataManager.GetItem(saveData.pants.itemID) as Clothing);
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);
 
             MoveToSpawn();

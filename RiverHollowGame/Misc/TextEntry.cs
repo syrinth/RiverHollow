@@ -252,6 +252,21 @@ namespace RiverHollow.Misc
 
                     rv = true;
                 }
+
+                if (_diTags.ContainsKey("CompletedTaskID"))
+                {
+                    if (int.TryParse(_diTags["CompletedTaskID"], out int taskID))
+                    {
+                        if (TaskManager.TaskCompleted(taskID))
+                        {
+                            rv = true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
             }
 
             return rv;
@@ -313,11 +328,22 @@ namespace RiverHollow.Misc
             }
             if (_diTags.ContainsKey("UnlockItemID"))
             {
-                GameManager.DIShops[int.Parse(_diTags["ShopTargetID"])].UnlockMerchandise(int.Parse(_diTags["UnlockItemID"]));
+                if (int.TryParse(_diTags["ShopTargetID"], out int shopID) && int.TryParse(_diTags["UnlockItemID"], out int itemID))
+                {
+                    GameManager.DIShops[shopID].UnlockMerchandise(itemID);
+                }
             }
             if (_diTags.ContainsKey("SendToTown"))
             {
                 ((Villager)GameManager.CurrentNPC).ReadySmokeBomb();
+            }
+
+            if (_diTags.ContainsKey("AddTaskID"))
+            {
+                if (int.TryParse(_diTags["AddTaskID"], out int taskID))
+                {
+                    TaskManager.GetTaskByID(taskID).AddTaskToLog(true);
+                }
             }
 
             if (talker != null &&  talker.HasAssignedTask() && !CutsceneManager.Playing)
@@ -325,6 +351,14 @@ namespace RiverHollow.Misc
                 RHTask task = talker.GetAssignedTask();
                 task.TaskIsTalking();
                 GUIManager.QueueTextWindow(GameManager.CurrentNPC.GetDialogEntry(task.StartTaskDialogue));
+            }
+
+            if (_diTags.ContainsKey("AssignTaskID"))
+            {
+                if (int.TryParse(_diTags["AssignTaskID"], out int taskID))
+                {
+                    TaskManager.GetTaskByID(taskID).AssignTaskToNPC();
+                }
             }
         }
 

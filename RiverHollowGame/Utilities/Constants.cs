@@ -54,6 +54,7 @@ namespace RiverHollow.Utilities
         public const int MAX_LAYER_DEPTH = 999999;
         public const int MAX_STACK_SIZE = 999;
         public const float ITEM_BOUNCE_SPEED = 0.2f;
+        public const float BUILDING_SCORE_MULTIPLIER = 0.1f;
 
         public const int SOUND_MAX_SAME_SOUND = 3;
 

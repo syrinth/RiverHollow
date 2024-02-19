@@ -23,11 +23,11 @@
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Type:Build][StartNPC:14][AssignTrigger:GameStart][TargetObjectID:24][EndBuildingID:24][CutsceneID:12][ItemRewardID:93-3/95-1/96-1]</Value>
+      <Value>[Type:Build][StartNPC:14][AssignTrigger:Task-16][TargetObjectID:24][EndBuildingID:24][CutsceneID:12][ItemRewardID:93-3/95-1/96-1]</Value>
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Population]</Value>
+      <Value>[Type:TownState][GoalNPC:16][Population:5][ItemRewardID:180-1]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -68,6 +68,10 @@
     <Item>
       <Key>16</Key>
       <Value>[Type:Build][StartNPC:26][AssignTrigger:Task-1][TargetObjectID:22][EndBuildingID:22][CutsceneID:15][ItemRewardID:227-5][Money:50][TriggerTask:7]</Value>
+    </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>[Type:TownState][StartNPC:20][AssignTrigger:Letter-1][MonstersKilled:40][GoalNPC:20]</Value>
     </Item>
   </Asset>
 </XnaContent>

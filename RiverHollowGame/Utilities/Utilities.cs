@@ -599,8 +599,8 @@ namespace RiverHollow.Utilities
             int rarityIndex = RHRandom.Instance().Next(1, 1000);
 
             if (rarityIndex > 990 && dictionary.ContainsKey(RarityEnum.M)) { rolledRarity = RarityEnum.M; }
-            else if (rarityIndex > 950 && dictionary.ContainsKey(RarityEnum.R)) { rolledRarity = RarityEnum.R; }
-            else if (rarityIndex > 850 && dictionary.ContainsKey(RarityEnum.U)) { rolledRarity = RarityEnum.U; }
+            else if (rarityIndex > 900 && dictionary.ContainsKey(RarityEnum.R)) { rolledRarity = RarityEnum.R; }
+            else if (rarityIndex > 600 && dictionary.ContainsKey(RarityEnum.U)) { rolledRarity = RarityEnum.U; }
             else if (!dictionary.ContainsKey(RarityEnum.C))
             {
                 return notFound;

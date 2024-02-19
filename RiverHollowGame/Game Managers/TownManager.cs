@@ -8,7 +8,6 @@ using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -69,7 +68,7 @@ namespace RiverHollow.Game_Managers
             {
                 [MailboxEnum.Waiting] = new List<string>(),
                 [MailboxEnum.Unsent] = new List<string>(),
-                [MailboxEnum.Sent] = new List<string>()
+                [MailboxEnum.Processed] = new List<string>()
             };
             foreach (var key in DataManager.GetMailboxData())
             {
@@ -137,8 +136,10 @@ namespace RiverHollow.Game_Managers
 
         public static void Rollover()
         {
+            TaskManager.TaskLog.ForEach(x => x.AttemptProgress());
+
             //DataManager.GetMailboxMessage();
-            if(GameCalendar.DayOfWeek == 0)
+            if (GameCalendar.DayOfWeek == 0)
             {
                 _bTravelersCame = false;
             }
@@ -458,9 +459,44 @@ namespace RiverHollow.Game_Managers
         }
         public static int GetTownScore()
         {
-            int rv = 0;
+            float totalScore = 0;
+            float buildingScore = 0;
+            float infrastuctureScore = 0;
+            float decorationScore = 0;
+            float miscScore = 0;
 
-            return rv;
+            var TownObjects = MapManager.TownMap.GetObjects();
+            foreach (var key in TownObjects.Keys)
+            {
+                var list = TownObjects[key];
+                foreach(var obj in list)
+                {
+                    var objScore = obj.GetTownScore();
+                    if (obj.BuildableType(BuildableEnum.Building))
+                    {
+                        buildingScore += objScore;
+                    }
+                    else if (obj.BuildableType(BuildableEnum.Wall) || obj.BuildableType(BuildableEnum.Floor))
+                    {
+                        infrastuctureScore += objScore;
+                    }
+                    else if (obj.GetBoolByIDKey("Decoration"))
+                    {
+                        decorationScore += objScore;
+                    }
+                    else
+                    {
+                        miscScore += objScore;
+                    }
+                }
+            }
+
+            totalScore += buildingScore;
+            totalScore += Math.Min(infrastuctureScore, buildingScore * 0.4f);
+            totalScore += Math.Min(decorationScore, buildingScore * 0.2f);
+            totalScore += miscScore;
+
+            return (int)totalScore;
         }
         public static void TrackDefeatedMob(Mob m)
         {
@@ -556,7 +592,7 @@ namespace RiverHollow.Game_Managers
                 entry = DataManager.GetMailboxLetter(str);
 
                 _diMailbox[MailboxEnum.Waiting].Remove(str);
-                Util.AddToListDictionary(ref _diMailbox, Enums.MailboxEnum.Sent, str);
+                Util.AddToListDictionary(ref _diMailbox, Enums.MailboxEnum.Processed, str);
             }
 
             return entry;
@@ -565,6 +601,11 @@ namespace RiverHollow.Game_Managers
         public static bool MailboxHasMessages()
         {
             return _diMailbox[MailboxEnum.Waiting].Count > 0;
+        }
+
+        public static bool MailboxMessageRead(int id)
+        {
+            return _diMailbox[MailboxEnum.Processed].Contains(id.ToString());
         }
         #endregion
 
@@ -594,7 +635,7 @@ namespace RiverHollow.Game_Managers
             TownAnimals.ForEach(x => data.TownAnimals.Add(x.ID));
 
             data.MailboxUnsent = _diMailbox[MailboxEnum.Unsent];
-            data.MailboxSent = _diMailbox[MailboxEnum.Sent];
+            data.MailboxSent = _diMailbox[MailboxEnum.Processed];
             data.MailboxWaiting = _diMailbox[MailboxEnum.Waiting];
 
             foreach (Villager npc in DIVillagers.Values)
@@ -676,7 +717,7 @@ namespace RiverHollow.Game_Managers
                 if (saveData.MailboxSent.Contains(messageID))
                 {
                     _diMailbox[MailboxEnum.Unsent].Remove(messageID);
-                    _diMailbox[MailboxEnum.Sent].Add(messageID);
+                    _diMailbox[MailboxEnum.Processed].Add(messageID);
                 }
                 else if (saveData.MailboxWaiting.Contains(messageID))
                 {
@@ -684,6 +725,7 @@ namespace RiverHollow.Game_Managers
                     _diMailbox[MailboxEnum.Waiting].Add(messageID);
                 }
             }
+            RolloverMailbox();
 
             foreach (VillagerData data in saveData.VillagerData)
             {

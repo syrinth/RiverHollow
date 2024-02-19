@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -188,10 +187,8 @@ namespace RiverHollow.GUIComponents.Screens
                 clothesList.Add(int.Parse(s));
             }
 
-            PlayerManager.PlayerActor.PlayerGear[1, 0] = (Clothing)DataManager.GetItem(clothesList[0]);
-            PlayerManager.PlayerActor.SetClothing((Clothing)DataManager.GetItem(clothesList[0]));
-            PlayerManager.PlayerActor.PlayerGear[2, 0] = (Clothing)DataManager.GetItem(clothesList[1]);
-            PlayerManager.PlayerActor.SetClothing((Clothing)DataManager.GetItem(clothesList[1]));
+            PlayerManager.PlayerActor.AssignClothing(DataManager.GetItem(clothesList[0]) as Clothing);
+            PlayerManager.PlayerActor.AssignClothing(DataManager.GetItem(clothesList[1]) as Clothing);
         }
         public void SetSelection(GUITextInputWindow g)
         {

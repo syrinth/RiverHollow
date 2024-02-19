@@ -63,7 +63,7 @@ namespace RiverHollow.GUIComponents.Screens
                 PurchaseBox newBox = null;
                 if (!PlayerManager.AlreadyBoughtUniqueItem(m.MerchID))
                 {
-                    Item it = DataManager.GetItem(m.MerchType == Merchandise.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID);
+                    Item it = DataManager.GetItem(m.MerchType == Merchandise.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID, m.Amount);
                     it.ApplyUniqueData(m.UniqueData);
 
                     newBox = new PurchaseBox(it, m.Price, _winMain.InnerWidth() - GameManager.ScaledTileSize, ShowDisplay);
@@ -152,7 +152,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (CanBuy && PlayerManager.Money >= Cost)
             {
                 PlayerManager.TakeMoney(Cost);
-                if (ShopItem != null) { PurchaseItem(ShopItem.ID); }
+                if (ShopItem != null) { PurchaseItem(ShopItem.ID, ShopItem.Number); }
 
                 rv = true;
             }
@@ -170,9 +170,9 @@ namespace RiverHollow.GUIComponents.Screens
             Enable(false);
         }
 
-        private void PurchaseItem(int ID)
+        private void PurchaseItem(int ID, int num)
         {
-            Item purchaseItem = DataManager.GetItem(ID);
+            Item purchaseItem = DataManager.GetItem(ID, num);
             if (purchaseItem.IsUnique())
             {
                 PlayerManager.AddUniqueItemToList(ID);

@@ -165,6 +165,12 @@ namespace RiverHollow.Buildings
             return rv;
         }
 
+        public override float GetTownScore()
+        {
+            float value = base.GetTownScore();
+            return value + (value * Level - 1 * Constants.BUILDING_SCORE_MULTIPLIER);
+        }
+
         #region Upgrade Handlers
         public bool MaxLevel()
         {

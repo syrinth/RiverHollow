@@ -464,7 +464,7 @@ Exit:
 
                 if (inventory == PlayerManager.PlayerActor.PlayerGear && item.CompareType(ItemEnum.Clothing))
                 {
-                    PlayerManager.PlayerActor.SetClothing(item as Clothing);
+                    PlayerManager.PlayerActor.SetClothingSprite(item as Clothing);
                 }
             }
             return rv;

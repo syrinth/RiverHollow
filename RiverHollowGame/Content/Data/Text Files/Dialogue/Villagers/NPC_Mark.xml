@@ -68,5 +68,16 @@ I'll keep the visitors entertained as best I can, but you'll have to check in be
       <Key>16</Key>
       <Value>[Name:Gift_Miserable][Text:...I appreciate the thought.]</Value>
     </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>[Name:Task_17_Start][Text:Hey! How are things, settling in well? Good, good. Glad to hear it. Look, I was thinking... It might help convince people to move in if we thinned out the monsters a bit. I was going for a little stroll this morning and an $Actor_70$ popped out of the bushes!
+I'm fine, only my dignity is hurt, but since you're the only one with a weapon here, maybe you could go out and encourage them to back off?
+Thanks.]</Value>
+    </Item>
+    <Item>
+      <Key>18</Key>
+      <Value>[Name:Task_17_End][Text:That'll show 'em. Serves em right for scaring the daylights out of me. I'm sure you'll need the things you got from them anyway.
+It doesn't really matter though, does it? There'll be more back before you know it...]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -225,8 +225,14 @@ namespace RiverHollow.Misc
                     case TaskTriggerEnum.GameStart:
                         checksum++;
                         break;
+                    case TaskTriggerEnum.Letter:
+                        if (int.TryParse(_diAssignationTriggers[trigger], out int letterID) && TownManager.MailboxMessageRead(letterID))
+                        {
+                            checksum++;
+                        }
+                        break;
                     case TaskTriggerEnum.Task:
-                        if (TaskManager.TaskCompleted(int.Parse(_diAssignationTriggers[trigger])))
+                        if (int.TryParse(_diAssignationTriggers[trigger], out int taskID) && TaskManager.TaskCompleted(taskID))
                         {
                             checksum++;
                         }
@@ -269,7 +275,7 @@ namespace RiverHollow.Misc
                     case TaskTypeEnum.Build:
                         foreach (int k in TownManager.GetTownObjects().Keys) { AttemptProgressBuild(k); }
                         break;
-                    case TaskTypeEnum.Population:
+                    case TaskTypeEnum.TownState:
                         AttemptProgress();
                         break;
                 }
@@ -305,6 +311,12 @@ namespace RiverHollow.Misc
         public bool AttemptProgress(Mob m)
         {
             bool rv = false;
+
+            if (DataManager.GetBoolByIDKey(ID, "MonstersKilled", DataType.Task))
+            {
+                var count = DataManager.GetIntByIDKey(ID, "MonstersKilled", DataType.Task);
+                SetReadyForHandIn(TownManager.TotalDefeatedMobs >= count);
+            }
 
             if (_questMonster != null && _questMonster.ID == m.ID)
             {
@@ -342,10 +354,20 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if (_eTaskType == TaskTypeEnum.Population)
+            if (_eTaskType == TaskTypeEnum.TownState)
             {
                 rv = true;
-                SetReadyForHandIn(TownManager.GetPopulation() >= NeededCount);
+                if (DataManager.GetBoolByIDKey(ID, "Population", DataType.Task))
+                {
+                    var count = DataManager.GetIntByIDKey(ID, "Population", DataType.Task);
+                    SetReadyForHandIn(TownManager.GetPopulation() >= count);
+                }
+
+                if (DataManager.GetBoolByIDKey(ID, "TownScore", DataType.Task))
+                {
+                    var count = DataManager.GetIntByIDKey(ID, "TownScore", DataType.Task);
+                    SetReadyForHandIn(TownManager.GetTownScore() >= count);
+                }
             }
 
             return rv;
@@ -513,8 +535,23 @@ namespace RiverHollow.Misc
             {
                 switch (_eTaskType)
                 {
-                    case TaskTypeEnum.Population:
-                        rv = " Population: " + TownManager.GetPopulation() + "/" + NeededCount;
+                    case TaskTypeEnum.TownState:
+                        if (DataManager.GetBoolByIDKey(ID, "Population", DataType.Task))
+                        {
+                            var count = DataManager.GetIntByIDKey(ID, "Population", DataType.Task);
+                            rv = " Population: " + TownManager.GetPopulation() + "/" + count;
+                        }
+                        else if (DataManager.GetBoolByIDKey(ID, "TownScore", DataType.Task))
+                        {
+                            var count = DataManager.GetIntByIDKey(ID, "TownScore", DataType.Task);
+                            rv = " Town Score: " + TownManager.GetTownScore() + "/" + count;
+                        }
+                        else if (DataManager.GetBoolByIDKey(ID, "MonstersKilled", DataType.Task))
+                        {
+                            var count = DataManager.GetIntByIDKey(ID, "MonstersKilled", DataType.Task);
+                            rv = " Monsters Defeated: " + TownManager.TotalDefeatedMobs + "/" + count;
+                        }
+
                         break;
                     case TaskTypeEnum.Fetch:
                         rv = string.Format(@"{0} {1}/{2}", _targetItem.Name(), TargetsAccomplished, NeededCount);

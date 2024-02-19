@@ -82,8 +82,8 @@ namespace RiverHollow.Characters
                     DamageTimerEnd();
                     DropLoot();
                     CurrentMap.RemoveActor(this);
-                    TaskManager.AdvanceTaskProgress(this);
                     TownManager.TrackDefeatedMob(this);
+                    TaskManager.AdvanceTaskProgress(this);
                     return;
                 }
 

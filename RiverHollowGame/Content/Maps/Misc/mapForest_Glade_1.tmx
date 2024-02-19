@@ -7,7 +7,7 @@
   <property name="Mobs" value="1-2"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="Randomize" type="bool" value="true"/>
-  <property name="ResourceItemID" value="162-C/227-C/163-R"/>
+  <property name="ResourceItemID" value="162-C/227-C/148-U/163-R"/>
   <property name="ResourceObjectID" value="106-U"/>
   <property name="ResourceTotal" value="3-5"/>
  </properties>

@@ -28,6 +28,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
             var plantsGrown = new GUIText(string.Format("Plants Grown: " + TownManager.PlantsGrown));
             plantsGrown.AnchorAndAlignWithSpacing(enemiesDefeated, SideEnum.Bottom, SideEnum.Left, 10);
+
+            //Do this to make sure to sync completion with TownScore
+            TaskManager.TaskLog.ForEach(x => x.AttemptProgress());
         }
     }
 }

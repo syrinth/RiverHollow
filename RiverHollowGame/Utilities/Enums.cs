@@ -67,11 +67,11 @@
         public enum ChildStageEnum { Newborn, Infant, Toddler };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
-        public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task };
-        public enum TaskTypeEnum { Build, Fetch, GroupSlay, Population, Slay, Talk };
+        public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task, Letter };
+        public enum TaskTypeEnum { Build, Fetch, GroupSlay, TownState, Slay, Talk };
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
-        public enum MailboxEnum { Unsent, Sent, Waiting };
+        public enum MailboxEnum { Unsent, Processed, Waiting };
 
         public enum GameIconEnum { None, Book, Coin, Hammer, Traveler, Capacity };
 

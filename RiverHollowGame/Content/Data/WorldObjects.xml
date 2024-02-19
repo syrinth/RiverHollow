@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Farmhouse][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-10/60-10]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Farmhouse][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-10/60-10][TownScore:15]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-80/0-30][UpgradeID:0-1][Traveller:10][Upgradable:4/4-0][CraftAmount:2]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-80/0-30][UpgradeID:0-1][Traveller:10][Upgradable:4/4-0][CraftAmount:2][TownScore:35]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/3-0]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/3-0][TownScore:30]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_Player][Size:7-8][Base:0-5-7-3][Entrance:3-6-1-2][LightID:3-30-86/3-80-86][Upgrade_1:55-10/60-10][Upgrade_2:55-20/60-20][ReqItems:55-5/60-5][Home][Upgradable:0/0-0]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:House_Player][Size:7-8][Base:0-5-7-3][Entrance:3-6-1-2][LightID:3-30-86/3-80-86][Upgrade_1:55-10/60-10][Upgrade_2:55-20/60-20][ReqItems:55-5/60-5][Home][Upgradable:0/0-0][TownScore:25]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -115,7 +115,7 @@
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/2-0][CraftAmount:3]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/2-0][CraftAmount:3][TownScore:40]</Value>
     </Item>
     <Item>
       <Key>29</Key>
@@ -159,7 +159,7 @@
     </Item>
     <Item>
       <Key>39</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Carpenter][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][UpgradeID:2][Upgradable:1/1-0][CraftAmount:30]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Carpenter][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][UpgradeID:2][Upgradable:1/1-0][CraftAmount:30][TownScore:15]</Value>
     </Item>
     <Item>
       <Key>40</Key>
@@ -263,7 +263,7 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Plant][Texture:Tree_Alden][States:5][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-1/2-10][Tool:Axe][Time:2/2/3/4][Spread:5/5][BonusItemID:206-1-C][SeedID:206][Walkable:T/T/F/F/F][DrawUnder:T/T/F/F/F][NoWater]</Value>
+      <Value>[Type:Plant][Texture:Tree_Alden][States:5][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-1/2-10][Tool:Axe][Time:2/2/3/4][Spread:5/5][BonusItemID:206-1-C][SeedID:206][Walkable:T/T/F/F/F][DrawUnder:T/T/F/F/F][NoWater][TownScore:0.1]</Value>
     </Item>
     <Item>
       <Key>66</Key>
@@ -311,7 +311,7 @@
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Buildable][Subtype:Floor][Image:8-0][ReqItems:0-1]</Value>
+      <Value>[Type:Buildable][Subtype:Floor][Image:12-0][TownScore:1][Amount:5]</Value>
     </Item>
     <Item>
       <Key>78</Key>
@@ -407,7 +407,7 @@
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-3/1-3/0-4/1-4][Size:1-1/1-1/1-1/1-1][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-0-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:76][ItemID:154][BonusItemID:76-1-U][Season:Spring][SpriteOffset:4]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-3/1-3/0-4/1-4][Size:1-1/1-1/1-1/1-1][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-0-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:76][ItemID:154][BonusItemID:76-1-U][Season:Spring][SpriteOffset:4][TownScore:0.1]</Value>
     </Item>
     <Item>
       <Key>102</Key>
@@ -415,7 +415,7 @@
     </Item>
     <Item>
       <Key>103</Key>
-      <Value>[Type:Plant][Tool:Sword][States:3][Time:2/3][Image:0-6/1-5/2-5][Size:1-1/1-2/2-2][Base:0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T][DrawUnder:F/F/F][ItemID:61-0-1/61-0-2/61-0-3][BaseOffset: 0-0/0-0/8-0][Spread:1/1][NoWater]</Value>
+      <Value>[Type:Plant][Tool:Sword][States:3][Time:2/3][Image:0-6/1-5/2-5][Size:1-1/1-2/2-2][Base:0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T][DrawUnder:F/F/F][ItemID:61-0-1/61-0-2/61-0-3][BaseOffset: 0-0/0-0/8-0][Spread:1/1][NoWater][TownScore:-0.05]</Value>
     </Item>
     <Item>
       <Key>104</Key>
@@ -455,11 +455,11 @@
     </Item>
     <Item>
       <Key>113</Key>
-      <Value>[Type:Buildable][Subtype:Wall][Image:4-0][Size:1-2][Base:0-1-1-1][ReqItems:0-1]</Value>
+      <Value>[Type:Buildable][Subtype:Wall][Image:4-0][Size:1-2][Base:0-1-1-1][ReqItems:0-1][TownScore:2]</Value>
     </Item>
     <Item>
       <Key>114</Key>
-      <Value>[Type:Buildable][Subtype:Wall][Image:0-0][Size:1-2][Base:0-1-1-1][ReqItems:2-2]</Value>
+      <Value>[Type:Buildable][Subtype:Wall][Image:0-0][Size:1-2][Base:0-1-1-1][ReqItems:2-2][Amount:5][TownScore:1]</Value>
     </Item>
     <Item>
       <Key>115</Key>
@@ -591,11 +591,11 @@
     </Item>
     <Item>
       <Key>147</Key>
-      <Value>[Type:Plant][Image:12-3/2][Tool:Sword][Hp:1][ReqLvl:1][DestructionAnim:0-2-3-0.1][States:1][Spread:2/1][NoWater]</Value>
+      <Value>[Type:Plant][Image:12-3/2][Tool:Sword][Hp:1][ReqLvl:1][DestructionAnim:0-2-3-0.1][States:1][Spread:2/1][NoWater][TownScore:-0.5]</Value>
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Machine][Image:0-19][Size:2-3][Base:0-2-2-1][Makes:70/75/195/213/214/215/217][Kitchen]</Value>
+      <Value>[Type:Machine][Image:0-19][Size:2-3][Base:0-2-2-1][Makes:70/75/155/195/213/214/215/217][Kitchen]</Value>
     </Item>
     <Item>
       <Key>149</Key>
@@ -712,6 +712,10 @@
     <Item>
       <Key>177</Key>
       <Value>[Type:Buildable][Subtype:Container][Image:4-41][Size:1-2][Base:0-1-1-1][Rows:1][Cols:4][Stash]</Value>
+    </Item>
+    <Item>
+      <Key>178</Key>
+      <Value>[Type:Buildable][Subtype:Floor][Image:8-0][TownScore:0.5][Amount:5]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.GUIObjects;
+﻿using RiverHollow.Game_Managers;
 using RiverHollow.Items;
-using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
@@ -15,9 +11,9 @@ namespace RiverHollow.Misc
     public class Shop
     {
         public int ShopkeeperID { get; private set; }
-        int _iShopID;
-        int _iShopBuildingID = -1;
-        List<Merchandise> _liMerchandise;
+        readonly int _iShopID;
+        readonly int _iShopBuildingID = -1;
+        readonly List<Merchandise> _liMerchandise;
         public int Count => _liMerchandise.Count;
 
         public Merchandise SelectedMerchandise { get; private set; }
@@ -94,10 +90,7 @@ namespace RiverHollow.Misc
         public void UnlockMerchandise(int merchID)
         {
             Merchandise m = _liMerchandise.Find(x => x.MerchID == merchID);
-            if (m != null)
-            {
-                m.Unlock();
-            }
+            m?.Unlock();
         }
 
         public void UnlockMerchandise(string unlockedMerchandise)
@@ -177,6 +170,7 @@ namespace RiverHollow.Misc
 
         public int MerchID { get; } = -1;
         public int ItemID => MerchType == MerchTypeEnum.Item ? MerchID : MerchID + Constants.BUILDABLE_ID_OFFSET;
+        public int Amount { get; } = 1;
         public Item MerchItem { get; private set; }
 
         private readonly int _iTaskReq = -1;
@@ -189,6 +183,8 @@ namespace RiverHollow.Misc
             MerchID = int.Parse(data[0]);
             Price = int.Parse(data[1]);
 
+            Amount = DataManager.GetIntByIDKey(MerchID, "Amount", (type == MerchTypeEnum.WorldObject ? DataType.WorldObject : DataType.Item), 1);
+
             if (data.Length > 2)
             {
                 if (data[2].Equals("Unique")) { UniqueData = data[2]; }
@@ -196,7 +192,7 @@ namespace RiverHollow.Misc
             }
         }
 
-        public void GenerateSaleItem() { MerchItem = DataManager.GetItem(ItemID); }
+        public void GenerateSaleItem() { MerchItem = DataManager.GetItem(ItemID, Amount); }
         public void CleanSaleItem() { MerchItem = null; }
 
         /// <summary>

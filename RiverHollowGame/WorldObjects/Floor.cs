@@ -133,5 +133,10 @@ namespace RiverHollow.WorldObjects
                 }
             }
         }
+
+        public override float GetTownScore()
+        {
+            return 0;
+        }
     }
 }

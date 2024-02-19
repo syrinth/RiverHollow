@@ -369,6 +369,11 @@ namespace RiverHollow.Game_Managers
                         if (_diUpgradeData[id].ContainsKey(key)) { return _diUpgradeData[id][key]; }
                         break;
                     case DataType.WorldObject:
+                        if (id > Constants.BUILDABLE_ID_OFFSET)
+                        {
+                            id -= Constants.BUILDABLE_ID_OFFSET;
+                        }
+
                         if (_diWorldObjects[id].ContainsKey(key)) { return _diWorldObjects[id][key]; }
                         break;
                 }
@@ -531,7 +536,12 @@ namespace RiverHollow.Game_Managers
         {
             if (id >= Constants.BUILDABLE_ID_OFFSET)
             {
-                return new WrappedObjectItem(id - Constants.BUILDABLE_ID_OFFSET);
+                var obj = new WrappedObjectItem(id - Constants.BUILDABLE_ID_OFFSET);
+                if (obj.Stacks())
+                {
+                    obj.SetNumber(num);
+                }
+                return obj;
             }
 
             if (id != -1 && _diItemData.ContainsKey(id))

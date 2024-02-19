@@ -506,6 +506,11 @@ namespace RiverHollow.WorldObjects
             Sprite.Position += direction;
         }
 
+        public virtual float GetTownScore()
+        {
+            return GetFloatByIDKey("TownScore", 0);
+        }
+
         #region Lookup Handlers
         public string GetTextData(string key)
         {

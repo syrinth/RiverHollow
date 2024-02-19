@@ -99,7 +99,6 @@ namespace RiverHollow.Characters
         {
             base.Update(gTime);
 
-
             if (_lightSource != null)
             {
                 _lightSource.Position = Position - new Point((_lightSource.Width - Width) / 2, (_lightSource.Height - Height) / 2);
@@ -263,7 +262,26 @@ namespace RiverHollow.Characters
             GetSprites().ForEach(spr => spr.SetScale(scale));
         }
 
-        public void SetClothing(Clothing c)
+        public void AssignClothing(Clothing c)
+        {
+            if (c != null)
+            {
+                switch (c.ClothingType)
+                {
+                    case EquipmentEnum.Hat:
+                        PlayerGear[0, 0] = c;
+                        break;
+                    case EquipmentEnum.Shirt:
+                        PlayerGear[1, 0] = c;
+                        break;
+                    case EquipmentEnum.Pants:
+                        PlayerGear[2, 0] = c;
+                        break;
+                }
+                SetClothingSprite(c);
+            }
+        }
+        public void SetClothingSprite(Clothing c)
         {
             if (c != null)
             {
@@ -315,9 +333,9 @@ namespace RiverHollow.Characters
         public void SetBodyType(int val)
         {
             BodyType = val;
-            SetClothing(Hat);
-            SetClothing(Shirt);
-            SetClothing(Pants);
+            SetClothingSprite(Hat);
+            SetClothingSprite(Shirt);
+            SetClothingSprite(Pants);
         }
 
         private void SetLinkedSprites()
@@ -326,10 +344,9 @@ namespace RiverHollow.Characters
             LinkedSpriteHelper(PantsSprite, ref temp);
             LinkedSpriteHelper(ShirtSprite, ref temp);
 
-            ArmSprite.SetLinkedSprite(temp, false);
-            EyeSprite.SetLinkedSprite(temp, false);
-            HairSprite.SetLinkedSprite(EyeSprite, false);
-            temp = HairSprite;
+            LinkedSpriteHelper(ArmSprite, ref temp);
+            LinkedSpriteHelper(EyeSprite, ref temp);
+            LinkedSpriteHelper(HairSprite, ref temp);
 
             LinkedSpriteHelper(HatSprite, ref temp);
         }
