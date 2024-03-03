@@ -46,7 +46,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 for (int j = 0; j < _iColumns; j++)
                 {
                     _arrItemBoxes[i, j].SetItem(InventoryManager.GetItemFromLocation(i, j, _bPlayerInventory));
-                    if (TownManager.AtArchive() && !TownManager.CanArchiveItem(_arrItemBoxes[i, j].BoxItem))
+                    if (_bPlayerInventory && TownManager.AtArchive() && _arrItemBoxes[i, j].BoxItem != null && !TownManager.CanArchiveItem(_arrItemBoxes[i, j].BoxItem))
                     {
                         _arrItemBoxes[i, j].Enable(false);
                     }
@@ -122,7 +122,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             bool rv = false;
 
             var itemBox = GetItemBox(mouse);
-            if (itemBox != null)
+            if (itemBox != null && itemBox.Active)
             {
                 rv = true;
                 if (GameManager.HeldItem != null)
@@ -162,13 +162,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         Item clickedItem = IsItemThere(mouse);
                         if (!GUIManager.IsTextWindowOpen() && Contains(mouse) && clickedItem != null)
                         {
-                            if (GameManager.CurrentWorldObject.CompareType(ObjectTypeEnum.DungeonObject))
+                            if (!DungeonHandling(clickedItem))
                             {
-                                if (((TriggerObject)GameManager.CurrentWorldObject).CheckForKey(clickedItem))
-                                {
-                                    ((TriggerObject)GameManager.CurrentWorldObject).AttemptToTrigger(Constants.TRIGGER_ITEM_OPEN);
-                                    GUIManager.CloseMainObject();
-                                }
+                                bool takeHalf = InputManager.IsKeyDown(Keys.LeftShift) || InputManager.IsKeyDown(Keys.RightShift);
+                                GameManager.GrabItem(TakeItem(mouse, takeHalf));
                             }
                         }
                     }
@@ -203,7 +200,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 //Retrieve the item from the GUIBox we clicked on
                 GUIItemBox i = GetItemBox(mouse);
-                if (i != null && i.BoxItem != null)
+                if (i != null && i.BoxItem != null && i.Active)
                 {
                     if (!HoldsItem(i.BoxItem, _bPlayerInventory))
                     {
@@ -216,7 +213,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     {
                         rv = i.BoxItem.ItemBeingUsed();
                     }
-                    else  //We are managing an additional Inventory
+                    else if(!DungeonHandling(i.BoxItem))  //We are managing an additional Inventory
                     {
                         int row = 0;
                         int col = 0;
@@ -286,6 +283,23 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             //Close any hover windows that may be open
             if (rv && IsItemThere(mouse) == null) { GUIManager.CloseHoverWindow(); }
+
+            return rv;
+        }
+
+        private bool DungeonHandling(Item clickedItem)
+        {
+            bool rv = false;
+            if (GameManager.CurrentWorldObject != null && GameManager.CurrentWorldObject is TriggerObject triggerObj)
+            {
+                rv = true;
+
+                if (triggerObj.CheckForKey(clickedItem))
+                {
+                    triggerObj.AttemptToTrigger(Constants.TRIGGER_ITEM_OPEN);
+                    GUIManager.CloseMainObject();
+                }
+            }
 
             return rv;
         }

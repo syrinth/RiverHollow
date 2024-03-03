@@ -4,21 +4,25 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.GUIComponents.Screens;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
     public class Trigger : TriggerObject
     {
         Item _item;
-        public Trigger(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        protected Point _pDisplayOffset;
+        public Trigger(int id, Dictionary<string, string> stringData) : base(id, stringData) 
         {
             _item = DataManager.GetItem(_iItemKeyID);
+            _pDisplayOffset = GetPointByIDKey("DisplayOffset");
 
             if (_iItemKeyID == -1)
             {
-                Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Width, _pImagePos.Y, _pSize);
+                Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X, _pImagePos.Y + Height, _pSize);
             }
         }
 
@@ -28,7 +32,7 @@ namespace RiverHollow.WorldObjects
             if (_item != null)
             {
                 float visibility = _bHasBeenTriggered ? 1f : 0.25f;
-                _item.Draw(spriteBatch, new Rectangle((int)(MapPosition.X), (int)(MapPosition.Y - 6), Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1, visibility);
+                _item.Draw(spriteBatch, new Rectangle(MapPosition.X + _pDisplayOffset.X, MapPosition.Y + _pDisplayOffset.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1, visibility);
             }
         }
 
@@ -80,7 +84,6 @@ namespace RiverHollow.WorldObjects
                 ResetTrigger();
             }
             
-
             if (CurrentMap.IsDungeon) { DungeonManager.ActivateTrigger(_sOutTrigger); }
             else { GameManager.ActivateTriggers(_sOutTrigger); }
         }
@@ -95,6 +98,16 @@ namespace RiverHollow.WorldObjects
         {
             _bHasBeenTriggered = false;
             Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+        }
+
+        public override void LoadData(WorldObjectData data)
+        {
+            base.LoadData(data);
+            _item = DataManager.GetItem(_iItemKeyID);
+            if (_iItemKeyID != -1)
+            {
+                Sprite.RemoveAnimation(AnimationEnum.Action1);
+            }
         }
     }
 }

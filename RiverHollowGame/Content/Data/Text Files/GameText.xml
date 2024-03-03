@@ -79,7 +79,7 @@
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Name:Pedestal_Ruby][Text:A shining red gem.]</Value>
+      <Value>[Name:Codex_Unlocked][Text:Codex Acquired!]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -119,7 +119,7 @@
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Name:Selection_ShipGoods][Text:Ship Goods][TextVerb:ShipGoods]</Value>
+      <Value>[Name:Selection_Donate][Text:Donate to Archives][TextVerb:ArchivesDonate]</Value>
     </Item>
     <Item>
       <Key>30</Key>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;

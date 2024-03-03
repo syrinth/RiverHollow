@@ -57,6 +57,17 @@ namespace RiverHollow.WorldObjects
             _bVisible = true;
             _iTriggersLeft = _iTriggerNumber;
         }
+
+        public override void LoadData(SaveManager.WorldObjectData data)
+        {
+            base.LoadData(data);
+            if (_bHasBeenTriggered)
+            {
+                _bHasBeenTriggered = true;
+                _bWalkable = true;
+                _bVisible = false;
+            }
+        }
     }
 
     public class TriggerDoor : TriggerDoorObject

@@ -36,7 +36,10 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             _liButtons.Add(new GUIButton("Build", BtnBuild));
             _liButtons.Add(new GUIButton("Edit Town", BtnEdit));
             _liButtons.Add(new GUIButton("Task Log", BtnTaskLog));
-            _liButtons.Add(new GUIButton("Codex", BtnCodex));
+            if (PlayerManager.CodexUnlocked)
+            {
+                _liButtons.Add(new GUIButton("Codex", BtnCodex));
+            }
             _liButtons.Add(new GUIButton("Options", BtnOptions));
             _liButtons.Add(new GUIButton("Exit Game", BtnExitGame));
 

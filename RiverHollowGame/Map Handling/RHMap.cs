@@ -869,6 +869,9 @@ namespace RiverHollow.Map_Handling
             {
                 if (forceRepop || tiledObj.Properties.ContainsKey("Reset"))
                 {
+                    int xCount = 0;
+                    int yCount = 0;
+
                     int objWidth = Constants.TILE_SIZE;
                     int objHeight = Constants.TILE_SIZE;
                     for (int y = (int)tiledObj.Position.Y; y < (int)tiledObj.Position.Y + tiledObj.Size.Height; y += objHeight)
@@ -877,27 +880,42 @@ namespace RiverHollow.Map_Handling
                         {
                             if (tiledObj.Properties.ContainsKey("ObjectID"))
                             {
-                                WorldObject obj = DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Properties);
-                                if (obj is Plant plantObj)
+                                int placeEvery = 1;
+                                if (tiledObj.Properties.ContainsKey("Every"))
                                 {
-                                    plantObj.FinishGrowth();
+                                    if (!int.TryParse(tiledObj.Properties["Every"], out placeEvery))
+                                    {
+                                        ErrorManager.TrackError();
+                                    }
                                 }
 
-                                if (obj.PlaceOnMap(new Point(x, y), this))
+                                if (xCount % placeEvery == 0 && yCount % placeEvery == 0)
                                 {
-                                    objWidth = obj.BaseWidth * Constants.TILE_SIZE;
-                                    objHeight = obj.BaseHeight * Constants.TILE_SIZE;
-                                }
-                                else
-                                {
-                                    ErrorManager.TrackError();
+                                    WorldObject obj = DataManager.CreateWorldObjectByID(int.Parse(tiledObj.Properties["ObjectID"]), tiledObj.Properties);
+                                    if (obj is Plant plantObj)
+                                    {
+                                        plantObj.FinishGrowth();
+                                    }
+
+                                    if (obj.PlaceOnMap(new Point(x, y), this))
+                                    {
+                                        objWidth = obj.BaseWidth * Constants.TILE_SIZE;
+                                        objHeight = obj.BaseHeight * Constants.TILE_SIZE;
+                                    }
+                                    else
+                                    {
+                                        ErrorManager.TrackError();
+                                    }
                                 }
                             }
                             else if (tiledObj.Properties.ContainsKey("ItemID"))
                             {
                                 new WrappedItem(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position.ToPoint(), this);
                             }
+                            xCount++;
                         }
+                        xCount = 0;
+                        yCount++;
                     }
                 }
             }

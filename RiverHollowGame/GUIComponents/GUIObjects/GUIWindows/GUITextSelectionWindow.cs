@@ -86,7 +86,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
 
                 if (v.CanGiveGift) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift")); }
-                if (_textEntry.HasTag("ShipGoods")) { liCommands.Add(DataManager.GetGameTextEntry("Selection_ShipGoods")); }
                 if (v.CanBeMarried)
                 {
                     if (v.AvailableToDate()) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Date")); }

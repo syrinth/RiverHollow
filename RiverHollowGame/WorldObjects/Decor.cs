@@ -34,13 +34,27 @@ namespace RiverHollow.WorldObjects
         public bool HasDisplay => _objDisplay != null || _itemDisplay != null;
         bool Archive => GetBoolByIDKey("Archive");
 
-        public Decor(int id) : base(id)
+        public Decor(int id, Dictionary<string, string> args) : base(id)
         {
             _pRotationOffset = GetPointByIDKey("RotationBaseOffset");
             _pRotationSize = GetPointByIDKey("RotationSize");
 
             _pDisplayOffset = GetPointByIDKey("DisplayOffset");
             _pRotatedDisplayOffset = GetPointByIDKey("RotatedDisplayOffset");
+
+            if (CanDisplay)
+            {
+                if (args != null && args.ContainsKey("ItemID"))
+                {
+                    string[] holdSplit = Util.FindParams(args["ItemID"]);
+                    var itemStr = Util.FindArguments(holdSplit[0]);
+
+                    int ID = int.Parse(itemStr[0]);
+                    int number = itemStr.Length > 1 ? int.Parse(itemStr[1]) : 1;
+
+                    _itemDisplay = DataManager.GetItem(ID, number);
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -279,7 +293,7 @@ namespace RiverHollow.WorldObjects
         /// <param name="it">The Item object to display</param>
         public void SetDisplayEntity(Item it, bool viaBuildMode = true)
         {
-            if (!Archive || !TownManager.DIArchive[it.ID].Item2)
+            if (!Archive || (it != null && !TownManager.DIArchive[it.ID].Item2))
             {
                 if (StoreDisplayEntity(viaBuildMode))
                 {

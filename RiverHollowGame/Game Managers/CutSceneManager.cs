@@ -129,7 +129,7 @@ namespace RiverHollow.Game_Managers
     public class Cutscene
     {
         #region CutScene Commandinformation
-        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, GoTo, Introduce, ItemID, Move, MoveToTown, Rotate, Sound, Speak, Speed, Task, Text, Wait };
+        enum CutsceneCommandEnum { Activate, Background, BackgroundRemove, End, Face, GoTo, Introduce, ItemID, Move, MoveToTown, Rotate, SendToTown, Sound, Speak, Speed, Task, Text, Wait };
 
         /// <summary>
         /// A class to hold the information for a CutSceneCommand step
@@ -369,6 +369,10 @@ namespace RiverHollow.Game_Managers
                                 case CutsceneCommandEnum.MoveToTown:
                                     goToNext = true;
                                     MoveToTown(sCommandData);                                   
+                                    break;
+                                case CutsceneCommandEnum.SendToTown:
+                                    goToNext = true;
+                                    SendToTown(sCommandData);
                                     break;
                                 case CutsceneCommandEnum.Introduce:
                                     goToNext = true;
@@ -680,6 +684,9 @@ namespace RiverHollow.Game_Managers
                             case CutsceneCommandEnum.MoveToTown:
                                 MoveToTown(sCommandData);
                                 break;
+                            case CutsceneCommandEnum.SendToTown:
+                                SendToTown(sCommandData);
+                                break;
                             case CutsceneCommandEnum.Task:
                                 SetTask(sCommandData);
                                 break;
@@ -743,6 +750,14 @@ namespace RiverHollow.Game_Managers
             {
                 TownManager.DIVillagers[characterID].TryToMoveIn();
                 TownManager.DIVillagers[characterID].MoveToSpawn();
+            }
+        }
+
+        private void SendToTown(string[] sCommandData)
+        {
+            if (int.TryParse(sCommandData[0], out int characterID))
+            {
+                TownManager.DIVillagers[characterID].SendToTown(true);
             }
         }
 

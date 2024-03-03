@@ -13,16 +13,13 @@ namespace RiverHollow.WorldObjects
         {
             _eAssignedColor = GetEnumByIDKey<ColorStateEnum>("Color");
 
-            if (_eAssignedColor == ColorStateEnum.Red)
-            {
-                Activate(false);
-            }
+            Activate(_eAssignedColor != ColorStateEnum.Red);
         }
 
         protected override void LoadSprite()
         {
             base.LoadSprite();
-            Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + Constants.TILE_SIZE, _pImagePos.Y, _pSize);
+            Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X, _pImagePos.Y + Height, _pSize);
         }
 
         public override void AttemptToTrigger(string name)
@@ -40,11 +37,13 @@ namespace RiverHollow.WorldObjects
             if (_bActive)
             {
                 _bWalkable = false;
+                _bDrawUnder = false;
                 Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
             }
             else
             {
                 _bWalkable = true;
+                _bDrawUnder = GetBoolByIDKey("DrawUnder");
                 Sprite.PlayAnimation(AnimationEnum.Action1);
             }
         }

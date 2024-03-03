@@ -122,5 +122,6 @@ namespace RiverHollow.Utilities
         public const string STR_ALERT_TASK = "Alert_Task";
         public const string STR_ALERT_FINISHED = "Alert_Finished";
         public const string STR_ALERT_ENERGY = "Alert_Energy";
+        public const string STR_ALERT_CODEX = "Codex_Unlocked";
     }
 }

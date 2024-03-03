@@ -231,11 +231,11 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:1-6][ItemGroups:Potion][Value:70][ReqItems:93-1/23-1]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:1-6][ItemGroups:Potion][Value:70][ReqItems:162-1/93-1/23-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:2-6][ItemGroups:Potion][Value:60][ReqItems:56-1/162-2]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:2-6][ItemGroups:Potion][Value:60][ReqItems:162-1/56-1]</Value>
     </Item>
     <Item>
       <Key>59</Key>
@@ -255,7 +255,7 @@
     </Item>
     <Item>
       <Key>63</Key>
-      <Value>[Type:Resource][Subtype:None][Image:0-7]</Value>
+      <Value>[Type:Resource][Subtype:Herb][Image:0-7]</Value>
     </Item>
     <Item>
       <Key>64</Key>
@@ -399,7 +399,7 @@
     </Item>
     <Item>
       <Key>99</Key>
-      <Value>[Type:Resource][Subtype:None][Image:4-0][Value:1500][ESub:Wand][Tier:5][Damage:Minor][Magic:Major][ReqItems:38-2/45-1]</Value>
+      <Value>[Type:Special][Image:7-0]</Value>
     </Item>
     <Item>
       <Key>100</Key>
@@ -659,15 +659,15 @@
     </Item>
     <Item>
       <Key>164</Key>
-      <Value>[Type:Consumable][Subtype:None][Image:1-2][Value:3000][CombatType:Helpful][Status:KO][Hp:1]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:3-6][ItemGroups:Potion][Value:70][ReqItems:162-1/93-1/23-1]</Value>
     </Item>
     <Item>
       <Key>165</Key>
-      <Value>[Type:Consumable][Subtype:None][Image:1-2][Value:3000][CombatType:Helpful][Status:Poisoned]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:1-2][ItemGroups:Potion][Value:70][ReqItems:162-1/7-1]</Value>
     </Item>
     <Item>
       <Key>166</Key>
-      <Value>[Type:Consumable][Subtype:Potion][Image:1-2][Value:3000][CombatType:Harmful][Status:Poisoned]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:1-2][ItemGroups:Potion][Value:70][ReqItems:162-1/63-1/95-1]</Value>
     </Item>
     <Item>
       <Key>167</Key>

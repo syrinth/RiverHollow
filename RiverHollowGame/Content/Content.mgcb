@@ -560,6 +560,21 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapMountainPath.tmx
 
+#begin Maps/Misc/mapMushMush_2.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapMushMush_2.tmx
+
+#begin Maps/Misc/mapMushMush_3.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapMushMush_3.tmx
+
+#begin Maps/Misc/mapMushMush_RitualCave.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapMushMush_RitualCave.tmx
+
 #begin Maps/Misc/mapRuined_Manor.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor

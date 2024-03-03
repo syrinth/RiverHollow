@@ -146,6 +146,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "MagicIncreases")]
             public int magicIncreases;
 
+            [XmlElement(ElementName = "Codex")]
+            public bool codex;
+
             [XmlElement(ElementName = "HasMagic")]
             public bool hasMagic;
 
@@ -714,7 +717,6 @@ namespace RiverHollow.Game_Managers
 
             //After we've loaded everything, spawn the mounts in the Stables
             PlayerManager.SpawnMounts();
-            
         }
         #endregion
 

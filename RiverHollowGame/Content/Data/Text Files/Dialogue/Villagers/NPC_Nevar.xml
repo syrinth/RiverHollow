@@ -3,7 +3,7 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Greetings. I am a traveler of sorts, searching the lands for curios and curiosities. $Actor_22$ is my name and I would entreat your aid.]</Value>
+      <Value>[Name:Introduction][Text:Again, I thank you for your aid. It would appear that the Spirits took my previous offerings and, as a result, left me trapped. Perhaps we might help one another?]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -31,16 +31,18 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?][Name:Collection]</Value>
+      <Value>[Name:Collection][Text:Is that for me? Oh! Thank you! It's just what I've been looking for! How did you know?]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Text:Hello, what can I do for you?][Selection:VillageTalk][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:You have returned. What do you require of me?][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Name:Task_10_Start][Text:I have spent years studying ancient texts that pre-date the war. They were scattered, hard to find and difficult to understand. I would build an $WorldObject_30$ here to better record our history.
-This land has a sense of importance about it and I feel that this task is of the utmost importance. Should warfare come again, greater than the last, we must prepare to preserve our knowledge for the future.][UnlockObjectID:30]</Value>
+      <Value>[Name:Task_10_Start][Text:I have been contemplating my next move and I think that this village you shall make a fine home for me to continue my research, at least for now.
+I am... a scholar of sorts, seeking out relics of the past and present. I wish to record the various items and resources found int his land.
+ You are a Builder, yes? As such, your duties will have you scouring the land for your materials. I ask only that you bring them to me as well, so that I may research them. Herbs, Potions, Relics from the past as well as any tomes you might find.
+ I will make it worth your while to furnish my $WorldObject_30$.][UnlockObjectID:30]</Value>
     </Item>
     <Item>
       <Key>10</Key>

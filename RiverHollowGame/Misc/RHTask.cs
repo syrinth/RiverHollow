@@ -491,6 +491,13 @@ namespace RiverHollow.Misc
                     GameManager.GoToHUDScreen();
                 }
 
+                if (DataManager.TaskData[ID].ContainsKey("UnlockCodex"))
+                {
+                    PlayerManager.CodexUnlocked = true;
+                    GameManager.GoToHUDScreen();
+                    GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_CODEX);
+                }
+
                 ActivateNPCs();
 
                 TaskManager.TaskLog.Remove(this);

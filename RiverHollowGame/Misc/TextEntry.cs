@@ -252,6 +252,15 @@ namespace RiverHollow.Misc
 
                     rv = true;
                 }
+                if (_diTags.ContainsKey("ArchiveTotal") && int.TryParse(_diTags["ArchiveTotal"], out int archiveTotal))
+                {
+                    if (TownManager.GetArchiveTotal() < archiveTotal)
+                    {
+                        return false;
+                    }
+
+                    rv = true;
+                }
 
                 if (_diTags.ContainsKey("CompletedTaskID"))
                 {
@@ -321,6 +330,10 @@ namespace RiverHollow.Misc
                 }
 
                 talker.CheckInventoryAlert();
+            }
+            if (_diTags.ContainsKey("Money") && int.TryParse(_diTags["Money"], out int moneyTotal))
+            {
+                PlayerManager.AddMoney(moneyTotal);
             }
             if (_diTags.ContainsKey("GiveItems"))
             {

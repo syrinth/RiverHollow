@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name][Text:Splendid. You are indeed a crtedit to your profession, I can envision this place filled to capacity, a center of learning for all who seek knowledge of these lands.
+	  Here, I promised you recompense for your efforts, and my word is my bond. This Codex will record all manner of information regarding your experiences with the land and creatures within.
+	  Use it well.]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

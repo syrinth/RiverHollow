@@ -45,7 +45,6 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
                 {
                     if (!_bHasBeenTriggered) { FireTrigger(); }
                 }
-                else { ResetTrigger(); }
             }
         }
 

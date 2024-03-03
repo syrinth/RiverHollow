@@ -8,7 +8,7 @@
   <property name="Mobs" value="4-25"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourceItemID" value="162-C/148-U/227-U/163-R"/>
-  <property name="ResourceObjectID" value="106-U"/>
+  <property name="ResourceObjectID" value="105-U/106-U"/>
   <property name="ResourceRate" type="int" value="1"/>
   <property name="ResourceTotal" value="15"/>
  </properties>

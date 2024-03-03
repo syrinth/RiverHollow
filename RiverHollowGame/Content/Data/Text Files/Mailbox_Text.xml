@@ -15,5 +15,9 @@ Yours, Delian Fortenay, Guild of Merchants][Day:2][Month:1][Year:1]</Value>
 	  <Key>1</Key>
       <Value>[Name:$World_Object_38$][Text:Now that we're getting settled in, we need a Town Hall. It'll help with organizing the town.][CompletedTaskID:16][AddTaskID:6][AssignTaskID:17]</Value>
     </Item>
+	<Item>
+	  <Key>2</Key>
+      <Value>[Name:Archive 1][Text:Gratitude for your contributions. I have sent this small reward as recompense, I hope that you appreciate it.][ArchiveTotal:3][Money:100]</Value>
+    </Item>
   </Asset>
 </XnaContent>

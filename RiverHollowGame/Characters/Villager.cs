@@ -265,9 +265,9 @@ namespace RiverHollow.Characters
             _eSpawnStatus = SpawnStateEnum.SendingToInn;
             MapManager.FadeOut();
         }
-        public void SendToTown()
+        public void SendToTown(bool force = false)
         {
-            if (_eSpawnStatus == SpawnStateEnum.SendingToInn)
+            if (force || _eSpawnStatus == SpawnStateEnum.SendingToInn)
             {
                 _eSpawnStatus = SpawnStateEnum.WaitAtInn;
                 MoveToSpawn();

@@ -453,6 +453,21 @@ namespace RiverHollow.Game_Managers
             return it != null && DIArchive.ContainsKey(it.ID) && !DIArchive[it.ID].Item2;
         }
 
+        public static int GetArchiveTotal()
+        {
+            int rv = 0;
+
+            foreach(var data in DIArchive.Values)
+            {
+                if (data.Item2)
+                {
+                    rv++;
+                }
+            }
+
+            return rv;
+        }
+
         public static int GetPopulation()
         {
             return DIVillagers.Count(x => x.Value.LivesInTown);

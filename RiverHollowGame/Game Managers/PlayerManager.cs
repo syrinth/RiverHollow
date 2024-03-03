@@ -29,6 +29,7 @@ namespace RiverHollow.Game_Managers
 
         public static float CurrentEnergy;
         public static float CurrentMagic;
+        public static bool CodexUnlocked = false;
         public static bool MagicUnlocked = false;
 
         #region Increases
@@ -856,6 +857,7 @@ namespace RiverHollow.Game_Managers
                 hpIncreases = HPIncrease,
                 energyIncreases = EnergyIncrease,
                 magicIncreases = MagicIncrease,
+                codex = CodexUnlocked,
                 hasMagic = MagicUnlocked,
                 Items = new List<ItemData>(),
                 liPets = new List<int>(),
@@ -910,6 +912,8 @@ namespace RiverHollow.Game_Managers
             EnergyIncrease = saveData.energyIncreases;
             MagicIncrease = saveData.magicIncreases;
             MagicUnlocked = saveData.hasMagic;
+            
+            CodexUnlocked = saveData.codex;
 
             NewDayRecovery();
 

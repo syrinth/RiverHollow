@@ -629,7 +629,7 @@ namespace RiverHollow.Game_Managers
                             case BuildableEnum.Container:
                                 return new Container(id, args);
                             case BuildableEnum.Decor:
-                                return new Decor(id);
+                                return new Decor(id, args);
                             case BuildableEnum.Field:
                                 return new Field(id);
                             case BuildableEnum.Floor:

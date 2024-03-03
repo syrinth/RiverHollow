@@ -2,25 +2,22 @@
 <XnaContent xmlns:Generic="System.Collections.Generic">
   <Asset Type="Dictionary[int, string]">
     <Item>
+      <Key>0</Key>
+      <Value>[Text:No... there is nothing new to be gained here. What mysteries do you hide?]</Value>
+    </Item>
+    <Item>
       <Key>1</Key>
-      <Value>[Name:First][Text:It's not good for monsters to be this close to your town.]</Value>
+      <Value>[Text:Oh. Hello, I see aid has finally arrived. Gratitude for releasing me, I have been trapped here for quite some time.]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Name:Engage][Text:You look like you know what you're doing. Care to join me in taking this thing down?]</Value>
-    </Item>
-    <Item>
-      <Key>3</Key>
-      <Value>[Text:Ready for what? I know you're skilled with that sword of yours, but every time you leave the house with it, I'm so afraid.]</Value>
-    </Item>
-    <Item>
-      <Key>4</Key>
-      <Value>[Text:So what? You'd rather I just cower in fear the next time monsters raid the town? No, I won't do that.]</Value>
-    </Item>
-    <Item>
-      <Key>5</Key>
-      <Value>[Text:...
-We'll talk about this later, we have a guest. Is that you $Name$? I'm sorry you had to see that. What can I help you with?]</Value>
+      <Value>[Text:Tell me. Do you know what this place is?
+	  I thought not.
+	  Far in the past, there was a people who lived in this land called the Aedians. According to legend, they lived together with the spirits of the land. They left behind multiple statues and carvings of the spirits behind them.
+	  No one is really sure about what became of them and it's one mystery among many this land holds that I hope to unravel.
+	  But first, I will have to rest. I have been down here too long.
+	  ...
+	  A town you say? How serendipitous. I know the clearing you speak of, I shall meet you there.]</Value>
     </Item>
   </Asset>
 </XnaContent>

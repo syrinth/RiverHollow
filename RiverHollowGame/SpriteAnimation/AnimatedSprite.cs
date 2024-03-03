@@ -112,6 +112,7 @@ namespace RiverHollow.SpriteAnimations
         #endregion
 
         #region RemoveAnimation Helpers
+        public void RemoveAnimation(AnimationEnum e) { RemoveAnimation(Util.GetEnumString(e)); }
         public void RemoveAnimation(VerbEnum verb, DirectionEnum dir) { RemoveAnimation(Util.GetActorString(verb, dir)); }
         private void RemoveAnimation(string animationName) { _diFrameAnimations.Remove(animationName); }
         #endregion

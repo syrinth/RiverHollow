@@ -792,7 +792,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_63</Key>
-      <Value>[Name:Aether Shroom]</Value>
+      <Value>[Name:Bluecap]</Value>
     </Item>
     <Item>
       <Key>Item_64</Key>
@@ -936,7 +936,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_99</Key>
-      <Value>[Name:Black Night][Description:This wand was enchanted with the essences of many dark creatures, giving it a sinister power.]</Value>
+      <Value>[Name:Emerald Spirit][Description:A carved emerald in the shape of a Spirit]</Value>
     </Item>
     <Item>
       <Key>Item_100</Key>
@@ -1196,15 +1196,15 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_164</Key>
-      <Value>[Name:Smelling Salts][Description:Wake Up]</Value>
+      <Value>[Name:Potion of Laughter][Description:Tickles your funny bone from the inside.]</Value>
     </Item>
     <Item>
       <Key>Item_165</Key>
-      <Value>[Name:Antidote][Description:Cures Poisons]</Value>
+      <Value>[Name:Pick Me Up][Description:For those days when you're still suffering last night's bad decisions.]</Value>
     </Item>
     <Item>
       <Key>Item_166</Key>
-      <Value>[Name:Poisoned Knife][Description:Inflicts Poison]</Value>
+      <Value>[Name:Potion of Arcane Might][Description:Increases magical power. Use cautiously, side effects may include...]</Value>
     </Item>
     <Item>
       <Key>Item_167</Key>
@@ -1504,11 +1504,11 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_10</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Staircase]</Value>
     </Item>
     <Item>
       <Key>WorldObject_11</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Pedestal]</Value>
     </Item>
     <Item>
       <Key>WorldObject_12</Key>
@@ -1752,7 +1752,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_72</Key>
-      <Value>[Name:Interaction Trigger]</Value>
+      <Value>[Name:Trigger Pedestal]</Value>
     </Item>
     <Item>
       <Key>WorldObject_73</Key>
@@ -2180,7 +2180,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>
-      <Value>[Name:Carpenter]</Value>
+      <Value>[Name:Mush Mush Ritual]</Value>
     </Item>
     <Item>
       <Key>Cutscene_1</Key>

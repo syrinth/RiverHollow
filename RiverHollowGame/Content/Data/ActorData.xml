@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Villager][Key:Nevar][PortRow:1][HouseID:30][Collection:7/167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Size:16-28]</Value>
+      <Value>[Type:Villager][Key:Nevar][PortRow:1][HouseID:30][Collection:7/167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Size:16-29][StartMap:mapMushMush_RitualCave]</Value>
     </Item>
     <Item>
       <Key>23</Key>
