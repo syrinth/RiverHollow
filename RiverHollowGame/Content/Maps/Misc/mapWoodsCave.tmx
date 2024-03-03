@@ -151,19 +151,19 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="71" name="Mob" x="496" y="304" width="32" height="32">
+  <object id="71" name="Mob" x="432" y="272" width="96" height="80">
    <properties>
     <property name="MobID" value="32-C"/>
    </properties>
   </object>
-  <object id="72" name="Mob" x="528" y="80" width="32" height="32">
+  <object id="72" name="Mob" x="448" y="64" width="128" height="64">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C/58-U"/>
    </properties>
   </object>
-  <object id="73" name="Mob" x="432" y="480" width="32" height="32">
+  <object id="73" name="Mob" x="448" y="464" width="112" height="48">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C/58-U"/>
    </properties>
   </object>
   <object id="76" name="Resource" x="544" y="208" width="160" height="160">
@@ -172,7 +172,7 @@
     <property name="ItemID" value="210-C/211-U"/>
    </properties>
   </object>
-  <object id="83" name="Color Blocker" x="128" y="176" width="48" height="15">
+  <object id="83" name="Color Blocker" x="80" y="240" width="48" height="15">
    <properties>
     <property name="ObjectID" type="int" value="66"/>
    </properties>

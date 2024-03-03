@@ -469,6 +469,10 @@ namespace RiverHollow.Map_Handling
             if (_diWorldObjects[obj.ID].Contains(obj))
             {
                 _diWorldObjects[obj.ID].Remove(obj);
+                if (_diWorldObjects[obj.ID].Count == 0)
+                {
+                    _diWorldObjects.Remove(obj.ID);
+                }
             }
         }
         public int GetNumberObjects(int objID, bool onlyFinished)
@@ -643,6 +647,7 @@ namespace RiverHollow.Map_Handling
                         }
                         else if (data.Type == SpawnTypeEnum.Item)
                         {
+                            // -1 because we're looking for WrappedItem Objects here
                             var objList = GetObjectsByID(-1);
                             foreach(var obj in objList)
                             {
@@ -1042,9 +1047,21 @@ namespace RiverHollow.Map_Handling
                 Visited = false;
                 foreach (var objectList in _diWorldObjects.Values)
                 {
-                    objectList.ForEach(x => x.RemoveSelfFromTiles());
+                    if (objectList[0] is Trigger)
+                    {
+                        foreach(var trigger in objectList)
+                        {
+                            if (trigger.Reset)
+                            {
+                                RemoveWorldObject(trigger);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        objectList.ForEach(x => RemoveWorldObject(x));
+                    }
                 }
-                _diWorldObjects.Clear();
             }
 
             MobsSpawned = MobSpawnStateEnum.None;

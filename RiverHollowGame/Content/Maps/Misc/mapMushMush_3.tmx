@@ -168,29 +168,29 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="MapObject">
-  <object id="71" name="Mob" x="64" y="304" width="32" height="32">
+  <object id="71" name="Mob" x="96" y="256" width="64" height="64">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C/58-U"/>
    </properties>
   </object>
-  <object id="72" name="Mob" x="444" y="614.667" width="32" height="32">
+  <object id="72" name="Mob" x="416" y="592" width="64" height="48">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C/58-U"/>
    </properties>
   </object>
-  <object id="73" name="Mob" x="272" y="400" width="32" height="32">
+  <object id="73" name="Mob" x="176" y="384" width="176" height="64">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C/58-U"/>
    </properties>
   </object>
-  <object id="89" name="Mob" x="176" y="144" width="32" height="32">
+  <object id="89" name="Mob" x="64" y="112" width="176" height="48">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C/58-U"/>
    </properties>
   </object>
-  <object id="90" name="Mob" x="448" y="384" width="32" height="32">
+  <object id="90" name="Mob" x="432" y="368" width="80" height="64">
    <properties>
-    <property name="MobID" value="32-C"/>
+    <property name="MobID" value="32-C/58-U"/>
    </properties>
   </object>
   <object id="95" name="Trigger Door" x="80" y="48" width="16" height="16">
