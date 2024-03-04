@@ -1049,7 +1049,7 @@ namespace RiverHollow.Map_Handling
                 {
                     if (objectList[0] is Trigger)
                     {
-                        foreach(var trigger in objectList)
+                        foreach (var trigger in objectList)
                         {
                             if (trigger.Reset)
                             {
@@ -1063,14 +1063,17 @@ namespace RiverHollow.Map_Handling
                     }
                 }
             }
-
-            MobsSpawned = MobSpawnStateEnum.None;
-            var keys = new List<int>(_diWorldObjects.Keys);
-            foreach (var key in keys)
+            else
             {
-                new List<WorldObject>(_diWorldObjects[key]).ForEach(x => x.Rollover());
+                //Skipping the Rollover here because the WorldObjects that were cleared still exist on the map list
+                var keys = new List<int>(_diWorldObjects.Keys);
+                foreach (var key in keys)
+                {
+                    new List<WorldObject>(_diWorldObjects[key]).ForEach(x => x.Rollover());
+                }
             }
 
+            MobsSpawned = MobSpawnStateEnum.None;
             _liSpecialTiles.ForEach(x => x.Rollover());
             
             GenerateRolloverResources();

@@ -453,13 +453,21 @@ namespace RiverHollow.Game_Managers
             return it != null && DIArchive.ContainsKey(it.ID) && !DIArchive[it.ID].Item2;
         }
 
+        private static bool SkipType(int id)
+        {
+            var type = DataManager.GetEnumByIDKey<ItemEnum>(id, "Type", DataType.Item);
+
+            return type == ItemEnum.Tool;
+        }
+
         public static int GetArchiveTotal()
         {
             int rv = 0;
 
-            foreach(var data in DIArchive.Values)
+            foreach(var data in DIArchive)
             {
-                if (data.Item2)
+
+                if (!SkipType(data.Key) && data.Value.Item2)
                 {
                     rv++;
                 }
