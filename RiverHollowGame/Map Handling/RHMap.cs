@@ -828,7 +828,7 @@ namespace RiverHollow.Map_Handling
                         {
                             if (obj.Properties.ContainsKey("NPC_ID"))
                             {
-                                Util.SafeAddToDictionary(ref _diCharacterLayer, "NPC_" + obj.Properties["NPC_ID"], Util.RectFromTiledMapObject(obj));
+                                Util.SafeAddToDictionary(ref _diCharacterLayer, Constants.MAPOBJ_HOME + obj.Properties["NPC_ID"], Util.RectFromTiledMapObject(obj));
                             }
                         }
                         else
@@ -1091,7 +1091,7 @@ namespace RiverHollow.Map_Handling
         public void CreateBuildingEntrance(Building b)
         {
             TravelPoint buildPoint = new TravelPoint(b, this.Name, b.ID);
-            _diTravelPoints.Add(b.BuildingMapName, buildPoint); //TODO: FIX THIS
+            _diTravelPoints.Add(b.InnerMapName, buildPoint); //TODO: FIX THIS
             CreateDoor(buildPoint, b.TravelBox.X, b.TravelBox.Y, b.TravelBox.Width, b.TravelBox.Height);
         }
 
@@ -1131,7 +1131,7 @@ namespace RiverHollow.Map_Handling
         /// <param name="b">The building to remove the door of</param>
         public void RemoveDoor(Building b)
         {
-            string mapName = b.BuildingMapName;
+            string mapName = b.InnerMapName;
             TravelPoint pt = _diTravelPoints[mapName];
 
             foreach (Point vec in Util.GetAllPointsInArea(pt.Location.X, pt.Location.Y, pt.CollisionBox.Width, pt.CollisionBox.Height, Constants.TILE_SIZE))
@@ -1799,23 +1799,24 @@ namespace RiverHollow.Map_Handling
 
                 if (!rv)
                 {
-                    foreach (var obj in _liMapObjects)
+                    foreach (var obj in CharacterObjects)
                     {
-                        Rectangle objRect = Util.RectFromTiledMapObject(obj);
+                        var name = obj.Key;
+                        Rectangle objRect = obj.Value;
                         DirectionEnum facing = DirectionEnum.None;
                         if (objRect.Contains(mouseLocation) && PlayerManager.InRangeOfPlayer(objRect, ref facing))
                         {
-                            if (obj.Name.Equals("Town_Display"))
+                            if (name.Equals("Town_Display"))
                             {
                                 rv = true;
                                 GUIManager.OpenMainObject(new HUDTownManagement());
                             }
-                            else if (obj.Name.Equals("Display_Upgrade"))
+                            else if (name.Equals("Display_Upgrade"))
                             {
                                 rv = true;
                                 GUIManager.OpenMainObject(new HUDBuildingUpgrade(TownManager.GetBuildingByID(this.BuildingID)));
                             }
-                            else if (obj.Name.StartsWith("Talk_"))
+                            else if (name.StartsWith(Constants.MAPOBJ_SHOP))
                             {
                                 foreach(var actor in _liActors)
                                 {
@@ -1920,12 +1921,14 @@ namespace RiverHollow.Map_Handling
                     }
                 }
 
-                foreach (var obj in _liMapObjects)
+                foreach (var obj in CharacterObjects)
                 {
-                    Rectangle objRect = Util.RectFromTiledMapObject(obj);
+                    var name = obj.Key;
+                    Rectangle objRect = obj.Value;
+
                     if (objRect.Contains(mouseLocation))
                     {
-                        if (obj.Name.StartsWith("Talk_"))
+                        if (name.StartsWith(Constants.MAPOBJ_SHOP))
                         {
                             foreach (var actor in _liActors)
                             {

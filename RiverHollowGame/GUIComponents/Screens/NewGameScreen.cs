@@ -218,7 +218,6 @@ namespace RiverHollow.GUIComponents.Screens
 
             RiverHollow.Instance.NewGame(!_gCheckSkipCutscene.Checked());
             GameManager.StopTakingInput();
-
         }
         public void BtnCancel()
         {

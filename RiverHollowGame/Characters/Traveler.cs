@@ -88,7 +88,7 @@ namespace RiverHollow.Characters
             if (BuildingID() != -1)
             {
                 var building = TownManager.GetBuildingByID(BuildingID());
-                var map = MapManager.Maps[building.BuildingMapName];
+                var map = MapManager.Maps[building.InnerMapName];
 
                 var containers = map.GetObjectsByType<Container>().Cast<Container>().ToList();
                 var shopTables = containers.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();

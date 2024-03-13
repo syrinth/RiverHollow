@@ -261,7 +261,7 @@ namespace RiverHollow.Game_Managers
 
                 foreach (Villager v in TownManager.DIVillagers.Values)
                 {
-                    v.DetermineValidSchedule();
+                    v.CreateDailySchedule();
                     v.RecalculatePath();
                 }
             }

@@ -380,16 +380,16 @@ namespace RiverHollow.Game_Managers
                 case 0:
                     if (EnvironmentManager.IsRaining())
                     {
-                        map = MapManager.Maps[Inn.BuildingMapName];
+                        map = MapManager.Maps[Inn.InnerMapName];
                     }
                     break;
                 case 1:
-                    map = MapManager.Maps[Inn.BuildingMapName];
+                    map = MapManager.Maps[Inn.InnerMapName];
                     break;
                 case 2:
                     if (npc.BuildingID() != -1 && TownObjectBuilt(npc.BuildingID()))
                     {
-                        map = MapManager.Maps[GetBuildingByID(npc.BuildingID()).BuildingMapName];
+                        map = MapManager.Maps[GetBuildingByID(npc.BuildingID()).InnerMapName];
                     }
                     else { goto case 0; }
                     break;

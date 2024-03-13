@@ -343,6 +343,7 @@ namespace RiverHollow
             foreach (Villager v in TownManager.DIVillagers.Values)
             {
                 v.SetStartingLocation();
+                v.CreateDailySchedule();
             }
 
             Camera.SetObserver(PlayerManager.PlayerActor);

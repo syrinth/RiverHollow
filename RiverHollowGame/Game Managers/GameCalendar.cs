@@ -181,7 +181,7 @@ namespace RiverHollow.Game_Managers
 
         public static string GetTime()
         {
-            return CurrentHour + ":" + CurrentMin.ToString("00");
+            return CurrentHour.ToString("00") + ":" + CurrentMin.ToString("00");
         }
 
         public static string GetCurrentSeason()
@@ -218,7 +218,7 @@ namespace RiverHollow.Game_Managers
 
         public static void LoadCalendar(CalendarData d)
         {
-            _timer = new RHTimer(Constants.CALENDAR_MINUTES_PER_SECOND);
+            _timer = new RHTimer(1);
 
             CurrentYear = d.currYear;
             CurrentDay = d.dayOfMonth;

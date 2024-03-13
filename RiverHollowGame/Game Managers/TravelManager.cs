@@ -112,11 +112,11 @@ namespace RiverHollow.Game_Managers
         /// When we are finished, set the newStart variable to the end location so subsequent pathfinding calls
         /// know to start there.
         /// </summary>
-        /// <param name="findKey">The location to try to reach</param>
-        /// <param name="mapName">The map the actor is currently on</param>
+        /// <param name="findLocation">The location to try to reach</param>
+        /// <param name="currentMapName">The map the actor is currently on</param>
         /// <param name="newStart">Reference to the start point. Changes for subsequent pathfinding calulations</param>
         /// <returns></returns>
-        public static List<RHTile> FindRouteToLocation(string findKey, string mapName, Point newStart, string logName = "")
+        public static List<RHTile> FindRouteToLocation(string findLocation, string currentMapName, Point newStart, string logName = "")
         {
             if (!string.IsNullOrEmpty(logName)) { TravelManager.NewTravelLog(logName); }
 
@@ -127,14 +127,14 @@ namespace RiverHollow.Game_Managers
             Dictionary<string, string> mapCameFrom = new Dictionary<string, string>();      
             Dictionary<string, double> mapCostSoFar = new Dictionary<string, double>();     //Records the cost to travel to maps that we've discovered
 
-            WriteToTravelLog("====================== " + mapName + " => " + findKey + " ======================");
+            WriteToTravelLog("====================== " + currentMapName + " => " + findLocation + " ======================");
 
             //Initialize pathfinding. Add the start node to the map frontier
             //The map frontier is a list of maps discovered and the cost to arrive at them
             var frontier = new PriorityQueue<string>();
-            frontier.Enqueue(mapName, 0);
-            mapCameFrom[mapName] = mapName;
-            mapCostSoFar[mapName] = 0;
+            frontier.Enqueue(currentMapName, 0);
+            mapCameFrom[currentMapName] = currentMapName;
+            mapCostSoFar[currentMapName] = 0;
 
             //As long as there are still maps to explore, we need to keep checking
             //When the loop resets, we are checking a 'new' map.
@@ -155,15 +155,15 @@ namespace RiverHollow.Game_Managers
                 }
 
                 //If the testMap contains the key that we're looking for then we need to pathfind from the entrance to the key
-                if (theTestMap.GetCharacterObject(findKey) != Rectangle.Empty)
+                if (theTestMap.GetCharacterObject(findLocation) != Rectangle.Empty)
                 {
                     //Set the initial values for the map pathfinding
                     //To make this work with the reversal later on, start
                     //at the key, and then walk back to the entrance to the map.
-                    mapName = testMapStr;
-                    newStart = MapManager.Maps[testMap].GetCharacterObject(findKey).Location;
+                    currentMapName = testMapStr;
+                    newStart = MapManager.Maps[testMap].GetCharacterObject(findLocation).Location;
 
-                    List<RHTile> pathToExit = FindPathToLocation(ref start, MapManager.Maps[testMap].GetCharacterObject(findKey).Location, testMapStr);
+                    List<RHTile> pathToExit = FindPathToLocation(ref start, MapManager.Maps[testMap].GetCharacterObject(findLocation).Location, testMapStr);
                     fromMap = mapCameFrom[testMapStr];          //Do the backtracking
 
                     List<List<RHTile>> liTotalPath = new List<List<RHTile>> { pathToExit };  //The pathfor this segment
@@ -234,9 +234,133 @@ namespace RiverHollow.Game_Managers
                                 _diMapPathing[testMapStr + ":" + exit.Value.LinkedMap] = pathToExit; // This needs another key for the appropriate exit
                                 WriteToTravelLog("---" + testMapStr + ":" + exit.Value.LinkedMap + "---");
                             }
-                            else
+                        }
+                    }
+                }
+            }
+
+            CloseTravelLog();
+
+            return _liCompletePath;
+        }
+
+        public static List<RHTile> FindRouteToPositionOnMap(Point targetPosition, string targetMap, string currentMapName, Point newStart, string logName = "")
+        {
+            if (!string.IsNullOrEmpty(logName)) { TravelManager.NewTravelLog(logName); }
+
+            List<RHTile> _liCompletePath = new List<RHTile>();            //The path from start to finish, between maps
+            _diMapPathing = new Dictionary<string, List<RHTile>>();         //Dictionary of all pathing
+
+            Point start = newStart;                                       //Set the start to the given location
+            Dictionary<string, string> mapCameFrom = new Dictionary<string, string>();
+            Dictionary<string, double> mapCostSoFar = new Dictionary<string, double>();     //Records the cost to travel to maps that we've discovered
+
+            WriteToTravelLog("====================== " + currentMapName + " => " + targetPosition + " ======================");
+
+            //Initialize pathfinding. Add the start node to the map frontier
+            //The map frontier is a list of maps discovered and the cost to arrive at them
+            var frontier = new PriorityQueue<string>();
+            frontier.Enqueue(currentMapName, 0);
+            mapCameFrom[currentMapName] = currentMapName;
+            mapCostSoFar[currentMapName] = 0;
+
+            //As long as there are still maps to explore, we need to keep checking
+            //When the loop resets, we are checking a 'new' map.
+            while (frontier.Count > 0)
+            {
+                var testMapStr = frontier.Dequeue();           //The map with the shortest path
+                string testMap = testMapStr.Split(':')[0];     //The map we're currently testing. Split is for multiple entrances from same map
+                string fromMap = mapCameFrom[testMapStr];      //The map we came from
+
+                RHMap theTestMap = MapManager.Maps[testMap];
+
+                //If the from map isn't the testing map, set the start point at the entrance from the from map
+                if (fromMap != testMapStr)
+                {
+                    //Find the location of the new endpoint on the target map
+                    TravelPoint linkedPoint = theTestMap.GetTravelPoint(fromMap);
+                    start = linkedPoint.GetMovedCenter();
+                }
+
+                //If the testMap contains the key that we're looking for then we need to pathfind from the entrance to the key
+                if (theTestMap.Name.Equals(targetMap))
+                {
+                    //Set the initial values for the map pathfinding
+                    //To make this work with the reversal later on, start
+                    //at the key, and then walk back to the entrance to the map.
+                    currentMapName = testMapStr;
+                    newStart = targetPosition;
+
+                    List<RHTile> pathToExit = FindPathToLocation(ref start, targetPosition, testMapStr);
+                    fromMap = mapCameFrom[testMapStr];          //Do the backtracking
+
+                    List<List<RHTile>> liTotalPath = new List<List<RHTile>> { pathToExit };  //The pathfor this segment
+
+                    //Now we backtrack from the map, and add each path to the totalPath
+                    while (fromMap != testMapStr)
+                    {
+                        liTotalPath.Add(_diMapPathing[fromMap + ":" + testMapStr]);
+                        testMapStr = fromMap;
+                        fromMap = mapCameFrom[testMapStr];
+                    }
+
+                    //Since everything has been added in reverse order, we need to reverse it.
+                    //Last tile, second last tile, ... first tile
+                    liTotalPath.Reverse();
+
+                    //TravelManager Log
+                    foreach (List<RHTile> l in liTotalPath)
+                    {
+                        if (l.Count > 0)
+                        {
+                            WriteToTravelLog("");
+                            WriteToTravelLog("[" + l[0].X + ", " + l[0].Y + "] => [" + l[l.Count() - 1].X + ", " + l[l.Count() - 1].Y + "]");
+                            _liCompletePath.AddRange(l);
+                        }
+                    }
+
+                    //We found it, so break the fuck out of the loop
+                    break;
+                }
+
+                //Iterate over the exits in the map we're testing and pathfind to them from the starting location
+                foreach (KeyValuePair<string, TravelPoint> exit in theTestMap.TravelPoints)
+                {
+                    if (exit.Value.Modular) { continue; }
+                    TravelPoint exitPoint = exit.Value;
+                    Point pathToVector = exitPoint.GetCenterTilePosition();
+                    if (exitPoint.IsDoor)
+                    {
+                        Point gridCoords = Util.GetGridCoords(exitPoint.GetCenterTilePosition());
+                        RHTile doorTile = theTestMap.GetTileByGridCoords(gridCoords);
+
+                        //If the exit points to a door, then path to the RHTile below the door because the door, itself is impassable
+                        pathToVector = doorTile.GetTileByDirection(DirectionEnum.Down).Center;
+                    }
+
+                    //Find the shortest path to the exit in question. We copy the start vector into a new one
+                    //so that our start point doesn't get overridden. We do not care about the location of the last
+                    //tile in the previous pathfinding instance for this operation.
+                    Point startVector = new Point(start.X, start.Y);
+                    List<RHTile> pathToExit = FindPathToLocation(ref startVector, pathToVector, testMapStr, exitPoint.IsDoor);
+                    if (pathToExit != null)
+                    {
+                        //Determine what the new cost of traveling to the testmap is, by appending the
+                        //length of the found path, to the current cost to travel to the test map and,
+                        //if the map isn't in the dictionary, or the newCost to arrive there is less than
+                        //the old cost, we need to change the value to the new shortest path.
+                        double newCost = mapCostSoFar[testMapStr] + pathToExit.Count;
+                        if (!mapCostSoFar.ContainsKey(exit.Key) || newCost < mapCostSoFar[exit.Key])
+                        {
+                            if (!exit.Key.Contains(":"))
                             {
-                                int i = 0;
+                                mapCostSoFar[exit.Key] = newCost;         //Set the map cost to the new cost to arrive
+                                frontier.Enqueue(exit.Key, newCost);      //Queue the map with the new cost to arrive there
+
+                                //Setting the backtrack path for the exit map
+                                mapCameFrom[exit.Key] = testMap;
+                                _diMapPathing[testMapStr + ":" + exit.Value.LinkedMap] = pathToExit; // This needs another key for the appropriate exit
+                                WriteToTravelLog("---" + testMapStr + ":" + exit.Value.LinkedMap + "---");
                             }
                         }
                     }

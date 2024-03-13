@@ -19,7 +19,8 @@ namespace RiverHollow.Buildings
 
         public string Description => GetTextData("Description");
 
-        public string BuildingMapName => "map" + GetStringByIDKey("Texture");
+        public string InnerMapName => "map" + GetStringByIDKey("Texture");
+        public RHMap InnerMap => MapManager.Maps[InnerMapName];
 
         public Rectangle SelectionBox => new Rectangle(MapPosition.X, MapPosition.Y, Sprite.Width, Sprite.Height);
         private Rectangle _rShadowTarget;
@@ -215,7 +216,7 @@ namespace RiverHollow.Buildings
             {
                 Level++;
 
-                MapManager.Maps[BuildingMapName].UpdateBuildingEntrance(initialLevel, MapName);
+                MapManager.Maps[InnerMapName].UpdateBuildingEntrance(initialLevel, MapName);
                 MapManager.Maps[MapName].UpgradeMap(Level);
 
                 //_sprite.PlayAnimation(Level.ToString());

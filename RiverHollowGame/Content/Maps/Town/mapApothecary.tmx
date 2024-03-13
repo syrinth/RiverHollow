@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="64">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="65">
  <properties>
   <property name="BuildingID" type="int" value="18"/>
   <property name="MapType" value="Town"/>
@@ -78,7 +78,6 @@
     <property name="ObjectID" type="int" value="88"/>
    </properties>
   </object>
-  <object id="55" name="Talk_Apothecary" x="96" y="96" width="16" height="32"/>
   <object id="59" name="WorldObject" x="160" y="128" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="165"/>
@@ -86,11 +85,13 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="18" name="NPC_43" x="96" y="96" width="16" height="16"/>
+  <object id="18" name="NPC_43" x="144" y="80" width="16" height="16"/>
   <object id="41" name="Start" x="112" y="176" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="92"/>
    </properties>
   </object>
+  <object id="55" name="Shop" x="96" y="96" width="16" height="32"/>
+  <object id="64" name="Craft" x="192" y="160" width="16" height="16"/>
  </objectgroup>
 </map>

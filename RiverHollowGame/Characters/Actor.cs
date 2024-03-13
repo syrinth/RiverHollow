@@ -14,6 +14,7 @@ using RiverHollow.WorldObjects;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.GameManager;
+using System.Linq;
 
 namespace RiverHollow.Characters
 {
@@ -143,6 +144,8 @@ namespace RiverHollow.Characters
 
         public virtual void Update(GameTime gTime)
         {
+            _bBumpedIntoSomething = false;
+
             if (CurrentMap == MapManager.CurrentMap)
             {
                 foreach (AnimatedSprite spr in GetSprites())
@@ -379,6 +382,25 @@ namespace RiverHollow.Characters
             }
         }
 
+        public RHTile GetOccupantTile()
+        {
+            RHTile rv;
+            if (_liTilePath.Count > 0)
+            {
+                rv = _liTilePath.Last();
+            }
+            else if (CurrentMap != null)
+            {
+                rv = CurrentMap.GetTileByPixelPosition(CollisionCenter);
+            }
+            else
+            {
+                rv = null;
+            }
+
+            return rv;
+        }
+
         #region MoveBuffer Methods
         public void MoveActor(Point p)
         {
@@ -413,13 +435,13 @@ namespace RiverHollow.Characters
         #region Pathing
         public Thread CalculatePathThreaded()
         {
-            _pathingThread = new Thread(CalculatePath);
+            _pathingThread = new Thread(GetPathToNextAction);
             _pathingThread.Start();
 
             return _pathingThread;
         }
 
-        protected virtual void CalculatePath()
+        protected virtual void GetPathToNextAction()
         {
             if (PlayerManager.CurrentMap != CurrentMapName || _eCurrentState != NPCStateEnum.TrackPlayer)
             {

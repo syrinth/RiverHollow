@@ -16,7 +16,7 @@ namespace RiverHollow.Map_Handling
         string _sMapName;
 
         private string _sLinkedMapName = string.Empty;
-        public string LinkedMap => (TargetBuilding != null ? TargetBuilding.BuildingMapName : _sLinkedMapName);
+        public string LinkedMap => (TargetBuilding != null ? TargetBuilding.InnerMapName : _sLinkedMapName);
 
         private string _sMapConnector = string.Empty;
         public string MapConnector => (!string.IsNullOrEmpty(_sMapConnector)) ? ":" + _sMapConnector : "";

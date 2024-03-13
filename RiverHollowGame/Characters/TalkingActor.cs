@@ -76,15 +76,7 @@ namespace RiverHollow.Characters
         {
             base.Update(gTime);
 
-            if (_bBumpedIntoSomething)
-            {
-                _bBumpedIntoSomething = false;
-                if (_eCurrentState == NPCStateEnum.Wander)
-                {
-                    ChangeState(NPCStateEnum.Idle);
-                    SetMoveTo(Point.Zero);
-                }
-            }
+            CheckBumpedIntoSomething();
 
             if (_bFollow)
             {
@@ -354,6 +346,17 @@ namespace RiverHollow.Characters
             if (HasHeldItems())
             {
                 GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
+            }
+        }
+        #endregion
+
+        #region Pathing Handlers
+        protected virtual void CheckBumpedIntoSomething()
+        {
+            if (_bBumpedIntoSomething && _eCurrentState == NPCStateEnum.Wander)
+            {
+                ChangeState(NPCStateEnum.Idle);
+                SetMoveTo(Point.Zero);
             }
         }
         #endregion

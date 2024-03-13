@@ -209,9 +209,9 @@ namespace RiverHollow.Game_Managers
         private static void LoadDialogDictionary(ContentManager Content, string fileName)
         {
             Dictionary<string, string> newDialogue;
-            if (fileName.Contains("NPC_"))
+            if (fileName.Contains(Constants.MAPOBJ_HOME))
             {
-                string key = Path.GetFileName(fileName).Replace("NPC_", "").Split('.')[0];
+                string key = Path.GetFileName(fileName).Replace(Constants.MAPOBJ_HOME, "").Split('.')[0];
 
                 Util.ParseContentFile(ref fileName);
                 Dictionary<int, string> rawInfo = Content.Load<Dictionary<int, string>>(fileName);

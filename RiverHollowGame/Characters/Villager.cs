@@ -1,21 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
-using RiverHollow.Misc;
 using RiverHollow.Map_Handling;
+using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using RiverHollow.WorldObjects;
-
-using static RiverHollow.Utilities.Enums;
+using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
     public class Villager : TravellingNPC
     {
+        public string SpawnID => Constants.MAPOBJ_HOME + ID;
         public string StartMap => GetStringByIDKey("StartMap");
         public int HouseID => GetIntByIDKey("HouseID", 1);
         public bool Marriable => GetBoolByIDKey("CanMarry");
@@ -54,17 +54,10 @@ namespace RiverHollow.Characters
 
         readonly List<Request> _liHousingRequests;
 
-        int _iNextTimeKeyID = 0;
-
         //The Data containing the path they are currently on
         PathData _currentPathData;
-
-        //The complete schedule with all pathing combinations
-        protected Dictionary<string, List<Dictionary<string, string>>> _diCompleteSchedule;
-        private string NextScheduledTime => _diCompleteSchedule[_sScheduleKey][_iNextTimeKeyID]["TimeKey"];
-
-        string _sScheduleKey;
-
+        protected List<KeyValuePair<string, NPCActionState>> _liSchedule;
+        protected NPCActionState _eCurrentAction;
         protected override string SpriteName()
         {
             return DataManager.VILLAGER_FOLDER + GetStringByIDKey("Key");
@@ -73,9 +66,9 @@ namespace RiverHollow.Characters
         public Villager(int index, Dictionary<string, string> stringData) : base(index, stringData)
         {
             _liHousingRequests = new List<Request>();
+            _liSchedule = new List<KeyValuePair<string, NPCActionState>>();
             _diCollection = new Dictionary<int, bool>();
             _diItemMoods = new Dictionary<int, MoodEnum>();
-            _diCompleteSchedule = new Dictionary<string, List<Dictionary<string, string>>>();
 
             if (!string.IsNullOrEmpty(StartMap))
             {
@@ -88,23 +81,6 @@ namespace RiverHollow.Characters
                 foreach (string s in vectorSplit)
                 {
                     _diCollection.Add(int.Parse(s), false);
-                }
-            }
-
-            Dictionary<string, List<string>> schedule = DataManager.GetSchedule("NPC_" + stringData["Key"]);
-            if (schedule != null)
-            {
-                foreach (KeyValuePair<string, List<string>> kvp in schedule)
-                {
-                    List<Dictionary<string, string>> pathingData = new List<Dictionary<string, string>>();
-                    foreach (string s in kvp.Value)
-                    {
-                        Dictionary<string, string> taggedDictionary = DataManager.TaggedStringToDictionary(s);
-                        string timeKey = taggedDictionary["Hour"] + ":" + taggedDictionary["Minute"];
-                        taggedDictionary["TimeKey"] = timeKey;
-                        pathingData.Add(taggedDictionary);
-                    }
-                    _diCompleteSchedule.Add(kvp.Key, pathingData);
                 }
             }
 
@@ -144,8 +120,7 @@ namespace RiverHollow.Characters
             //Only follow schedules ATM if they are active and not married
             if (OnTheMap && !Married)
             {
-                //Only start to find a path if we are not currently on one.
-                if (_pathingThread == null && _liTilePath.Count == 0 && _diCompleteSchedule != null && _sScheduleKey != null && _diCompleteSchedule[_sScheduleKey].Count > _iNextTimeKeyID && NextScheduledTime == GameCalendar.GetTime())
+                if (_pathingThread == null && _liTilePath.Count == 0 && _liSchedule.Count > 0 && Util.CompareTimeStrings(_liSchedule[0].Key, GameCalendar.GetTime()))
                 {
                     TravelManager.RequestPathing(this);
                 }
@@ -161,11 +136,10 @@ namespace RiverHollow.Characters
                 //And animations that may be requested
                 if (stillMoving && _liTilePath.Count == 0 && _currentPathData != null)
                 {
-                    string direction = _currentPathData.Direction;
                     string animation = _currentPathData.Animation;
-                    if (!string.IsNullOrEmpty(direction))
+                    if (_currentPathData.Direction != DirectionEnum.None)
                     {
-                        SetFacing(Util.ParseEnum<DirectionEnum>(direction));
+                        SetFacing(_currentPathData.Direction);
                         PlayAnimation(VerbEnum.Idle);
                     }
 
@@ -200,6 +174,7 @@ namespace RiverHollow.Characters
             }
 
             MoveToSpawn();
+            CreateDailySchedule();
         }
 
         public void Introduce()
@@ -307,7 +282,7 @@ namespace RiverHollow.Characters
             string strSpawn = string.Empty;
             if (Married)
             {
-                return PlayerManager.PlayerHome.BuildingMapName;
+                return PlayerManager.PlayerHome.InnerMapName;
             }
             else
             {
@@ -316,7 +291,7 @@ namespace RiverHollow.Characters
                     case SpawnStateEnum.WaitAtInn:
                         return "mapInn";
                     case SpawnStateEnum.HasHome:
-                        return TownManager.GetBuildingByID(HouseID)?.BuildingMapName;
+                        return TownManager.GetBuildingByID(HouseID)?.InnerMapName;
                     case SpawnStateEnum.SendingToInn:
                     case SpawnStateEnum.NonTownMap:
                         return StartMap;
@@ -355,7 +330,7 @@ namespace RiverHollow.Characters
                             break;
                         case SpawnStateEnum.HasHome:
                         case SpawnStateEnum.NonTownMap:
-                            SetPosition(Util.SnapToGrid(map.GetCharacterSpawn("NPC_" + ID.ToString())));
+                            SetPosition(Util.SnapToGrid(map.GetCharacterSpawn(SpawnID)));
                             break;
 
                     }
@@ -364,67 +339,23 @@ namespace RiverHollow.Characters
                 SetFacing(DirectionEnum.Down);
                 PlayAnimation(VerbEnum.Idle);
                 map.AddCharacterImmediately(this);
-                DetermineValidSchedule();
             }
         }
         #endregion
 
         #region Pathing Handlers
-        /// <summary>
-        /// This method determines which schedule key to follow as well as which time key
-        /// to wait for for the next pathing calculation.
-        /// </summary>
-        public void DetermineValidSchedule()
+        protected override void CheckBumpedIntoSomething()
         {
-            if ((LivesInTown  || !string.IsNullOrEmpty(StartMap)) && _diCompleteSchedule != null)
+            if (_bBumpedIntoSomething && _liTilePath.Count > 0 && _liTilePath[0].MapName == CurrentMapName)
             {
-                //Iterate through the schedule keys
-                foreach (string scheduleKey in _diCompleteSchedule.Keys)
-                {
-                    bool valid = true;
-                    string[] args = Util.FindParams(scheduleKey);
-
-                    //For each schedule argument, tryto find a failure. Any failure
-                    //breaks out of the argument check and invalidates the scheduleKey
-                    foreach (string arg in args)
-                    {
-                        string[] split = arg.Split(':');
-                        if (split[0].Equals("Built"))
-                        {
-                            if (!TownManager.TownObjectBuilt(int.Parse(split[1])))
-                            {
-                                valid = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (valid)
-                    {
-                        _sScheduleKey = scheduleKey;
-
-                        //We now need to compare the current time against each of the schedule time keys
-                        //We're looking for the next key to act on. 
-                        foreach (Dictionary<string, string> timeKey in _diCompleteSchedule[_sScheduleKey])
-                        {
-                            string currentTime = GameCalendar.GetTime();
-                            TimeSpan currTimeSpan = TimeSpan.ParseExact(currentTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None);
-                            TimeSpan keyTime = TimeSpan.ParseExact(timeKey["TimeKey"], "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None);
-                            if (TimeSpan.Compare(currTimeSpan, keyTime) <= 0)
-                            {
-                                _iNextTimeKeyID = _diCompleteSchedule[_sScheduleKey].IndexOf(timeKey);
-                                break;
-                            }
-                        }
-
-                        break;
-                    }
-                }
+                //Still unclear on why we are hitting objects. Suspect due to when we cut clip off RHTiles and we're doing it sloppily
+                _liTilePath.Clear();
+                _liSchedule.Insert(0, new KeyValuePair<string, NPCActionState>(string.Empty, _eCurrentAction));
+                TravelManager.RequestPathing(this);
             }
         }
-
         /// <summary>
-        /// IF the Villager is in town and is currently on a path, request a new
+        /// If the Villager is in town and is currently on a path, request a new
         /// pathing calculation.
         /// </summary>
         public void RecalculatePath()
@@ -434,42 +365,300 @@ namespace RiverHollow.Characters
                 TravelManager.RequestPathing(this);
             }
         }
+        /// <summary>
+        /// This method determines which schedule key to follow as well as which time key
+        /// to wait for for the next pathing calculation.
+        /// </summary>
+        public void CreateDailySchedule()
+        {
+            _liSchedule.Clear();
 
+            if (LivesInTown)
+            {
+                AddScheduleAction(NPCActionState.Home);
+                AddScheduleAction(NPCActionState.Craft);
+                AddScheduleAction(NPCActionState.Inn);
+                AddScheduleAction(NPCActionState.Shop);
+                AddScheduleAction(NPCActionState.Market);
+
+                _liSchedule = _liSchedule.OrderBy(x => x.Key).ToList();
+            }
+        }
+        protected void AddScheduleAction(NPCActionState actionState)
+        {
+            //ToDo: Need to be able to parse multiple actions in one day. For example:  Inn:09-30/14-30/Monday-11-00/Monday-18-00
+            var timeKey = GetDefaultTime(actionState);
+            var actionKey = Util.GetEnumString(actionState);
+            var todayList = new List<KeyValuePair<string, NPCActionState>>();
+            if (ValidActionInWeather(actionState))
+            {
+                var strParamsKey = GetBoolByIDKey(actionKey) ? GetStringByIDKey(actionKey) : timeKey;
+                var strDataParams = Util.FindParams(strParamsKey);
+
+                if (!strDataParams[0].Equals("Skip") && strDataParams.Length > 0)
+                {
+                    bool defBehaviour = true;
+                    for (int i = 0; i < strDataParams.Length; i++)
+                    {
+                        var strData = Util.FindArguments(strDataParams[i]);
+
+                        switch (strData.Length)
+                        {
+                            case 1:
+                                CreateScheduleData(strData[0], actionState, ref todayList);
+                                break;
+                            case 2:
+                                if (!strData[1].Equals("Skip"))
+                                {
+                                    CreateScheduleData(string.Format("{0}-{1}", strData[0], strData[1]), actionState, ref todayList);
+                                }
+                                else if (Util.ParseEnum<DayEnum>(strData[0]) == GameCalendar.DayOfWeek)
+                                {
+                                    todayList.Clear();
+                                }
+                                break;
+                            case 3:
+                                if (Util.ParseEnum<DayEnum>(strData[0]) == GameCalendar.DayOfWeek)
+                                {
+                                    if (defBehaviour)
+                                    {
+                                        defBehaviour = false;
+                                        todayList.Clear();
+                                    }
+                                    CreateScheduleData(string.Format("{0}-{1}", strData[1], strData[2]), actionState, ref todayList);
+                                }
+                                break;
+
+                        }
+                    }
+                }
+            }
+
+            _liSchedule.AddRange(todayList);
+        }
+        private string GetDefaultTime(NPCActionState actionState)
+        {
+            string rv = string.Empty;
+
+            switch (actionState)
+            {
+                case NPCActionState.Inn:
+                    switch (ActorType)
+                    {
+                        case ActorTypeEnum.Villager:
+                            rv = Constants.VILLAGER_INN_DEFAULT;
+                            break;
+                        case ActorTypeEnum.Traveler:
+                            rv = Constants.TRAVELER_INN_DEFAULT;
+                            break;
+                    }
+                    break;
+                case NPCActionState.Market:
+                    switch (ActorType)
+                    {
+                        case ActorTypeEnum.Villager:
+                            rv = Constants.VILLAGER_MARKET_DEFAULT;
+                            break;
+                        case ActorTypeEnum.Traveler:
+                            rv = Constants.TRAVELER_MARKET_DEFAULT;
+                            break;
+                    }
+                    break;
+                case NPCActionState.Craft:
+                    rv = Constants.VILLAGER_CRAFT_DEFAULT;
+                    break;
+                case NPCActionState.Shop:
+                    switch (ActorType)
+                    {
+                        case ActorTypeEnum.Villager:
+                            rv = Constants.VILLAGER_SHOP_DEFAULT;
+                            break;
+                        case ActorTypeEnum.Traveler:
+                            rv = Constants.TRAVELER_SHOP_DEFAULT;
+                            break;
+                    }
+                    break;
+                case NPCActionState.Home:
+                    rv = Constants.VILLAGER_HOME_DEFAULT;
+                    break;
+            }
+
+            return rv;
+        }
+        private bool ValidActionInWeather(NPCActionState actionState)
+        {
+            bool rv = true;
+            if (EnvironmentManager.IsRaining())
+            {
+                if (actionState == NPCActionState.Market)
+                {
+                    rv = false;
+                }
+            }
+
+            return rv;
+        }
+        private void CreateScheduleData(string parameter, NPCActionState actionState, ref List<KeyValuePair<string, NPCActionState>> list)
+        {
+            var str = Util.FindArguments(parameter);
+            var timeStr = str.Length == 1 ? str[0] : string.Format("{0}:{1}", str[0], str[1]);
+            if (TimeSpan.TryParse(timeStr, out TimeSpan timeSpan))
+            {
+                var timeMod = GetTimeModifier();
+                timeSpan = timeSpan.Add(timeMod);
+                var timeKey = timeSpan.ToString();
+                list.Add(new KeyValuePair<string, NPCActionState>(timeKey, actionState));
+            }
+        }
+
+        private TimeSpan GetTimeModifier()
+        {
+            TimeSpan rv = TimeSpan.FromMinutes(RHRandom.Instance().Next(0, Constants.ACTION_DELAY) - Constants.ACTION_DELAY / 2);
+
+            if (GetBoolByIDKey("Prompt"))
+            {
+                rv = default;
+            }
+            else if (GetBoolByIDKey("Early"))
+            {
+                rv = TimeSpan.FromMinutes(RHRandom.Instance().Next(0, Constants.ACTION_DELAY) - Constants.ACTION_DELAY * 2);
+            }
+            else if (GetBoolByIDKey("Slow"))
+            {
+                rv = TimeSpan.FromMinutes(RHRandom.Instance().Next(0, Constants.ACTION_DELAY));
+            }
+
+            return rv;
+        }
+        private bool ProcessActionStateData(out Point targetPosition, out string targetMapName, out DirectionEnum dir)
+        {
+            var currentAction = _liSchedule[0].Value;
+            switch (currentAction)
+            {
+                case NPCActionState.Inn:
+                    if (HouseID != TownManager.Inn.ID)
+                    {
+                        dir = DirectionEnum.Down;
+                        return ProcessActionStateDataHandler(TownManager.Inn.ID, "Inn_Floor", out targetPosition, out targetMapName);
+                    }
+                    break; 
+                case NPCActionState.Craft:
+                    dir = DirectionEnum.Up;
+                    if (ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_CRAFT, out targetPosition, out targetMapName))
+                    {
+                        return true;
+                    }
+                    else { goto case NPCActionState.Home; }
+                case NPCActionState.Shop:
+                    dir = DirectionEnum.Down;
+                    if(ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_SHOP, out targetPosition, out targetMapName))
+                    {
+                        return true;
+                    }
+                    else { goto case NPCActionState.Home; }
+                case NPCActionState.Market:
+                    dir = DirectionEnum.Down;
+                    if (TownManager.Merchant != null)
+                    {
+                        return ProcessActionStateDataHandler(TownManager.Market, out targetPosition, out targetMapName);
+                    }
+                    else { goto case NPCActionState.Home; }
+                case NPCActionState.Home:
+                    dir = DirectionEnum.Down;
+                    return ProcessActionStateDataHandler(HouseID, SpawnID, out targetPosition, out targetMapName);
+            }
+
+            dir = DirectionEnum.None;
+            targetPosition = Point.Zero;
+            targetMapName = string.Empty;
+
+            return false;
+        }
         /// <summary>
         /// This method constructs the PathData and calls out to the TravelManager to
         /// get the shortest path to the appropriate target
         /// </summary>
-        protected override void CalculatePath()
+        protected override void GetPathToNextAction()
         {
-            int timeKeyIndex = _currentPathData == null ? _iNextTimeKeyID : _currentPathData.TimeKeyIndex;
-            Dictionary<string, string> pathingData = _diCompleteSchedule[_sScheduleKey][timeKeyIndex];
-
-            RHTile nextTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
-            Point startPosition = nextTile != null ? nextTile.Position : CollisionBoxLocation;
-            List<RHTile> timePath = TravelManager.FindRouteToLocation(pathingData["Location"], CurrentMapName, startPosition, Name());
-
-            string direction = string.Empty;
-            string animation = string.Empty;
-
-            Util.AssignValue(ref direction, "Dir", pathingData);
-            Util.AssignValue(ref animation, "Anim", pathingData);
-            _currentPathData = new PathData(timePath, direction, animation, timeKeyIndex, pathingData.ContainsKey("Wander"));
-
-            //Keep the next tile in the path in order to keep things consistent
-            if (nextTile != null)
+            if (ProcessActionStateData(out Point targetPosition, out string targetMapName, out DirectionEnum dir))
             {
-                _currentPathData.Path.Insert(0, nextTile);
-            }
-            _liTilePath = _currentPathData.Path;
+                RHTile nextTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
+                Point startPosition = nextTile != null ? nextTile.Position : CollisionBoxLocation;
+                List<RHTile> timePath = TravelManager.FindRouteToPositionOnMap(targetPosition, targetMapName, CurrentMapName, startPosition, Name());
 
-            if (_liTilePath?.Count > 0)
-            {
-                SetMoveTo(_liTilePath[0].Position);
+                string animation = string.Empty;
+                _currentPathData = new PathData(timePath, dir, animation);
+
+                //Keep the next tile in the path in order to keep things consistent
+                if (nextTile != null)
+                {
+                    _currentPathData.Path.Insert(0, nextTile);
+                }
+                _liTilePath = _currentPathData.Path;
+
+                if (_liTilePath?.Count > 0)
+                {
+                    SetMoveTo(_liTilePath[0].Position);
+                }
             }
 
-            //Set the next TimeKey to watch out for
-            _iNextTimeKeyID = timeKeyIndex + 1;
             TravelManager.FinishThreading(ref _pathingThread);
+
+            _eCurrentAction = _liSchedule[0].Value;
+            _liSchedule.RemoveAt(0);
+        }
+        private bool ProcessActionStateDataHandler(int id, string locationName, out Point targetPosition, out string targetMapName)
+        {
+            bool rv = false;
+            targetPosition = Point.Zero;
+
+            var building = TownManager.GetBuildingByID(id);
+            targetMapName = building.InnerMapName;
+
+            var r = building.InnerMap.GetCharacterObject(locationName);
+            if (r != Rectangle.Empty)
+            {
+                rv = true;
+                var tiles = MapManager.Maps[targetMapName].GetTilesFromRectangleExcludeEdgePoints(r).Where(x => x.Passable()).ToList();
+                foreach (var v in TownManager.DIVillagers.Values)
+                {
+                    tiles.Remove(v.GetOccupantTile());
+                }
+
+                if (TownManager.Merchant != null)
+                {
+                    tiles.Remove(TownManager.Merchant.GetOccupantTile());
+                }
+
+                if (tiles.Count > 0)
+                {
+                    RHTile targetTile = Util.GetRandomItem(tiles);
+                    targetPosition = targetTile.Position;
+                }
+            }
+
+            return rv;
+        }
+        private bool ProcessActionStateDataHandler(WorldObject obj, out Point targetPosition, out string targetMapName)
+        {
+            bool rv = false;
+
+            targetMapName = MapManager.TownMap.Name;
+            var targetObjs = MapManager.TownMap.GetObjectsByID(obj.ID);
+            var chosenObj = Util.GetRandomItem(targetObjs);
+
+            var tiles = MapManager.TownMap.GetTilesFromRectangleExcludeEdgePoints(chosenObj.CollisionBox).Where(x => x.Passable()).ToList();
+            if (tiles.Count > 0)
+            {
+                rv = true;
+                targetPosition = Util.GetRandomItem(tiles).Position;
+            }
+            else
+            {
+                targetPosition = Point.Zero;
+            }
+
+            return rv;
         }
         #endregion
 
@@ -647,9 +836,9 @@ namespace RiverHollow.Characters
                 PlayerManager.Spouse = this;
             }
 
-            if (!string.IsNullOrEmpty(StartMap))
+            if (LivesInTown)
             {
-                DetermineValidSchedule();
+                CreateDailySchedule();
             }
 
             foreach (string s in data.spokenKeys)
@@ -679,23 +868,20 @@ namespace RiverHollow.Characters
         /// This includes the path being taken, the direction to face at the end, and the
         /// animation that mayneed to be played.
         /// </summary>
-        private class PathData
+        protected class PathData
         {
             public List<RHTile> Path { get; }
-            public string Direction { get; }
+            public DirectionEnum Direction { get; }
             public string Animation { get; }
-            public int TimeKeyIndex { get; }
             public bool Wander { get; }
 
-            public PathData(List<RHTile> path, string direction, string animation, int timeKeyIndex, bool wander = false)
+            public PathData(List<RHTile> path, DirectionEnum direction, string animation)
             {
                 Path = path;
                 Direction = direction;
                 Animation = animation;
-                TimeKeyIndex = timeKeyIndex;
             }
         }
-
         private class Request
         {
             public VillagerRequestEnum RequestRange { get; }

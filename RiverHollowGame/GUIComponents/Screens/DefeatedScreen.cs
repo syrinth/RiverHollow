@@ -49,7 +49,7 @@ namespace RiverHollow.GUIComponents.Screens
                 GameCalendar.AddTime(2, 0);
                 _gTimeText.SetText(GameCalendar.GetTime());
             }
-            RHMap homeMap = MapManager.Maps[TownManager.Home.BuildingMapName];
+            RHMap homeMap = MapManager.Maps[TownManager.Home.InnerMapName];
             GameManager.GoToHUDScreen();
             MapManager.FadeToNewMap(homeMap, homeMap.GetCharacterSpawn("PlayerSpawn"), DirectionEnum.Down, TownManager.Home);
             GUIManager.BeginFadeIn(true);

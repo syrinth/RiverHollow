@@ -110,7 +110,7 @@
       <Value>
         <Item></Item>
         <Item>[Map:mapInn][Actors:20-C_Start][Face:20-Up][Deactivate:Player]</Item>
-        <Item>[Speak:20-0][Speed:20-1][Move:20-1-Left][Move:20-2-Right][Move:20-2-Left][Move:20-1-Right-Up][Speed:20-N/Player-N][Speak:20-1][Activate:Player][Move:Player-1-Up][Wait:1.5][Face:20-Down-1][Speak:20-2][Move:Player-1-Up][Speak:20-3][Rotate:20-1][Speak:20-4][Move:20-2-Right][GoTo:20-C_1/Player-C_2][Face:20-Up/Player-Up][Speak:20-5][Introduce:20]</Item>
+        <Item>[Speak:20-0][Speed:20-1][Move:20-1-Left][Move:20-2-Right][Move:20-2-Left][Move:20-1-Right-Up][Speed:20-N/Player-N][Speak:20-1][Activate:Player][Move:Player-1-Up][Wait:1.5][Face:20-Down-1][Speak:20-2][Move:Player-1-Up][Speak:20-3][Rotate:20-1][Speak:20-4][Move:20-2-Right][GoTo:20-C_1/Player-Craft][Face:20-Up/Player-Up][Speak:20-5][Introduce:20]</Item>
       </Value>
     </Item>
     <Item>

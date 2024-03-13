@@ -11,6 +11,7 @@ using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using MonoGame.Extended.Tiled;
+using Microsoft.Win32;
 
 namespace RiverHollow.Utilities
 {
@@ -939,6 +940,18 @@ namespace RiverHollow.Utilities
         public static int ListIndexFromMultiArray(int currRow, int currColumn, int totalColumns)
         {
             return currRow * totalColumns + currColumn;
+        }
+
+        public static bool CompareTimeStrings(string checkValue, string targetValue)
+        {
+            bool rv = false;
+
+            if(TimeSpan.TryParse(checkValue, out TimeSpan checkTime) && TimeSpan.TryParse(targetValue, out TimeSpan targetTime))
+            {
+                return targetTime >= checkTime;
+            }
+
+            return rv;
         }
     }
 

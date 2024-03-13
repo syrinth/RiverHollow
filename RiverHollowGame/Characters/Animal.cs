@@ -34,7 +34,7 @@ namespace RiverHollow.Characters
             MoveToSpawn();
             if (TownManager.TownObjectBuilt(HouseID))
             {
-                RHMap map = MapManager.Maps[TownManager.GetBuildingByID(HouseID).BuildingMapName];
+                RHMap map = MapManager.Maps[TownManager.GetBuildingByID(HouseID).InnerMapName];
                 if(!new WrappedItem(ItemID).PlaceOnMap(map.GetRandomPosition(), map))
                 {
                     ErrorManager.TrackError();
@@ -48,7 +48,7 @@ namespace RiverHollow.Characters
             RHMap map = MapManager.TownMap;
             if (TownManager.TownObjectBuilt(HouseID))
             {
-                map = MapManager.Maps[TownManager.GetBuildingByID(HouseID).BuildingMapName];
+                map = MapManager.Maps[TownManager.GetBuildingByID(HouseID).InnerMapName];
             }
 
             map.AddActor(this);

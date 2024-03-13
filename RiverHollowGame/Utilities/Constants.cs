@@ -97,6 +97,21 @@ namespace RiverHollow.Utilities
         public const int GROUP_DIVISOR = 3;
         public const int MEMBER_DIVISOR = 2;
 
+        public const int ACTION_DELAY = 10;
+        public const string MAPOBJ_CRAFT = "Craft";
+        public const string MAPOBJ_HOME = "NPC_";
+        public const string MAPOBJ_SHOP = "Shop";
+
+        public const string VILLAGER_SHOP_DEFAULT = "09:00";
+        public const string VILLAGER_INN_DEFAULT = "12:00";
+        public const string VILLAGER_CRAFT_DEFAULT = "14:00";
+        public const string VILLAGER_HOME_DEFAULT = "22:00";
+        public const string VILLAGER_MARKET_DEFAULT = "Skip";
+
+        public const string TRAVELER_SHOP_DEFAULT = "09:00";
+        public const string TRAVELER_INN_DEFAULT = "12:00";
+        public const string TRAVELER_MARKET_DEFAULT = "Skip";
+
         public const int TALK_FRIENDSHIP = 10;
         public const int GIFT_COLLECTION = 50;
         public const int GIFT_HAPPY = 20;
