@@ -1772,12 +1772,15 @@ namespace RiverHollow.Map_Handling
                         rv = tile.ProcessRightClick();
                     }
 
-                    foreach (Actor c in _liActors)
+                    if (!rv)
                     {
-                        if (PlayerManager.InRangeOfPlayer(c.HoverBox) && c.HoverContains(mouseLocation) && c.OnTheMap)
+                        foreach (Actor c in _liActors)
                         {
-                            c.ProcessRightButtonClick();
-                            return true;
+                            if (PlayerManager.InRangeOfPlayer(c.HoverBox) && c.HoverContains(mouseLocation) && c.OnTheMap)
+                            {
+                                c.ProcessRightButtonClick();
+                                return true;
+                            }
                         }
                     }
                 }
