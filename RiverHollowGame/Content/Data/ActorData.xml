@@ -43,7 +43,7 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7/188][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ItemID:199][FirstArrival:1][Key:Griselda][Size:16-29]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:1][Collection:7/188][ShopData:0][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ItemID:199][FirstArrival:1][Key:Griselda][Size:16-29][Traits:Recluse/Prompt]</Value>
     </Item>
     <Item>
       <Key>11</Key>
@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:8][Key:Caleb][Size:16-32][Prompt]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:8][Key:Caleb][Size:16-32][Traits:Late][Friends:43/60]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-33][Craft:20-00]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-33][Traits:Anxious][Craft:20-00][Inn:13-00][Friends:16/43/26]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Yulia][Size:16-30][StartMap:mapForest_Glade_2][Inactive]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:22][Collection:5/6][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Yulia][Size:16-30][StartMap:mapForest_Glade_2][Inactive][Friends:43]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -175,7 +175,7 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][HouseID:18][Size:16-25][MobsDefeated:40][GoodsSoldValue:150][Market:14-00][Craft:16-00][Slow]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][HouseID:18][Size:16-25][MobsDefeated:40][GoodsSoldValue:150][Market:14-00][Craft:16-00][Traits:Late/Chatty][Friends:26/16/10]</Value>
     </Item>
     <Item>
       <Key>44</Key>
@@ -243,7 +243,7 @@
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:Villager][Key:Quentin][Size:16-34][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][Collection:0/1/2][PlantsGrown:30]</Value>
+      <Value>[Type:Villager][Key:Quentin][Size:16-34][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][Collection:0/1/2][PlantsGrown:30][Traits:Recluse/Early]</Value>
     </Item>
     <Item>
       <Key>61</Key>

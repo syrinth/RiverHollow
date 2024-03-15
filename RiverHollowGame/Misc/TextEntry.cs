@@ -202,7 +202,7 @@ namespace RiverHollow.Misc
                 }
                 if (_diTags.ContainsKey("Chance"))
                 {
-                    if (RHRandom.Instance().RollPercent(int.Parse(_diTags["Chance"]))) { rv = true; }
+                    if (RHRandom.RollPercent(int.Parse(_diTags["Chance"]))) { rv = true; }
                     else { return false; }
                 }
                 if (_diTags.ContainsKey("Married"))

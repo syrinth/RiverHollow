@@ -4,6 +4,7 @@ namespace RiverHollow.Utilities
 {
     static class Constants
     {
+        public static Point TileSize = new Point(TILE_SIZE, TILE_SIZE);
         public const bool AUTO_TOOL = true;
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
@@ -107,6 +108,7 @@ namespace RiverHollow.Utilities
         public const string VILLAGER_CRAFT_DEFAULT = "14:00";
         public const string VILLAGER_HOME_DEFAULT = "22:00";
         public const string VILLAGER_MARKET_DEFAULT = "Skip";
+        public const string VILLAGER_VISIT_DEFAULT = "Skip";
 
         public const string TRAVELER_SHOP_DEFAULT = "09:00";
         public const string TRAVELER_INN_DEFAULT = "12:00";
@@ -127,7 +129,26 @@ namespace RiverHollow.Utilities
 
         public const int BUILDABLE_ID_OFFSET = 8000;
 
-        internal static Rectangle ITEM_SHADOW = new Rectangle(0, 0, 16, 16);
+        public static Rectangle ITEM_SHADOW = new Rectangle(0, 0, 16, 16);
+
+        public static Rectangle RECTANGLE_EMOJI_HAPPY = new Rectangle(0, 48, 16, 16);
+        public static Rectangle RECTANGLE_EMOJI_SING = new Rectangle(16, 48, 16, 16);
+        public static Rectangle RECTANGLE_EMOJI_TALK = new Rectangle(32, 48, 16, 16);
+        public static Rectangle RECTANGLE_EMOJI_DOTS = new Rectangle(48, 48, 16, 16);
+        public static Rectangle RECTANGLE_EMOJI_HEART = new Rectangle(64, 48, 16, 16);
+        public static Rectangle RECTANGLE_EMOJI_SLEEPY = new Rectangle(0, 64, 16, 16);
+
+        public const int WALK_TO_FRIEND_PERCENT = 60;
+
+        public const int EMOJI_CHAT_DEFAULT_RATE = 25;
+        public const int EMOJI_SING_DEFAULT_RATE = 15;
+        public const int EMOJI_SLEEPY_DEFAULT_RATE = 10;
+        public const int EMOJI_WORK_FINISHED_DEFAULT_RATE = 25;
+
+        public const int TRAIT_CHATTY_BONUS = 15;
+        public const int TRAIT_MUSICAL_BONUS = 30;
+        public const int TRAIT_ANXIOUS_CHANCE = 20;
+        public const int TRAIT_RECLUSE_CHANCE = 10;
 
         public const string STR_ALERT_INVENTORY = "Alert_Inventory";
         public const string STR_ALERT_MISSING = "Alert_Missing";

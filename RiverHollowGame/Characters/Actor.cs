@@ -53,6 +53,9 @@ namespace RiverHollow.Characters
         public ActorStateEnum State { get; protected set; } = ActorStateEnum.Walk;
         public ActorTypeEnum ActorType { get; protected set; }
 
+        protected ActorEmoji _emoji;
+        protected RHTimer _rhEmojiTimer;
+
         protected ActorCollisionState _eCollisionState = ActorCollisionState.Block;
 
         public string CurrentMapName;
@@ -106,15 +109,14 @@ namespace RiverHollow.Characters
 
             _liTilePath = new List<RHTile>();
             _vbMovement = new VectorBuffer();
+            _rhEmojiTimer = new RHTimer(5, true);
         }
 
-        public Actor(int id, Dictionary<string, string> stringData) : base()
+        public Actor(int id, Dictionary<string, string> stringData) : this()
         {
             ID = id;
             ActorType = Util.ParseEnum<ActorTypeEnum>(stringData["Type"]);
 
-            _vbMovement = new VectorBuffer();
-            _liTilePath = new List<RHTile>();
             _movementTimer = new RHTimer(_fBaseWanderTimer);
 
             if (stringData.ContainsKey("Size"))
@@ -133,6 +135,7 @@ namespace RiverHollow.Characters
         {
             if (OnTheMap)
             {
+                _emoji?.Draw(spriteBatch);
                 GetSprites().ForEach(x => x.Draw(spriteBatch, useLayerDepth));
 
                 if (Constants.DRAW_COLLISION)
@@ -156,6 +159,11 @@ namespace RiverHollow.Characters
 
             if (!GamePaused())
             {
+                _emoji?.Update(gTime);
+                if(_emoji != null && _emoji.Finished)
+                {
+                    _emoji = null;
+                }
                 HandleMove();
             }
         }
@@ -401,6 +409,21 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        public Point GetHoverPointLocation()
+        {
+            Point pos = new Point(Position.X, Position.Y);
+            pos.Y -= Constants.TASK_ICON_OFFSET;
+
+            return pos;
+        }
+        public void SetEmoji(ActorEmojiEnum e, bool randomize = false)
+        {
+            if (_emoji == null)
+            {
+                _emoji = new ActorEmoji(e, this, randomize);
+            }
+        }
+
         #region MoveBuffer Methods
         public void MoveActor(Point p)
         {
@@ -613,7 +636,7 @@ namespace RiverHollow.Characters
         {
             if (_movementTimer.TickDown(gTime))
             {
-                if (RHRandom.Instance().RollPercent(50))
+                if (RHRandom.RollPercent(50))
                 {
                     _movementTimer.Reset(Constants.WANDER_COUNTDOWN + RHRandom.Instance().Next(10));
                     _bIdleCooldown = true;
@@ -667,7 +690,7 @@ namespace RiverHollow.Characters
                 {
                     _movementTimer.Reset(_fBaseWanderTimer + RHRandom.Instance().Next(4) * 0.25);
 
-                    if (!_bIdleCooldown && RHRandom.Instance().RollPercent(rollChance))
+                    if (!_bIdleCooldown && RHRandom.RollPercent(rollChance))
                     {
                         ChangeState(NPCStateEnum.Idle);
                         return;
@@ -766,6 +789,11 @@ namespace RiverHollow.Characters
         {
             return DataManager.GetIntByIDKey(ID, key, DataType.Actor, defaultValue);
         }
+        public int[] GetIntParamsByIDKey(string key, string defaultValue = "")
+        {
+            return DataManager.GetIntParamsByIDKey(ID, key, DataType.Actor, defaultValue);
+        }
+
         public float GetFloatByIDKey(string key, int defaultValue = -1)
         {
             return DataManager.GetFloatByIDKey(ID, key, DataType.Actor, defaultValue);
@@ -773,6 +801,10 @@ namespace RiverHollow.Characters
         public string GetStringByIDKey(string key)
         {
             return DataManager.GetStringByIDKey(ID, key, DataType.Actor);
+        }
+        public string[] GetStringParamsByIDKey(string key, string defaultValue = "")
+        {
+            return DataManager.GetStringParamsByIDKey(ID, key, DataType.Actor, defaultValue);
         }
         protected TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
         {

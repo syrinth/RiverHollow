@@ -94,7 +94,7 @@ namespace RiverHollow.WorldObjects
 
             if (Tiles[0].WorldObject == null)
             {
-                if (RHRandom.Instance().RollPercent(10))
+                if (RHRandom.RollPercent(10))
                 {
                     CurrentMap.RemoveWorldObject(this);
                 }

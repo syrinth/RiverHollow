@@ -21,6 +21,8 @@ namespace RiverHollow.Characters
         public bool Marriable => GetBoolByIDKey("CanMarry");
         public bool CanBecomePregnant => GetBoolByIDKey("CanBecomePregnant");
 
+        public int[] FriendIDs => GetIntParamsByIDKey("Friends");
+
         private Dictionary<int, MoodEnum> _diItemMoods;
 
         public bool GiftedToday = false;
@@ -57,7 +59,8 @@ namespace RiverHollow.Characters
         //The Data containing the path they are currently on
         PathData _currentPathData;
         protected List<KeyValuePair<string, NPCActionState>> _liSchedule;
-        protected NPCActionState _eCurrentAction;
+        public bool HasSchedule => _liSchedule?.Count > 0;
+        public NPCActionState CurrentActionState { get; private set; }
         protected override string SpriteName()
         {
             return DataManager.VILLAGER_FOLDER + GetStringByIDKey("Key");
@@ -155,6 +158,8 @@ namespace RiverHollow.Characters
 
                     _currentPathData = null;
                 }
+
+                EmojiChecks(gTime);
             }
         }
 
@@ -262,7 +267,7 @@ namespace RiverHollow.Characters
         //Try to move into Town
         public void TryToMoveIn()
         {
-            if (HouseID != -1 && TownManager.TownObjectBuilt(HouseID))
+            if (HouseID != -1 && TownManager.TownObjectBuilt(HouseID) && _eSpawnStatus != SpawnStateEnum.HasHome)
             {
                 TaskManager.AdvanceTaskProgress();
                 _eSpawnStatus = SpawnStateEnum.HasHome;
@@ -349,9 +354,7 @@ namespace RiverHollow.Characters
             if (_bBumpedIntoSomething && _liTilePath.Count > 0 && _liTilePath[0].MapName == CurrentMapName)
             {
                 //Still unclear on why we are hitting objects. Suspect due to when we cut clip off RHTiles and we're doing it sloppily
-                _liTilePath.Clear();
-                _liSchedule.Insert(0, new KeyValuePair<string, NPCActionState>(string.Empty, _eCurrentAction));
-                TravelManager.RequestPathing(this);
+                RequeueCurrentAction();
             }
         }
         /// <summary>
@@ -364,6 +367,13 @@ namespace RiverHollow.Characters
             {
                 TravelManager.RequestPathing(this);
             }
+        }
+
+        public void RequeueCurrentAction()
+        {
+            _liTilePath.Clear();
+            _liSchedule.Insert(0, new KeyValuePair<string, NPCActionState>(string.Empty, CurrentActionState));
+            TravelManager.RequestPathing(this);
         }
         /// <summary>
         /// This method determines which schedule key to follow as well as which time key
@@ -380,6 +390,7 @@ namespace RiverHollow.Characters
                 AddScheduleAction(NPCActionState.Inn);
                 AddScheduleAction(NPCActionState.Shop);
                 AddScheduleAction(NPCActionState.Market);
+                AddScheduleAction(NPCActionState.Visit);
 
                 _liSchedule = _liSchedule.OrderBy(x => x.Key).ToList();
             }
@@ -478,6 +489,9 @@ namespace RiverHollow.Characters
                             break;
                     }
                     break;
+                case NPCActionState.Visit:
+                    rv = Constants.VILLAGER_VISIT_DEFAULT;
+                    break;
                 case NPCActionState.Home:
                     rv = Constants.VILLAGER_HOME_DEFAULT;
                     break;
@@ -515,15 +529,15 @@ namespace RiverHollow.Characters
         {
             TimeSpan rv = TimeSpan.FromMinutes(RHRandom.Instance().Next(0, Constants.ACTION_DELAY) - Constants.ACTION_DELAY / 2);
 
-            if (GetBoolByIDKey("Prompt"))
+            if (HasTrait(ActorTraitsEnum.Prompt))
             {
                 rv = default;
             }
-            else if (GetBoolByIDKey("Early"))
+            else if (HasTrait(ActorTraitsEnum.Early))
             {
                 rv = TimeSpan.FromMinutes(RHRandom.Instance().Next(0, Constants.ACTION_DELAY) - Constants.ACTION_DELAY * 2);
             }
-            else if (GetBoolByIDKey("Slow"))
+            else if (HasTrait(ActorTraitsEnum.Late))
             {
                 rv = TimeSpan.FromMinutes(RHRandom.Instance().Next(0, Constants.ACTION_DELAY));
             }
@@ -536,12 +550,8 @@ namespace RiverHollow.Characters
             switch (currentAction)
             {
                 case NPCActionState.Inn:
-                    if (HouseID != TownManager.Inn.ID)
-                    {
-                        dir = DirectionEnum.Down;
-                        return ProcessActionStateDataHandler(TownManager.Inn.ID, "Inn_Floor", out targetPosition, out targetMapName);
-                    }
-                    break; 
+                    dir = DirectionEnum.Down;
+                    return ProcessActionStateDataHandler(TownManager.Inn.ID, "Inn_Floor", out targetPosition, out targetMapName);
                 case NPCActionState.Craft:
                     dir = DirectionEnum.Up;
                     if (ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_CRAFT, out targetPosition, out targetMapName))
@@ -551,16 +561,25 @@ namespace RiverHollow.Characters
                     else { goto case NPCActionState.Home; }
                 case NPCActionState.Shop:
                     dir = DirectionEnum.Down;
-                    if(ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_SHOP, out targetPosition, out targetMapName))
+                    if (ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_SHOP, out targetPosition, out targetMapName))
                     {
                         return true;
                     }
                     else { goto case NPCActionState.Home; }
                 case NPCActionState.Market:
                     dir = DirectionEnum.Down;
+                    dir = DirectionEnum.Down;
                     if (TownManager.Merchant != null)
                     {
                         return ProcessActionStateDataHandler(TownManager.Market, out targetPosition, out targetMapName);
+                    }
+                    else { goto case NPCActionState.Home; }
+                case NPCActionState.Visit:
+                    dir = DirectionEnum.Down;
+                    var friend = GetRandomFriend(x => true);
+                    if (friend != null)
+                    {
+                        return ProcessActionStateDataHandler(friend.HouseID, "Visitor", out targetPosition, out targetMapName);
                     }
                     else { goto case NPCActionState.Home; }
                 case NPCActionState.Home:
@@ -604,7 +623,7 @@ namespace RiverHollow.Characters
 
             TravelManager.FinishThreading(ref _pathingThread);
 
-            _eCurrentAction = _liSchedule[0].Value;
+            CurrentActionState = _liSchedule[0].Value;
             _liSchedule.RemoveAt(0);
         }
         private bool ProcessActionStateDataHandler(int id, string locationName, out Point targetPosition, out string targetMapName)
@@ -615,25 +634,29 @@ namespace RiverHollow.Characters
             var building = TownManager.GetBuildingByID(id);
             targetMapName = building.InnerMapName;
 
-            var r = building.InnerMap.GetCharacterObject(locationName);
-            if (r != Rectangle.Empty)
+            if (FriendCheck(targetMapName, out targetPosition))
             {
                 rv = true;
-                var tiles = MapManager.Maps[targetMapName].GetTilesFromRectangleExcludeEdgePoints(r).Where(x => x.Passable()).ToList();
-                foreach (var v in TownManager.DIVillagers.Values)
+            }
+            else
+            {
+                var r = building.InnerMap.GetCharacterObject(locationName);
+                if (r != Rectangle.Empty)
                 {
-                    tiles.Remove(v.GetOccupantTile());
-                }
+                    rv = true;
+                    var tiles = MapManager.Maps[targetMapName].GetTilesFromRectangleExcludeEdgePoints(r).Where(x => x.Passable()).ToList();
+                    RemoveOccupiedTiles(ref tiles);
 
-                if (TownManager.Merchant != null)
-                {
-                    tiles.Remove(TownManager.Merchant.GetOccupantTile());
-                }
+                    if (TownManager.Merchant != null)
+                    {
+                        tiles.Remove(TownManager.Merchant.GetOccupantTile());
+                    }
 
-                if (tiles.Count > 0)
-                {
-                    RHTile targetTile = Util.GetRandomItem(tiles);
-                    targetPosition = targetTile.Position;
+                    if (tiles.Count > 0)
+                    {
+                        RHTile targetTile = Util.GetRandomItem(tiles);
+                        targetPosition = targetTile.Position;
+                    }
                 }
             }
 
@@ -644,31 +667,165 @@ namespace RiverHollow.Characters
             bool rv = false;
 
             targetMapName = MapManager.TownMap.Name;
-            var targetObjs = MapManager.TownMap.GetObjectsByID(obj.ID);
-            var chosenObj = Util.GetRandomItem(targetObjs);
 
-            var tiles = MapManager.TownMap.GetTilesFromRectangleExcludeEdgePoints(chosenObj.CollisionBox).Where(x => x.Passable()).ToList();
-            if (tiles.Count > 0)
-            {
+            if (FriendCheck(targetMapName, out targetPosition)){
                 rv = true;
-                targetPosition = Util.GetRandomItem(tiles).Position;
             }
-            else
-            {
-                targetPosition = Point.Zero;
+            else {
+                var targetObjs = MapManager.TownMap.GetObjectsByID(obj.ID);
+                var chosenObj = Util.GetRandomItem(targetObjs);
+
+                var tiles = MapManager.TownMap.GetTilesFromRectangleExcludeEdgePoints(chosenObj.CollisionBox).Where(x => x.Passable()).ToList();
+                if (tiles.Count > 0)
+                {
+                    rv = true;
+                    targetPosition = Util.GetRandomItem(tiles).Position;
+                }
+                else
+                {
+                    targetPosition = Point.Zero;
+                }
             }
 
             return rv;
         }
+
+        private bool FriendCheck(string targetMapName, out Point targetPosition)
+        {
+            bool rv = false;
+            var currentAction = _liSchedule[0].Value;
+
+            targetPosition = Point.Zero;
+            if (HasTrait(ActorTraitsEnum.Anxious) || (RHRandom.RollPercent(Constants.WALK_TO_FRIEND_PERCENT) && _emoji?.Emoji != ActorEmojiEnum.Dots))
+            {
+                var chosenFriend = GetRandomFriend(x => x.GetOccupantTile().MapName.Equals(targetMapName));
+                if (chosenFriend != null && chosenFriend.CurrentActionState == currentAction)
+                {
+                    var tile = chosenFriend.GetOccupantTile();
+                    var tiles = new List<RHTile>();
+
+                    AddWalkableTile(ref tiles, tile, DirectionEnum.Left);
+                    AddWalkableTile(ref tiles, tile, DirectionEnum.Right);
+                    RemoveOccupiedTiles(ref tiles);
+
+                    if (tiles.Count > 0)
+                    {
+                        rv = true;
+                        targetPosition = Util.GetRandomItem(tiles).Position;
+                    }
+                    else
+                    {
+                        targetPosition = Point.Zero;
+                    }
+                }
+            }
+
+            return rv;
+        }
+        private void AddWalkableTile(ref List<RHTile> tiles, RHTile tile, DirectionEnum dir)
+        {
+            if (tile.GetTileByDirection(dir).Passable())
+            {
+                tiles.Add(tile.GetTileByDirection(dir));
+            }
+        }
+
+        private void RemoveOccupiedTiles(ref List<RHTile> tiles)
+        {
+            foreach (var v in TownManager.DIVillagers.Values)
+            {
+                tiles.Remove(v.GetOccupantTile());
+            }
+        }
+
         #endregion
 
-        protected bool CheckTaskLog(ref TextEntry taskEntry)
+        private bool EmojiStateSocial()
+        {
+            var validStates = new List<NPCActionState>() { NPCActionState.Visit, NPCActionState.Market, NPCActionState.Inn };
+            return validStates.Contains(CurrentActionState);
+        }
+
+        public void EmojiChecks(GameTime gTime)
+        {
+            if (PeriodicEmojiReady(gTime))
+            {
+                if (!FollowingPath)
+                {
+                    if (CurrentActionState == NPCActionState.Craft)
+                    {
+                        if (RHRandom.RollPercent(Constants.EMOJI_SING_DEFAULT_RATE + TraitValue(ActorTraitsEnum.Musical)))
+                        {
+                            SetEmoji(ActorEmojiEnum.Sing, true);
+                        }
+                    }
+                    else if (EmojiStateSocial())
+                    {
+                        //Looking for someone to Chat with
+                        var tiles = GetOccupantTile().GetWalkableNeighbours(true);
+                        foreach (var actor in CurrentMap.Actors)
+                        {
+                            if (tiles.Contains(actor.GetOccupantTile()) && !actor.FollowingPath)
+                            {
+                                if (HasTrait(ActorTraitsEnum.Anxious) && RHRandom.RollPercent(Constants.TRAIT_ANXIOUS_CHANCE))
+                                {
+                                    RequeueCurrentAction();
+                                }
+                                else if (HasTrait(ActorTraitsEnum.Recluse) && RHRandom.RollPercent(Constants.TRAIT_RECLUSE_CHANCE))
+                                {
+                                    SetEmoji(ActorEmojiEnum.Dots);
+                                    RequeueCurrentAction();
+                                    break;
+                                }
+                                else if (RHRandom.RollPercent(Constants.EMOJI_CHAT_DEFAULT_RATE + TraitValue(ActorTraitsEnum.Chatty)))
+                                {
+                                    SetEmoji(ActorEmojiEnum.Talk, true);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                if (_emoji == null && HasTrait(ActorTraitsEnum.Musical) && RHRandom.RollPercent(Constants.TRAIT_MUSICAL_BONUS))
+                {
+                    SetEmoji(ActorEmojiEnum.Sing);
+                }
+
+                _rhEmojiTimer.Reset(RHRandom.Instance().Next(3, 5));
+            }
+            
+            //Off Work
+            if (CurrentActionState == NPCActionState.Craft)
+            {
+                if (EmojiActionAboutToEnd(Constants.EMOJI_WORK_FINISHED_DEFAULT_RATE))
+                {
+                    SetEmoji(ActorEmojiEnum.Happy);
+                }
+            }
+
+            //Going Home at night
+            if(_liSchedule.Count == 1 && _liSchedule[0].Value == NPCActionState.Home)
+            {
+                if (EmojiActionAboutToEnd(Constants.EMOJI_SLEEPY_DEFAULT_RATE))
+                {
+                    SetEmoji(ActorEmojiEnum.Sleepy);
+                }
+            }
+        }
+
+        private bool EmojiActionAboutToEnd(int percentRate)
+        {
+            return Util.MinutesLeft(GameCalendar.GetTime(), _liSchedule[0].Key, 1) && RHRandom.RollPercent(percentRate);
+        }
+
+        public bool CheckTaskLog(ref TextEntry taskEntry)
         {
             bool rv = false;
              
             foreach (RHTask t in TaskManager.TaskLog)
             {
-                if (t.ReadyForHandIn && t.GoalNPC == this)
+                if (t.ReadyForHandIn && t.GoalNPC == this && !t.HasEndBuilding)
                 {
                     rv = true;
                     TaskManager.QueuedHandin = t;
@@ -709,16 +866,19 @@ namespace RiverHollow.Characters
                         switch (mood)
                         {
                             case MoodEnum.Happy:
+                                SetEmoji(ActorEmojiEnum.Heart);
                                 WeeklyGiftGiven = true;
                                 FriendshipPoints += Constants.GIFT_HAPPY;
                                 response = GetDialogEntry("Gift_Happy");
                                 break;
                             case MoodEnum.Pleased:
+                                SetEmoji(ActorEmojiEnum.Heart);
                                 WeeklyGiftGiven = true;
                                 FriendshipPoints += Constants.GIFT_PLEASED;
                                 response = GetDialogEntry("Gift_Pleased");
                                 break;
                             case MoodEnum.Neutral:
+                                SetEmoji(ActorEmojiEnum.Heart);
                                 FriendshipPoints += Constants.GIFT_NEUTRAL;
                                 response = GetDialogEntry("Gift_Neutral");
                                 break;
@@ -737,6 +897,29 @@ namespace RiverHollow.Characters
 
             GUIManager.CloseMainObject();
             GUIManager.OpenTextWindow(response, this);
+        }
+
+        public Villager GetRandomFriend(Func<Villager, bool> condition)
+        {
+            Villager chosenFriend = null;
+            var possibleFriends = new List<Villager>();
+
+            foreach (var id in FriendIDs)
+            {
+                Villager v = TownManager.DIVillagers[id];
+                if (v.LivesInTown)
+                {
+                    possibleFriends.Add(v);
+                }
+            }
+
+            possibleFriends = possibleFriends.Where(condition).ToList();
+            if (possibleFriends.Count > 0)
+            {
+                chosenFriend = Util.GetRandomItem(possibleFriends);
+            }
+
+            return chosenFriend;
         }
 
         public MoodEnum ItemOpinion(Item it)

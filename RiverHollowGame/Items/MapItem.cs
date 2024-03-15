@@ -10,7 +10,7 @@ namespace RiverHollow.Items
     public class MapItem
     {
         public Point Position;
-        public Rectangle CollisionBox { get => new Rectangle(Position.X, Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE); }
+        public Rectangle CollisionBox { get => new Rectangle(Position, Constants.TileSize); }
         private readonly VectorBuffer _vbMovement;
 
         public Item WrappedItem { get; }

@@ -44,14 +44,15 @@
         public enum UpgradeTypeEnum { Building, Global };
         public enum UpgradeStatusEnum { Locked, Unlocked, InProgress, Completed };
 
+        public enum ActorEmojiEnum { Dots, Happy, Heart, Sing, Sleepy, Talk };
         public enum ActorStateEnum { Climb, Grab, Swim, Walk };
         public enum ActorCollisionState { Block, Slow, PassThrough };
+        public enum ActorTraitsEnum { Early, Late, Prompt, Chatty, Anxious, Recluse, Musical };
         public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
         public enum ActorTypeEnum { Animal, Child, Critter, Effect, Merchant, Mob, Mount, Pet, Projectile, Spirit, TalkingActor, Traveler, Villager };
         public enum MobTypeEnum { Basic, Mage, Shooter, Summoner };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Magi, Noble};
-        public enum PlayerColorEnum { None, yes, Hair, Skin };
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };
 
         public enum ObjectPlacementEnum { Ground, Floor, Wall };
@@ -65,7 +66,7 @@
         public enum TravelerMoodEnum { Angry, Sad, Neutral, Happy };
         public enum NPCStateEnum { Alert, Idle, Leashing, MaintainDistance, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
-        public enum NPCActionState { Home, Inn, Craft, Shop, Market };
+        public enum NPCActionState { Home, Inn, Craft, Shop, Market, Visit };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
         public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task, Letter };

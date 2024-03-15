@@ -34,6 +34,7 @@ namespace RiverHollow.Misc
         public int TargetsAccomplished { get; private set; }
 
         private readonly int _iBuildingEndID = -1;
+        public bool HasEndBuilding => _iBuildingEndID != -1;
         private Mob _questMonster;
         private Item _targetItem;
         private int _iTargetObjectID = -1;

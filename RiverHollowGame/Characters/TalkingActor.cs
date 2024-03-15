@@ -6,6 +6,7 @@ using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
@@ -54,8 +55,7 @@ namespace RiverHollow.Characters
             base.Draw(spriteBatch, useLayerDepth);
             if (OnTheMap)
             {
-                Rectangle pos = new Rectangle(Position.X, Position.Y, 16, 16);
-                pos.Offset(0, -Constants.TASK_ICON_OFFSET);
+                Rectangle pos = new Rectangle(GetHoverPointLocation(), new Point(Constants.TILE_SIZE, Constants.TILE_SIZE));
 
                 if(HasHeldItems())
                 {
@@ -65,7 +65,7 @@ namespace RiverHollow.Characters
                 {
                     spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), pos, GUIUtils.QUEST_TURNIN, Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
-                else if (_assignedTask?.TaskState == TaskStateEnum.Assigned)
+                else if (_emoji == null & _assignedTask?.TaskState == TaskStateEnum.Assigned)
                 {
                     spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), pos, GUIUtils.QUEST_NEW, Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                 }
@@ -347,6 +347,42 @@ namespace RiverHollow.Characters
             {
                 GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
             }
+        }
+        #endregion
+
+        #region Emojis And Traits
+        protected bool PeriodicEmojiReady(GameTime gTime)
+        {
+            return _rhEmojiTimer.TickDown(gTime) && _emoji == null;
+        }
+
+        public bool HasTrait(ActorTraitsEnum e)
+        {
+            bool rv = false;
+
+            var traits = GetStringParamsByIDKey("Traits").ToList();
+            if (traits.Contains(Util.GetEnumString(e)))
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+
+        public int TraitValue(ActorTraitsEnum e)
+        {
+            if (HasTrait(e))
+            {
+                switch (e)
+                {
+                    case ActorTraitsEnum.Chatty:
+                        return Constants.TRAIT_CHATTY_BONUS;
+                    case ActorTraitsEnum.Musical:
+                        return Constants.TRAIT_MUSICAL_BONUS;
+                }
+            }
+
+            return 0;
         }
         #endregion
 

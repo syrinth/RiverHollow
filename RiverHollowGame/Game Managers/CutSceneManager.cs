@@ -749,7 +749,10 @@ namespace RiverHollow.Game_Managers
             if (int.TryParse(sCommandData[0], out int characterID))
             {
                 TownManager.DIVillagers[characterID].TryToMoveIn();
-                TownManager.DIVillagers[characterID].MoveToSpawn();
+                if (!TownManager.DIVillagers[characterID].HasSchedule)
+                {
+                    TownManager.DIVillagers[characterID].MoveToSpawn();
+                }
             }
         }
 

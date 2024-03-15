@@ -953,6 +953,18 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+
+        public static bool MinutesLeft(string checkValue, string targetValue, int minutesLeft)
+        {
+            bool rv = false;
+
+            if (TimeSpan.TryParse(checkValue, out TimeSpan checkTime) && TimeSpan.TryParse(targetValue, out TimeSpan targetTime))
+            {
+                rv = (targetTime - checkTime).TotalMinutes <= minutesLeft;
+            }
+
+            return rv;
+        }
     }
 
     public class RHRandom : Random
@@ -965,6 +977,11 @@ namespace RiverHollow.Utilities
             return _randomizer;
         }
 
+        public static bool RollPercent(int percent)
+        {
+            return Instance().RollPercentInternal(percent);
+        }
+
         private RHRandom() : base() {}
 
         public override int Next(int min, int max)
@@ -972,9 +989,9 @@ namespace RiverHollow.Utilities
             return base.Next(min, max + 1);
         }
 
-        public bool RollPercent(int percent)
+        public bool RollPercentInternal(int percent)
         {
-            int roll = RHRandom.Instance().Next(1, 100);
+            int roll = Instance().Next(1, 100);
             return roll <= percent;
         }
     }

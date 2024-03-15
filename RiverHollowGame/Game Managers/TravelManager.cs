@@ -311,11 +311,15 @@ namespace RiverHollow.Game_Managers
                     //TravelManager Log
                     foreach (List<RHTile> l in liTotalPath)
                     {
-                        if (l.Count > 0)
+                        if ( l != null && l.Count > 0)
                         {
                             WriteToTravelLog("");
                             WriteToTravelLog("[" + l[0].X + ", " + l[0].Y + "] => [" + l[l.Count() - 1].X + ", " + l[l.Count() - 1].Y + "]");
                             _liCompletePath.AddRange(l);
+                        }
+                        else
+                        {
+                            ErrorManager.TrackError();
                         }
                     }
 

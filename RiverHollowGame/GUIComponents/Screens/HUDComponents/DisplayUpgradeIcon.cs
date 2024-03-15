@@ -26,7 +26,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         {
             iconPosition = Util.MultiplyPoint(iconPosition, Constants.TILE_SIZE);
 
-            var iconRect = new Rectangle(iconPosition.X, iconPosition.Y, Constants.TILE_SIZE, Constants.TILE_SIZE);
+            var iconRect = new Rectangle(iconPosition, Constants.TileSize);
             GUIImage spr = new GUIImage(iconRect, DataManager.UPGRADE_ICONS);
             spr.CenterOnObject(this);
             AddControl(spr);

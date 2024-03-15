@@ -69,6 +69,7 @@ namespace RiverHollow.Map_Handling
         private List<Light> _liLights;
         private List<RHTile> _liTestTiles;
         private List<Actor> _liActors;
+        public IList<Actor> Actors { get { return _liActors.AsReadOnly(); } }
         protected List<Mob> _liMobs;
         public IList<Mob> Mobs { get { return _liMobs.AsReadOnly(); } }
         public List<Actor> ToAdd;
@@ -374,7 +375,7 @@ namespace RiverHollow.Map_Handling
                     bool passable = CanPlaceObject(t, HeldObject);
                     if (!passable || (passable && !HeldObject.BuildableType(BuildableEnum.Wallpaper)))
                     {
-                        spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), new Rectangle(t.Position.X, t.Position.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), GUIUtils.PLACEMENT_BOX, passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                        spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), new Rectangle(t.Position, Constants.TileSize), GUIUtils.PLACEMENT_BOX, passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                     }
                 }
             }

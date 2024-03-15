@@ -82,6 +82,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Characters\ActionEffect.cs" />
+    <Compile Include="Characters\ActorEmoji.cs" />
     <Compile Include="Characters\Animal.cs" />
     <Compile Include="Characters\CombatActor.cs" />
     <Compile Include="Characters\Mobs\Mage.cs" />

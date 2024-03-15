@@ -1,4 +1,5 @@
-﻿using RiverHollow.Buildings;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
@@ -57,6 +58,30 @@ namespace RiverHollow.Characters
             _fWanderSpeed = Constants.NPC_WALK_SPEED;
             Wandering = true;
             _eCollisionState = ActorCollisionState.Slow;
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+            if (PeriodicEmojiReady(gTime))
+            {
+                if (!FollowingPath)
+                {
+                    var tiles = GetOccupantTile().GetWalkableNeighbours(true);
+                    foreach (var actor in CurrentMap.Actors)
+                    {
+                        if (tiles.Contains(actor.GetOccupantTile()) && !actor.FollowingPath)
+                        {
+                            if (RHRandom.RollPercent(Constants.EMOJI_CHAT_DEFAULT_RATE + TraitValue(ActorTraitsEnum.Chatty)))
+                            {
+                                SetEmoji(ActorEmojiEnum.Talk, true);
+                            }
+                            break;
+                        }
+                    }
+                }
+                _rhEmojiTimer.Reset(RHRandom.Instance().Next(3, 5));
+            }
         }
 
         public override TextEntry GetOpeningText()

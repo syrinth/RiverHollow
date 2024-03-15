@@ -143,7 +143,7 @@ namespace RiverHollow.WorldObjects
             }
             else
             {
-                if (!_bShaken && FinishedGrowing() && HP > 0 && GetBoolByIDKey("SeedID") && RHRandom.Instance().RollPercent(30))
+                if (!_bShaken && FinishedGrowing() && HP > 0 && GetBoolByIDKey("SeedID") && RHRandom.RollPercent(30))
                 {
                     rv = true;
                     MapManager.DropItemOnMap(DataManager.GetItem(GetIntByIDKey("SeedID")), CollisionBox.Location);
@@ -191,7 +191,7 @@ namespace RiverHollow.WorldObjects
             if (FinishedGrowing() && GetBoolByIDKey("Spread"))
             {
                 var spreadParams = Util.FindIntParams(GetStringByIDKey("Spread"));
-                if (RHRandom.Instance().RollPercent(spreadParams[0]))
+                if (RHRandom.RollPercent(spreadParams[0]))
                 {
                     var targetTile = Util.GetRandomItem(CurrentMap.GetAllTilesInRange(Tiles[0], spreadParams[1]));
                     if (targetTile != null && targetTile.WorldObject == null && targetTile.Flooring == null)

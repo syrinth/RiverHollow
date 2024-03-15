@@ -278,7 +278,7 @@ namespace RiverHollow.Game_Managers
             int successChance = Constants.BASE_TRAVELER_RATE + BuildingTravelerChance() + _iTravelerBonus;
             do {
                 //Guaranteed at least one set of Travelers/week
-                if ((GameCalendar.DayOfWeek == DayEnum.Sunday && !_bTravelersCame) ||  RHRandom.Instance().RollPercent(successChance))
+                if ((GameCalendar.DayOfWeek == DayEnum.Sunday && !_bTravelersCame) ||  RHRandom.RollPercent(successChance))
                 {
                     _bTravelersCame = true;
 
@@ -312,7 +312,7 @@ namespace RiverHollow.Game_Managers
             int chainSuccess = successChance;
             do
             {
-                if (RHRandom.Instance().RollPercent(chainSuccess))
+                if (RHRandom.RollPercent(chainSuccess))
                 {
                     List<Traveler> options;
                     var noneList = travelerList.FindAll(x => x.Group() == TravelerGroupEnum.None);
@@ -328,7 +328,7 @@ namespace RiverHollow.Game_Managers
                     else if (group == TravelerGroupEnum.None) { options = travelerList; }
                     else
                     {
-                        if (RHRandom.Instance().RollPercent(80)) { options = groupList; }
+                        if (RHRandom.RollPercent(80)) { options = groupList; }
                         else { options = noneList; }
                     }
 
