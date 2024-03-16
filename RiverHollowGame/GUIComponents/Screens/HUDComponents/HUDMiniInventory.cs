@@ -74,23 +74,18 @@ namespace RiverHollow.GUIComponents.Screens
                 float startFade = _fAlphaValue;
                 if (GameManager.HideMiniInventory)
                 {
-                    if (_eFadeState == StateEnum.FadeOut)
+                    switch (_eFadeState)
                     {
-                        if (_fAlphaValue - MIN_FADE > MIN_FADE) { _fAlphaValue -= MIN_FADE; }
-                        else
-                        {
-                            _fAlphaValue = MIN_FADE;
-                        }
-                    }
-                    else
-                    {
-                        if (_eFadeState == StateEnum.FadeIn && _fAlphaValue < 1)
-                        {
-                            _fAlphaValue += MIN_FADE;
-                        }
-
-                        UpdateItemFade(gTime);
-
+                        case StateEnum.FadeOut:
+                            _fAlphaValue = Math.Max(MIN_FADE, _fAlphaValue -= MIN_FADE);
+                            break;
+                        case StateEnum.FadeIn:
+                            _fAlphaValue = Math.Min(1, _fAlphaValue += MIN_FADE);
+                            UpdateItemFade(gTime);
+                            break;
+                        case StateEnum.None:
+                            _eFadeState = StateEnum.FadeOut;
+                            break;
                     }
                 }
                 else
