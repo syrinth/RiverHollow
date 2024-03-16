@@ -165,7 +165,7 @@ namespace RiverHollow.GUIComponents.Screens
                     OpenMenuObject(new HUDPlayerInventory());
                 }
 
-                if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyCodex))
+                if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyCodex) && PlayerManager.CodexUnlocked)
                 {
                     OpenMenuObject(new HUDCodex());
                 }
@@ -183,6 +183,11 @@ namespace RiverHollow.GUIComponents.Screens
                 if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyBuild))
                 {
                     OpenMenuObject(new HUDTownCrafting(CloseMenu));
+                }
+
+                if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyEdit))
+                {
+                    GameManager.EnterTownModeEdit();
                 }
             }
         }
