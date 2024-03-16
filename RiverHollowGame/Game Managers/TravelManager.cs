@@ -23,6 +23,12 @@ namespace RiverHollow.Game_Managers
         static Thread _thread;
         static List<Actor> _liPathingRequest;
 
+        public static void Reset()
+        {
+            _thread = null;
+            _liPathingRequest.Clear();
+        }
+
         /// <summary>
         /// Nulls the threads
         /// </summary>

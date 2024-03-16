@@ -39,22 +39,22 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Name:Task_10_Start][Text:I have been contemplating my next move and I think that this village you shall make a fine home for me to continue my research, at least for now.
+      <Value>[Name:Task_10_Start][Text:I have been contemplating my next move and I think that this village of yours shall make a fine home for me to continue my research, at least for now.
 I am... a scholar of sorts, seeking out relics of the past and present. I wish to record the various items and resources found int his land.
  You are a Builder, yes? As such, your duties will have you scouring the land for your materials. I ask only that you bring them to me as well, so that I may research them. Herbs, Potions, Relics from the past as well as any tomes you might find.
  I will make it worth your while to furnish my $WorldObject_30$.][UnlockObjectID:30]</Value>
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.][Name:JoinPartyNo]</Value>
+      <Value>[Name:JoinPartyNo][Text:Sorry,I'm very busy today. Maybe in a few days I can go with you again.]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Text:Yes I will marry you!][Name:MarriageYes]</Value>
+      <Value>[Name:MarriageYes][Text:Yes I will marry you!]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Text:Oh... I'm sorry but. No.][Name:MarriageNo]</Value>
+      <Value>[Name:MarriageNo][Text:Oh... I'm sorry but. No.]</Value>
     </Item>
   </Asset>
 </XnaContent>

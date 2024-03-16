@@ -520,7 +520,7 @@ namespace RiverHollow.Characters
                     }
                 }
 
-                if(initial != direction)
+                if(Util.CompareAbsolute(direction, initial) == -1)
                 {
                     _bBumpedIntoSomething = true;
                 }

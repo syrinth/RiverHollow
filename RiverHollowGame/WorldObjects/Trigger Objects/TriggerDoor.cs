@@ -1,15 +1,76 @@
-﻿using RiverHollow.Game_Managers;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.WorldObjects
 {
     public abstract class TriggerDoorObject : TriggerObject
     {
+        Rectangle _rSourceGem;
+        Rectangle[] _arrPoints;
         public TriggerDoorObject(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             _rBase.Y = _pSize.Y - BaseHeight;
+            Setup();
+
+            Sprite.AddAnimation(AnimationEnum.Action1, _pImagePos.X + (_pSize.X * Constants.TILE_SIZE), _pImagePos.Y, _pSize, 0, 0);
+        }
+
+        private void Setup()
+        {
+            var strParams = GetStringParamsByIDKey("TriggerGemData");
+
+            var p = Util.ParsePoint(strParams[0]);
+            p = Util.MultiplyPoint(p, Constants.TILE_SIZE);
+            var sourceSize = Util.ParsePoint(strParams[1]);
+
+            _rSourceGem = new Rectangle(p, sourceSize);
+
+            
+            var posParams = GetStringParamsByIDKey("TriggerPos");
+            _arrPoints = new Rectangle[posParams.Length];
+            for (int i = 0; i < posParams.Length; i++)
+            {
+                var drawPoint = Util.ParsePoint(posParams[i]);
+                _arrPoints[i] = new Rectangle(drawPoint, sourceSize);
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+
+            int startPoint = _iTriggerNumber == 2 ? 1 : 0;
+            var gemsToLight = _iTriggerNumber - _iTriggersLeft;
+            for (int i = startPoint; i < _arrPoints.Length; i++)
+            {
+                var drawGem = _rSourceGem;
+                if (i - startPoint < gemsToLight)
+                {
+                    drawGem.Offset(new Point(_rSourceGem.Width, 0));
+                }
+                
+                var drawBox = new Rectangle(Sprite.Position.X + _arrPoints[i].X, Sprite.Position.Y + _arrPoints[i].Y, _arrPoints[i].Width, _arrPoints[i].Height);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_WORLDOBJECTS), drawBox, drawGem, Color.White, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth + 1);
+            }
+        }
+        private void SetTriggerFlags(bool value)
+        {
+            _bHasBeenTriggered = value;
+            _bWalkable = value;
+
+            if (value)
+            {
+                Sprite.PlayAnimation(AnimationEnum.Action1);
+            }
+            else
+            {
+                Sprite.PlayAnimation(AnimationEnum.ObjectIdle);
+            }
         }
 
         /// <summary>
@@ -27,9 +88,7 @@ namespace RiverHollow.WorldObjects
                         if (CurrentMap.IsDungeon) { DungeonManager.ActivateTrigger(_sOutTrigger); }
                         else { GameManager.ActivateTriggers(_sOutTrigger); }
                     }
-                    _bHasBeenTriggered = true;
-                    _bWalkable = true;
-                    _bVisible = false;
+                    SetTriggerFlags(true);
 
                     SoundManager.PlayEffect(Enums.SoundEffectEnum.Door);
                 }
@@ -40,9 +99,7 @@ namespace RiverHollow.WorldObjects
                         if (CurrentMap.IsDungeon) { DungeonManager.ActivateTrigger(_sOutTrigger); }
                         else { GameManager.ActivateTriggers(_sOutTrigger); }
                     }
-                    _bHasBeenTriggered = false;
-                    _bWalkable = false;
-                    _bVisible = true;
+                    SetTriggerFlags(false);
                     SoundManager.PlayEffect(Enums.SoundEffectEnum.Door);
                 }
             }
@@ -53,8 +110,7 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override void ResetTrigger()
         {
-            _bWalkable = false;
-            _bVisible = true;
+            SetTriggerFlags(false);
             _iTriggersLeft = _iTriggerNumber;
         }
 
@@ -63,10 +119,10 @@ namespace RiverHollow.WorldObjects
             base.LoadData(data);
             if (_bHasBeenTriggered)
             {
-                _bHasBeenTriggered = true;
-                _bWalkable = true;
-                _bVisible = false;
+                SetTriggerFlags(true);
             }
+
+            Setup();
         }
     }
 
@@ -80,7 +136,10 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override bool ProcessRightClick()
         {
-            GUIManager.OpenTextWindow("Trigger_Door");
+            if (!_bHasBeenTriggered)
+            {
+                GUIManager.OpenTextWindow("Trigger_Door");
+            }
             return true;
         }
     }
@@ -98,7 +157,10 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override bool ProcessRightClick()
         {
-            GUIManager.OpenTextWindow("Trigger_Door");
+            if (!_bHasBeenTriggered)
+            {
+                GUIManager.OpenTextWindow("Trigger_Door");
+            }
             return true;
         }
     }
@@ -116,35 +178,33 @@ namespace RiverHollow.WorldObjects
         }
 
         /// <summary>
-        /// Handles the response from whent he player attempts to Interact with the Door object.
+        /// Handles the response from when the player attempts to Interact with the Door object.
         /// Primarily just handles the output for the doors and the type of triggers required to use it.
         /// </summary>
         public override bool ProcessRightClick()
         {
-            bool rv = false;
-
-            GameManager.SetSelectedWorldObject(this);
-            if (_bKeyDoor)
+            if (!_bHasBeenTriggered)
             {
-                if (DungeonManager.DungeonKeys() > 0)
+                GameManager.SetSelectedWorldObject(this);
+                if (_bKeyDoor)
                 {
-                    rv = true;
-                    DungeonManager.UseDungeonKey();
-                    AttemptToTrigger(Constants.TRIGGER_KEY_OPEN);
+                    if (DungeonManager.DungeonKeys() > 0)
+                    {
+                        DungeonManager.UseDungeonKey();
+                        AttemptToTrigger(Constants.TRIGGER_KEY_OPEN);
+                    }
+                    else
+                    {
+                        GUIManager.OpenTextWindow("Key_Door");
+                    }
                 }
-                else
+                else if (_iItemKeyID != -1)
                 {
-                    rv = true;
-                    GUIManager.OpenTextWindow("Key_Door");
+                    GUIManager.OpenMainObject(new HUDInventoryDisplay());
                 }
             }
-            else if (_iItemKeyID != -1)
-            {
-                rv = true;
-                GUIManager.OpenMainObject(new HUDInventoryDisplay());
-            }
 
-            return rv;
+            return true;
         }
     }
 }

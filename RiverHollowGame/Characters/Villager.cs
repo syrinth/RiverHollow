@@ -165,6 +165,8 @@ namespace RiverHollow.Characters
 
         public override void RollOver()
         {
+            TravelManager.FinishThreading(ref _pathingThread);
+
             ClearPath();
             GiftedToday = false;
             if (GameCalendar.DayOfWeek == 0)
@@ -355,17 +357,6 @@ namespace RiverHollow.Characters
             {
                 //Still unclear on why we are hitting objects. Suspect due to when we cut clip off RHTiles and we're doing it sloppily
                 RequeueCurrentAction();
-            }
-        }
-        /// <summary>
-        /// If the Villager is in town and is currently on a path, request a new
-        /// pathing calculation.
-        /// </summary>
-        public void RecalculatePath()
-        {
-            if (LivesInTown && _currentPathData != null)
-            {
-                TravelManager.RequestPathing(this);
             }
         }
 

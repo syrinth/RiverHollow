@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Hey. $Name$ right? Glad you made it. I'm $Actor_16$, and I'm here to help you with building the town itself.]</Value>
+      <Value>[Name:Introduction][Text:Hey. $Name$ right? Glad you made it. I'm $Actor_16$, and I'm here to help you with building the town.]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Name:1][Text:Hey there, $Name$,hope you're feeling well today!][Default]</Value>
+      <Value>[Name:1][Text:Hey there, $Name$, hope you're feeling well today!][Default]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Name:2][Text:Hey, $Name$, you don't happen to need any new weapons, do you? I've got a few at the shop that I think could come in handy.][Default]</Value>
+      <Value>[Name:2][Text:Hey, $Name$, you make your way into the woods today? I'm always looking to get my hands on more wood.][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>

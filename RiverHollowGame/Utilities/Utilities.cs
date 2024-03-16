@@ -942,6 +942,22 @@ namespace RiverHollow.Utilities
             return currRow * totalColumns + currColumn;
         }
 
+        public static int CompareAbsolute(Vector2 first, Vector2 second)
+        {
+            return CompareAbsolute(first.Length(), second.Length());
+        }
+        public static int CompareAbsolute(float first, float second)
+        {
+            float absFirst = Math.Abs(first);
+            float absSecond= Math.Abs(second);
+
+            int rv;
+            if (absFirst < absSecond) { rv = -1; }
+            else if (absFirst == absSecond) { rv = 0; }
+            else { rv = 1; }
+
+            return rv;
+        }
         public static bool CompareTimeStrings(string checkValue, string targetValue)
         {
             bool rv = false;

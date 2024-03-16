@@ -451,7 +451,7 @@ namespace RiverHollow.WorldObjects
         }
 
         public virtual bool CanPickUp() { return false; }
-        public virtual bool HasInteract() { return GetBoolByIDKey("UnlockUpgradeID") || this is Trigger; }
+        public virtual bool HasInteract() { return GetBoolByIDKey("UnlockUpgradeID") || this is Trigger || this is TriggerDoor; }
 
         public void InitiateMove(Vector2 newMovement)
         {

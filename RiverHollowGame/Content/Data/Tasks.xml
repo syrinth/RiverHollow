@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Build][StartNPC:16][AssignTrigger:GameStart][TargetObjectID:112][ItemRewardID:178/8040][Money:50][ActivateNPC:26]</Value>
+      <Value>[Type:Build][StartNPC:16][AssignTrigger:GameStart][TargetObjectID:112][ItemRewardID:178/8040][Money:50][TriggerTask:1]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Fetch][StartNPC:26][AssignTrigger:GameStart][SendToTown][GoalItem:227][Count:2][TriggerTask:16-Delayed]</Value>
+      <Value>[Type:Fetch][StartNPC:26][AssignTrigger:Task-0][GoalItem:227][Count:2][TriggerTask:16-Delayed]</Value>
     </Item>
     <Item>
       <Key>2</Key>

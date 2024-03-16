@@ -137,7 +137,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     var toSwitch = itemBox.BoxItem;
                     if (toSwitch != null)
                     {
-                        if (GameManager.HeldItem.ID == toSwitch.ID)
+                        if (GameManager.HeldItem.ID == toSwitch.ID && CheckExtraHoldsSingular())
                         {
                             toSwitch.Add(GameManager.HeldItem.Number);
                             GameManager.DropItem();
@@ -223,7 +223,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         if (!takeHalf && _arrItemBoxes.Length != 1 && InventoryManager.ExtraInventory.Length == 1 && InventoryManager.ExtraInventory[0, 0] != null)
                         {
                             singleItem = InventoryManager.ExtraInventory[0, 0];
-                            InventoryManager.RemoveItemFromInventorySpot(0, 0, false);
+                            if (singleItem.ID != i.BoxItem.ID)
+                            {
+                                InventoryManager.RemoveItemFromInventorySpot(0, 0, false);
+                            }
                         }
 
                         bool performSwap = false;
@@ -237,7 +240,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                                 col = gearPosition.Y;
                             }
                         }
-                        else if (InventoryManager.HasSpaceInInventory(i.BoxItem.ID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory))
+                        else if (InventoryManager.HasSpaceInInventory(i.BoxItem.ID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory) && (singleItem == null || singleItem.ID != i.BoxItem.ID))
                         {
                             performSwap = true;
                         }
@@ -311,6 +314,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             bool shopToolCheck = InventoryManager.CurrentInventoryDisplay != DisplayTypeEnum.ShopTable || !i.CompareType(ItemEnum.Special, ItemEnum.Tool);
 
             return playerInventoryCheck && validIDsCheck && shopToolCheck;
+        }
+
+        private bool CheckExtraHoldsSingular()
+        {
+            return _bPlayerInventory || !InventoryManager.ExtraHoldSingular;
         }
 
         private GUIItemBox GetItemBox(Point mouse)

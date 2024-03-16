@@ -354,6 +354,7 @@ namespace RiverHollow
         /// </summary>
         public static void Rollover()
         {
+            TravelManager.Reset();
             TaskManager.Rollover();
             PlayerManager.Rollover();
             TownManager.Rollover();
@@ -391,6 +392,7 @@ namespace RiverHollow
             MapManager.LoadObjects();
 
             TaskManager.Initialize();
+            TravelManager.Reset();
 
             //Set the Main Menu Screen
             GUIManager.SetScreen(new IntroMenuScreen());
