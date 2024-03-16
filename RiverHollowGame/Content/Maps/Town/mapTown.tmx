@@ -175,11 +175,6 @@
   </object>
  </objectgroup>
  <objectgroup id="9" name="MapObject">
-  <object id="201" name="Building" x="256" y="496" width="63" height="28">
-   <properties>
-    <property name="ObjectID" type="int" value="18"/>
-   </properties>
-  </object>
   <object id="179" name="Building" x="80" y="352" width="144" height="64">
    <properties>
     <property name="ObjectID" type="int" value="28"/>
