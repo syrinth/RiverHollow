@@ -5,121 +5,62 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
-using RiverHollow.Items;
-using RiverHollow.Utilities;
 using RiverHollow.Buildings;
 using System.Linq;
 
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     class HUDRecipeBook : GUIMainObject
     {
-        const int MAX_DISPLAY = 28;
-        const int COLUMNS = 7;
-
-        private GUIImage _gSelection;
-        private GUIImage _gComponents;
-
-        private GUIText _gName;
-        private GUIItemBoxHover[] _arrRecipes;
-        private List<GUIItemBox> _liRequiredItems;
+        const int MAX_DISPLAY = 10;
+        int _iIndex = 0;
+        int _iMaxUsed = MAX_DISPLAY;
 
         private readonly Machine _objMachine;
 
+        readonly GUIButton _btnLeft;
+        readonly GUIButton _btnRight;
+
+        private readonly List<RecipeDisplay> _liRecipes;
         private readonly Dictionary<int, bool> _diCraftingList;
 
         public HUDRecipeBook(Machine m)
         {
-            _liRequiredItems = new List<GUIItemBox>();
             _objMachine = m;
-            _gName = new GUIText("");
 
+            _liRecipes = new List<RecipeDisplay>();
             _diCraftingList = new Dictionary<int, bool>();
             foreach (var item in m.GetFullCraftingList())
             {
                 _diCraftingList[item.Item1] = item.Item2;
             }
 
-            Setup();
+            _iMaxUsed = Math.Min(_diCraftingList.Count, MAX_DISPLAY);
 
-            UpdateInfo(_arrRecipes[0]);
+            _winMain = new GUIWindow(GUIUtils.WINDOW_WOODEN_TITLE, GameManager.ScaleIt(188), GameManager.ScaleIt(59));    //116
+            AddControl(_winMain);
 
-            DetermineSize();
-
-            Position();
-        }
-
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            GUIManager.CloseMainObject();
-            return true;
-        }
-
-        /// <summary>
-        /// Does the setup for the crafting window, determines what the crafter can make
-        /// and creates the appropriate boxes forthem
-        /// </summary>
-        /// <param name="recipes"></param>
-        public void Setup()
-        {
-            int recipeNumber = Math.Min(_diCraftingList.Count, Constants.MAX_RECIPE_DISPLAY);
-            _arrRecipes = new GUIItemBoxHover[MAX_DISPLAY];
-            _winMain = new GUIWindow(GUIUtils.WINDOW_WOODEN_TITLE, GameManager.ScaleIt(174), GameManager.ScaleIt(113));
-
+            //Add Machine Name
             var machineName = new GUIText(_objMachine.Name());
             machineName.Position(_winMain);
             machineName.AlignToObject(_winMain, SideEnum.CenterX);
             machineName.MoveBy(0, (GUIUtils.WINDOW_WOODEN_TITLE.ScaledTopEdge - machineName.Height) / 2);
 
-            for (int i = 0; i < MAX_DISPLAY; i++)
-            {
-                Item newItem = null;
-                if (_diCraftingList.Count > i)
-                {
-                    newItem = DataManager.CraftItem(_diCraftingList.Keys.ToList()[i]);
-                }
+            //Add page lines
+            var top = new GUIImage(GUIUtils.RECIPE_TOP);
+            top.PositionAndMove(_winMain, 6, 16);
 
-                bool blackout = newItem == null || !_diCraftingList[newItem.ID];
-                var displayWindow = new GUIItemBoxHover(newItem, blackout ? ItemBoxDraw.Never : ItemBoxDraw.MoreThanOne, UpdateInfo);
-                if (blackout)
-                {
-                    displayWindow.SetItemColor(Color.Black);
-                    displayWindow.DrawShadow(false);
-                }
+            GUIImage temp = top;
+            DynamicSectionHelper(4, ref temp);
+            DynamicSectionHelper(6, ref temp);
+            DynamicSectionHelper(8, ref temp);
 
-                if (newItem != null)
-                {
-                    if (!_objMachine.HasSufficientItems(newItem))
-                    {
-                        displayWindow.SetItemAlpha(0.3f);
-                        displayWindow.DrawShadow(false);
-                    }
-                }
-                else
-                {
-                    displayWindow.Enable(false);
-                }
+            var bottom = new GUIImage(GUIUtils.RECIPE_BOTTOM);
+            bottom.AnchorAndAlign(temp, SideEnum.Bottom, SideEnum.Left);
 
-                _arrRecipes[i] = displayWindow;
-            }
-
-            GUIUtils.CreateSpacedGrid(new List<GUIObject>(_arrRecipes), _winMain, new Point(8, 18), COLUMNS, 3, 3);
-
-            _gSelection = new GUIImage(GUIUtils.SELECT_HIGHLIGHT);
-            _winMain.AddControl(_gSelection);
-            _gSelection.CenterOnObject(_arrRecipes[0]);
-
-            int widthBetween = (recipeNumber - 1) * ScaleIt(2);
-            AddControl(_winMain);
-
-            _gComponents = new GUIImage(GUIUtils.WIN_IMAGE_CRAFTING);
-            _winMain.MoveBy(new Point((_gComponents.Width - _winMain.Width) / 2, 0));
-            _gComponents.AnchorAndAlignWithSpacing(_winMain, SideEnum.Bottom, SideEnum.CenterX, 2);
-            _gComponents.AddControl(_gName);
-
+            //Add Crafts/Day
             var mapProperties = MapManager.CurrentMap.GetMapProperties();
             if (mapProperties.ContainsKey("BuildingID") && int.TryParse(mapProperties["BuildingID"], out int buildingID))
             {
@@ -129,30 +70,143 @@ namespace RiverHollow.GUIComponents.Screens
                     int craftsLeft = b.GetDailyCraftingLimit();
 
                     var craftIcon = new GUIIconText(craftsLeft.ToString(), 2, GUIUtils.ICON_HAMMER, GameIconEnum.Hammer, SideEnum.Right, SideEnum.CenterY);
-                    craftIcon.PositionAndMove(_winMain, 142, 1);
+                    craftIcon.PositionAndMove(_winMain, 155, 1);
                 }
             }
 
-            AddControl(_gComponents);
-
             DetermineSize();
+
+            _btnLeft = new GUIButton(GUIUtils.BTN_LEFT_SMALL, BtnLeft);
+            _btnLeft.PositionAndMove(_winMain, -11, 58);
+            _btnLeft.Show(false);
+
+            _btnRight = new GUIButton(GUIUtils.BTN_RIGHT_SMALL, BtnRight);
+            _btnRight.PositionAndMove(_winMain, 189, 58);
+            _btnRight.Show(false);
+            AddControls(_btnLeft, _btnRight);
+
+            SetupRecipes();
             CenterOnScreen();
         }
 
-        private void UpdateInfo(GUIItemBoxHover obj)
+        private void DynamicSectionHelper(int value, ref GUIImage temp)
         {
-            if (obj.BoxItem != null && _diCraftingList[obj.BoxItem.ID])
+            if (_iMaxUsed > value)
             {
-                _gSelection.CenterOnObject(obj);
+                var middleTwo = new GUIImage(GUIUtils.RECIPE_MIDDLE);
+                middleTwo.AnchorAndAlign(temp, SideEnum.Bottom, SideEnum.Left);
+                temp = middleTwo;
+                _winMain.Height += temp.Height;
+            }
+        }
 
-                GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, obj.BoxItem.GetRequiredItems(), _objMachine.Stash);
+        private void SetupRecipes()
+        {
+            foreach(var recipe in _liRecipes)
+            {
+                recipe.RemoveSelfFromControl();
+            }
+            _liRecipes.Clear();
 
-                _gName.SetText(obj.BoxItem.Name());
-                _gName.Position(_gComponents);
-                _gName.ScaledMoveBy(0, 6);
-                _gName.AlignToObject(_gComponents, SideEnum.CenterX);
+            Point start = new Point(9, 18);
+            for (int i = _iIndex; i < _iIndex + _iMaxUsed; i++)
+            {
+                if (_diCraftingList.Count > i)
+                {
+                    var id = _diCraftingList.Keys.ToList()[i];
+                    RecipeDisplay newDisplay = new RecipeDisplay(id, _diCraftingList, _objMachine);
 
-                GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), _gComponents, _gComponents, 2, 24);
+                    if (i == _iIndex)
+                    {
+                        newDisplay.PositionAndMove(_winMain, start);
+                    }
+                    else if (i == ((_iIndex + _iMaxUsed) / 2))
+                    {
+                        newDisplay.AnchorAndAlignWithSpacing(_liRecipes[0], SideEnum.Right, SideEnum.Bottom, 10);
+                    }
+                    else
+                    {
+                        newDisplay.AnchorAndAlignWithSpacing(_liRecipes[i- _iIndex - 1], SideEnum.Bottom, SideEnum.Left, 3);
+                    }
+
+                    _liRecipes.Add(newDisplay);
+                }
+            }
+
+            _btnLeft.Show(_iIndex >= _iMaxUsed);
+            _btnRight.Show(_iIndex + _iMaxUsed < _diCraftingList.Count);
+        }
+
+        public override bool ProcessRightButtonClick(Point mouse)
+        {
+            GUIManager.CloseMainObject();
+            return true;
+        }
+
+        public void BtnLeft()
+        {
+            _iIndex -= _iMaxUsed;
+            _btnRight.Enable(true);
+            SetupRecipes();
+        }
+        public void BtnRight()
+        {
+            _iIndex += _iMaxUsed;
+            _btnLeft.Enable(true);
+            SetupRecipes();
+        }
+
+        private class RecipeDisplay : GUIObject
+        {
+            public RecipeDisplay(int id, Dictionary<int, bool> craftingList, Machine m)
+            {
+                var item = DataManager.CraftItem(id);
+                GUIItem itemToCraft = new GUIItem(item, ItemBoxDraw.MoreThanOne, false);
+
+                bool blackout = !craftingList[item.ID];
+                if (blackout)
+                {
+                    itemToCraft.SetImageColor(Color.Black);
+                    AddControl(itemToCraft);
+                }
+                else
+                {
+
+                    GUIImage dots = new GUIImage(GUIUtils.RECIPE_DOTS);
+                    dots.AnchorAndAlign(itemToCraft, SideEnum.Right, SideEnum.Bottom);
+                    AddControls(itemToCraft, dots);
+
+                    var recipeList = new List<GUIObject>();
+                    var reqItems = item.GetRequiredItems();
+                    foreach (var kvp in reqItems)
+                    {
+                        var recipeItem = DataManager.GetItem(kvp.Key, kvp.Value);
+                        var guiRecipeItem = new GUIItem(recipeItem, ItemBoxDraw.MoreThanOne, false);
+
+                        if (!guiRecipeItem.CompareNumToInventory(m.Stash))
+                        {
+                            itemToCraft.SetImageAlpha(0.3f);
+                            dots.Alpha(0.3f);
+                            guiRecipeItem.SetImageAlpha(0.3f);
+                        }
+
+                        if (recipeList.Count == 0)
+                        {
+                            guiRecipeItem.AnchorAndAlign(dots, SideEnum.Right, SideEnum.Bottom);
+                        }
+                        else
+                        {
+                            guiRecipeItem.AnchorAndAlign(recipeList.Last(), SideEnum.Right, SideEnum.Bottom);
+                        }
+
+                        recipeList.Add(guiRecipeItem);
+                        AddControl(guiRecipeItem);
+                    }
+                }
+
+                //Always needs to be the same width, regarless of if it's missing objects
+                Width = itemToCraft.Width * 5;
+                Height = itemToCraft.Height;
             }
         }
     }

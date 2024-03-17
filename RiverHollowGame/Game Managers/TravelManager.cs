@@ -26,7 +26,7 @@ namespace RiverHollow.Game_Managers
         public static void Reset()
         {
             _thread = null;
-            _liPathingRequest.Clear();
+            _liPathingRequest?.Clear();
         }
 
         /// <summary>

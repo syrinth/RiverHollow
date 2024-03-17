@@ -133,6 +133,11 @@ namespace RiverHollow.GUIComponents
         internal static WindowData WINDOW_WOODEN_PANEL = new WindowData(80, 240, 3, 3, 3, 3, 10);
         internal static WindowData WINDOW_WOODEN_TITLE = new WindowData(0, 256, 17, 5, 7, 7, 10);
 
+        internal static Rectangle RECIPE_TOP = new Rectangle(0, 288, 176, 19);
+        internal static Rectangle RECIPE_MIDDLE = new Rectangle(0, 307, 176, 19);
+        internal static Rectangle RECIPE_BOTTOM = new Rectangle(0, 326, 176, 20);
+        internal static Rectangle RECIPE_DOTS = new Rectangle(176, 288, 16, 16);
+
         public static bool ProcessLeftMouseButton(Point mouse, params GUIObject[] list)
         {
             bool rv = false;

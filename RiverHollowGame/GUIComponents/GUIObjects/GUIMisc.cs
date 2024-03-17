@@ -189,6 +189,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUIItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks, bool drawShadow = true)
         {
+            HoverControls = false;
+
             _bDrawShadow = drawShadow;
 
             ItemObject = it;
@@ -263,6 +265,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public void SetImageColor(Color c)
         {
             _gImg.SetColor(c);
+
+            if(_gImg.ObjColor == Color.Black)
+            {
+                DrawNumbers = ItemBoxDraw.Never;
+            }
+        }
+
+        public void SetImageAlpha(float alpha)
+        {
+            _gImg.Alpha(alpha);
         }
 
         public void DrawShadow(bool drawShadow)
@@ -286,6 +298,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
 
             return rv;
+        }
+
+        protected override void BeginHover()
+        {
+            if (_gImg.ObjColor != Color.Black)
+            {
+                var win = new GUIItemDescriptionWindow(ItemObject);
+                win.AnchorToScreen(SideEnum.BottomRight);
+                GUIManager.OpenHoverObject(win, DrawRectangle, true);
+            }
         }
     }
 
