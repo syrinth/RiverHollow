@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
@@ -6,7 +7,6 @@ using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.WorldObjects;
 using RiverHollow.Buildings;
-using System.Linq;
 
 using static RiverHollow.Utilities.Enums;
 
@@ -16,15 +16,15 @@ namespace RiverHollow.GUIComponents.Screens
     {
         const int MAX_DISPLAY = 10;
         int _iIndex = 0;
-        int _iMaxUsed = MAX_DISPLAY;
+        readonly int _iMaxUsed = MAX_DISPLAY;
 
         private readonly Machine _objMachine;
 
         readonly GUIButton _btnLeft;
         readonly GUIButton _btnRight;
 
-        private readonly List<RecipeDisplay> _liRecipes;
-        private readonly Dictionary<int, bool> _diCraftingList;
+        readonly List<RecipeDisplay> _liRecipes;
+        readonly Dictionary<int, bool> _diCraftingList;
 
         public HUDRecipeBook(Machine m)
         {
@@ -37,7 +37,9 @@ namespace RiverHollow.GUIComponents.Screens
                 _diCraftingList[item.Item1] = item.Item2;
             }
 
+            //_iMaxUsed needs to be an even number or the next page factor will skip early
             _iMaxUsed = Math.Min(_diCraftingList.Count, MAX_DISPLAY);
+            if(_iMaxUsed % 2 != 0) { _iMaxUsed++; }
 
             _winMain = new GUIWindow(GUIUtils.WINDOW_WOODEN_TITLE, GameManager.ScaleIt(188), GameManager.ScaleIt(59));    //116
             AddControl(_winMain);
@@ -126,7 +128,7 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                     else
                     {
-                        newDisplay.AnchorAndAlignWithSpacing(_liRecipes[i- _iIndex - 1], SideEnum.Bottom, SideEnum.Left, 3);
+                        newDisplay.AnchorAndAlignWithSpacing(_liRecipes[i - _iIndex - 1], SideEnum.Bottom, SideEnum.Left, 3);
                     }
 
                     _liRecipes.Add(newDisplay);
@@ -171,7 +173,6 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else
                 {
-
                     GUIImage dots = new GUIImage(GUIUtils.RECIPE_DOTS);
                     dots.AnchorAndAlign(itemToCraft, SideEnum.Right, SideEnum.Bottom);
                     AddControls(itemToCraft, dots);

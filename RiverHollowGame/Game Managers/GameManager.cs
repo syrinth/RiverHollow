@@ -53,6 +53,7 @@ namespace RiverHollow.Game_Managers
         public static int TotalExperience = 0;
 
         public static bool HideMiniInventory = false;
+        public static bool PrintTextImmediately = true;
 
         public static GameScreenEnum CurrentScreen;
         #endregion

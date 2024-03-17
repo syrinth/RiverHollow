@@ -16,6 +16,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         GUINumberControl _gVolumeControl;
         GUINumberControl _gEffectControl;
         GUICheck _gMute;
+        GUICheck _gTextComplete;
 
         const int SOUND_VOLUME_SCALAR = 100;
 
@@ -37,6 +38,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
             _gMute = new GUICheck("Mute All", SoundManager.IsMuted, ProcessMuteAll);
             _gMute.AnchorAndAlign(_gEffectControl, SideEnum.Bottom, SideEnum.Left);
+
+            _gTextComplete = new GUICheck("Print Whole Text", GameManager.PrintTextImmediately);
+            _gTextComplete.AnchorAndAlign(_gMute, SideEnum.Bottom, SideEnum.Left);
 
             _btnSave = new GUIButton("Save", BtnSave);
             _btnSave.AnchorToInnerSide(_winMain, SideEnum.BottomRight);
@@ -87,6 +91,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         public void BtnSave()
         {
             GameManager.HideMiniInventory = _gHideMiniInventory.Checked();
+            GameManager.PrintTextImmediately = _gTextComplete.Checked();
             GUIManager.CloseMainObject();
         }
 

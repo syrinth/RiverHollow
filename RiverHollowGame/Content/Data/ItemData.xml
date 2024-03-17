@@ -231,11 +231,11 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:1-6][ItemGroups:Potion][Value:70][ReqItems:162-1/93-1/23-1]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:1-6][ItemGroups:Potion][Value:70][ReqItems:162-1/95-1/23-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:2-6][ItemGroups:Potion][Value:60][ReqItems:162-1/56-1]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:2-6][ItemGroups:Potion][Value:60][ReqItems:162-1/63-1/56-1]</Value>
     </Item>
     <Item>
       <Key>59</Key>
@@ -663,11 +663,11 @@
     </Item>
     <Item>
       <Key>165</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:1-2][ItemGroups:Potion][Value:70][ReqItems:162-1/7-1]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:7-7][ItemGroups:Potion][Value:70][ReqItems:162-1/8-1/227-1]</Value>
     </Item>
     <Item>
       <Key>166</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:1-2][ItemGroups:Potion][Value:70][ReqItems:162-1/63-1/95-1]</Value>
+      <Value>[Type:Resource][Subtype:Potion][Image:8-7][ItemGroups:Potion][Value:70][ReqItems:162-1/63-1/95-1]</Value>
     </Item>
     <Item>
       <Key>167</Key>

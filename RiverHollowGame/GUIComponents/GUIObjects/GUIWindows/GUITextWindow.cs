@@ -49,6 +49,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _iCharHeight = _gText.CharHeight;
 
             AddControl(_gText);
+
+            if (GameManager.PrintTextImmediately)
+            {
+                PrintAll();
+            }
         }
 
         //Used for the default TextWindow that sits on the bottom of the screen
@@ -60,6 +65,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             ConfigureHeight();
             SyncText(_textEntry.GetFormattedText());
             Setup(open);
+
+            if (GameManager.PrintTextImmediately)
+            {
+                PrintAll();
+            }
         }
 
         //Informational boxes that show up anywhere, like tooltips
@@ -87,6 +97,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gText.PrintAll = true;
             _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
             Resize();
+
+            if (GameManager.PrintTextImmediately)
+            {
+                PrintAll();
+            }
         }
 
         public void ClosingWindow()
@@ -267,6 +282,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 _gText.ResetText(_liTextPages[_iCurrText]);
                 rv = true;
+
+                if (GameManager.PrintTextImmediately)
+                {
+                    PrintAll();
+                }
             }
 
             return rv;
