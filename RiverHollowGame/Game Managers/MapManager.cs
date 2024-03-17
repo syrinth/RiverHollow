@@ -27,6 +27,7 @@ namespace RiverHollow.Game_Managers
 
         static NewMapInfo _newMapInfo;
         public static RHMap CurrentMap { get; set; }
+        public static RHTimer MapChangeTimer { get; private set; }
         
         public static void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice)
         {
@@ -41,6 +42,7 @@ namespace RiverHollow.Game_Managers
             }
 
             CurrentMap = Maps[Constants.PLAYER_HOME_NAME];
+            MapChangeTimer = new RHTimer(Constants.PLAYER_GRACE_PERIOD, true);
         }
         public static void LoadObjects()
         {
@@ -220,13 +222,18 @@ namespace RiverHollow.Game_Managers
                         }
                         else { PlayerManager.PlayerActor.ActiveMount.SyncToPlayer(); }
                     }
+
+                    MapChangeTimer.Reset();
                 }
                 else
                 {
                     CurrentMap.SendVillagersToTown();
                 }
             }
-
+            else
+            {
+                MapChangeTimer?.TickDown(gTime);
+            }
             foreach(RHMap map in Maps.Values)
             {
                 map.Update(gTime);

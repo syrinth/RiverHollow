@@ -28,7 +28,7 @@ namespace RiverHollow.Characters.Mobs
             }
             else if (_cooldownTimer.TickDown(gTime))
             {
-                if (!_bUsingAction && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 6))
+                if (!_bUsingAction && CanEffectPlayer(6))
                 {
                     _bUsingAction = true;
                     PlayAnimation(VerbEnum.Action1);

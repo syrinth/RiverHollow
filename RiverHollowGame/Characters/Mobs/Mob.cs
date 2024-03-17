@@ -187,10 +187,14 @@ namespace RiverHollow.Characters
             }
         }
 
+        protected bool CanEffectPlayer(int range)
+        {
+            return PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * range) && MapManager.MapChangeTimer.Finished();
+        }
         protected bool ScanForPlayer()
         {
             bool rv = false;
-            if ((TracksPlayer || MaintainDistance )&& OnScreen() && PlayerManager.PlayerInRange(CollisionCenter, Constants.TILE_SIZE * 6))
+            if ((TracksPlayer || MaintainDistance) && OnScreen() && CanEffectPlayer(6))
             {
                 rv = true;
                 Wandering = false;

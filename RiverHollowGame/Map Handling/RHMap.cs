@@ -951,8 +951,11 @@ namespace RiverHollow.Map_Handling
                 _liMobs.Clear();
 
                 string[] mobRange = Util.FindArguments(Map.Properties["Mobs"]);
-                int min = int.Parse(mobRange[0]);
-                int max = int.Parse(mobRange[1]);
+                int.TryParse(mobRange[1], out int min);
+                if(!int.TryParse(mobRange[1], out int max))
+                {
+                    max = min;
+                }
 
                 if (_liMobSpawns.Count < max)
                 {

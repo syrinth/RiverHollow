@@ -52,7 +52,7 @@ namespace RiverHollow.Characters.Mobs
         {
             bool rv = false;
 
-            if (_cooldownTimer.TickDown(gTime))
+            if (MapManager.MapChangeTimer.Finished() && _cooldownTimer.TickDown(gTime))
             {
                 if (AimsProjectiles(data)) { rv = true; }
                 else if (Facing == Util.GetDirection(GetPlayerDirection())) { rv = true; }

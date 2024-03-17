@@ -33,6 +33,7 @@ namespace RiverHollow.Utilities
         public const int PLAYER_PANTS_OFFSET = 16;
         public const int MERCHANT_BASE_CAPACITY = 5;
 
+        public const float PLAYER_GRACE_PERIOD = 0.75f;
         public const float PLAYER_INVULN_PERIOD = 1;
         public const float MOB_INVULN_PERIOD = 0.3f;
         public const float FLICKER_PERIOD = 0.08f;
