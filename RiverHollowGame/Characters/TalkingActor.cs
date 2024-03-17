@@ -53,7 +53,7 @@ namespace RiverHollow.Characters
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
             base.Draw(spriteBatch, useLayerDepth);
-            if (OnTheMap)
+            if (OnTheMap && DisplayIcons())
             {
                 Rectangle pos = new Rectangle(GetHoverPointLocation(), new Point(Constants.TILE_SIZE, Constants.TILE_SIZE));
 
@@ -101,6 +101,7 @@ namespace RiverHollow.Characters
             ProcessStateEnum(gTime, true);
         }
 
+        public virtual bool DisplayIcons() { return true; }
         public bool HasAssignedTask()
         {
             return _assignedTask != null && _assignedTask.TaskState == TaskStateEnum.Assigned;

@@ -184,6 +184,11 @@ namespace RiverHollow.Characters
             CreateDailySchedule();
         }
 
+        public override bool DisplayIcons()
+        {
+            return _eSpawnStatus != SpawnStateEnum.SendingToInn;
+        }
+
         public void Introduce()
         {
             if(!Introduced)
