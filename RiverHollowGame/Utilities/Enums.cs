@@ -5,7 +5,7 @@
         public enum ButtonEnum { Left, Right, Middle };
         public enum DataType { Actor, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
         public enum BuildTypeEnum { Structure, WorldObject };
-        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Buy, Sell, Propose, Date, EndDay, GoToNight, Option_0, Option_1, Option_2, Option_3 };
+        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Buy, Sell, Propose, Date, EndDay, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Shop, Bed };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Donate, PetFollow, PetUnfollow, GetBaby }
 
@@ -59,7 +59,6 @@
         public enum ObjectPlacementEnum { Ground, Floor, Wall };
         public enum ObjectTypeEnum { WorldObject, Buildable, Hazard, Destructible, DungeonObject,Gatherable, Machine, Plant, WarpPoint };
         public enum BuildableEnum { Basic, Beehive, Building, Container, Decor, Field, Floor, Mailbox, Structure, Wall, Wallpaper };
-        public enum MobSpawnStateEnum { None, Day, Night };
         public enum ExpectingChildEnum { None, Adoption, Pregnant };
         public enum RelationShipStatusEnum { None, Friends, Dating, Engaged, Married };
         public enum SpawnStateEnum { OffMap, WaitAtInn, HasHome, NonTownMap, SendingToInn };

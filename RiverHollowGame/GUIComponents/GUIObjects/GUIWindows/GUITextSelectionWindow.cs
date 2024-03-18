@@ -142,14 +142,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             List<TextEntry> liCommands = new List<TextEntry>
             {
                 DataManager.GetGameTextEntry("Selection_Sleep"),
-                DataManager.GetGameTextEntry("Selection_Nightfall"),
                 DataManager.GetGameTextEntry("Selection_NeverMind")
             };
-
-            if (GameCalendar.CurrentHour >= GameCalendar.Nightfall())
-            {
-                liCommands.RemoveAt(1);
-            }
 
             AddOptions(liCommands);
         }
@@ -249,14 +243,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     Point pos = PlayerManager.PlayerActor.CollisionCenter;
                     PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.GetCharacterObject("PlayerSpawn").Location));
                     GUIManager.SetScreen(new DayEndScreen());
-                    break;
-                case TextEntryVerbEnum.GoToNight:
-                    MapManager.FadeToNewMap(MapManager.CurrentMap, MapManager.CurrentMap.GetCharacterObject("PlayerSpawn").Location, DirectionEnum.Down);
-                    if (GameCalendar.CurrentHour <= GameCalendar.Nightfall())
-                    {
-                        PlayerManager.RecoverEnergy(Constants.ENERGY_NAP_RECOVERY);
-                    }
-                    GameCalendar.GoToNightfall();
                     break;
                 case TextEntryVerbEnum.Buy:
                     npc?.OpenShop();

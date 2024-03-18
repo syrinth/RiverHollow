@@ -234,10 +234,6 @@ namespace RiverHollow.Map_Handling
 
         public bool Validate(int id)
         {
-
-            if (DataManager.GetBoolByIDKey(id, "Day", DataType.Actor) && GameCalendar.IsNight()) { return false; }
-            else if (DataManager.GetBoolByIDKey(id, "Night", DataType.Actor) && !GameCalendar.IsNight() && _map.IsOutside) { return false; }
-
             var seasonList = DataManager.GetEnumListByIDKey<SeasonEnum>(id, "Season", DataType.Actor);
 
             bool validSeason = seasonList[0] == SeasonEnum.None;

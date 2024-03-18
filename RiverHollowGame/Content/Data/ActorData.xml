@@ -131,11 +131,11 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][Night][ItemID:56-C/222-C/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][ItemID:56-C/222-C/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
     </Item>
     <Item>
       <Key>33</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Mossy_Slime][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8-C/219-C/5-R][HP:2][Damage:1][Day][Size:16-24][Speed:1][Weight:Medium][Wander:0.5-4-16]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Mossy_Slime][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:8-C/219-C/5-R][HP:2][Damage:1][Size:16-24][Speed:1][Weight:Medium][Wander:0.5-4-16]</Value>
     </Item>
     <Item>
       <Key>34</Key>

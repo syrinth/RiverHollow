@@ -46,7 +46,6 @@ namespace RiverHollow.Map_Handling
         public MapTypeEnum MapType => Util.ParseEnum<MapTypeEnum>(_map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty);
 
         public bool Visited { get; private set; } = false;
-        public MobSpawnStateEnum MobsSpawned { get; private set; } = MobSpawnStateEnum.None;
         private bool Randomize => _map.Properties.ContainsKey("Randomize");
         public MonsterFood PrimedFood { get; private set; }
 
@@ -586,20 +585,7 @@ namespace RiverHollow.Map_Handling
                 GenerateMapObjects();
             }
 
-            if (MobsSpawned == MobSpawnStateEnum.None)
-            {
-                SpawnMobs();
-                if (GameCalendar.IsNight()) { MobsSpawned = MobSpawnStateEnum.Night; }
-                else { MobsSpawned = MobSpawnStateEnum.Day; }
-            }
-            else if (MobsSpawned == MobSpawnStateEnum.Day)
-            {
-                if (GameCalendar.IsNight())
-                {
-                    SpawnMobs();
-                    MobsSpawned = MobSpawnStateEnum.Night;
-                }
-            }
+            SpawnMobs();
         }
         private void GenerateMapObjects()
         {
@@ -1077,7 +1063,6 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            MobsSpawned = MobSpawnStateEnum.None;
             _liSpecialTiles.ForEach(x => x.Rollover());
             
             GenerateRolloverResources();

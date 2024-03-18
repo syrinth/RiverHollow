@@ -405,37 +405,37 @@
   </object>
   <object id="192" name="Mob" x="128" y="608" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
   <object id="193" name="Mob" x="512" y="736" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
   <object id="194" name="Mob" x="768" y="1024" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
   <object id="195" name="Mob" x="352" y="448" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
   <object id="201" name="Mob" x="144" y="1392" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
   <object id="202" name="Mob" x="561.333" y="1342.67" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
   <object id="203" name="Mob" x="320" y="1488" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
   <object id="204" name="Resource" x="448" y="656" width="16" height="16">

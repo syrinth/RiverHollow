@@ -153,30 +153,22 @@ namespace RiverHollow.Game_Managers
             EnvironmentManager.RollForWeatherEffects();
         }
 
-        public static int Nightfall()
+        public static bool IsNight()
         {
+            int nightFall = 0;
             switch (CurrentSeason)
             {
                 case SeasonEnum.Summer:
-                    return Constants.NIGHTFALL_LATE;
+                    nightFall = Constants.NIGHTFALL_LATE;
+                    break;
                 case SeasonEnum.Winter:
-                    return Constants.NIGHTFALL_EARLY;
+                    nightFall = Constants.NIGHTFALL_EARLY;
+                    break;
                 default:
-                    return Constants.NIGHTFALL_STANDARD;
+                    nightFall = Constants.NIGHTFALL_STANDARD;
+                    break;
             }
-        }
-        public static bool IsNight()
-        {
-            return CurrentHour >= 18;
-        }
-
-        public static void GoToNightfall()
-        {
-            if (CurrentHour < Nightfall())
-            {
-                CurrentHour = Nightfall();
-                CurrentMin = 0;
-            }
+            return CurrentHour >= nightFall;
         }
 
         public static string GetTime()
