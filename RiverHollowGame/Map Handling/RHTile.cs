@@ -21,7 +21,7 @@ namespace RiverHollow.Map_Handling
         public int X { get; }
         public int Y { get; }
         public Point Position => new Point(X * Constants.TILE_SIZE, Y * Constants.TILE_SIZE);
-        public Rectangle CollisionBox => new Rectangle(Position, Constants.TileSize);
+        public Rectangle CollisionBox => new Rectangle(Position, Constants.BasicTileSize);
         public Point Center => CollisionBox.Center;
 
         TravelPoint _travelPoint;

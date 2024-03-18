@@ -11,12 +11,15 @@ using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 using MonoGame.Extended.Tiled;
-using Microsoft.Win32;
 
 namespace RiverHollow.Utilities
 {
     public class Util
     {
+        public static float DetermineLayerDepth(Point Position, int LayerHeight)
+        {
+            return (Position.Y + LayerHeight) - (LayerHeight / 1000f) + (Position.X / 10000f);
+        }
         /// <summary>
         /// Gets the total directional movement speed required to get to the target location
         /// </summary>

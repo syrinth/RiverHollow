@@ -78,31 +78,18 @@ namespace RiverHollow.Items
 
         public virtual void Update(GameTime gTime) { }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
         {
-            DrawShadow(spriteBatch, drawBox, LayerDepth, forcedLayerDepth, alpha);
-            if (LayerDepth)
-            {
-                spriteBatch.Draw(_texTexture, drawBox, SourceRectangle, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
-            }
-            else
-            {
-                spriteBatch.Draw(_texTexture, drawBox, SourceRectangle, _c * alpha);
-            }
+            DrawShadow(spriteBatch, drawBox, alpha);
+            spriteBatch.Draw(_texTexture, drawBox, SourceRectangle, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
+
         }
 
-        public void DrawShadow(SpriteBatch spriteBatch, Rectangle drawBox, bool LayerDepth = false, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
+        public void DrawShadow(SpriteBatch spriteBatch, Rectangle drawBox, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
         {
             if (_bDrawShadow)
             {
-                if (LayerDepth)
-                {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, Constants.ITEM_SHADOW, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth - Constants.SPRITE_LINKED_MOD);
-                }
-                else
-                {
-                    spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, Constants.ITEM_SHADOW, _c * alpha);
-                }
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, Constants.ITEM_SHADOW, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth - Constants.SPRITE_LINKED_MOD);
             }
         }
 

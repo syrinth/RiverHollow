@@ -316,7 +316,7 @@ namespace RiverHollow.Characters
             Item drop = DataManager.GetItem(Util.RollOnRarityTable(lootDictionary, -1));
             if (drop != null)
             {
-                MapManager.CurrentMap.SpawnItemOnMap(drop, CollisionBoxLocation, false);
+                MapManager.CurrentMap.SpawnItemOnMap(drop, CollisionBoxLocation, true);
             }
         }
 

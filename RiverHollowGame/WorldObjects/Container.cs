@@ -46,7 +46,7 @@ namespace RiverHollow.WorldObjects
                 for (int i = 0; i < Columns; i++)
                 {
                     Inventory[0, i]?.DrawShadow(true);
-                    Inventory[0, i]?.Draw(spriteBatch, new Rectangle(MapPosition.X + point.X, MapPosition.Y + point.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1);
+                    Inventory[0, i]?.Draw(spriteBatch, new Rectangle(MapPosition.X + point.X, MapPosition.Y + point.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), Sprite.LayerDepth + 1);
 
                     point.X += offset;
                 }

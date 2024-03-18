@@ -64,7 +64,7 @@ namespace RiverHollow.WorldObjects
             if (HoldingItem())
             {
                 Item i = DataManager.CraftItem(CraftingSlot.ID);
-                i.Draw(spriteBatch, new Rectangle((int)(MapPosition.X - ItemOffset.X), (int)(MapPosition.Y - ItemOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), true, Sprite.LayerDepth + 1);
+                i.Draw(spriteBatch, new Rectangle((int)(MapPosition.X - ItemOffset.X), (int)(MapPosition.Y - ItemOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), Sprite.LayerDepth + 1);
             }
             base.Draw(spriteBatch);
         }

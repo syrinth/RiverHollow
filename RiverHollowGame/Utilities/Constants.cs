@@ -4,7 +4,7 @@ namespace RiverHollow.Utilities
 {
     static class Constants
     {
-        public static Point TileSize = new Point(TILE_SIZE, TILE_SIZE);
+        public static Point BasicTileSize = new Point(TILE_SIZE, TILE_SIZE);
         public const bool AUTO_TOOL = true;
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
@@ -40,6 +40,11 @@ namespace RiverHollow.Utilities
         public const float MOB_STUN_TIME = 5;
         public const float WANDER_COUNTDOWN = 2.5f;
         public const float PUSH_COOLDOWN = 0.1f;
+
+        public const float ITEM_POP_VELOCITY = -3f;
+        public const float ITEM_POP_BOUNCE = -1.5f;
+        public const float ITEM_POP_DECAY = 0.2f;
+        public const int ITEM_POP_VARIANCE = 10;
 
         public const int FLIER_MAX_DIST = 6 * TILE_SIZE;
         public const int FLIER_MIN_DIST = 3 * TILE_SIZE;

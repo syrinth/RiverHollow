@@ -30,6 +30,7 @@
         public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, FinishTool, MakeItem, Action1, Action2 };
         public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action1, Action2, Action_Finished, Alert, KO, Spawn, Pose };
         public enum ItemPickupState { Auto, Manual, None };
+        public enum ItemMovementState { None, Bounce, Magnet };
 
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
