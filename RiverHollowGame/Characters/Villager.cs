@@ -1015,11 +1015,6 @@ namespace RiverHollow.Characters
                 PlayerManager.Spouse = this;
             }
 
-            if (LivesInTown)
-            {
-                CreateDailySchedule();
-            }
-
             foreach (string s in data.spokenKeys)
             {
                 GetDialogEntry(s).Spoken(this);

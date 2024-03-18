@@ -144,8 +144,6 @@ namespace RiverHollow.Game_Managers
                 _liTasks[i].LoadData(list[i]);
             }
 
-            AssignTasks();
-
             //ToDo Code for new/custom tasks
         }
     }
