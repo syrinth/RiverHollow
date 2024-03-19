@@ -203,11 +203,11 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Mob][Subtype:Shooter][Key:Spitter][Walk:3-.15-T][Idle:3-.15-T][KO:384-0-6-0.15-F][ItemID:9-C/229-C/16-R][HP:1][Damage:1][Size:16-24][Speed:1][Cooldown:1.5][Projectile:51][Weight:Medium][Wander:0.5-4-16]</Value>
+      <Value>[Type:Mob][Subtype:Shooter][Key:Spitter][Idle:0-0-1-0--T][Walk:64-0-3-0.15-T][KO:256-0-6-0.2-F][ItemID:9-C/229-C/16-R][HP:1][Damage:1][Size:16-26][Speed:0.6][Cooldown:1.5][Projectile:51][Weight:Medium][Wander:3-4-8]</Value>
     </Item>
     <Item>
       <Key>51</Key>
-      <Value>[Type:Projectile][Size:16-16][Idle:0-0-1-1-T][KO:16-0-1-0.1-F][CollisionOffset:3-1][CollisionSize:10-10][Speed:3][Damage:1]</Value>
+      <Value>[Type:Projectile][Size:16-16][Idle:0-0-1-1-T][KO:16-0-1-0.1-F][CollisionOffset:5-5][CollisionSize:6-6][Speed:3][Damage:1]</Value>
     </Item>
     <Item>
       <Key>52</Key>

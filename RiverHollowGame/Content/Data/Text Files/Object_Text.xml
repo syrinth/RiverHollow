@@ -576,7 +576,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_9</Key>
-      <Value>[Name:Living Seed][Description:A small seed pulsing with life]</Value>
+      <Value>[Name:Crawling Root][Description:It's still trying to move around]</Value>
     </Item>
     <Item>
       <Key>Item_10</Key>
@@ -604,7 +604,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_16</Key>
-      <Value>[Name:Crawling Root][Description:It's still trying to move around]</Value>
+      <Value>[Name:Spitter Seed][Description:Filled with new growth]</Value>
     </Item>
     <Item>
       <Key>Item_17</Key>

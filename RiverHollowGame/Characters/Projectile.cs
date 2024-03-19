@@ -35,6 +35,7 @@ namespace RiverHollow.Characters
                 {
                     PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
                     PlayAnimation(AnimationEnum.KO);
+                    _vVelocity = Vector2.Zero;
                 }
                 else if (CurrentMap.CheckForCollisions(this, ref _vVelocity, ref impeded))
                 {

@@ -599,7 +599,7 @@
     </Item>
     <Item>
       <Key>149</Key>
-      <Value>[Type:Food][Subtype:Food][Image:2-0][Value:5][Stam:35][WrappedImage:9-0]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:2-0][Value:5][Stam:35]</Value>
     </Item>
     <Item>
       <Key>150</Key>
@@ -923,7 +923,7 @@
     </Item>
     <Item>
       <Key>230</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/61-10][Value:20]</Value>
+      <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/9-10][Value:20]</Value>
     </Item>
   </Asset>
 </XnaContent>
