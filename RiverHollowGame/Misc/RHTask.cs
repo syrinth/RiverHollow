@@ -7,7 +7,6 @@ using System.Xml.Serialization;
 using RiverHollow.Items;
 using System;
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Misc
 {
@@ -16,67 +15,38 @@ namespace RiverHollow.Misc
         public int ID { get; }
         public string StartTaskDialogue => "Task_" + ID + "_Start";
         public string EndTaskDialogue => "Task_" + ID + "_End";
-
         public string Name => DataManager.GetTextData(ID, "Name", DataType.Task);
         public string Description => DataManager.GetTextData(ID, "Description", DataType.Task);
+
+        private readonly Dictionary<string, string> _diLookupInfo;
 
         private TaskTypeEnum _eTaskType;
         public TaskStateEnum TaskState { get; private set; } = TaskStateEnum.Waiting;
 
-        public TalkingActor StartNPC { get; private set; }
-        public TalkingActor GoalNPC { get; private set; }
-
         private readonly Dictionary<TaskTriggerEnum, string> _diAssignationTriggers;
         private readonly List<KeyValuePair<int, bool>> _liTasksToTrigger;
 
-        private readonly int _iCutsceneID;
-        public int NeededCount { get; private set; }
-        public int TargetsAccomplished { get; private set; }
+        #region Lookups
+        bool FinishOnCompletion => GetBoolByIDKey("Immediate");
+        bool HiddenGoal => GetBoolByIDKey("HideGoal");
+        int CutsceneID => GetIntByIDKey("CutscneID");
+        int EndBuildingID => GetIntByIDKey("EndBuildingID");
 
-        private readonly int _iBuildingEndID = -1;
-        public bool HasEndBuilding => _iBuildingEndID != -1;
-        private Mob _questMonster;
-        private Item _targetItem;
-        private int _iTargetObjectID = -1;
-        public bool ReadyForHandIn { get; private set; } = false;
-        
-
-        bool _bFinishOnCompletion;
-        bool _bHiddenGoal;
         #region Rewards
-        private int _iUnlockObjectID = -1;        
-        private int _iFriendPoints;
-        public string FriendTarget { get; }
-
-        public int RewardMoney { get; private set; }
-        public List<Item> LiRewardItems { get; }
+        public int RewardMoney => GetIntByIDKey("Money");
+        int UnlockObjectID => GetIntByIDKey("UnlockBuildingID");
         #endregion
-        #region Spawn Mobs
-        Mob _spawnMob;
-        string _sSpawnMap;
-        string _sLocName;
         #endregion
 
-        #region Reqs
-        int _iDay => DataManager.GetIntByIDKey(ID, "Day", DataType.Task);
-        int _iSeason => DataManager.GetIntByIDKey(ID, "Season", DataType.Task);
-        #endregion
+        public int TargetsAccomplished { get; private set; }
+        public bool ReadyForHandIn { get; private set; } = false;
+        public bool HasEndBuilding => EndBuildingID != -1;
 
         private RHTask()
         {
-            _iCutsceneID = -1;
-            _bFinishOnCompletion = false;
             ID = -1;
-            FriendTarget = string.Empty;
-            StartNPC = null;
-            GoalNPC = null;
-            _targetItem = null;
-            _questMonster = null;
-            NeededCount = -1;
             TargetsAccomplished = -1;
             ReadyForHandIn = false;
-
-            LiRewardItems = new List<Item>();
 
             _liTasksToTrigger = new List<KeyValuePair<int, bool>>();
             _diAssignationTriggers = new Dictionary<TaskTriggerEnum, string>();
@@ -84,11 +54,8 @@ namespace RiverHollow.Misc
 
         public RHTask(string name, TaskTypeEnum type, string desc, int target, Mob m, Item i, Villager giver = null) : this()
         {
+            _diLookupInfo = new Dictionary<string, string>();
             _eTaskType = type;
-            GoalNPC = giver;
-            NeededCount = target;
-            _questMonster = m;
-            _targetItem = i;
             TargetsAccomplished = 0;
             ReadyForHandIn = false;
         }
@@ -98,23 +65,8 @@ namespace RiverHollow.Misc
             ID = id;
 
             TargetsAccomplished = 0;
-            LiRewardItems = new List<Item>();
 
             _eTaskType = Util.ParseEnum<TaskTypeEnum>(stringData["Type"]);
-
-            if (stringData.ContainsKey("StartNPC"))
-            {
-                StartNPC = TownManager.DIVillagers[int.Parse(stringData["StartNPC"])];
-            }
-
-            if (stringData.ContainsKey("GoalNPC"))
-            {
-                GoalNPC = TownManager.DIVillagers[int.Parse(stringData["GoalNPC"])];
-            }
-            else
-            {
-                GoalNPC = StartNPC;
-            }
 
             if (stringData.ContainsKey("AssignTrigger"))
             {
@@ -142,70 +94,6 @@ namespace RiverHollow.Misc
                     }
                 }
             }
-
-            if (stringData.ContainsKey("GoalItem"))
-            {
-                string[] parse = Util.FindArguments(stringData["GoalItem"]);
-                _targetItem = DataManager.GetItem(int.Parse(parse[0]));
-                NeededCount = parse.Length > 1 ? int.Parse(parse[1]) : 1;
-            }
-
-            if (stringData.ContainsKey("Count"))
-            {
-                NeededCount = int.Parse(stringData["Count"]);
-            }
-
-            if (stringData.ContainsKey("ItemRewardID"))
-            {
-                string[] items = Util.FindParams(stringData["ItemRewardID"]);
-                if (items.Length > 0)
-                {
-                    foreach (string itemInfo in items)
-                    {
-                        string[] parse = Util.FindArguments(itemInfo);
-                        Item it = DataManager.GetItem(int.Parse(parse[0]), parse.Length > 1 ? int.Parse(parse[1]) : 1);
-                        if (parse.Length == 3) { it.ApplyUniqueData(parse[2]); }
-                        LiRewardItems.Add(it);
-                    }
-                }
-            }
-
-            if (stringData.ContainsKey("Friendship"))
-            {
-                string[] parse = Util.FindArguments(stringData["Friendship"]);
-                if (parse.Length > 1)
-                {
-                    FriendTarget = parse[0];
-                    _iFriendPoints = int.Parse(parse[1]);
-                }
-            }
-
-            if (stringData.ContainsKey("SpawnMob"))
-            {
-                string[] parse = Util.FindArguments(stringData["SpawnMob"]);
-                if (parse.Length > 1)
-                {
-                    _spawnMob = DataManager.CreateMob(int.Parse(parse[0]));
-                    _sSpawnMap = parse[1];
-                    _sLocName = parse[2];
-                }
-            }
-
-            _iBuildingEndID = Util.AssignValue("EndBuildingID", stringData);
-
-            RewardMoney = Util.AssignValue("Money", stringData, 0);
-            _iUnlockObjectID = Util.AssignValue("UnlockBuildingID", stringData);
-
-            if (stringData.ContainsKey("TargetObjectID"))
-            {
-                string[] split = Util.FindArguments(stringData["TargetObjectID"]);
-                _iTargetObjectID = int.Parse(split[0]);
-                NeededCount = split.Length == 2 ? int.Parse(split[1]) : 1;
-            }
-
-            Util.AssignValue(ref _bFinishOnCompletion, "Immediate", stringData);
-            _iCutsceneID = Util.AssignValue("CutsceneID", stringData);
-            Util.AssignValue(ref _bHiddenGoal, "HideGoal", stringData);
         }
 
         public bool ReadyForAssignation()
@@ -249,7 +137,7 @@ namespace RiverHollow.Misc
             if ((TaskState == TaskStateEnum.Waiting || TaskState == TaskStateEnum.Assigned) && ReadyForAssignation())
             {
                 TaskState = TaskStateEnum.Assigned;
-                StartNPC.AssignTask(this);
+                StartNPC().AssignTask(this);
             }
         }
 
@@ -280,7 +168,7 @@ namespace RiverHollow.Misc
                         AttemptProgress();
                         break;
                 }
-                
+
                 SpawnTaskMobs();
 
                 GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_TASK);
@@ -291,7 +179,7 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if (_iBuildingEndID == i)
+            if (EndBuildingID == i)
             {
                 TurnInTask();
             }
@@ -302,7 +190,8 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if(_eTaskType == TaskTypeEnum.Talk && GoalNPC == a) {
+            if (_eTaskType == TaskTypeEnum.Talk && GoalNPC() == a)
+            {
                 rv = true;
                 ReadyForHandIn = true;
             }
@@ -313,15 +202,18 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if (DataManager.GetBoolByIDKey(ID, "MonstersKilled", DataType.Task))
+            if (_eTaskType == TaskTypeEnum.TownState && GetBoolByIDKey("MonstersKilled"))
             {
-                var count = DataManager.GetIntByIDKey(ID, "MonstersKilled", DataType.Task);
+                var count = GetIntByIDKey("MonstersKilled");
                 SetReadyForHandIn(TownManager.TotalDefeatedMobs >= count);
             }
-
-            if (_questMonster != null && _questMonster.ID == m.ID)
+            else if (_eTaskType == TaskTypeEnum.Slay)
             {
-                rv = true;
+                var mob = GoalMob();
+                if (mob.Item1 == m.ID)
+                {
+                    rv = true;
+                }
             }
 
             return rv;
@@ -330,7 +222,8 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if (_targetItem != null && _targetItem.ID == i.ID)
+            var targetItem = GoalItem();
+            if (targetItem != null && targetItem.ID == i.ID)
             {
                 rv = true;
                 CheckItems();
@@ -342,10 +235,11 @@ namespace RiverHollow.Misc
         {
             bool rv = false;
 
-            if (_eTaskType == TaskTypeEnum.Build && i == _iTargetObjectID)
+            var targetObject = GoalObject();
+            if (_eTaskType == TaskTypeEnum.Build && i == targetObject.Item1)
             {
                 rv = true;
-                SetReadyForHandIn(TownManager.GetNumberTownObjects(_iTargetObjectID) == NeededCount);
+                SetReadyForHandIn(TownManager.GetNumberTownObjects(targetObject.Item1) == targetObject.Item2);
             }
 
             return rv;
@@ -358,15 +252,15 @@ namespace RiverHollow.Misc
             if (_eTaskType == TaskTypeEnum.TownState)
             {
                 rv = true;
-                if (DataManager.GetBoolByIDKey(ID, "Population", DataType.Task))
+                if (GetBoolByIDKey("Population"))
                 {
-                    var count = DataManager.GetIntByIDKey(ID, "Population", DataType.Task);
+                    var count = GetIntByIDKey("Population");
                     SetReadyForHandIn(TownManager.GetPopulation() >= count);
                 }
 
-                if (DataManager.GetBoolByIDKey(ID, "TownScore", DataType.Task))
+                if (GetBoolByIDKey("TownScore"))
                 {
-                    var count = DataManager.GetIntByIDKey(ID, "TownScore", DataType.Task);
+                    var count = GetIntByIDKey("TownScore");
                     SetReadyForHandIn(TownManager.GetTownScore() >= count);
                 }
             }
@@ -376,12 +270,13 @@ namespace RiverHollow.Misc
 
         public void CheckItems()
         {
-            if (_targetItem != null)
+            var targetItem = GoalItem();
+            if (targetItem != null)
             {
-                var currentNumber = InventoryManager.GetNumberInPlayerInventory(_targetItem.ID);
-                if (currentNumber >= NeededCount)
+                var currentNumber = InventoryManager.GetNumberInPlayerInventory(targetItem.ID);
+                if (currentNumber >= targetItem.Number)
                 {
-                    TargetsAccomplished = NeededCount;
+                    TargetsAccomplished = targetItem.Number;
                     SetReadyForHandIn(true);
                 }
                 else
@@ -392,12 +287,37 @@ namespace RiverHollow.Misc
             }
         }
 
+        public void AttemptProgressCraft(Item i)
+        {
+            if (_eTaskType == TaskTypeEnum.Craft)
+            {
+                var goal = GoalItem();
+                if(i.ID == goal.ID)
+                {
+                    if(TargetsAccomplished + i.Number > TargetsAccomplished)
+                    {
+                        TargetsAccomplished = goal.Number;
+                        SetReadyForHandIn(true);
+                    }
+                    else
+                    {
+                        TargetsAccomplished += i.Number;
+                    }
+                }
+            }
+        }
+
         public void SpawnTaskMobs()
         {
-            if (_spawnMob != null)
+            if (GetBoolByIDKey("SpawnMob"))
             {
-                RHMap map = MapManager.Maps[_sSpawnMap];
-                map.AddMobByPosition(_spawnMob, map.GetCharacterObject(_sLocName).Location);
+                string[] parse = Util.FindArguments(GetStringByIDKey("SpawnMob"));
+                if (parse.Length > 1 && int.TryParse(parse[0], out int mobID))
+                {
+                    var mob = DataManager.CreateMob(mobID);
+                    RHMap map = MapManager.Maps[parse[1]];
+                    map.AddMobByPosition(mob, map.GetCharacterObject(parse[2]).Location);
+                }
             }
         }
 
@@ -415,11 +335,12 @@ namespace RiverHollow.Misc
             {
                 ReadyForHandIn = value;
 
-                if (GoalNPC != null && _iBuildingEndID == -1)
+                var goalNPC = GoalNPC();
+                if (goalNPC != null && EndBuildingID == -1)
                 {
-                    GoalNPC.ModifyTaskGoalValue(value ? 1 : -1);
+                    goalNPC.ModifyTaskGoalValue(value ? 1 : -1);
                 }
-                if (value && _bFinishOnCompletion)
+                if (value && FinishOnCompletion)
                 {
                     TurnInTask();
                 }
@@ -430,15 +351,16 @@ namespace RiverHollow.Misc
         {
             TaskState = TaskStateEnum.Completed;
 
-            if (_targetItem != null && _targetItem.ID > -1)
+            var item = GoalItem();
+            if (item != null)
             {
-                InventoryManager.RemoveItemsFromInventory(_targetItem.ID, NeededCount);
+                InventoryManager.RemoveItemsFromInventory(item.ID, item.Number);
             }
 
             //If a cutscene will play defer the actual End of the Task until the Cutscene ends
-            if (_iCutsceneID != -1)
+            if (CutsceneID != -1)
             {
-                CutsceneManager.TriggerCutscene(_iCutsceneID, this);
+                CutsceneManager.TriggerCutscene(CutsceneID, this);
             }
             else
             {
@@ -452,11 +374,12 @@ namespace RiverHollow.Misc
             {
                 for (int i = 0; i < _liTasksToTrigger.Count; i++)
                 {
-                    if (!_liTasksToTrigger[i].Value){ TaskManager.AssignTaskByID(_liTasksToTrigger[i].Key); }
+                    if (!_liTasksToTrigger[i].Value) { TaskManager.AssignTaskByID(_liTasksToTrigger[i].Key); }
                     else { TaskManager.AddDelayedTask(_liTasksToTrigger[i].Key); }
                 }
 
-                foreach (Item i in LiRewardItems)
+                var goalNPC = GoalNPC();
+                foreach (Item i in ItemRewardList())
                 {
                     if (InventoryManager.HasSpaceInInventory(i.ID, i.Number))
                     {
@@ -464,35 +387,48 @@ namespace RiverHollow.Misc
                     }
                     else
                     {
-                        GoalNPC.AssignItemToNPC(i.ID, i.Number);
+                        goalNPC.AssignItemToNPC(i.ID, i.Number);
                     }
                 }
-                GoalNPC.CheckInventoryAlert();
+
+                goalNPC.CheckInventoryAlert();
 
                 PlayerManager.AddMoney(RewardMoney);
 
-                if (FriendTarget.Equals("Giver"))
+                if (GetBoolByIDKey("Friendship"))
                 {
-                    GoalNPC.FriendshipPoints += _iFriendPoints;
+                    string[] parse = Util.FindArguments(GetStringByIDKey("Friendship"));
+                    if (parse.Length > 1)
+                    {
+                        if (int.TryParse(parse[0], out int targetID))
+                        {
+                            var villager = TownManager.DIVillagers[targetID];
+                            if (!int.TryParse(parse[1], out int pointValue))
+                            {
+                                pointValue = 0;
+                            }
+                            villager.FriendshipPoints += pointValue;
+                        }
+                    }
                 }
 
-                if (_iUnlockObjectID != -1)
+                if (UnlockObjectID != -1)
                 {
-                    PlayerManager.AddToCraftingDictionary(_iUnlockObjectID);
+                    PlayerManager.AddToCraftingDictionary(UnlockObjectID);
                 }
 
-                if (DataManager.TaskData[ID].ContainsKey("SendToTown"))
+                if (GetBoolByIDKey("SendToTown") && goalNPC is Villager goalVillager)
                 {
-                    ((Villager)GoalNPC).ReadySmokeBomb();
+                    goalVillager.ReadySmokeBomb();
                 }
 
-                if (DataManager.TaskData[ID].ContainsKey("UnlockMagic"))
+                if (GetBoolByIDKey("UnlockMagic"))
                 {
                     PlayerManager.MagicUnlocked = true;
                     GameManager.GoToHUDScreen();
                 }
 
-                if (DataManager.TaskData[ID].ContainsKey("UnlockCodex"))
+                if (GetBoolByIDKey("UnlockCodex"))
                 {
                     PlayerManager.CodexUnlocked = true;
                     GameManager.GoToHUDScreen();
@@ -504,6 +440,110 @@ namespace RiverHollow.Misc
                 TaskManager.TaskLog.Remove(this);
                 GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_FINISHED);
             }
+        }
+        public TalkingActor StartNPC()
+        {
+            TalkingActor rv = null;
+            if (GetBoolByIDKey("StartNPC"))
+            {
+                rv = TownManager.DIVillagers[GetIntByIDKey("StartNPC")];
+            }
+
+            return rv;
+        }
+        public TalkingActor GoalNPC()
+        {
+            TalkingActor rv;
+            if (GetBoolByIDKey("StartNPC"))
+            {
+                rv = TownManager.DIVillagers[GetIntByIDKey("StartNPC")];
+            }
+            else
+            {
+                rv = StartNPC();
+            }
+
+            return rv;
+        }
+        public Item GoalItem()
+        {
+            Item rv = null;
+            if (GetBoolByIDKey("GoalItem"))
+            {
+                string[] split = Util.FindArguments(GetStringByIDKey("GoalItem"));
+                if (int.TryParse(split[0], out int id))
+                {
+                    if (!int.TryParse(split[1], out int number))
+                    {
+                        number = 1;
+                    }
+
+                    rv = DataManager.GetItem(id, number);
+                }
+            }
+
+            return rv;
+        }
+        public Tuple<int, int> GoalObject()
+        {
+            Tuple<int, int> rv = default;
+            if (GetBoolByIDKey("TargetObjectID"))
+            {
+                string[] split = Util.FindArguments(GetStringByIDKey("TargetObjectID"));
+                if (int.TryParse(split[0], out int id))
+                {
+                    int number;
+                    if (split.Length == 1 || !int.TryParse(split[1], out number))
+                    {
+                        number = 1;
+                    }
+
+                    rv = new Tuple<int, int>(id, number);
+                }
+            }
+
+            return rv;
+        }
+        public Tuple<int, int> GoalMob()
+        {
+            Tuple<int, int> rv = new Tuple<int, int>(-1, -1);
+            if (GetBoolByIDKey("TargetMobID"))
+            {
+                string[] split = Util.FindArguments(GetStringByIDKey("TargetMobID"));
+                if (int.TryParse(split[0], out int id))
+                {
+                    int number;
+                    if (!int.TryParse(split[1], out number))
+                    {
+                        number = 1;
+                    }
+
+                    rv = new Tuple<int, int>(id, number);
+                }
+            }
+
+            return rv;
+        }
+
+        public List<Item> ItemRewardList()
+        {
+            List<Item> rv = new List<Item>();
+            if (GetBoolByIDKey("ItemRewardID"))
+            {
+                string[] items = Util.FindParams(GetStringByIDKey("ItemRewardID"));
+                if (items.Length > 0)
+                {
+                    foreach (string itemInfo in items)
+                    {
+                        string[] parse = Util.FindArguments(itemInfo);
+                        Item it = DataManager.GetItem(int.Parse(parse[0]), parse.Length > 1 ? int.Parse(parse[1]) : 1);
+                        if (parse.Length == 3) { it.ApplyUniqueData(parse[2]); }
+                        rv.Add(it);
+                    }
+                }
+            }
+
+            return rv;
         }
 
         private void ActivateNPCs()
@@ -522,25 +562,31 @@ namespace RiverHollow.Misc
         {
             string rv = string.Empty;
 
-            if (_bHiddenGoal) { rv = "???"; }
-            else if (ReadyForHandIn) {
-                if (GoalNPC != null)
+            var goalNPC = GoalNPC();
+            if (HiddenGoal)
+            {
+                rv = "???";
+            }
+            else if (ReadyForHandIn)
+            {
+                if (goalNPC != null)
                 {
-                    if (_iBuildingEndID != -1)
+                    if (EndBuildingID != -1)
                     {
-                        var article = DataManager.GetBoolByIDKey(_iBuildingEndID, "SkipArticle", DataType.WorldObject) ? "" : "the ";
-                        string name = DataManager.GetTextData(_iBuildingEndID, "Name", DataType.WorldObject);
-                        
+                        var article = DataManager.GetBoolByIDKey(EndBuildingID, "SkipArticle", DataType.WorldObject) ? "" : "the ";
+                        string name = DataManager.GetTextData(EndBuildingID, "Name", DataType.WorldObject);
+
                         rv = string.Format("Enter {0}{1}", article, name);
                     }
                     else
                     {
-                        rv = string.Format("Speak to {0}", GoalNPC.Name());
+                        rv = string.Format("Speak to {0}", goalNPC.Name());
                     }
                 }
             }
             else
             {
+                var goalItem = GoalItem();
                 switch (_eTaskType)
                 {
                     case TaskTypeEnum.TownState:
@@ -562,19 +608,21 @@ namespace RiverHollow.Misc
 
                         break;
                     case TaskTypeEnum.Fetch:
-                        rv = string.Format(@"{0} {1}/{2}", _targetItem.Name(), TargetsAccomplished, NeededCount);
+                        rv = string.Format(@"{0} {1}/{2}", goalItem.Name(), TargetsAccomplished, goalItem.Number);
                         break;
-                    case TaskTypeEnum.GroupSlay:
-                        rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + NeededCount;
+                    case TaskTypeEnum.Craft:
+                        rv = string.Format(@"Craft {0} {1}/{2}", goalItem.Name(), TargetsAccomplished, goalItem.Number);
                         break;
                     case TaskTypeEnum.Slay:
-                        rv = _questMonster.Name() + " Defeated: " + TargetsAccomplished + "/" + NeededCount;
+                        var mob = GoalMob();
+                        rv = DataManager.GetTextData(mob.Item1, "Name", DataType.Actor) + " Defeated: " + TargetsAccomplished + "/" + mob.Item2;
                         break;
                     case TaskTypeEnum.Build:
-                        string objName = DataManager.GetTextData(_iTargetObjectID, "Name", DataType.WorldObject);
+                        var goalObj = GoalObject();
+                        string objName = DataManager.GetTextData(goalObj.Item1, "Name", DataType.WorldObject);
 
-                        if (NeededCount > 1) { rv = string.Format(@"Build {0} {1}s", NeededCount.ToString(), objName); }
-                        else if (!DataManager.GetBoolByIDKey(_iTargetObjectID, "SkipArticle", DataType.WorldObject))
+                        if (goalObj.Item2 > 1) { rv = string.Format(@"Build {0} {1}s", goalObj.Item2.ToString(), objName); }
+                        else if (!DataManager.GetBoolByIDKey(goalObj.Item1, "SkipArticle", DataType.WorldObject))
                         {
                             var vowels = new List<string>() { "a", "e", "i", "o", "u" };
                             var article = "a";
@@ -593,13 +641,98 @@ namespace RiverHollow.Misc
                         }
                         break;
                     case TaskTypeEnum.Talk:
-                        rv = "Speak to " + GoalNPC.Name();
+                        rv = "Speak to " + goalNPC.Name();
                         break;
                 }
             }
 
             return rv;
         }
+
+        #region Lookup Handlers
+        public bool GetBoolByIDKey(string key)
+        {
+            bool rv = false;
+            if (ID == -1)
+            {
+                rv = _diLookupInfo.ContainsKey(key);
+            }
+            else
+            {
+                rv = DataManager.GetBoolByIDKey(ID, key, DataType.Task);
+            }
+
+            return rv;
+        }
+        public int GetIntByIDKey(string key, int defaultValue = -1)
+        {
+            int rv = defaultValue;
+            if (ID == -1)
+            {
+                if (_diLookupInfo.ContainsKey(key))
+                {
+                    int.TryParse(_diLookupInfo[key], out rv);
+                }
+            }
+            else
+            {
+                rv = DataManager.GetIntByIDKey(ID, key, DataType.Task, defaultValue);
+            }
+
+            return rv;
+        }
+        public float GetFloatByIDKey(string key, float defaultValue = -1)
+        {
+            float rv = defaultValue;
+            if (ID == -1)
+            {
+                if (_diLookupInfo.ContainsKey(key))
+                {
+                    float.TryParse(_diLookupInfo[key], out rv);
+                }
+            }
+            else
+            {
+                rv = DataManager.GetFloatByIDKey(ID, key, DataType.Task, defaultValue);
+            }
+
+            return rv;
+        }
+        public string GetStringByIDKey(string key)
+        {
+            string rv = string.Empty;
+            if (ID == -1)
+            {
+                if (_diLookupInfo.ContainsKey(key))
+                {
+                    rv = _diLookupInfo[key];
+                }
+            }
+            else
+            {
+                rv = DataManager.GetStringByIDKey(ID, key, DataType.Task);
+            }
+
+            return rv;
+        }
+        public virtual TEnum GetEnumByIDKey<TEnum>(string key) where TEnum : struct
+        {
+            TEnum rv = default;
+            if (ID == -1)
+            {
+                if (_diLookupInfo.ContainsKey(key))
+                {
+                    rv = Util.ParseEnum<TEnum>(_diLookupInfo[key]);
+                }
+            }
+            else
+            {
+                rv = DataManager.GetEnumByIDKey<TEnum>(ID, key, DataType.Task);
+            }
+
+            return rv;
+        }
+        #endregion
 
         public struct TaskData
         {
@@ -609,41 +742,11 @@ namespace RiverHollow.Misc
             [XmlElement(ElementName = "TaskState")]
             public int taskState;
 
-            [XmlElement(ElementName = "RewardText")]
-            public string rewardText;
-
-            [XmlElement(ElementName = "GoalNPC")]
-            public int goalNPC;
-
-            [XmlElement(ElementName = "TaskItem")]
-            public int itemID;
-
-            [XmlElement(ElementName = "TaskMonster")]
-            public int monsterID;
-
-            [XmlElement(ElementName = "TaskBuilding")]
-            public int targetWorldObjectID;
-
-            [XmlElement(ElementName = "TargetGoal")]
-            public int targetGoal;
-
             [XmlElement(ElementName = "Accomplished")]
             public int accomplished;
 
             [XmlElement(ElementName = "ReadyForHandIn")]
             public bool readyForHandIn;
-
-            [XmlElement(ElementName = "HiddenGoal")]
-            public bool hiddenGoal;
-
-            [XmlElement(ElementName = "RewardMoney")]
-            public int rewardMoney;
-
-            [XmlArray(ElementName = "RewardItems")]
-            public List<ItemData> Items;
-
-            [XmlElement(ElementName = "RewardUnlock")]
-            public int unlockBuildingID;
         }
 
         public TaskData SaveData()
@@ -651,56 +754,29 @@ namespace RiverHollow.Misc
             TaskData qData = new TaskData
             {
                 questType = (int)_eTaskType,
-                goalNPC = GoalNPC != null ? GoalNPC.ID : -1,
-                itemID = _targetItem != null ? _targetItem.ID : -1,
-                monsterID = _questMonster != null ? _questMonster.ID : -1,
-                targetWorldObjectID = _iTargetObjectID,
-                unlockBuildingID = _iUnlockObjectID,
-                targetGoal = NeededCount,
-                hiddenGoal = _bHiddenGoal,
-                accomplished = TargetsAccomplished,
-                readyForHandIn = ReadyForHandIn,
                 taskState = (int)TaskState,
-                Items = new List<ItemData>()
+                accomplished = TargetsAccomplished,
+                readyForHandIn = ReadyForHandIn
             };
-            foreach (Item i in LiRewardItems)
-            {
-                qData.Items.Add(Item.SaveData(i));
-            }
 
             return qData;
         }
         public void LoadData(TaskData qData)
         {
-            if(ID == -1)
+            if (ID == -1)
             {
                 _eTaskType = (TaskTypeEnum)qData.questType;
-                GoalNPC = qData.goalNPC != -1 ? TownManager.DIVillagers[qData.goalNPC] : null;
-                _targetItem = qData.itemID != -1 ? DataManager.GetItem(qData.itemID) : null;
-                _questMonster = qData.monsterID != -1 ? DataManager.CreateMob(qData.monsterID) : null;
-                _iTargetObjectID = qData.targetWorldObjectID;
-                _iUnlockObjectID = qData.unlockBuildingID;
-                NeededCount = qData.targetGoal;
-                _bHiddenGoal = qData.hiddenGoal;
-                
-                foreach (ItemData i in qData.Items)
-                {
-                    Item newItem = DataManager.GetItem(i.itemID, i.num);
-
-                    newItem?.ApplyUniqueData(i.strData);
-                    LiRewardItems.Add(newItem);
-                }
             }
 
+            TaskState = (TaskStateEnum)qData.taskState;
             TargetsAccomplished = qData.accomplished;
             ReadyForHandIn = qData.readyForHandIn;
-            TaskState = (TaskStateEnum)qData.taskState;
 
             if (ReadyForHandIn && TaskState != TaskStateEnum.Completed)
             {
-                if (GoalNPC != null && _iBuildingEndID == -1)
+                if (EndBuildingID == -1)
                 {
-                    GoalNPC.ModifyTaskGoalValue(1);
+                    GoalNPC()?.ModifyTaskGoalValue(1);
                 }
             }
 

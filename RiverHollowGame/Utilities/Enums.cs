@@ -70,7 +70,7 @@
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
         public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task, Letter };
-        public enum TaskTypeEnum { Build, Fetch, GroupSlay, TownState, Slay, Talk };
+        public enum TaskTypeEnum { Build, Fetch, Talk, TownState, Slay, Craft };
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
         public enum MailboxEnum { Unsent, Processed, Waiting };

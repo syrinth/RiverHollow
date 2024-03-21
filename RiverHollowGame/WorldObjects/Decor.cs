@@ -53,6 +53,7 @@ namespace RiverHollow.WorldObjects
                     int number = itemStr.Length > 1 ? int.Parse(itemStr[1]) : 1;
 
                     _itemDisplay = DataManager.GetItem(ID, number);
+                    _itemDisplay.DrawShadow(true);
                 }
             }
         }
@@ -304,7 +305,11 @@ namespace RiverHollow.WorldObjects
                             _objDisplay = (Decor)DataManager.CreateWorldObjectByID(it.ID);
                             SyncDisplayObject();
                         }
-                        else { _itemDisplay = DataManager.GetItem(it.ID); }
+                        else
+                        {
+                            _itemDisplay = DataManager.GetItem(it.ID);
+                            _itemDisplay.DrawShadow(true);
+                        }
 
                         if (viaBuildMode)
                         {

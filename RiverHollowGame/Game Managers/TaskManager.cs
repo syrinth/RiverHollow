@@ -67,7 +67,6 @@ namespace RiverHollow.Game_Managers
             _liDelayedTasks.Clear();
         }
 
-
         public static void AdvanceTaskProgress(WorldObject obj)
         {
             foreach (RHTask q in TaskLog)
@@ -115,6 +114,10 @@ namespace RiverHollow.Game_Managers
         public static void CheckItemCount()
         {
             TaskLog.ForEach(q => q.CheckItems());
+        }
+        public static void AttemptProgressCraft(Item i)
+        {
+            TaskLog.ForEach(q => q.AttemptProgressCraft(i));
         }
         public static RHTask GetTaskByID(int taskID)
         {

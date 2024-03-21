@@ -74,6 +74,10 @@
       <Value>[Name:Thinning the Herd]</Value>
     </Item>
     <Item>
+      <Key>Task_18</Key>
+      <Value>[Name:Lumber Time]</Value>
+    </Item>
+    <Item>
       <Key>Actor_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>

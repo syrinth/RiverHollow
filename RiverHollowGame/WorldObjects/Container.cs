@@ -75,6 +75,7 @@ namespace RiverHollow.WorldObjects
                 }
             }
 
+            GameManager.SetSelectedWorldObject(this);
             GUIManager.OpenMainObject(new HUDInventoryDisplay(Inventory, displayType, false, validIDs));
             InventoryManager.SetHoldItem(GetEnumByIDKey<ItemEnum>("ItemType"));
             return true;

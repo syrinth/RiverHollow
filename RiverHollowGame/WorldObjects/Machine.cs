@@ -252,9 +252,12 @@ namespace RiverHollow.WorldObjects
             {
                 rv = true;
 
+                var targetItem = DataManager.CraftItem(chosenItem.ID);
                 InventoryManager.InitExtraInventory(targetContainer.Inventory);
-                InventoryManager.AddToInventory(DataManager.CraftItem(chosenItem.ID), false, true);
+                InventoryManager.AddToInventory(targetItem, false, true);
                 InventoryManager.ClearExtraInventory();
+
+                TaskManager.AttemptProgressCraft(targetItem);
 
                 TownManager.AddToCodex(chosenItem.ID);
                 validItems = WhatCanWeCraft(craftingList);

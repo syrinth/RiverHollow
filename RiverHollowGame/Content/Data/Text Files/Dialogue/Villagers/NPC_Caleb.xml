@@ -50,11 +50,12 @@ A Wandmaker was supposed to have arrived today, to supply the apprentices with w
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[Name:Task_7_Start][Text:BUILD TOWN HALL]</Value>
+      <Value>[Name:Task_18_Start][Text:While you're out, could you make sure to get as much lumber as you can? We're going to need a lot of wood for building.
+Forty planks sounds like a good start, so just place twenty lumber in the bin by the door and I'll whip them up overnight!]</Value>
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Name:Task_7_End][Text:ITS BUILT!]</Value>
+      <Value>[Name:Task_18_End][Text:We're off to a great start!][Money:50]</Value>
     </Item>
     <Item>
       <Key>12</Key>

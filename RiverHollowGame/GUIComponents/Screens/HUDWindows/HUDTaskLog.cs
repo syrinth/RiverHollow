@@ -168,9 +168,10 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 _progress.AnchorAndAlignThenMove(scroll, SideEnum.Top, SideEnum.CenterX, 0, -4);
 
                 var rewards = new List<GUIObject>();
-                for (int i = 0; i < q.LiRewardItems.Count; i++)
+                var items = q.ItemRewardList();
+                for (int i = 0; i < items.Count; i++)
                 {
-                    GUIItemBox newBox = new GUIItemBox(q.LiRewardItems[i]);
+                    GUIItemBox newBox = new GUIItemBox(items[i]);
                     rewards.Add(newBox);
                 }
 

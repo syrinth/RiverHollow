@@ -80,7 +80,7 @@ namespace RiverHollow.Items
 
         public virtual void Draw(SpriteBatch spriteBatch, Rectangle drawBox, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
         {
-            DrawShadow(spriteBatch, drawBox, alpha);
+            DrawShadow(spriteBatch, drawBox, forcedLayerDepth, alpha);
             spriteBatch.Draw(_texTexture, drawBox, SourceRectangle, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
 
         }

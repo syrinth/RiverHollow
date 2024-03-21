@@ -821,7 +821,7 @@ namespace RiverHollow.Characters
              
             foreach (RHTask t in TaskManager.TaskLog)
             {
-                if (t.ReadyForHandIn && t.GoalNPC == this && !t.HasEndBuilding)
+                if (t.ReadyForHandIn && t.GoalNPC() == this && !t.HasEndBuilding)
                 {
                     rv = true;
                     TaskManager.QueuedHandin = t;
