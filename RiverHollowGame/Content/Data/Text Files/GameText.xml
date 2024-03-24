@@ -219,7 +219,7 @@
     </Item>
 	<Item>
       <Key>54</Key>
-      <Value>[Name:Combat_Label_Items][Text:Found Items]</Value>
+      <Value>[Name:UpgradeNoTownHall][Text:The way is blocked. I'll have to come back later once $Town$ has grown larger.]</Value>
     </Item>
 	<Item>
       <Key>55</Key>

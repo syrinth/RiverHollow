@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents;
+using RiverHollow.Misc;
 
 namespace RiverHollow.WorldObjects
 {
@@ -250,7 +251,8 @@ namespace RiverHollow.WorldObjects
             if (GetBoolByIDKey("UnlockUpgradeID"))
             {
                 rv = true;
-                TownManager.UnlockUpgrade(GetIntByIDKey("UnlockUpgradeID"));
+                if (TownManager.TownHall == null) { GUIManager.OpenTextWindow("UpgradeNoTownHall"); }
+                else { TownManager.UnlockUpgrade(GetIntByIDKey("UnlockUpgradeID")); }
             }
 
             return rv;

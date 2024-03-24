@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Town_Hall][Size:11-10][Base:0-6-11-4][Entrance:5-8-1-2][ReqItems:60-50/0-30]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Town_Hall][Size:11-10][Base:0-6-11-4][Entrance:5-8-1-2][ReqItems:60-50/0-30][TownHall]</Value>
     </Item>
     <Item>
       <Key>39</Key>
