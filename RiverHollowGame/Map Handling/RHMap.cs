@@ -583,9 +583,8 @@ namespace RiverHollow.Map_Handling
                 }
 
                 GenerateMapObjects();
+                SpawnMobs();
             }
-
-            SpawnMobs();
         }
         private void GenerateMapObjects()
         {

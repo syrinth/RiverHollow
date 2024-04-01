@@ -96,12 +96,12 @@
  <objectgroup id="5" name="MapObject">
   <object id="66" name="Mob" x="288" y="96" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
   <object id="67" name="Mob" x="112" y="208" width="32" height="32">
    <properties>
-    <property name="MobID" value="32-C/33-C/50-C"/>
+    <property name="MobID" value="33-C/50-C"/>
    </properties>
   </object>
  </objectgroup>
