@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Fetch][StartNPC:26][AssignTrigger:Task-0][GoalItem:227-2][TriggerTask:16-Delayed]</Value>
+      <Value>[Type:Fetch][StartNPC:26][AssignTrigger:Task-0][GoalItem:227-2][TriggerTask:16]</Value>
     </Item>
     <Item>
       <Key>2</Key>

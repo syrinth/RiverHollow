@@ -29,7 +29,7 @@ namespace RiverHollow.Misc
         #region Lookups
         bool FinishOnCompletion => GetBoolByIDKey("Immediate");
         bool HiddenGoal => GetBoolByIDKey("HideGoal");
-        int CutsceneID => GetIntByIDKey("CutscneID");
+        int CutsceneID => GetIntByIDKey("CutsceneID");
         int EndBuildingID => GetIntByIDKey("EndBuildingID");
 
         #region Rewards
@@ -270,19 +270,22 @@ namespace RiverHollow.Misc
 
         public void CheckItems()
         {
-            var targetItem = GoalItem();
-            if (targetItem != null)
+            if (_eTaskType == TaskTypeEnum.Fetch)
             {
-                var currentNumber = InventoryManager.GetNumberInPlayerInventory(targetItem.ID);
-                if (currentNumber >= targetItem.Number)
+                var targetItem = GoalItem();
+                if (targetItem != null)
                 {
-                    TargetsAccomplished = targetItem.Number;
-                    SetReadyForHandIn(true);
-                }
-                else
-                {
-                    TargetsAccomplished = currentNumber;
-                    SetReadyForHandIn(false);
+                    var currentNumber = InventoryManager.GetNumberInPlayerInventory(targetItem.ID);
+                    if (currentNumber >= targetItem.Number)
+                    {
+                        TargetsAccomplished = targetItem.Number;
+                        SetReadyForHandIn(true);
+                    }
+                    else
+                    {
+                        TargetsAccomplished = currentNumber;
+                        SetReadyForHandIn(false);
+                    }
                 }
             }
         }
@@ -292,16 +295,20 @@ namespace RiverHollow.Misc
             if (_eTaskType == TaskTypeEnum.Craft)
             {
                 var goal = GoalItem();
-                if(i.ID == goal.ID)
+                if(goal != null && i.ID == goal.ID)
                 {
-                    if(TargetsAccomplished + i.Number > TargetsAccomplished)
+                    if(TargetsAccomplished + i.Number > goal.Number)
                     {
                         TargetsAccomplished = goal.Number;
-                        SetReadyForHandIn(true);
                     }
                     else
                     {
                         TargetsAccomplished += i.Number;
+                    }
+
+                    if(TargetsAccomplished == goal.Number)
+                    {
+                        SetReadyForHandIn(true);
                     }
                 }
             }
@@ -351,8 +358,7 @@ namespace RiverHollow.Misc
         {
             TaskState = TaskStateEnum.Completed;
 
-            var item = GoalItem();
-            if (item != null)
+            if (_eTaskType == TaskTypeEnum.Fetch && GoalItem() is Item item)
             {
                 InventoryManager.RemoveItemsFromInventory(item.ID, item.Number);
             }
