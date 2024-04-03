@@ -360,6 +360,8 @@ namespace RiverHollow.Game_Managers
                     return "thump3";
                 case SoundEffectEnum.Text:
                     return "Sample";
+                case SoundEffectEnum.Trigger_1:
+                    return "Trigger_1";
                 case SoundEffectEnum.GrabBuilding:
                     return "buildingGrab";
                 default:

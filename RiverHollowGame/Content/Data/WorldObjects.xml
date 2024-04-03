@@ -291,7 +291,7 @@
     </Item>
     <Item>
       <Key>72</Key>
-      <Value>[Type:DungeonObject][Subtype:Trigger][Image:5-13][Size:1-2][Base:0-1-1-1][DisplayOffset:0-5]</Value>
+      <Value>[Type:DungeonObject][Subtype:Trigger][Image:5-13][Size:1-2][Base:0-1-1-1][DisplayOffset:0-5][SoundEffect:Trigger_1]</Value>
     </Item>
     <Item>
       <Key>73</Key>
@@ -303,7 +303,7 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:DungeonObject][Subtype:Trigger][Image:0-13][SoundEffect:grinding_stone]</Value>
+      <Value>[Type:DungeonObject][Subtype:Trigger][Image:0-13][SoundEffect:GrindStone]</Value>
     </Item>
     <Item>
       <Key>76</Key>

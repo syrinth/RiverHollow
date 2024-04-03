@@ -904,6 +904,12 @@
 /processorParam:Quality=Best
 /build:Sound/Original/Effects/Success_Blip.wav
 
+#begin Sound/Original/Effects/Trigger_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Original/Effects/Trigger_1.wav
+
 #begin Sound/Stock/Effects/126426__cabeeno-rossley__timer-ends-time-up.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

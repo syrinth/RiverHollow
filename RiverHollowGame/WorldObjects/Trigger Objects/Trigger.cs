@@ -15,6 +15,8 @@ namespace RiverHollow.WorldObjects
     {
         Item _item;
         protected Point _pDisplayOffset;
+
+        SoundEffectEnum TriggerSound => GetEnumByIDKey<SoundEffectEnum>("SoundEffect");
         public Trigger(int id, Dictionary<string, string> stringData) : base(id, stringData) 
         {
             _item = DataManager.GetItem(_iItemKeyID);
@@ -57,7 +59,6 @@ namespace RiverHollow.WorldObjects
                 else
                 {
                     rv = true;
-                    SoundManager.PlayEffectAtLoc(GetEnumByIDKey<SoundEffectEnum>("SoundEffect"), MapName, MapPosition, this);
                     FireTrigger();
                 }
             }
@@ -77,6 +78,7 @@ namespace RiverHollow.WorldObjects
         {
             if (!_bHasBeenTriggered)
             {
+                SoundManager.PlayEffectAtLoc(TriggerSound, MapName, MapPosition, this);
                 Activate();
             }
             else
