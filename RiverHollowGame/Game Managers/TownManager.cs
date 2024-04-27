@@ -34,7 +34,7 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, Villager> DIVillagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
-        public static Dictionary<int, ValueTuple<bool, bool>> DIArchive { get; private set; }
+        public static Dictionary<int, ItemDataState> DIArchive { get; private set; }
 
         private static Dictionary<MailboxEnum, List<string>> _diMailbox;
 
@@ -105,11 +105,11 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            DIArchive = new Dictionary<int, ValueTuple<bool, bool>>();
+            DIArchive = new Dictionary<int, ItemDataState>();
             foreach (var id in DataManager.ItemKeys)
             {
                 ItemEnum type = DataManager.GetEnumByIDKey<ItemEnum>(id, "Type", DataType.Item);
-                DIArchive[id] = new ValueTuple<bool, bool>(false, false);
+                DIArchive[id] = new ItemDataState();
             }
 
             TotalDefeatedMobs = 0;
@@ -434,14 +434,14 @@ namespace RiverHollow.Game_Managers
         {
             if (DataManager.ItemKeys.Contains(id))
             {
-                DIArchive[id] = new ValueTuple<bool, bool>(true, false);
+                DIArchive[id].SetCodex();
             }
         }
         public static void AddToArchive(int id)
         {
             if (DataManager.ItemKeys.Contains(id))
             {
-                DIArchive[id] = new ValueTuple<bool, bool>(true, true);
+                DIArchive[id].SetArchive();
             }
         }
 
@@ -451,7 +451,7 @@ namespace RiverHollow.Game_Managers
         }
         public static bool CanArchiveItem(Item it)
         {
-            return it != null && DIArchive.ContainsKey(it.ID) && !DIArchive[it.ID].Item2;
+            return it != null && DIArchive.ContainsKey(it.ID) && !DIArchive[it.ID].Archived;
         }
 
         private static bool SkipType(int id)
@@ -468,7 +468,7 @@ namespace RiverHollow.Game_Managers
             foreach(var data in DIArchive)
             {
 
-                if (!SkipType(data.Key) && data.Value.Item2)
+                if (!SkipType(data.Key) && data.Value.Archived)
                 {
                     rv++;
                 }
@@ -686,13 +686,13 @@ namespace RiverHollow.Game_Managers
 
             foreach (var kvp in DIArchive)
             {
-                if (kvp.Value.Item1)
+                if (kvp.Value.Codexed)
                 {
                     CodexEntryData travelerData = new CodexEntryData()
                     {
                         id = kvp.Key,
-                        found = kvp.Value.Item1,
-                        archived = kvp.Value.Item2
+                        found = kvp.Value.Codexed,
+                        archived = kvp.Value.Archived
                     };
                     data.CodexEntries.Add(travelerData);
                 }
@@ -776,10 +776,18 @@ namespace RiverHollow.Game_Managers
             }
 
             foreach (CodexEntryData data in saveData.CodexEntries)
-            {
+            { 
                 if (data.id < 8000)
                 {
-                    DIArchive[data.id] = new ValueTuple<bool, bool>(data.found, data.archived);
+                    if(data.found)
+                    {
+                        DIArchive[data.id].SetCodex();
+                    }
+
+                    if (data.archived)
+                    {
+                        DIArchive[data.id].SetArchive();
+                    }
                 }
             }
 
@@ -801,6 +809,28 @@ namespace RiverHollow.Game_Managers
                 Merchant = DIMerchants[saveData.MerchantID];
                 Merchant.MoveToSpawn();
             }
+        }
+    }
+
+    public class ItemDataState
+    {
+        public bool Codexed { get; private set; }
+        public bool Archived { get; private set; }
+
+        public ItemDataState()
+        {
+            Codexed = false;
+            Archived = false;
+        }
+
+        public void SetCodex()
+        {
+            Codexed = true;
+        }
+
+        public void SetArchive()
+        {
+            Archived = true;
         }
     }
 }

@@ -123,7 +123,7 @@
     </Item>
     <Item>
       <Key>30</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Archives][Size:9-7][Base:0-4-9-3][Entrance:2-5-1-2][ReqItems:0-15]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Archives][Size:9-7][Base:0-4-9-3][Entrance:2-5-1-2][ReqItems:0-20/60-40]</Value>
     </Item>
     <Item>
       <Key>31</Key>

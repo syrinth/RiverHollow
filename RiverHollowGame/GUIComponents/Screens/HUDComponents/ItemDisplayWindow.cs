@@ -14,18 +14,18 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public bool Found { get; private set; }
         const float FADE = 0.8f;
 
-        public ItemDisplayWindow(int ItemID, ValueTuple<bool, bool> state) : base((state.Item1 && state.Item2) ? GUIUtils.CODEX_ITEM_ARCHIVED : GUIUtils.CODEX_ITEM)
+        public ItemDisplayWindow(int ItemID, ItemDataState state) : base((state.Codexed && state.Archived) ? GUIUtils.CODEX_ITEM_ARCHIVED : GUIUtils.CODEX_ITEM)
         {
             HoverControls = false;
 
             ID = ItemID;
-            Found = state.Item1;
+            Found = state.Codexed;
 
             GUIItem spr = new GUIItem(DataManager.GetItem(ItemID), ItemBoxDraw.Never);
             spr.CenterOnObject(this);
             AddControl(spr);
 
-            if (!state.Item1)
+            if (!state.Codexed)
             {
                 spr.DrawShadow(false);
                 spr.SetColor(Color.Black * FADE);

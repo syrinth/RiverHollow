@@ -32,7 +32,7 @@ namespace RiverHollow.WorldObjects
         private Item _itemDisplay;
         private Decor _objDisplay;
         public bool HasDisplay => _objDisplay != null || _itemDisplay != null;
-        bool Archive => GetBoolByIDKey("Archive");
+        public bool Archive => GetBoolByIDKey("Archive");
 
         public Decor(int id, Dictionary<string, string> args) : base(id)
         {
@@ -292,14 +292,18 @@ namespace RiverHollow.WorldObjects
         /// for the given item.
         /// </summary>
         /// <param name="it">The Item object to display</param>
-        public void SetDisplayEntity(Item it, bool viaBuildMode = true)
+        public bool SetDisplayEntity(Item it, bool viaBuildMode = true)
         {
-            if (!Archive || (it != null && !TownManager.DIArchive[it.ID].Item2))
+            bool rv = false;
+
+            if (!Archive || (it != null && !TownManager.DIArchive[it.ID].Archived))
             {
                 if (StoreDisplayEntity(viaBuildMode))
                 {
                     if (it != null)
                     {
+                        rv = true;
+
                         if (it.ID > Constants.BUILDABLE_ID_OFFSET)
                         {
                             _objDisplay = (Decor)DataManager.CreateWorldObjectByID(it.ID);
@@ -315,14 +319,11 @@ namespace RiverHollow.WorldObjects
                         {
                             InventoryManager.RemoveItemsFromInventory(it.ID, 1);
                         }
-
-                        if (Archive)
-                        {
-                            TownManager.AddToArchive(it.ID);
-                        }
                     }
                 }
             }
+
+            return rv;
         }
 
         /// <summary>

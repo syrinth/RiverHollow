@@ -633,9 +633,15 @@ Exit:
                 GUIManager.OpenTextWindow(GameManager.CurrentNPC.GetDialogEntry("Goodbye"));
             }
 
-            if (GameManager.CurrentWorldObject != null && GameManager.CurrentWorldObject.BuildableType(BuildableEnum.Decor))
+            if (GameManager.CurrentWorldObject != null && GameManager.CurrentWorldObject is Decor decorObj)
             {
-                ((Decor)GameManager.CurrentWorldObject).SetDisplayEntity(ExtraInventory[0, 0], false);
+                if(decorObj.SetDisplayEntity(ExtraInventory[0, 0], false))
+                {
+                    if (decorObj.Archive)
+                    {
+                        TownManager.AddToArchive(ExtraInventory[0, 0].ID);
+                    }
+                }
             }
 
             ExtraHoldSingular = false;

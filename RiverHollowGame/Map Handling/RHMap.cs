@@ -46,6 +46,7 @@ namespace RiverHollow.Map_Handling
         public MapTypeEnum MapType => Util.ParseEnum<MapTypeEnum>(_map.Properties.ContainsKey("MapType") ? _map.Properties["MapType"] : string.Empty);
 
         public bool Visited { get; private set; } = false;
+        public bool MobsSpawned { get; private set; } = false;
         private bool Randomize => _map.Properties.ContainsKey("Randomize");
         public MonsterFood PrimedFood { get; private set; }
 
@@ -583,8 +584,9 @@ namespace RiverHollow.Map_Handling
                 }
 
                 GenerateMapObjects();
-                SpawnMobs();
             }
+
+            SpawnMobs();
         }
         private void GenerateMapObjects()
         {
@@ -927,8 +929,10 @@ namespace RiverHollow.Map_Handling
 
         private void SpawnMobs()
         {
-            if (Map.Properties.ContainsKey("Mobs") && _liMobSpawns.Count > 0)
+            if (!MobsSpawned && Map.Properties.ContainsKey("Mobs") && _liMobSpawns.Count > 0)
             {
+                MobsSpawned = true;
+
                 for (int i = 0; i < _liMobs.Count; i++)
                 {
                     RemoveActor(_liMobs[i]);
