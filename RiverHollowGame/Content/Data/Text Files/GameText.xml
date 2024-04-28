@@ -321,5 +321,9 @@
       <Key>79</Key>
       <Value>[Name:Alert_Energy][Text:Not Enough Energy]</Value>
     </Item>
+	<Item>
+      <Key>80</Key>
+      <Value>[Name:Item_Confirm][Text:Use the {0}?][Selection:YesNo][Trigger:UseItem][ItemPose]</Value>
+    </Item>
   </Asset>
 </XnaContent>

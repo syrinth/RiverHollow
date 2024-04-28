@@ -20,12 +20,20 @@ namespace RiverHollow.Characters
         protected RHTimer _damageTimer;
         protected RHTimer _cooldownTimer;
 
+        protected List<StatusEffect> _liEffects;
+
         public virtual Rectangle HitBox => new Rectangle(Position.X + HitBoxOffset.X, Position.Y + HitBoxOffset.Y, HitBoxSize.X, HitBoxSize.Y);
         public Point HitBoxOffset => GetPointByIDKey("HitBoxOffset",new Point(0, Height - Constants.TILE_SIZE));
         public Point HitBoxSize => GetPointByIDKey("HitBoxSize", new Point(Width, Constants.TILE_SIZE));
 
-        public CombatActor() : base() { }
-        public CombatActor(int id, Dictionary<string, string> stringData) : base(id, stringData) { }
+        public CombatActor() : base()
+        {
+            _liEffects = new List<StatusEffect>();
+        }
+        public CombatActor(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        {
+            _liEffects = new List<StatusEffect>();
+        }
 
         public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
         {
@@ -33,6 +41,22 @@ namespace RiverHollow.Characters
             if (Constants.DRAW_HITBOX)
             {
                 spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), HitBox, GUIUtils.BLACK_BOX, Color.Red * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
+            }
+        }
+
+        public override void Update(GameTime gTime)
+        {
+            base.Update(gTime);
+
+            for (int i = _liEffects.Count - 1; i >= 0; i--)
+            {
+                StatusEffect effect = _liEffects[i];
+                effect.Update(gTime);
+                if (effect.Duration <= 0)
+                {
+                    effect.RemoveEffects(this);
+                    _liEffects.RemoveAt(i);
+                }
             }
         }
 
@@ -120,29 +144,11 @@ namespace RiverHollow.Characters
             PlayAnimation(AnimationEnum.KO);
         }
 
-        /// <summary>
-        /// Adds the StatusEffect objectto the character's list of status effects.
-        /// </summary>
-        /// <param name="effect">Effect toadd</param>
-        public void ApplyStatusEffect(StatusEffect effect)
+        public void AssignStatusEffect(StatusEffect effect, float duration)
         {
-            //if (effect.EffectType == StatusTypeEnum.DoT || effect.EffectType == StatusTypeEnum.HoT)
-            //{
-            //    StatusEffect find = _liStatusEffects.Find(status => status.ID == effect.ID);
-            //    if (find != null)
-            //    {
-            //        _liStatusEffects.Remove(find);
-            //    }
-            //    _liStatusEffects.Add(effect);
-            //}
-            //else
-            //{
-            //    foreach (KeyValuePair<AttributeEnum, string> kvp in effect.AffectedAttributes)
-            //    {
-            //        AssignAttributeEffect(kvp.Key, kvp.Value, effect.Duration, effect.EffectType);
-            //    }
-            //    _liStatusEffects.Add(effect);
-            //}
+            effect.SetDuration(duration);
+            effect.AssignEffects(this);
+            _liEffects.Add(effect);
         }
 
         public bool HasKnockbackVelocity()

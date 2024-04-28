@@ -925,5 +925,9 @@
       <Key>230</Key>
       <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/9-3][Value:20]</Value>
     </Item>
+    <Item>
+      <Key>231</Key>
+      <Value>[Type:Consumable][Subtype:None][Image:0-3][StatusEffect:0]</Value>
+    </Item>
   </Asset>
 </XnaContent>

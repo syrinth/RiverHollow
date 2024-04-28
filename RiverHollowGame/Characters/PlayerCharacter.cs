@@ -169,10 +169,15 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void NewLantern()
+        public void SetLightSource()
         {
-            _lightSource = DataManager.GetLight(7 + PlayerManager.LanternLevel);
+            SetLightSource(7 + PlayerManager.LanternLevel);
         }
+        public void SetLightSource(int lightID)
+        {
+            _lightSource = DataManager.GetLight(lightID);
+        }
+
         public void DrawLight(SpriteBatch spriteBatch)
         {
             _lightSource?.Draw(spriteBatch);

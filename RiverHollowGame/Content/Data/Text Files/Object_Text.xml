@@ -344,7 +344,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_0</Key>
-      <Value>[Name:Defend]</Value>
+      <Value>[Name:Torchlight]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_1</Key>
@@ -1465,6 +1465,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Item_230</Key>
       <Value>[Name:Twining Rod]</Value>
+    </Item>
+    <Item>
+      <Key>Item_231</Key>
+      <Value>[Name:Torch]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>

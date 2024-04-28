@@ -863,7 +863,7 @@ namespace RiverHollow.Game_Managers
             StatusEffect b = null;
             if (id != -1)
             {
-                b = new StatusEffect(id, _diStatusEffects[id]);
+                b = new StatusEffect(id);
             }
             return b;
         }

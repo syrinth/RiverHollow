@@ -12,18 +12,9 @@ namespace RiverHollow.Items
         public bool Recover => GetBoolByIDKey("Recover");
         public int Health => GetIntByIDKey("Hp");
         public int Mana => GetIntByIDKey("Mana");
-        private StatusEffect _statusEffect;
-        private int _iStatusDuration;
 
         public Consumable(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
         {
-            if (stringData.ContainsKey("StatusEffect"))
-            {
-                string[] strBuffer = Util.FindArguments(stringData["StatusEffect"]);
-                _statusEffect = DataManager.GetStatusEffectByIndex(int.Parse(strBuffer[0]));
-                _iStatusDuration = int.Parse(strBuffer[1]);
-            }
-
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }
 
@@ -42,20 +33,24 @@ namespace RiverHollow.Items
         public override bool ItemBeingUsed()
         {
             GameManager.SetSelectedItem(this);
-            ConfirmItemUse(DataManager.GetGameTextEntry("ItemConfirm", Name()));
+            ConfirmItemUse(DataManager.GetGameTextEntry("Item_Confirm", Name()));
 
             return true;
         }
 
         public override void UseItem()
         {
-            if (Helpful)
+            if (Health > 0) { PlayerManager.PlayerActor.IncreaseHealth(Health); }
+            if (GetBoolByIDKey("StatusEffect"))
             {
-                if (Health > 0) { PlayerManager.PlayerActor.IncreaseHealth(Health); }
-                if (_statusEffect != null) { PlayerManager.PlayerActor.ApplyStatusEffect(_statusEffect); }
-
-                Remove(1);
+                string[] strBuffer = Util.FindArguments(GetStringByIDKey("StatusEffect"));
+                if (int.TryParse(strBuffer[0], out int id) && int.TryParse(strBuffer[0], out int duration))
+                {
+                    PlayerManager.PlayerActor.AssignStatusEffect(DataManager.GetStatusEffectByIndex(id), duration);
+                }
             }
+
+            Remove(1);
             ClearGMObjects();
         }
     }

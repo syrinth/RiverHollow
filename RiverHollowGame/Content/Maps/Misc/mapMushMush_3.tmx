@@ -3,11 +3,12 @@
  <properties>
   <property name="FillerID" value="60-70/52-30"/>
   <property name="FillerPercent" type="float" value="0.1"/>
+  <property name="Lighting" type="float" value="0.1"/>
   <property name="MapType" value="Cave"/>
   <property name="Mobs" value="1-3"/>
   <property name="Randomize" type="bool" value="true"/>
   <property name="ResourceItemID" value="23-C/63-U/149-U"/>
-  <property name="ResourceTotal" value="10"/>
+  <property name="ResourceTotal" value="6"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>
