@@ -94,7 +94,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                     if (_timer.TickDown(gTime))
                     {
-                        foreach (Villager npc in TownManager.DIVillagers.Values)
+                        foreach (Villager npc in TownManager.Villagers.Values)
                         {
                             if (npc.LivesInTown)
                             {

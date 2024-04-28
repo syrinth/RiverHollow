@@ -79,7 +79,7 @@ namespace RiverHollow.Characters
             }
             if (RequiredVillagerID != -1)
             {
-                if (!TownManager.DIVillagers[RequiredVillagerID].LivesInTown)
+                if (!TownManager.Villagers[RequiredVillagerID].LivesInTown)
                 {
                     return false;
                 }

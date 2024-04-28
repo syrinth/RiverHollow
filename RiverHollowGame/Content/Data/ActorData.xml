@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][GoodsSoldValue:300][Size:16-33]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][Size:16-33][Town]</Value>
     </Item>
     <Item>
       <Key>12</Key>

@@ -340,7 +340,7 @@ namespace RiverHollow
             SoundManager.PlayBackgroundMusic();
 
             //Places NPCs on the map
-            foreach (Villager v in TownManager.DIVillagers.Values)
+            foreach (Villager v in TownManager.Villagers.Values)
             {
                 v.SetStartingLocation();
                 v.CreateDailySchedule();

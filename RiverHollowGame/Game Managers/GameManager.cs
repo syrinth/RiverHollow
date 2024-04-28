@@ -261,7 +261,7 @@ namespace RiverHollow.Game_Managers
                 EmptyHeldObject();
                 _eBuildType = EnumBuildType.None;
 
-                foreach (Villager v in TownManager.DIVillagers.Values)
+                foreach (Villager v in TownManager.Villagers.Values)
                 {
                     if (v.LivesInTown && v.FollowingPath)
                     {

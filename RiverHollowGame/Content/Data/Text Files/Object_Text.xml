@@ -1471,6 +1471,22 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Torch]</Value>
     </Item>
     <Item>
+      <Key>Item_232</Key>
+      <Value>[Name:Hemp Rope]</Value>
+    </Item>
+    <Item>
+      <Key>Item_233</Key>
+      <Value>[Name:Long Pole]</Value>
+    </Item>
+    <Item>
+      <Key>Item_234</Key>
+      <Value>[Name:Lucky Dice]</Value>
+    </Item>
+    <Item>
+      <Key>Item_235</Key>
+      <Value>[Name:Small Pouch]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>

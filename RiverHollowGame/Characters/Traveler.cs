@@ -93,7 +93,7 @@ namespace RiverHollow.Characters
         public bool Validate()
         {
             return (BuildingID() == -1 || TownManager.TownObjectBuilt(BuildingID())) &&
-                        (NPC() == -1 || TownManager.DIVillagers[NPC()].LivesInTown);
+                        (NPC() == -1 || TownManager.Villagers[NPC()].LivesInTown);
         }
 
         public bool HasEaten()

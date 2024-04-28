@@ -929,5 +929,21 @@
       <Key>231</Key>
       <Value>[Type:Consumable][Subtype:None][Image:0-3][StatusEffect:0]</Value>
     </Item>
+    <Item>
+      <Key>232</Key>
+      <Value>[Type:Resource][Subtype:None][Image:0-16][Value:15][ReqItems:61-10/8-1]</Value>
+    </Item>
+    <Item>
+      <Key>233</Key>
+      <Value>[Type:Resource][Subtype:None][Image:1-16][Value:5][ReqItems:2-5]</Value>
+    </Item>
+    <Item>
+      <Key>234</Key>
+      <Value>[Type:Resource][Subtype:None][Image:2-16][Value:25][ReqItems:66-3/63-1]</Value>
+    </Item>
+    <Item>
+      <Key>235</Key>
+      <Value>[Type:Resource][Subtype:None][Image:3-16][Value:30][ReqItems:56-2/93-1]</Value>
+    </Item>
   </Asset>
 </XnaContent>

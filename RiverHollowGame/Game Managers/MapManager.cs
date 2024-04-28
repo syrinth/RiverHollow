@@ -50,6 +50,14 @@ namespace RiverHollow.Game_Managers
             {
                 m.LoadMapObjects(false);
             }
+
+            foreach (var v in TownManager.Villagers)
+            {
+                if (DataManager.GetBoolByIDKey(v.Key, "Town", DataType.Actor))
+                {
+                    v.Value.SendToTown(true);
+                }
+            }
         }
 
         public static void AddMap(string mapToAdd, ContentManager Content, GraphicsDevice GraphicsDevice)

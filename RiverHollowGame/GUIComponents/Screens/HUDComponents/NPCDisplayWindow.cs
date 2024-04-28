@@ -27,14 +27,13 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             {
                 Villager villager = (Villager)npc;
 
+                Found = villager.Introduced;
                 if (!villager.Introduced)
                 {
                     spr.SetColor(Color.Black * FADE);
                 }
                 else if(showHeart)
                 {
-                    Found = true;
-
                     Rectangle heartRectangle = GUIUtils.ICON_HEART;
                     heartRectangle.Offset(10 * villager.GetFriendshipLevel(), 0);
 

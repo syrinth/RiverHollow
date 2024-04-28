@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="44">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="48">
  <properties>
   <property name="BuildingID" type="int" value="25"/>
   <property name="MapType" value="Town"/>
@@ -27,8 +27,8 @@
   <data encoding="csv">
 0,0,0,0,0,0,609,544,544,544,544,544,544,610,
 0,0,0,0,0,0,611,0,0,0,0,0,0,633,
-0,0,0,0,0,0,611,0,524,525,526,0,0,633,
-609,544,544,544,544,544,545,588,546,547,548,588,588,633,
+0,0,0,0,0,0,611,524,525,526,0,0,0,633,
+609,544,544,544,544,544,545,546,547,548,588,588,588,633,
 611,0,0,0,0,0,567,0,0,0,0,0,0,633,
 611,0,0,0,0,0,567,0,0,0,0,0,0,633,
 611,588,588,588,588,588,589,0,0,0,0,0,0,633,
@@ -69,9 +69,20 @@
     <property name="ObjectID" type="int" value="142"/>
    </properties>
   </object>
-  <object id="43" name="Talk_General_Store" x="32" y="112" width="16" height="32"/>
+  <object id="44" name="WorldObject" x="176" y="64" width="32" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="96"/>
+   </properties>
+  </object>
+  <object id="45" name="WorldObject" x="160" y="64" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="165"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="18" name="NPC_11" x="32" y="112" width="16" height="16"/>
+  <object id="18" name="NPC_11" x="128" y="64" width="16" height="16"/>
+  <object id="46" name="Shop" x="32" y="112" width="16" height="32"/>
+  <object id="47" name="Craft" x="176" y="80" width="16" height="16"/>
  </objectgroup>
 </map>

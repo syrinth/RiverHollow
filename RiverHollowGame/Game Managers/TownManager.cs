@@ -31,7 +31,7 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         private static Dictionary<int, Upgrade> _diGlobalUpgrades;
-        public static Dictionary<int, Villager> DIVillagers { get; private set; }
+        public static Dictionary<int, Villager> Villagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
         public static Dictionary<int, ItemDataState> DIArchive { get; private set; }
@@ -77,7 +77,7 @@ namespace RiverHollow.Game_Managers
             }
 
             DIMerchants = new Dictionary<int, Merchant>();
-            DIVillagers = new Dictionary<int, Villager>();
+            Villagers = new Dictionary<int, Villager>();
             foreach (KeyValuePair<int, Dictionary<string, string>> npcData in DataManager.ActorData)
             {
                 Dictionary<string, string> diData = DataManager.ActorData[npcData.Key];
@@ -88,7 +88,7 @@ namespace RiverHollow.Game_Managers
                         break;
 
                     case "Villager":
-                        DIVillagers.Add(npcData.Key, new Villager(npcData.Key, diData));
+                        Villagers.Add(npcData.Key, new Villager(npcData.Key, diData));
                         break;
                     default:
                         break;
@@ -145,7 +145,7 @@ namespace RiverHollow.Game_Managers
                 _bTravelersCame = false;
             }
 
-            foreach (Villager v in DIVillagers.Values)
+            foreach (Villager v in Villagers.Values)
             {
                 v.RollOver();
             }
@@ -479,7 +479,7 @@ namespace RiverHollow.Game_Managers
 
         public static int GetPopulation()
         {
-            return DIVillagers.Count(x => x.Value.LivesInTown);
+            return Villagers.Count(x => x.Value.LivesInTown);
         }
         public static int GetTownScore()
         {
@@ -663,7 +663,7 @@ namespace RiverHollow.Game_Managers
             data.MailboxSent = _diMailbox[MailboxEnum.Processed];
             data.MailboxWaiting = _diMailbox[MailboxEnum.Waiting];
 
-            foreach (Villager npc in DIVillagers.Values)
+            foreach (Villager npc in Villagers.Values)
             {
                 data.VillagerData.Add(npc.SaveData());
             }
@@ -754,7 +754,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (VillagerData data in saveData.VillagerData)
             {
-                Villager npc = DIVillagers[data.npcID];
+                Villager npc = Villagers[data.npcID];
                 npc.LoadData(data);
                 npc.MoveToSpawn();
             }

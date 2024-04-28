@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][LightID:3-30-86/3-80-86][ReqItems:0-30/60-50][UpgradeID:0-1][Profit:-20][Traveller:25][Upgradable:5/5-0]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][ReqItems:0-30/60-30][UpgradeID:0-1][Traveller:15][CraftAmount:2][Upgradable:5/5-0][LightID:3-30-86/3-80-86][TownScore:25]</Value>
     </Item>
     <Item>
       <Key>26</Key>
@@ -387,7 +387,7 @@
     </Item>
     <Item>
       <Key>96</Key>
-      <Value>[Type:Machine][Image:0-6][Work:3-0.15][Size:2-2][Makes:72/71/157/156/73/78/83][Base:0-1-2-1]</Value>
+      <Value>[Type:Machine][Image:0-6][Size:2-2][Base:0-1-2-1][Makes:232/233/234/235]</Value>
     </Item>
     <Item>
       <Key>97</Key>

@@ -33,7 +33,7 @@ namespace RiverHollow.Misc
         int EndBuildingID => GetIntByIDKey("EndBuildingID");
 
         #region Rewards
-        public int RewardMoney => GetIntByIDKey("Money");
+        public int RewardMoney => GetIntByIDKey("Money", 0);
         int UnlockObjectID => GetIntByIDKey("UnlockBuildingID");
         #endregion
         #endregion
@@ -408,7 +408,7 @@ namespace RiverHollow.Misc
                     {
                         if (int.TryParse(parse[0], out int targetID))
                         {
-                            var villager = TownManager.DIVillagers[targetID];
+                            var villager = TownManager.Villagers[targetID];
                             if (!int.TryParse(parse[1], out int pointValue))
                             {
                                 pointValue = 0;
@@ -452,7 +452,7 @@ namespace RiverHollow.Misc
             TalkingActor rv = null;
             if (GetBoolByIDKey("StartNPC"))
             {
-                rv = TownManager.DIVillagers[GetIntByIDKey("StartNPC")];
+                rv = TownManager.Villagers[GetIntByIDKey("StartNPC")];
             }
 
             return rv;
@@ -462,7 +462,7 @@ namespace RiverHollow.Misc
             TalkingActor rv;
             if (GetBoolByIDKey("StartNPC"))
             {
-                rv = TownManager.DIVillagers[GetIntByIDKey("StartNPC")];
+                rv = TownManager.Villagers[GetIntByIDKey("StartNPC")];
             }
             else
             {
@@ -557,9 +557,9 @@ namespace RiverHollow.Misc
             if (DataManager.GetBoolByIDKey(ID, "ActivateNPC", DataType.Task))
             {
                 var npc = DataManager.GetIntByIDKey(ID, "ActivateNPC", DataType.Task);
-                if (TownManager.DIVillagers.ContainsKey(npc))
+                if (TownManager.Villagers.ContainsKey(npc))
                 {
-                    TownManager.DIVillagers[npc].Activate(true);
+                    TownManager.Villagers[npc].Activate(true);
                 }
             }
         }

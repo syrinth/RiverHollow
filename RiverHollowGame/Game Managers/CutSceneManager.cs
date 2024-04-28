@@ -274,7 +274,7 @@ namespace RiverHollow.Game_Managers
                                     npcID = GetNPCData(sCommandData[0]);
                                     if (npcID != -1)    //Player should never be talking
                                     {
-                                        TownManager.DIVillagers[npcID].TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
+                                        TownManager.Villagers[npcID].TalkCutscene(CutsceneManager.GetDialogue(_iID, sCommandData[1]));
                                         goToNext = true;
                                     }
                                     break;
@@ -392,7 +392,7 @@ namespace RiverHollow.Game_Managers
                         {
                             if (currentCommand.Command == CutsceneCommandEnum.ItemID)
                             {
-                                TownManager.DIVillagers[_liUsedNPCs[0].ID].CheckInventoryAlert();
+                                TownManager.Villagers[_liUsedNPCs[0].ID].CheckInventoryAlert();
                             }
                             _iCurrentCommand++;
                         }
@@ -558,7 +558,7 @@ namespace RiverHollow.Game_Managers
                     {
                         string[] friendData = Util.FindArguments(f);
                         Actor act = null;
-                        if (TownManager.DIVillagers.ContainsKey(int.Parse(friendData[0])))
+                        if (TownManager.Villagers.ContainsKey(int.Parse(friendData[0])))
                         {
                             int npcID = int.Parse(friendData[0]);
                             act = new Villager(npcID, DataManager.ActorData[npcID]);
@@ -650,7 +650,7 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
             foreach (KeyValuePair<int, int> kvp in _liReqFriendship)
             {
-                if (TownManager.DIVillagers[kvp.Key].FriendshipPoints < kvp.Value) { goto friendshipExit; }
+                if (TownManager.Villagers[kvp.Key].FriendshipPoints < kvp.Value) { goto friendshipExit; }
             }
 
             rv = true;
@@ -693,7 +693,7 @@ namespace RiverHollow.Game_Managers
                         }
                     }
 
-                    if (currentCommand.Command == CutsceneCommandEnum.ItemID && TownManager.DIVillagers[_liUsedNPCs[0].ID].HasHeldItems())
+                    if (currentCommand.Command == CutsceneCommandEnum.ItemID && TownManager.Villagers[_liUsedNPCs[0].ID].HasHeldItems())
                     {
                         GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
                     }
@@ -732,26 +732,26 @@ namespace RiverHollow.Game_Managers
             }
             else
             {
-                TownManager.DIVillagers[_liUsedNPCs[0].ID].AssignItemToNPC(int.Parse(sCommandData[0]), sCommandData.Length == 1 ? 1 : int.Parse(sCommandData[1]));
+                TownManager.Villagers[_liUsedNPCs[0].ID].AssignItemToNPC(int.Parse(sCommandData[0]), sCommandData.Length == 1 ? 1 : int.Parse(sCommandData[1]));
                 GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
             }
         }
         private void IntroduceActor(string[] sCommandData)
         {
             int id = int.Parse(sCommandData[0]);
-            if (TownManager.DIVillagers.ContainsKey(id))
+            if (TownManager.Villagers.ContainsKey(id))
             {
-                TownManager.DIVillagers[id].Introduce();
+                TownManager.Villagers[id].Introduce();
             }
         }
         private void MoveToTown(string[] sCommandData)
         {
             if (int.TryParse(sCommandData[0], out int characterID))
             {
-                TownManager.DIVillagers[characterID].TryToMoveIn();
-                if (!TownManager.DIVillagers[characterID].HasSchedule)
+                TownManager.Villagers[characterID].TryToMoveIn();
+                if (!TownManager.Villagers[characterID].HasSchedule)
                 {
-                    TownManager.DIVillagers[characterID].MoveToSpawn();
+                    TownManager.Villagers[characterID].MoveToSpawn();
                 }
             }
         }
@@ -760,7 +760,7 @@ namespace RiverHollow.Game_Managers
         {
             if (int.TryParse(sCommandData[0], out int characterID))
             {
-                TownManager.DIVillagers[characterID].SendToTown(true);
+                TownManager.Villagers[characterID].SendToTown(true);
             }
         }
 

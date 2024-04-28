@@ -90,7 +90,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
     internal class HUDCodexVillagers : HUDCodexActorPage
     {
-        public HUDCodexVillagers(GUIWindow winMain) : base(winMain, "Villagers", TownManager.DIVillagers.Values.Cast<Actor>().ToList(), TownManager.DIVillagers.Values.Count(x => x.Introduced)) { }
+        public HUDCodexVillagers(GUIWindow winMain) : base(winMain, "Villagers", TownManager.Villagers.Values.Cast<Actor>().ToList(), TownManager.Villagers.Values.Count(x => x.Introduced)) { }
     }
 
     internal class HUDCodexMerchants : HUDCodexActorPage

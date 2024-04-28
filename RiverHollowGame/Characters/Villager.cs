@@ -116,6 +116,11 @@ namespace RiverHollow.Characters
             {
                 Activate(false);
             }
+
+            if (stringData.ContainsKey("Town"))
+            {
+                //SendToTown();
+            }
         }
 
         public override void Update(GameTime gTime)
@@ -728,7 +733,7 @@ namespace RiverHollow.Characters
 
         private void RemoveOccupiedTiles(ref List<RHTile> tiles)
         {
-            foreach (var v in TownManager.DIVillagers.Values)
+            foreach (var v in TownManager.Villagers.Values)
             {
                 tiles.Remove(v.GetOccupantTile());
             }
@@ -902,7 +907,7 @@ namespace RiverHollow.Characters
 
             foreach (var id in FriendIDs)
             {
-                Villager v = TownManager.DIVillagers[id];
+                Villager v = TownManager.Villagers[id];
                 if (v.LivesInTown)
                 {
                     possibleFriends.Add(v);
