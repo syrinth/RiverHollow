@@ -136,10 +136,8 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Held Objects
-        static Item _heldItem;
-        public static Item HeldItem { get => _heldItem; }
-        static WorldObject _heldWorldObject;
-        public static WorldObject HeldObject { get => _heldWorldObject; }
+        public static Item HeldItem { get; private set; }
+        public static WorldObject HeldObject { get; private set; }
 
         /// <summary>
         /// Grabs a building to be placed and/or moved.
@@ -152,7 +150,7 @@ namespace RiverHollow.Game_Managers
             if (obj != null)
             {
                 rv = true;
-                _heldWorldObject = obj;
+                HeldObject = obj;
                 obj.SetPickupOffset();
             }
 
@@ -160,7 +158,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void EmptyHeldObject()
         {
-            _heldWorldObject = null;
+            HeldObject = null;
         }
 
         /// <summary>
@@ -172,8 +170,8 @@ namespace RiverHollow.Game_Managers
             bool rv = false;
             if (item != null)
             {
-                _heldItem = item;
-                GUICursor.SetGUIItem(_heldItem);
+                HeldItem = item;
+                GUICursor.SetGUIItem(HeldItem);
                 rv = true;
             }
 
@@ -181,7 +179,7 @@ namespace RiverHollow.Game_Managers
         }
         public static void DropItem()
         {
-            _heldItem = null;
+            HeldItem = null;
             GUICursor.SetGUIItem(null);
         }
         #endregion
@@ -253,7 +251,13 @@ namespace RiverHollow.Game_Managers
             _eBuildType = EnumBuildType.BuildMode;
             GUIManager.CloseMainObject();
         }
-        public static void EnterTownModeEdit() { _eBuildType = EnumBuildType.Edit; }
+        public static void EnterTownModeEdit()
+        {
+            _eBuildType = EnumBuildType.Edit;
+            GUIManager.CloseMainObject();
+            GameManager.ClearGMObjects();
+            GUIManager.CloseMenu();
+        }
 
         public static void ExitTownMode() {
             if (InTownMode())

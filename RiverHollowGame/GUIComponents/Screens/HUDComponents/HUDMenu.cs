@@ -17,10 +17,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public delegate void CloseMenuDelegate();
         private CloseMenuDelegate _closeMenu;
 
-        public HUDMenu(CloseMenuDelegate closeMenu)
+        public HUDMenu()
         {
-            _closeMenu = closeMenu;
-
             _liButtons = new List<GUIObject>();
             NewButtonMenu();
             
@@ -109,9 +107,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 
         public void BtnEdit()
         {
-            _closeMenu();
-            GUIManager.CloseMainObject();
-            GameManager.ClearGMObjects();
             GameManager.EnterTownModeEdit();
         }
         #endregion

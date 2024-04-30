@@ -101,16 +101,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Width += WidthEdges();
             Height += HeightEdges();
         }
-        internal override void DetermineHeight(int edge = 0)
-        {
-            base.DetermineHeight(GameManager.ScaleIt(edge));
-            Height += HeightEdges();
-        }
-        internal override void DetermineWidth(int edge = 0)
-        {
-            base.DetermineWidth(GameManager.ScaleIt(edge));
-            Width += WidthEdges();
-        }
 
         #region Draw
         public void DrawWindow(SpriteBatch spriteBatch)

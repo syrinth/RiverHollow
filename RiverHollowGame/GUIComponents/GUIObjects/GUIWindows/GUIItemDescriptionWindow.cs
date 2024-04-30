@@ -89,7 +89,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 gDescription.AnchorAndAlignWithSpacing(gBar, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);
             }
 
-            DetermineHeight();
+            DetermineSize();
             Width = Constants.MAX_ITEM_DESC_SIZE;
 
             if (it is Merchandise m)

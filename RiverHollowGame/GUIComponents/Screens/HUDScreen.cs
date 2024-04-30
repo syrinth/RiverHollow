@@ -149,6 +149,8 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 if (InputManager.CheckForInitialKeyDown(Keys.Escape))
                 {
+                    GameManager.ExitTownMode();
+
                     if (_gMainObject != null)
                     {
                         CloseMainObject();
@@ -199,6 +201,7 @@ namespace RiverHollow.GUIComponents.Screens
                 OpenMenu();
             }
 
+            GameManager.ExitTownMode();
             GUIManager.OpenMainObject(obj);
         }
 
@@ -244,7 +247,7 @@ namespace RiverHollow.GUIComponents.Screens
         public override void OpenMenu()
         {
             GUICursor.ResetCursor();
-            _gMenu = new HUDMenu(CloseMenu);
+            _gMenu = new HUDMenu();
             AddControl(_gMenu);
         }
         public override void CloseMenu()
