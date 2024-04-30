@@ -18,13 +18,13 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDShopWindow : GUIMainObject
     {
-        List<Merchandise> _liMerch;
+        List<ShopItem> _liMerch;
         GUIMoneyDisplay _gMoney;
         GUIList _gList;
 
         GUIInventoryWindow _playerInventory;
 
-        public HUDShopWindow(List<Merchandise> merch)
+        public HUDShopWindow(List<ShopItem> merch)
         {
             _liMerch = merch;
             _playerInventory = new GUIInventoryWindow(true);
@@ -58,12 +58,12 @@ namespace RiverHollow.GUIComponents.Screens
 
             List<GUIObject> items = new List<GUIObject>();
 
-            foreach (Merchandise m in _liMerch)
+            foreach (ShopItem m in _liMerch)
             {
                 PurchaseBox newBox = null;
                 if (!PlayerManager.AlreadyBoughtUniqueItem(m.MerchID))
                 {
-                    Item it = DataManager.GetItem(m.MerchType == Merchandise.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID, m.Amount);
+                    Item it = DataManager.GetItem(m.MerchType == ShopItem.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID, m.Amount);
                     it.ApplyUniqueData(m.UniqueData);
 
                     newBox = new PurchaseBox(it, m.Price, _winMain.InnerWidth() - GameManager.ScaledTileSize, ShowDisplay);

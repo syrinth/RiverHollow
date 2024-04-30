@@ -23,57 +23,56 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             GUISprite spr = new GUISprite(npc.BodySprite, true);
             spr.AnchorToInnerSide(this, SideEnum.Bottom, 1);
 
-            if (npc.IsActorType(ActorTypeEnum.Villager))
+            if (npc is Villager v)
             {
-                Villager villager = (Villager)npc;
-
-                Found = villager.Introduced;
-                if (!villager.Introduced)
+                Found = v.Introduced;
+                if (!v.Introduced)
                 {
                     spr.SetColor(Color.Black * FADE);
                 }
                 else if(showHeart)
                 {
                     Rectangle heartRectangle = GUIUtils.ICON_HEART;
-                    heartRectangle.Offset(10 * villager.GetFriendshipLevel(), 0);
+                    heartRectangle.Offset(10 * v.GetFriendshipLevel(), 0);
 
                     GUIImage heart = new GUIImage(heartRectangle);
                     heart.PositionAndMove(this, 22, 34);
 
-                    if (!villager.CanGiveGift)
+                    if (!v.CanGiveGift)
                     {
                         GUIImage heartGlow = new GUIImage(GUIUtils.ICON_HEART_GLOW);
                         heartGlow.CenterOnObject(heart);
                     }
                 }
             }
-            else if (npc.IsActorType(ActorTypeEnum.Merchant))
+            else if (npc is Merchant m)
             {
-                Merchant villager = (Merchant)npc;
+                if (!m.Introduced)
+                {
+                    spr.SetColor(Color.Black * FADE);
+                }
+                else
+                {
+                    Found = true;
+                }
+            }
+            else if (npc is Traveler t)
+            {
+                if (!TownManager.DITravelerInfo[t.ID].Item1)
+                {
+                    spr.SetColor(Color.Black * FADE);
+                }
+                else
+                {
+                    Found = true;
 
-                if (!villager.Introduced)
-                {
-                    spr.SetColor(Color.Black * FADE);
-                }
-                else
-                {
-                    Found = true;
+                    GUIImage classIcon = GUIUtils.GetClassIcon(t.ClassType);
+                    classIcon.PositionAndMove(this, 22, 34);
                 }
             }
-            else if (npc.IsActorType(ActorTypeEnum.Traveler))
+            else if (npc is Mob mob)
             {
-                if (!TownManager.DITravelerInfo[npc.ID].Item1)
-                {
-                    spr.SetColor(Color.Black * FADE);
-                }
-                else
-                {
-                    Found = true;
-                }
-            }
-            else if (npc.IsActorType(ActorTypeEnum.Mob))
-            {
-                if (TownManager.DIMobInfo[npc.ID] == 0)
+                if (TownManager.DIMobInfo[mob.ID] == 0)
                 {
                     spr.SetColor(Color.Black * FADE);
                 }

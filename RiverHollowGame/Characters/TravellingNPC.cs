@@ -123,7 +123,7 @@ namespace RiverHollow.Characters
                 foreach(var good in goodsSoldParams)
                 {
                     var data = Util.FindArguments(good);
-                    ItemGroupEnum e = Util.ParseEnum<ItemGroupEnum>(data[0]);
+                    ResourceTypeEnum e = Util.ParseEnum<ResourceTypeEnum>(data[0]);
                     if (int.TryParse(data[1], out int number))
                     {
                         if(!TownManager.CheckSoldGoods(e, number))

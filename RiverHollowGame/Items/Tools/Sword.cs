@@ -8,7 +8,7 @@ namespace RiverHollow.Items.Tools
 {
     public class Sword : HitboxTool
     {
-        public Sword(int id, Dictionary<string, string> stringData) : base(id, stringData) { }
+        public Sword(int id) : base(id) { }
 
         public override void Update(GameTime gTime)
         {

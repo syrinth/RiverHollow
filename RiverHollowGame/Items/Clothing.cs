@@ -17,7 +17,7 @@ namespace RiverHollow.Items
         public EquipmentEnum ClothingType => GetEnumByIDKey<EquipmentEnum>("Subtype");
         public bool GenderNeutral => GetBoolByIDKey("Neutral");
 
-        public Clothing(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
+        public Clothing(int id) : base(id, 1)
         {
             _texTexture = DataManager.GetTexture(GetTextureName());
         }

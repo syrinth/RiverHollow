@@ -217,7 +217,7 @@ namespace RiverHollow.GUIComponents.Screens
                     if (gib.Contains(mouse))
                     {
                         SelectGuiItemBox(gib);
-                        if (gib.BoxItem != null && gib.BoxItem.CompareType(Enums.ItemEnum.Buildable))
+                        if (gib.BoxItem != null && gib.BoxItem.CompareType(Enums.ItemTypeEnum.Buildable))
                         {
                             rv = gib.BoxItem.ItemBeingUsed();
                         }

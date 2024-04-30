@@ -10,9 +10,9 @@ namespace RiverHollow.Items
     public class Blueprint : Item
     {
         private readonly int[] _arrCraftingUnlocks;
-        public Blueprint(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
+        public Blueprint(int id) : base(id, 1)
         {
-            if (stringData.ContainsKey("ObjectID")) { _arrCraftingUnlocks = Array.ConvertAll(Util.FindParams(stringData["ObjectID"]), s => int.Parse(s)); ; }
+            if (GetBoolByIDKey("ObjectID")) { _arrCraftingUnlocks = Array.ConvertAll(FindParamsByIDKey("ObjectID"), s => int.Parse(s)); ; }
 
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Blueprints");
         }

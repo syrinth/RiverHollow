@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 using static RiverHollow.GUIComponents.GUIObjects.GUIWindows.GUIWindow;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents
 {
@@ -50,6 +51,12 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle ICON_EXCLAMATION = new Rectangle(272, 128, 4, 10);
         internal static Rectangle ICON_ERROR = new Rectangle(276, 128, 8, 8);
         internal static Rectangle ICON_BUILD = new Rectangle(336, 144, 16, 16);
+
+        internal static Rectangle ICON_CLASS_GENERAL = new Rectangle(0, 0, 10, 10);
+        internal static Rectangle ICON_CLASS_FIGHTER = new Rectangle(10, 0, 10, 10);
+        internal static Rectangle ICON_CLASS_HEALER = new Rectangle(20, 0, 10, 10);
+        internal static Rectangle ICON_CLASS_MAGE = new Rectangle(30, 0, 10, 10);
+        internal static Rectangle ICON_CLASS_ROGUE = new Rectangle(40, 0, 10, 10);
 
         internal static Rectangle DIALOGUE_MORE = new Rectangle(160, 80, 16, 16);
         internal static Rectangle DIALOGUE_DONE = new Rectangle(176, 80, 16, 16);
@@ -239,6 +246,26 @@ namespace RiverHollow.GUIComponents
                     obj.AnchorAndAlignWithSpacing(components[i - 1], SideEnum.Right, SideEnum.Bottom, xSpacing, rule);
                 }
             }
+        }
+
+        internal static GUIImage GetClassIcon(ClassTypeEnum e)
+        {
+            Rectangle icon;
+            switch (e)
+            {
+                case ClassTypeEnum.Fighter:
+                    icon = ICON_CLASS_FIGHTER; break;
+                case ClassTypeEnum.Healer:
+                    icon = ICON_CLASS_HEALER; break;
+                case ClassTypeEnum.Mage:
+                    icon = ICON_CLASS_MAGE; break;
+                case ClassTypeEnum.Rogue:
+                    icon = ICON_CLASS_ROGUE; break;
+                default:
+                    icon = ICON_CLASS_GENERAL; break;
+            }
+
+            return new GUIImage(icon);
         }
     }
 }

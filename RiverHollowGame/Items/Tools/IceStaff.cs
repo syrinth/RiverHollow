@@ -8,7 +8,7 @@ namespace RiverHollow.Items
     public class IceStaff : Tool
     {
         WorldObject _objSummoned;
-        public IceStaff(int id, Dictionary<string, string> stringData) : base(id, stringData) { }
+        public IceStaff(int id) : base(id) { }
 
         public override bool ItemBeingUsed()
         {

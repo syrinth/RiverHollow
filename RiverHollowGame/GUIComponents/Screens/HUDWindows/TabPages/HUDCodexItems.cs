@@ -28,7 +28,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
         readonly List<ItemDisplayWindow> _liItemDisplay;
 
         int _iIndex = 0;
-        ItemEnum _eItemDisplay = ItemEnum.Resource;
+        ItemTypeEnum _eItemDisplay = ItemTypeEnum.Resource;
 
         public HUDCodexItems(GUIWindow winMain)
         {
@@ -80,7 +80,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
             _liItemDisplay.Clear();
         }
 
-        private void SetUpItemWindows(ItemEnum itemWindow, bool reset)
+        private void SetUpItemWindows(ItemTypeEnum itemWindow, bool reset)
         {
             if (reset)
             {
@@ -90,15 +90,15 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
             ClearWindows();
 
             int found = 0;
-            List<int> itemIDs = new List<int>(TownManager.DIArchive.Keys.ToList().Where(x => DataManager.GetEnumByIDKey<ItemEnum>(x, "Type", DataType.Item) == _eItemDisplay));
+            List<int> itemIDs = new List<int>(TownManager.DIArchive.Keys.ToList().Where(x => DataManager.GetEnumByIDKey<ItemTypeEnum>(x, "Type", DataType.Item) == _eItemDisplay));
 
             switch (itemWindow)
             {
-                case ItemEnum.Tool:
+                case ItemTypeEnum.Tool:
                     itemIDs = itemIDs.OrderBy(x => (int)DataManager.GetEnumByIDKey<ToolEnum>(x, "Subtype", DataType.Item)).ThenBy(x => DataManager.GetIntByIDKey(x, "Level", DataType.Item)).ToList();
                     break;
                 default:
-                    itemIDs = itemIDs.OrderBy(x => (int)DataManager.GetEnumByIDKey<ItemGroupEnum>(x, "Subtype", DataType.Item)).ThenBy(x => DataManager.GetTextData(x, "Name", DataType.Item)).ToList();
+                    itemIDs = itemIDs.OrderBy(x => (int)DataManager.GetEnumByIDKey<ResourceTypeEnum>(x, "Subtype", DataType.Item)).ThenBy(x => DataManager.GetTextData(x, "Name", DataType.Item)).ToList();
                     break;
             }
 
@@ -141,23 +141,23 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
         #region ItemTypeToggles
         public void ItemResourceToggle()
         {
-            SetUpItemWindows(ItemEnum.Resource, true);
+            SetUpItemWindows(ItemTypeEnum.Resource, true);
         }
         public void ItemPotionToggle()
         {
-            SetUpItemWindows(ItemEnum.Consumable, true);
+            SetUpItemWindows(ItemTypeEnum.Consumable, true);
         }
         public void ItemToolToggle()
         {
-            SetUpItemWindows(ItemEnum.Tool, true);
+            SetUpItemWindows(ItemTypeEnum.Tool, true);
         }
         public void ItemSpecialToggle()
         {
-            SetUpItemWindows(ItemEnum.Special, true);
+            SetUpItemWindows(ItemTypeEnum.Special, true);
         }
         public void ItemFoodToggle()
         {
-            SetUpItemWindows(ItemEnum.Food, true);
+            SetUpItemWindows(ItemTypeEnum.Food, true);
         }
         #endregion
     }

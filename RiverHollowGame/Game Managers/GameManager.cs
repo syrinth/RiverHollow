@@ -44,7 +44,7 @@ namespace RiverHollow.Game_Managers
         public static WorldObject CurrentWorldObject { get; private set; }
         public static Building CurrentBuilding { get; set; }
 
-        public static Merchandise CurrentMerchandise => MapManager.CurrentMap.TheShop.SelectedMerchandise;
+        public static ShopItem CurrentMerchandise => MapManager.CurrentMap.TheShop.SelectedMerchandise;
         #endregion
 
         #region Game State Values

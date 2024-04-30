@@ -50,15 +50,15 @@ namespace RiverHollow.Game_Managers
 
         public static int PlantsGrown { get; private set; }
         public static int ValueGoodsSold { get; private set; }
-        private static Dictionary<ItemGroupEnum, int> _diGoodsSold;
+        private static Dictionary<ResourceTypeEnum, int> _diGoodsSold;
         #endregion
 
         public static void Initialize()
         {
             PlantsGrown = 0;
             ValueGoodsSold = 0;
-            _diGoodsSold = new Dictionary<ItemGroupEnum, int>();
-            foreach (ItemGroupEnum e in Enum.GetValues(typeof(ItemGroupEnum)))
+            _diGoodsSold = new Dictionary<ResourceTypeEnum, int>();
+            foreach (ResourceTypeEnum e in Enum.GetValues(typeof(ResourceTypeEnum)))
             {
                 _diGoodsSold[e] = 0;
             }
@@ -108,7 +108,7 @@ namespace RiverHollow.Game_Managers
             DIArchive = new Dictionary<int, ItemDataState>();
             foreach (var id in DataManager.ItemKeys)
             {
-                ItemEnum type = DataManager.GetEnumByIDKey<ItemEnum>(id, "Type", DataType.Item);
+                ItemTypeEnum type = DataManager.GetEnumByIDKey<ItemTypeEnum>(id, "Type", DataType.Item);
                 DIArchive[id] = new ItemDataState();
             }
 
@@ -173,14 +173,18 @@ namespace RiverHollow.Game_Managers
             Income = 0;
             if (Travelers.Count > 0)
             {
-                foreach(var traveler in Travelers)
+
+                var merchantTables = new Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Container>>>();
+                GatherTables(ref merchantTables);
+
+                foreach (var traveler in Travelers)
                 {
-                    traveler.PurchaseItem();
+                    traveler.PurchaseItem(merchantTables);
                 }
 
                 InventoryManager.InitExtraInventory(Pantry.Inventory);
 
-                List<Food> sortedFood = Util.MultiArrayToList(Pantry.Inventory).FindAll(x => x.CompareType(ItemEnum.Food)).ConvertAll(x => (Food)x);
+                List<Food> sortedFood = Util.MultiArrayToList(Pantry.Inventory).FindAll(x => x.CompareType(ItemTypeEnum.Food)).ConvertAll(x => (Food)x);
                 sortedFood = sortedFood.OrderBy(x => x.FoodType).ThenByDescending(x => x.Value).ToList();
 
                 foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
@@ -210,6 +214,41 @@ namespace RiverHollow.Game_Managers
                 if(upgrade.Status == UpgradeStatusEnum.InProgress)
                 {
                     upgrade.TriggerUpgrade();
+                }
+            }
+        }
+        private static void GatherTables(ref Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Container>>> townMerchData)
+        {
+            foreach (ClassTypeEnum e in Enum.GetValues(typeof(ClassTypeEnum)))
+            {
+                townMerchData[e] = new List<KeyValuePair<Item, Container>>();
+            }
+
+            var shopIDs = DataManager.GetWorldObjectsWithKey("Shop");
+            for (int i = 0; i < shopIDs.Count; i++)
+            {
+                int targetID = shopIDs[i];
+                if (!TownObjectBuilt(targetID))
+                {
+                    continue;
+                }
+
+                var building = GetBuildingByID(targetID);
+                var map = MapManager.Maps[building.InnerMapName];
+
+                var containers = map.GetObjectsByType<Container>().Cast<Container>().ToList();
+                var shopTables = containers.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
+
+                foreach (var table in shopTables)
+                {
+                    foreach (var item in table.Inventory)
+                    {
+                        if (item is Merchandise merchItem)
+                        {
+                            var itemData = new KeyValuePair<Item, Container>(item, table);
+                            townMerchData[merchItem.ClassType].Add(itemData);
+                        }
+                    }
                 }
             }
         }
@@ -456,9 +495,9 @@ namespace RiverHollow.Game_Managers
 
         private static bool SkipType(int id)
         {
-            var type = DataManager.GetEnumByIDKey<ItemEnum>(id, "Type", DataType.Item);
+            var type = DataManager.GetEnumByIDKey<ItemTypeEnum>(id, "Type", DataType.Item);
 
-            return type == ItemEnum.Tool;
+            return type == ItemTypeEnum.Tool;
         }
 
         public static int GetArchiveTotal()
@@ -539,7 +578,7 @@ namespace RiverHollow.Game_Managers
             var itemEnum = item.GetItemGroup();
             _diGoodsSold[itemEnum] = _diGoodsSold[itemEnum] + num;
         }
-        public static bool CheckSoldGoods(ItemGroupEnum e, int val)
+        public static bool CheckSoldGoods(ResourceTypeEnum e, int val)
         {
             return _diGoodsSold[e] >= val;
         }
@@ -708,7 +747,7 @@ namespace RiverHollow.Game_Managers
                 data.GlobalUpgrades.Add(new ValueTuple<int, int>(kvp.Key, (int)kvp.Value.Status));
             }
 
-            foreach (ItemGroupEnum e in _diGoodsSold.Keys)
+            foreach (ResourceTypeEnum e in _diGoodsSold.Keys)
             {
                 data.GoodsSold.Add(new ValueTuple<int, int>((int)e, _diGoodsSold[e]));
             }
@@ -732,7 +771,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (var tpl in saveData.GoodsSold)
             {
-                _diGoodsSold[(ItemGroupEnum)tpl.Item1] = tpl.Item2;
+                _diGoodsSold[(ResourceTypeEnum)tpl.Item1] = tpl.Item2;
             }
 
             saveData.Travelers.ForEach(x => AddTraveler(x));

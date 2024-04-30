@@ -13,10 +13,10 @@ namespace RiverHollow.Misc
         public int ShopkeeperID { get; private set; }
         readonly int _iShopID;
         readonly int _iShopBuildingID = -1;
-        readonly List<Merchandise> _liMerchandise;
+        readonly List<ShopItem> _liMerchandise;
         public int Count => _liMerchandise.Count;
 
-        public Merchandise SelectedMerchandise { get; private set; }
+        public ShopItem SelectedMerchandise { get; private set; }
 
         public Shop(int id, Dictionary<string, string> stringDictionary)
         {
@@ -32,30 +32,30 @@ namespace RiverHollow.Misc
                 }
             }
 
-            _liMerchandise = new List<Merchandise>();
+            _liMerchandise = new List<ShopItem>();
             if (stringDictionary.ContainsKey("ItemID"))
             {
                 foreach (string s in Util.FindParams(stringDictionary["ItemID"]))
                 {
-                    _liMerchandise.Add(new Merchandise(Merchandise.MerchTypeEnum.Item, s));
+                    _liMerchandise.Add(new ShopItem(ShopItem.MerchTypeEnum.Item, s));
                 }
             }
             if (stringDictionary.ContainsKey("ObjectID"))
             {
                 foreach (string s in Util.FindParams(stringDictionary["ObjectID"]))
                 {
-                    _liMerchandise.Add(new Merchandise(Merchandise.MerchTypeEnum.WorldObject, s));
+                    _liMerchandise.Add(new ShopItem(ShopItem.MerchTypeEnum.WorldObject, s));
                 }
             }
         }
 
-        public void SetSelectedMerchandise(Merchandise m)
+        public void SetSelectedMerchandise(ShopItem m)
         {
             SelectedMerchandise = m;
             SelectedMerchandise.GenerateSaleItem();
         }
 
-        public void Purchase(Merchandise merch)
+        public void Purchase(ShopItem merch)
         {
             if (PlayerManager.Money >= merch.TotalPrice)
             {
@@ -67,7 +67,7 @@ namespace RiverHollow.Misc
 
                 InventoryManager.AddToInventory(merch.MerchItem);
 
-                if (merch.MerchItem.CompareType(ItemEnum.Tool))
+                if (merch.MerchItem.CompareType(ItemTypeEnum.Tool))
                 {
                     merch.MerchItem.StrikeAPose();
                 }
@@ -76,10 +76,10 @@ namespace RiverHollow.Misc
             }
         }
 
-        public List<Merchandise> GetUnlockedMerchandise()
+        public List<ShopItem> GetUnlockedMerchandise()
         {
-            List<Merchandise> rv = new List<Merchandise>();
-            foreach (Merchandise m in _liMerchandise)
+            List<ShopItem> rv = new List<ShopItem>();
+            foreach (ShopItem m in _liMerchandise)
             {
                 if (m.Unlocked && ValidateMerchandise(m.MerchID)) { rv.Add(m); }
             }
@@ -89,7 +89,7 @@ namespace RiverHollow.Misc
 
         public void UnlockMerchandise(int merchID)
         {
-            Merchandise m = _liMerchandise.Find(x => x.MerchID == merchID);
+            ShopItem m = _liMerchandise.Find(x => x.MerchID == merchID);
             m?.Unlock();
         }
 
@@ -98,7 +98,7 @@ namespace RiverHollow.Misc
             string[] split = Util.FindArguments(unlockedMerchandise);
             for (int i = 0; i < _liMerchandise.Count; i++)
             {
-                Merchandise m = _liMerchandise.Find(x => x.MerchID == i);
+                ShopItem m = _liMerchandise.Find(x => x.MerchID == i);
                 if (i < split.Length && split[i].Equals("True") && m != null)
                 {
                     m.Unlock();
@@ -131,7 +131,7 @@ namespace RiverHollow.Misc
         {
             string value = string.Empty;
             int index = 0;
-            foreach (Merchandise m in _liMerchandise)
+            foreach (ShopItem m in _liMerchandise)
             {
                 value += m.Unlocked;
 
@@ -156,7 +156,7 @@ namespace RiverHollow.Misc
         }
     }
 
-    public class Merchandise
+    public class ShopItem
     {
         public enum MerchTypeEnum { Item, WorldObject };
         public MerchTypeEnum MerchType { get; }
@@ -175,7 +175,7 @@ namespace RiverHollow.Misc
 
         private readonly int _iTaskReq = -1;
 
-        public Merchandise(MerchTypeEnum type, string merchData)
+        public ShopItem(MerchTypeEnum type, string merchData)
         {
             MerchType = type;
 

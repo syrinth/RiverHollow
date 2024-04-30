@@ -15,7 +15,7 @@ namespace RiverHollow.Items
         {
             _iNum = 1;
             _iObjectID = objectID;
-            _eItemType = ItemEnum.Buildable;
+            _eItemType = ItemTypeEnum.Buildable;
 
             Point imgPos = DataManager.GetPointByIDKey(_iObjectID, "Image", DataType.WorldObject);
             Point size = DataManager.GetPointByIDKey(_iObjectID, "Size", DataType.WorldObject, new Point (1,1));

@@ -16,8 +16,8 @@ namespace RiverHollow.Characters
     /// </summary>
     public class Merchant : TravellingNPC
     {
-        ItemGroupEnum Needs => GetEnumByIDKey<ItemGroupEnum>("Needs");
-        ItemGroupEnum Wants => GetEnumByIDKey<ItemGroupEnum>("Wants");
+        ResourceTypeEnum Needs => GetEnumByIDKey<ResourceTypeEnum>("Needs");
+        ResourceTypeEnum Wants => GetEnumByIDKey<ResourceTypeEnum>("Wants");
 
         public override Rectangle HoverBox => new Rectangle(Position, Size + new Point(0, Constants.TILE_SIZE));
 
@@ -137,7 +137,7 @@ namespace RiverHollow.Characters
         }
         public int EvaluateItem(Item it, ref Color c)
         {
-            if (it == null || it.CompareType(ItemEnum.Tool, ItemEnum.NPCToken, ItemEnum.Blueprint, ItemEnum.Buildable, ItemEnum.Special, ItemEnum.Clothing))
+            if (it == null || it.CompareType(ItemTypeEnum.Tool, ItemTypeEnum.NPCToken, ItemTypeEnum.Blueprint, ItemTypeEnum.Buildable, ItemTypeEnum.Special, ItemTypeEnum.Clothing))
             {
                 return 0;
             }

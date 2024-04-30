@@ -17,7 +17,7 @@ namespace RiverHollow.Map_Handling
     {
         string _sMapName;
         Point _pPosition;
-        Merchandise _merch;
+        ShopItem _merch;
         MapItem _merchItem;
         public int MerchID => _merch != null ? _merch.MerchID : -1;
         public Rectangle Box { get; private set; }
@@ -59,12 +59,12 @@ namespace RiverHollow.Map_Handling
             }
         }
 
-        internal void SetMerchandise(Merchandise m)
+        internal void SetMerchandise(ShopItem m)
         {
             _merch = m;
             if (m != null)
             {
-                if (m.MerchType == Merchandise.MerchTypeEnum.Item)
+                if (m.MerchType == ShopItem.MerchTypeEnum.Item)
                 {
                     _merchItem = new MapItem(DataManager.GetItem(m.MerchID))
                     {

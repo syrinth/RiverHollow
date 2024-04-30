@@ -9,7 +9,7 @@ namespace RiverHollow.Items
 {
     public class Special : Item
     {
-        public Special(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
+        public Special(int id) : base(id, 1)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Special");
         }

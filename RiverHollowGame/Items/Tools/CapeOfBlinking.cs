@@ -8,7 +8,7 @@ namespace RiverHollow.Items
 {
     public class CapeOfBlinking : Tool
     {
-        public CapeOfBlinking(int id, Dictionary<string, string> stringData) : base(id, stringData) { }
+        public CapeOfBlinking(int id) : base(id) { }
 
         public override bool ItemBeingUsed()
         {

@@ -226,7 +226,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_bDrawShadow && !ItemObject.CompareType(ItemEnum.Tool))
+            if (_bDrawShadow && !ItemObject.CompareType(ItemTypeEnum.Tool))
             {
                 _gShadow.Draw(spriteBatch);
             }

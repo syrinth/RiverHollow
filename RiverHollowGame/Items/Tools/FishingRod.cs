@@ -9,10 +9,9 @@ namespace RiverHollow.Items.Tools
 {
     public class FishingRod : Tool
     {
-        
-        public FishingRod(int id, Dictionary<string, string> stringData) : base(id, stringData)
+        public FishingRod(int id) : base(id)
         {
-            string[] par = Util.FindParams(stringData["ReelAnimation"]);
+            string[] par = FindParamsByIDKey("ReelAnimation");
             Vector2 start = Util.FindVectorArguments(par[0]);
             int[] sz = Util.FindIntArguments(par[1]);
             Point size = new Point(sz[0], sz[1]);

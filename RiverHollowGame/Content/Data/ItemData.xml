@@ -231,11 +231,11 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:1-6][ItemGroups:Potion][Value:70][ReqItems:162-1/95-1/23-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:1-6][Value:70][ReqItems:162-1/95-1/23-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:2-6][ItemGroups:Potion][Value:60][ReqItems:162-1/63-1/56-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:2-6][Value:60][ReqItems:162-1/63-1/56-1]</Value>
     </Item>
     <Item>
       <Key>59</Key>
@@ -395,7 +395,7 @@
     </Item>
     <Item>
       <Key>98</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:6-11][ReqItems:2-1/225-1][Value:60]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:None][Image:6-11][Value:60][ReqItems:2-1/225-1]</Value>
     </Item>
     <Item>
       <Key>99</Key>
@@ -659,15 +659,15 @@
     </Item>
     <Item>
       <Key>164</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:3-6][ItemGroups:Potion][Value:70][ReqItems:162-1/93-1/23-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:3-6][Value:70][ReqItems:162-1/93-1/23-1]</Value>
     </Item>
     <Item>
       <Key>165</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:7-7][ItemGroups:Potion][Value:70][ReqItems:162-1/8-1/227-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:Mage][Image:7-7][Value:70][ReqItems:162-1/8-1/227-1]</Value>
     </Item>
     <Item>
       <Key>166</Key>
-      <Value>[Type:Resource][Subtype:Potion][Image:8-7][ItemGroups:Potion][Value:70][ReqItems:162-1/63-1/95-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:Mage][Image:8-7][Value:70][ReqItems:162-1/63-1/95-1]</Value>
     </Item>
     <Item>
       <Key>167</Key>
@@ -679,15 +679,15 @@
     </Item>
     <Item>
       <Key>169</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:0-11][ReqItems:2-1/227-2][Value:20]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:Mage][Image:0-11][Value:20][ReqItems:2-1/227-2]</Value>
     </Item>
     <Item>
       <Key>170</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:1-11][ReqItems:2-1/219-1][Value:40]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:Mage][Image:1-11][Value:40][ReqItems:2-1/219-1]</Value>
     </Item>
     <Item>
       <Key>171</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:3-11][ReqItems:2-1/96-1/222-1][Value:100]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:Mage][Image:3-11][Value:100][ReqItems:2-1/96-1/222-1]</Value>
     </Item>
     <Item>
       <Key>172</Key>
@@ -779,7 +779,7 @@
     </Item>
     <Item>
       <Key>194</Key>
-      <Value>[Type:Resource][Subtype:Metal][Image:3-9][ItemGroups:Metalwork][Value:200][ReqItems:37-2]</Value>
+      <Value>[Type:Merchandise][Subtype:Generic][Group:None][Image:3-9][Value:200][ReqItems:37-2]</Value>
     </Item>
     <Item>
       <Key>195</Key>
@@ -807,19 +807,19 @@
     </Item>
     <Item>
       <Key>201</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:1-12][ItemGroups:Magic][Value:100][ReqItems:1-1/67-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:None][Image:1-12][Value:100][ReqItems:1-1/67-1]</Value>
     </Item>
     <Item>
       <Key>202</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:2-12][ItemGroups:Magic][Value:100][ReqItems:1-1/97-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:None][Image:2-12][Value:100][ReqItems:1-1/97-1]</Value>
     </Item>
     <Item>
       <Key>203</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:3-12][ItemGroups:Magic][Value:100][ReqItems:1-1/3-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:None][Image:3-12][Value:100][ReqItems:1-1/3-1]</Value>
     </Item>
     <Item>
       <Key>204</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:4-12][Value:100][ItemGroups:Magic][ReqItems:1-1/184-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:None][Image:4-12][Value:100][ReqItems:1-1/184-1]</Value>
     </Item>
     <Item>
       <Key>205</Key>
@@ -835,7 +835,7 @@
     </Item>
     <Item>
       <Key>208</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:5-12][Value:150][ItemGroups:None][ReqItems:1-1/32-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:None][Image:5-12][Value:150][ReqItems:1-1/32-1]</Value>
     </Item>
     <Item>
       <Key>209</Key>
@@ -923,7 +923,7 @@
     </Item>
     <Item>
       <Key>230</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:8-11][ReqItems:2-1/229-1/9-3][Value:20]</Value>
+      <Value>[Type:Merchandise][Subtype:Magic][Group:None][Image:8-11][Value:20][ReqItems:2-1/229-1/9-3]</Value>
     </Item>
     <Item>
       <Key>231</Key>
@@ -931,19 +931,19 @@
     </Item>
     <Item>
       <Key>232</Key>
-      <Value>[Type:Resource][Subtype:None][Image:0-16][Value:15][ReqItems:61-10/8-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Generic][Group:None][Image:0-16][Value:15][ReqItems:61-10/8-1]</Value>
     </Item>
     <Item>
       <Key>233</Key>
-      <Value>[Type:Resource][Subtype:None][Image:1-16][Value:5][ReqItems:2-5]</Value>
+      <Value>[Type:Merchandise][Subtype:Generic][Group:None][Image:1-16][Value:5][ReqItems:2-5]</Value>
     </Item>
     <Item>
       <Key>234</Key>
-      <Value>[Type:Resource][Subtype:None][Image:2-16][Value:25][ReqItems:66-3/63-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Generic][Group:None][Image:2-16][Value:25][ReqItems:66-3/63-1]</Value>
     </Item>
     <Item>
       <Key>235</Key>
-      <Value>[Type:Resource][Subtype:None][Image:3-16][Value:30][ReqItems:56-2/93-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Generic][Group:None][Image:3-16][Value:30][ReqItems:56-2/93-1]</Value>
     </Item>
   </Asset>
 </XnaContent>

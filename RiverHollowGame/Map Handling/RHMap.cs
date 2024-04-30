@@ -1670,7 +1670,7 @@ namespace RiverHollow.Map_Handling
 
                     Item i = InventoryManager.GetCurrentItem();
 
-                    if (i != null && i.HasUse() && i.CompareType(ItemEnum.Tool))
+                    if (i != null && i.HasUse() && i.CompareType(ItemTypeEnum.Tool))
                     {
                         int distance = 0;
                         if (PlayerManager.PlayerInRangeGetDist(GUICursor.GetWorldMousePosition(), 3 * Constants.TILE_SIZE, ref distance))

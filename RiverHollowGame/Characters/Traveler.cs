@@ -14,6 +14,7 @@ namespace RiverHollow.Characters
 {
     public class Traveler : TalkingActor
     {
+        public ClassTypeEnum ClassType => GetEnumByIDKey<ClassTypeEnum>("Group");
         public int FoodID { get; private set;} = -1;
         public int ItemID { get; private set;} = -1;
         public int Income { get; private set; } = 0;
@@ -108,38 +109,34 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void PurchaseItem()
+        public void PurchaseItem(Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Container>>> merchData)
         {
             if (BuildingID() != -1)
             {
-                var building = TownManager.GetBuildingByID(BuildingID());
-                var map = MapManager.Maps[building.InnerMapName];
-
-                var containers = map.GetObjectsByType<Container>().Cast<Container>().ToList();
-                var shopTables = containers.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
-
-                var merchTables = new List<Container>();
-                foreach (var table in shopTables)
+                if (merchData.Count > 0)
                 {
-                    foreach (var item in table.Inventory)
+                    ClassTypeEnum itemType = ClassTypeEnum.None;
+                    if (merchData[ClassType].Count > 0)
                     {
-                        if (item != null)
+                        itemType = ClassType;
+                    }
+
+                    if (merchData[itemType].Count > 0)
+                    {
+                        var randomKvp = Util.GetRandomItem(merchData[itemType]);
+                        var table = randomKvp.Value;
+                        var item = randomKvp.Key;
+
+                        InventoryManager.InitExtraInventory(table.Inventory);
+                        item.Remove(1, false);
+                        InventoryManager.ClearExtraInventory();
+                        ItemID = item.ID;
+
+                        if(item.Number == 0)
                         {
-                            merchTables.Add(table);
-                            break;
+                            merchData[itemType].Remove(randomKvp);
                         }
                     }
-                }
-
-                if (merchTables.Count > 0)
-                {
-                    var randomTable = Util.GetRandomItem(merchTables);
-                    var randomItem = Util.GetRandomItem(Util.MultiArrayToList(randomTable.Inventory));
-
-                    InventoryManager.InitExtraInventory(randomTable.Inventory);
-                    randomItem.Remove(1, false);
-                    InventoryManager.ClearExtraInventory();
-                    ItemID = randomItem.ID;
                 }
             }
         }

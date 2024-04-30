@@ -83,6 +83,7 @@
             this.dgvDungeons = new System.Windows.Forms.DataGridView();
             this.colDungeonsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabItem = new System.Windows.Forms.TabPage();
+            this.cbItemGroup = new System.Windows.Forms.ComboBox();
             this.cbItemSubtype = new System.Windows.Forms.ComboBox();
             this.cbItemType = new System.Windows.Forms.ComboBox();
             this.btnItemCancel = new System.Windows.Forms.Button();
@@ -168,6 +169,7 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
+            this.cbActorGroup = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabActor.SuspendLayout();
@@ -284,6 +286,7 @@
             // 
             // tabActor
             // 
+            this.tabActor.Controls.Add(this.cbActorGroup);
             this.tabActor.Controls.Add(this.tbActorDescription);
             this.tabActor.Controls.Add(this.label7);
             this.tabActor.Controls.Add(this.cbActorSubtype);
@@ -760,6 +763,7 @@
             // 
             // tabItem
             // 
+            this.tabItem.Controls.Add(this.cbItemGroup);
             this.tabItem.Controls.Add(this.cbItemSubtype);
             this.tabItem.Controls.Add(this.cbItemType);
             this.tabItem.Controls.Add(this.btnItemCancel);
@@ -778,6 +782,16 @@
             this.tabItem.TabIndex = 0;
             this.tabItem.Text = "Item";
             this.tabItem.UseVisualStyleBackColor = true;
+            // 
+            // cbItemGroup
+            // 
+            this.cbItemGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbItemGroup.FormattingEnabled = true;
+            this.cbItemGroup.Location = new System.Drawing.Point(630, 110);
+            this.cbItemGroup.Name = "cbItemGroup";
+            this.cbItemGroup.Size = new System.Drawing.Size(149, 21);
+            this.cbItemGroup.TabIndex = 26;
+            this.cbItemGroup.Visible = false;
             // 
             // cbItemSubtype
             // 
@@ -1711,6 +1725,16 @@
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
             // 
+            // cbActorGroup
+            // 
+            this.cbActorGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbActorGroup.FormattingEnabled = true;
+            this.cbActorGroup.Location = new System.Drawing.Point(630, 110);
+            this.cbActorGroup.Name = "cbActorGroup";
+            this.cbActorGroup.Size = new System.Drawing.Size(149, 21);
+            this.cbActorGroup.TabIndex = 60;
+            this.cbActorGroup.Visible = false;
+            // 
             // FrmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1914,6 +1938,8 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cbUpgradeType;
+        private System.Windows.Forms.ComboBox cbItemGroup;
+        private System.Windows.Forms.ComboBox cbActorGroup;
     }
 }
 

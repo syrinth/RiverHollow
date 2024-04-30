@@ -40,7 +40,7 @@ namespace Database_Editor
             InitializeComponent();
             SetupTabCollections();
 
-            InitComboBox<ItemEnum>(cbItemType);
+            InitComboBox<ItemTypeEnum>(cbItemType);
             InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
             InitComboBox<TaskTypeEnum>(cbTaskType);
             InitComboBox<EditableNPCDataEnum>(cbEditableCharData, false);
@@ -131,7 +131,6 @@ namespace Database_Editor
             LoadDataGrids();
             LoadAllInfoPanels();
         }
-
 
         private void SetupTabCollections()
         {
@@ -542,32 +541,33 @@ namespace Database_Editor
         private void SetItemSubtype()
         {
             cbItemSubtype.Items.Clear();
-            ItemEnum itemType = Util.ParseEnum<ItemEnum>(cbItemType.SelectedItem.ToString().Split(':')[1]);
+            cbItemGroup.Items.Clear();
+            ItemTypeEnum itemType = Util.ParseEnum<ItemTypeEnum>(cbItemType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
             {
-                case ItemEnum.Clothing:
-                    SubtypeHelper<EquipmentEnum>();
+                case ItemTypeEnum.Clothing:
+                    ItemComboBoxHelper<EquipmentEnum>(ref cbItemSubtype);
                     break;
-                case ItemEnum.Consumable:
-                    cbItemSubtype.Visible = true;
-                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.None.ToString());
-                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Potion.ToString());
+                case ItemTypeEnum.Merchandise:
+                    ItemComboBoxHelper<MerchandiseTypeEnum>(ref cbItemSubtype);
+                    ItemComboBoxHelper<ClassTypeEnum>(ref cbItemGroup);
                     break;
-                case ItemEnum.Food:
-                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Food.ToString());
-                    cbItemSubtype.Items.Add("Subtype:" + ItemGroupEnum.Meal.ToString());
+                case ItemTypeEnum.Food:
+                    cbItemSubtype.Items.Add("Subtype:" + ResourceTypeEnum.Food.ToString());
+                    cbItemSubtype.Items.Add("Subtype:" + ResourceTypeEnum.Meal.ToString());
                     break;
-                case ItemEnum.NPCToken:
-                    SubtypeHelper<NPCTokenTypeEnum>();
+                case ItemTypeEnum.NPCToken:
+                    ItemComboBoxHelper<NPCTokenTypeEnum>(ref cbItemSubtype);
                     break;
-                case ItemEnum.Resource:
-                    SubtypeHelper<ItemGroupEnum>(new List<ItemGroupEnum>() { ItemGroupEnum.Food, ItemGroupEnum.Meal });
+                case ItemTypeEnum.Resource:
+                    ItemComboBoxHelper(ref cbItemSubtype, new List<ResourceTypeEnum>() { ResourceTypeEnum.Food, ResourceTypeEnum.Meal });
                     break;
-                case ItemEnum.Tool:
-                    SubtypeHelper<ToolEnum>();
+                case ItemTypeEnum.Tool:
+                    ItemComboBoxHelper<ToolEnum>(ref cbItemSubtype);
                     break;
                 default:
                     cbItemSubtype.Visible = false;
+                    cbItemGroup.Visible = false;
                     break;
             }
 
@@ -575,11 +575,16 @@ namespace Database_Editor
             {
                 cbItemSubtype.SelectedIndex = 0;
             }
+
+            if (cbItemGroup.Visible)
+            {
+                cbItemGroup.SelectedIndex = 0;
+            }
         }
 
-        private void SubtypeHelper<T>(List<T> skip = null)
+        private void ItemComboBoxHelper<T>(ref ComboBox cb, List<T> skip = null)
         {
-            cbItemSubtype.Visible = true;
+            cb.Visible = true;
             foreach (T en in Enum.GetValues(typeof(T)))
             {
                 if (skip != null && skip.Contains(en))
@@ -588,7 +593,8 @@ namespace Database_Editor
                 }
                 else
                 {
-                    cbItemSubtype.Items.Add("Subtype:" + en.ToString());
+                    string prefix = (cb == cbItemSubtype) ? "Subtype" : "Group";
+                    cb.Items.Add(prefix + ":" + en.ToString());
                 }
             }
         }
@@ -611,6 +617,11 @@ namespace Database_Editor
                     foreach (TravelerGroupEnum e in Enum.GetValues(typeof(TravelerGroupEnum)))
                     {
                         cbActorSubtype.Items.Add("Subtype:" + e.ToString());
+                    }
+                    cbActorGroup.Visible = true;
+                    foreach (ClassTypeEnum e in Enum.GetValues(typeof(ClassTypeEnum)))
+                    {
+                        cbActorGroup.Items.Add("Group:" + e.ToString());
                     }
                     break;
                 default:
@@ -725,6 +736,8 @@ namespace Database_Editor
                     return "cb" + strType + "Type";
                 case ComponentTypeEnum.ComboBoxSubtype:
                     return "cb" + strType + "Subtype";
+                case ComponentTypeEnum.ComboBoxGroup:
+                    return "cb" + strType + "Group";
             }
 
             return string.Empty;
@@ -1357,30 +1370,32 @@ namespace Database_Editor
             contextMenu.Items.Clear();
             if (dgv == dgvItems)
             {
-                var items = Enum.GetNames(typeof(ItemEnum)).ToList();
-                items.Remove(Util.GetEnumString(ItemEnum.Buildable));
+                var items = Enum.GetNames(typeof(ItemTypeEnum)).ToList();
+                items.Remove(Util.GetEnumString(ItemTypeEnum.Buildable));
                 AddContextMenuItem("Add New", AddNewItem, true, items.ToArray());
                 AddContextMenuItem("All", dgvItemsContextMenuClick, false);
 
-                foreach (ItemEnum en in Enum.GetValues(typeof(ItemEnum)))
+                foreach (ItemTypeEnum en in Enum.GetValues(typeof(ItemTypeEnum)))
                 {
                     var s = Util.GetEnumString(en);
                     switch (en)
                     {
-                        case ItemEnum.Buildable:
+                        case ItemTypeEnum.Buildable:
                             continue;
-                        case ItemEnum.Resource:
-                            var names = Enum.GetNames(typeof(ItemGroupEnum)).ToList();
-                            names.Insert(0, "All");
-                            names.Remove(Util.GetEnumString(ItemGroupEnum.Food));
-                            names.Remove(Util.GetEnumString(ItemGroupEnum.Meal));
-                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, names.ToArray());
+                        case ItemTypeEnum.Resource:
+                            var resourceNames = Enum.GetNames(typeof(ResourceTypeEnum)).ToList();
+                            resourceNames.Insert(0, "All");
+                            resourceNames.Remove(Util.GetEnumString(ResourceTypeEnum.Food));
+                            resourceNames.Remove(Util.GetEnumString(ResourceTypeEnum.Meal));
+                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, resourceNames.ToArray());
                             break;
-                        case ItemEnum.Food:
-                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ItemGroupEnum.Food), Util.GetEnumString(ItemGroupEnum.Meal) });
+                        case ItemTypeEnum.Food:
+                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ResourceTypeEnum.Food), Util.GetEnumString(ResourceTypeEnum.Meal) });
                             break;
-                        case ItemEnum.Consumable:
-                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ItemGroupEnum.None), Util.GetEnumString(ItemGroupEnum.Potion) });
+                        case ItemTypeEnum.Merchandise:
+                            var merchNames = Enum.GetNames(typeof(MerchandiseTypeEnum)).ToList();
+                            merchNames.Insert(0, "All");
+                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, merchNames.ToArray());
                             break;
                         default:
                             AddContextMenuItem(s, dgvItemsContextMenuClick, false);
@@ -1630,25 +1645,25 @@ namespace Database_Editor
         }
         private void GetItemDefault(string chosenType, ref string defaultTags)
         {
-            ItemEnum e = Util.ParseEnum<ItemEnum>(chosenType);
+            ItemTypeEnum e = Util.ParseEnum<ItemTypeEnum>(chosenType);
             switch (e)
             {
-                case ItemEnum.Blueprint:
+                case ItemTypeEnum.Blueprint:
                     defaultTags = DEFAULT_ITEM_TAGS + ",ObjectID:";
                     break;
-                case ItemEnum.Food:
+                case ItemTypeEnum.Food:
                     defaultTags = DEFAULT_ITEM_TAGS + ",FoodType:,FoodValue:,Stam:";
                     break;
-                case ItemEnum.NPCToken:
+                case ItemTypeEnum.NPCToken:
                     defaultTags = DEFAULT_ITEM_TAGS + ",NPC_ID:";
                     break;
-                case ItemEnum.Resource:
+                case ItemTypeEnum.Resource:
                     defaultTags = DEFAULT_ITEM_TAGS;
                     break;
-                case ItemEnum.Seed:
+                case ItemTypeEnum.Seed:
                     defaultTags = DEFAULT_ITEM_TAGS + ",ObjectID:,Season:";
                     break;
-                case ItemEnum.Tool:
+                case ItemTypeEnum.Tool:
                     defaultTags = DEFAULT_ITEM_TAGS + ",Level:,Stam:";
                     break;
                 default:
@@ -1782,6 +1797,7 @@ namespace Database_Editor
             DataGridView dgvTags = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGridTags);
             ComboBox cb = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxType);
             ComboBox cbSubtype = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxSubtype);
+            ComboBox cbGrouptype = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxGroup);
 
             tbName.Text = data.Name;
             tbID.Text = data.ID.ToString();
@@ -1794,7 +1810,7 @@ namespace Database_Editor
             string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
-                if (!s.StartsWith("Type") && !s.StartsWith("Subtype"))
+                if (!s.StartsWith("Type") && !s.StartsWith("Subtype") && !s.StartsWith("Group"))
                 {
                     dgvTags.Rows.Add(s);
                 }
@@ -1806,6 +1822,10 @@ namespace Database_Editor
             if (cbSubtype != null && data.HasTag("Subtype"))
             {
                 cbSubtype.SelectedItem = "Subtype:" + data.GetTagValue("Subtype");
+            }
+            if (cbGrouptype != null && data.HasTag("Group"))
+            {
+                cbGrouptype.SelectedItem = "Group:" + data.GetTagValue("Group");
             }
         }
         private void LoadItemInfo()
@@ -1915,6 +1935,7 @@ namespace Database_Editor
             DataGridView dgvTags = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGridTags);
             ComboBox cb = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxType);
             ComboBox cbSubtype = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxSubtype);
+            ComboBox cbGrouptype = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxGroup);
 
             UpdateStatus("Saving " + tabIndex);
 
@@ -1940,6 +1961,12 @@ namespace Database_Editor
             if (cbSubtype != null && cbSubtype.SelectedItem != null)
             {
                 string[] typeTag = cbSubtype.SelectedItem.ToString().Split(':');
+                data.SetTagInfo(typeTag[0], typeTag[1]);
+            }
+
+            if (cbGrouptype != null && cbGrouptype.SelectedItem != null)
+            {
+                string[] typeTag = cbGrouptype.SelectedItem.ToString().Split(':');
                 data.SetTagInfo(typeTag[0], typeTag[1]);
             }
 

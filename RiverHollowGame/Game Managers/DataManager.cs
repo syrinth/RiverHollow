@@ -546,43 +546,45 @@ namespace RiverHollow.Game_Managers
 
             if (id != -1 && _diItemData.ContainsKey(id))
             {
-                Dictionary<string, string> diData = _diItemData[id];
-                switch (Util.ParseEnum<ItemEnum>(diData["Type"]))
+                var diData = _diItemData[id];
+                switch (Util.ParseEnum<ItemTypeEnum>(_diItemData[id]["Type"]))
                 {
-                    case ItemEnum.Blueprint:
-                        return new Blueprint(id, diData);
-                    case ItemEnum.Clothing:
-                        return new Clothing(id, diData); 
-                    case ItemEnum.Consumable:
-                        return new Consumable(id, diData, num);
-                    case ItemEnum.Food:
-                        return new Food(id, diData, num);
-                    case ItemEnum.MonsterFood:
-                        return new MonsterFood(id, diData, num);
-                    case ItemEnum.NPCToken:
-                        return new NPCToken(id, diData);
-                    case ItemEnum.Seed:
-                        return new Seed(id, diData, num);
-                    case ItemEnum.Special:
-                        return new Special(id, diData);
-                    case ItemEnum.Tool:
+                    case ItemTypeEnum.Blueprint:
+                        return new Blueprint(id);
+                    case ItemTypeEnum.Clothing:
+                        return new Clothing(id); 
+                    case ItemTypeEnum.Consumable:
+                        return new Consumable(id, num);
+                    case ItemTypeEnum.Food:
+                        return new Food(id, num);
+                    case ItemTypeEnum.Merchandise:
+                        return new Merchandise(id, num);
+                    case ItemTypeEnum.MonsterFood:
+                        return new MonsterFood(id, num);
+                    case ItemTypeEnum.NPCToken:
+                        return new NPCToken(id);
+                    case ItemTypeEnum.Seed:
+                        return new Seed(id, num);
+                    case ItemTypeEnum.Special:
+                        return new Special(id);
+                    case ItemTypeEnum.Tool:
                         switch (Util.ParseEnum<ToolEnum>(diData["Subtype"]))
                         {
                             case ToolEnum.FishingRod:
-                                return new FishingRod(id, diData);
+                                return new FishingRod(id);
                             case ToolEnum.StaffOfIce:
-                                return new IceStaff(id, diData);
+                                return new IceStaff(id);
                             case ToolEnum.Scythe:
-                                return new Scythe(id, diData);
+                                return new Scythe(id);
                             case ToolEnum.Sword:
-                                return new Sword(id, diData);
+                                return new Sword(id);
                             case ToolEnum.CapeOfBlinking:
-                                return new CapeOfBlinking(id, diData);
+                                return new CapeOfBlinking(id);
                             default:
-                                return new Tool(id, diData);
+                                return new Tool(id);
                         }
                     default:
-                        return new Item(id, diData, num);
+                        return new Item(id, num);
                 }
             }
             return null;

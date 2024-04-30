@@ -10,7 +10,7 @@ namespace RiverHollow.Items
         private NPCTokenTypeEnum TokenType => GetEnumByIDKey<NPCTokenTypeEnum>("Subtype");
         private int NPCID => GetIntByIDKey("NPC_ID");
 
-        public NPCToken(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
+        public NPCToken(int id) : base(id, 1)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tokens");
         }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using static RiverHollow.Utilities.Enums;
@@ -11,7 +10,7 @@ namespace RiverHollow.Items.Tools
     public abstract class HitboxTool :Tool
     {
         public Rectangle Hitbox { get; protected set; }
-        public HitboxTool(int id, Dictionary<string, string> stringData) : base(id, stringData) { }
+        public HitboxTool(int id) : base(id) { }
 
         protected Rectangle GetHitbox(DirectionEnum dir)
         {

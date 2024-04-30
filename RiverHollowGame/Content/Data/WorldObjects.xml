@@ -75,11 +75,11 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-80/0-30][UpgradeID:0-1][Traveller:10][Upgradable:4/4-0][CraftAmount:2][TownScore:35]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-80/0-30][UpgradeID:0-1][Traveller:10][Upgradable:4/4-0][CraftAmount:2][TownScore:35][Shop]</Value>
     </Item>
     <Item>
       <Key>19</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Jeweller][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:0-5/60-10][ShopSells:Gems]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Jeweller][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:0-5/60-10][ShopSells:Gems][Shop]</Value>
     </Item>
     <Item>
       <Key>20</Key>
@@ -87,11 +87,11 @@
     </Item>
     <Item>
       <Key>21</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Boutique][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-5/60-5][ShopSells:Textile]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Boutique][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-5/60-5][ShopSells:Textile][Shop]</Value>
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/3-0][TownScore:30]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-20/60-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/3-0][TownScore:30][Shop]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -103,7 +103,7 @@
     </Item>
     <Item>
       <Key>25</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][ReqItems:0-30/60-30][UpgradeID:0-1][Traveller:15][CraftAmount:2][Upgradable:5/5-0][LightID:3-30-86/3-80-86][TownScore:25]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:GeneralStore][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][ReqItems:0-30/60-30][UpgradeID:0-1][Traveller:15][CraftAmount:2][Upgradable:5/5-0][LightID:3-30-86/3-80-86][TownScore:25][Shop]</Value>
     </Item>
     <Item>
       <Key>26</Key>
@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:MagicShop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:1-10/68-20/205-20/199-1][UpgradeID:0-1][Upgradable:8/9-0]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:MagicShop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:1-10/68-20/205-20/199-1][UpgradeID:0-1][Upgradable:8/9-0][Shop]</Value>
     </Item>
     <Item>
       <Key>32</Key>
@@ -143,7 +143,7 @@
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40/60-20/188][LightID:3-30-86/3-80-86][Upgradable:7/8-0]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Smithy][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40/60-20/188][LightID:3-30-86/3-80-86][Upgradable:7/8-0][Shop]</Value>
     </Item>
     <Item>
       <Key>36</Key>

@@ -105,6 +105,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
     internal class HUDCodexTravelers : HUDCodexActorPage
     {
-        public HUDCodexTravelers(GUIWindow winMain) : base(winMain, "Villagers", DataManager.GetAllTravelers(), TownManager.DITravelerInfo.Values.Count(x => x.Item1)) { }
+        public HUDCodexTravelers(GUIWindow winMain) : base(winMain, "Travelers", DataManager.GetAllTravelers(), TownManager.DITravelerInfo.Values.Count(x => x.Item1)) { }
     }
 }

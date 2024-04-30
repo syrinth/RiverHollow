@@ -10,7 +10,7 @@ namespace RiverHollow.Game_Managers
     {
         #region Properties
         public static DisplayTypeEnum CurrentInventoryDisplay;
-        public static ItemEnum HoldItem;
+        public static ItemTypeEnum HoldItem;
 
         public static bool LockedInventory = false;
         public static int maxItemRows = 4;
@@ -52,14 +52,14 @@ namespace RiverHollow.Game_Managers
             ExtraInventory = inventory;
         }
 
-        public static void SetHoldItem(ItemEnum itemType)
+        public static void SetHoldItem(ItemTypeEnum itemType)
         {
             HoldItem = itemType;
         }
         public static void ClearExtraInventory()
         {
             ExtraInventory = null;
-            HoldItem = ItemEnum.None;
+            HoldItem = ItemTypeEnum.None;
         }
 
         #region Helpers
@@ -438,7 +438,7 @@ Exit:
 
                 if (inventory[row, column] == null)
                 {
-                    if (item.CompareType(ItemEnum.Tool))
+                    if (item.CompareType(ItemTypeEnum.Tool))
                     {
                         inventory[row, column] = (Tool)(item);
                     }
@@ -461,7 +461,7 @@ Exit:
                     }
                 }
 
-                if (inventory == PlayerManager.PlayerActor.PlayerGear && item.CompareType(ItemEnum.Clothing))
+                if (inventory == PlayerManager.PlayerActor.PlayerGear && item.CompareType(ItemTypeEnum.Clothing))
                 {
                     PlayerManager.PlayerActor.SetClothingSprite(item as Clothing);
                 }
@@ -487,7 +487,7 @@ Exit:
                 TaskManager.CheckItemCount();
             }
 
-            if (inventory == PlayerManager.PlayerActor.PlayerGear && inventory[row, column].CompareType(ItemEnum.Clothing))
+            if (inventory == PlayerManager.PlayerActor.PlayerGear && inventory[row, column].CompareType(ItemTypeEnum.Clothing))
             {
                 PlayerManager.PlayerActor.RemoveClothing(inventory[row, column] as Clothing);
             }

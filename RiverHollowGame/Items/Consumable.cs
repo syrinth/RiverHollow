@@ -13,7 +13,7 @@ namespace RiverHollow.Items
         public int Health => GetIntByIDKey("Hp");
         public int Mana => GetIntByIDKey("Mana");
 
-        public Consumable(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
+        public Consumable(int id, int num) : base(id, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }

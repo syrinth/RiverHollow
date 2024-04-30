@@ -209,7 +209,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
                     //If the only inventory we are working with is the player's inventory,
                     //pass the handler to the GUIItemBox and have it handle the item click
-                    if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && i.BoxItem.ItemType != ItemEnum.Clothing)
+                    if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && i.BoxItem.ItemType != ItemTypeEnum.Clothing)
                     {
                         rv = i.BoxItem.ItemBeingUsed();
                     }
@@ -233,7 +233,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && _bPlayerInventory)
                         {
                             Point gearPosition = Point.Zero;
-                            if (i.BoxItem.ItemType == ItemEnum.Clothing && PlayerManager.GetGearSlot(((Clothing)i.BoxItem).ClothingType, ref gearPosition))
+                            if (i.BoxItem.ItemType == ItemTypeEnum.Clothing && PlayerManager.GetGearSlot(((Clothing)i.BoxItem).ClothingType, ref gearPosition))
                             {
                                 performSwap = true;
                                 row = gearPosition.X;
@@ -309,9 +309,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private bool HoldsItem(Item i, bool goingToPlayerInventory)
         {
-            bool playerInventoryCheck = _bPlayerInventory || InventoryManager.HoldItem == ItemEnum.None || i.ItemType == InventoryManager.HoldItem;
+            bool playerInventoryCheck = _bPlayerInventory || InventoryManager.HoldItem == ItemTypeEnum.None || i.ItemType == InventoryManager.HoldItem;
             bool validIDsCheck = !goingToPlayerInventory || InventoryManager.ValidIDs == null || InventoryManager.ValidIDs.Contains(i.ID);
-            bool shopToolCheck = InventoryManager.CurrentInventoryDisplay != DisplayTypeEnum.ShopTable || !i.CompareType(ItemEnum.Special, ItemEnum.Tool);
+            bool shopToolCheck = InventoryManager.CurrentInventoryDisplay != DisplayTypeEnum.ShopTable || !i.CompareType(ItemTypeEnum.Special, ItemTypeEnum.Tool);
 
             return playerInventoryCheck && validIDsCheck && shopToolCheck;
         }

@@ -930,26 +930,33 @@ namespace RiverHollow.Characters
                 return _diItemMoods[it.ID];
             }
 
-            if (it.IsItemGroup(ItemGroupEnum.Gem))
+            if (it.CompareType(ItemTypeEnum.Resource))
             {
-                return MoodEnum.Happy;
+                if (it.IsItemGroup(ResourceTypeEnum.Gem))
+                {
+                    return MoodEnum.Happy;
+                }
+                if (it.IsItemGroup(ResourceTypeEnum.Flower))
+                {
+                    return MoodEnum.Pleased;
+                }
+                if (it.IsItemGroup(ResourceTypeEnum.Ore))
+                {
+                    return MoodEnum.Sad;
+                }
+                if (it.IsItemGroup(ResourceTypeEnum.None))
+                {
+                    return MoodEnum.Sad;
+                }
             }
-            if (it.IsItemGroup(ItemGroupEnum.Magic))
-            {
-                return MoodEnum.Pleased;
+            else if(it is Merchandise merchItem){
+                if (merchItem.MerchType == MerchandiseTypeEnum.Magic)
+                {
+                    return MoodEnum.Pleased;
+                }
             }
-            if (it.IsItemGroup(ItemGroupEnum.Flower))
-            {
-                return MoodEnum.Pleased;
-            }
-            if (it.IsItemGroup(ItemGroupEnum.Ore))
-            {
-                return MoodEnum.Sad;
-            }
-            if (it.IsItemGroup(ItemGroupEnum.None))
-            {
-                return MoodEnum.Sad;
-            }
+
+
 
             return MoodEnum.Neutral;
         }

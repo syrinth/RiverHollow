@@ -41,18 +41,18 @@ namespace RiverHollow.Items
             }
         }
 
-        public Tool(int id, Dictionary<string, string> stringData) : base(id, stringData, 1)
+        public Tool(int id) : base(id, 1)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tools");
 
-            if (stringData.ContainsKey("AnimationData"))
+            if (GetBoolByIDKey("AnimationData"))
             {
                 _sprite = new AnimatedSprite(@"Textures\Items\ToolAnimations")
                 {
                     Show = false
                 };
 
-                string[] par = Util.FindParams(stringData["AnimationData"]);
+                string[] par = FindParamsByIDKey("AnimationData");
                 Vector2 start = Util.FindVectorArguments(par[0]);
                 int[] sz = Util.FindIntArguments(par[1]);
                 Point size = new Point(sz[0], sz[1]);

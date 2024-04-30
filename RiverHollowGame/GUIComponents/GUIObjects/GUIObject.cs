@@ -777,21 +777,38 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         internal virtual void DetermineSize(int edge = 0)
         {
+            DetermineHeight(edge);
+            DetermineWidth(edge);
+        }
+
+        internal virtual void DetermineWidth(int edge = 0)
+        {
             if (Controls.Count > 0)
             {
-                int iTop = Controls[0].Top;
-                int iBottom = Controls[0].Bottom;
                 int iLeft = Controls[0].Left;
                 int iRight = Controls[0].Right;
                 foreach (GUIObject obj in Controls)
                 {
-                    if (obj.Top < iTop) { iTop = obj.Top; }
                     if (obj.Left < iLeft) { iLeft = obj.Left; }
-                    if (obj.Bottom > iBottom) { iBottom = obj.Bottom; }
                     if (obj.Right > iRight) { iRight = obj.Right; }
                 }
 
                 Width = iRight - iLeft + edge;
+            }
+        }
+
+        internal virtual void DetermineHeight(int edge = 0)
+        {
+            if (Controls.Count > 0)
+            {
+                int iTop = Controls[0].Top;
+                int iBottom = Controls[0].Bottom;
+                foreach (GUIObject obj in Controls)
+                {
+                    if (obj.Top < iTop) { iTop = obj.Top; }
+                    if (obj.Bottom > iBottom) { iBottom = obj.Bottom; }
+                }
+
                 Height = iBottom - iTop + edge;
             }
         }

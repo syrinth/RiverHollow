@@ -12,7 +12,7 @@ namespace RiverHollow.Items
         public int FoodValue => GetIntByIDKey("FoodValue");
         public FoodTypeEnum FoodType => GetEnumByIDKey<FoodTypeEnum>("FoodType");
 
-        public Food(int id, Dictionary<string, string> stringData, int num) : base(id, stringData, num)
+        public Food(int id, int num) : base(id, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Food");
         }

@@ -8,7 +8,7 @@ namespace RiverHollow.Items.Tools
 {
     internal class Scythe : HitboxTool
     {
-        public Scythe(int id, Dictionary<string, string> stringData) : base(id, stringData) { }
+        public Scythe(int id) : base(id) { }
 
         public override void Update(GameTime gTime)
         {
