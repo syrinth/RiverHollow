@@ -3,15 +3,15 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Build][StartNPC:16][AssignTrigger:GameStart][TargetObjectID:112][ItemRewardID:178/8040][Money:50][TriggerTask:1/18]</Value>
+      <Value>[Type:Build][StartNPC:16][AssignTrigger:GameStart][TargetObjectID:112][ItemRewardID:178/8040][Money:50][TriggerTask:1/12/18]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Fetch][StartNPC:26][AssignTrigger:Task-0][GoalItem:227-2][TriggerTask:16]</Value>
+      <Value>[Type:Fetch][StartNPC:43][AssignTrigger:Task-0][GoalItem:162-3][TriggerTask:2]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Build][StartNPC:43][AssignTrigger:Task-1][TargetObjectID:18][EndBuildingID:18][CutsceneID:3][ItemRewardID:23-5][Money:50]</Value>
+      <Value>[Type:Build][StartNPC:43][AssignTrigger:Task-1][TargetObjectID:18][EndBuildingID:18][CutsceneID:3][ItemRewardID:162-6][Money:50]</Value>
     </Item>
     <Item>
       <Key>3</Key>
@@ -51,7 +51,7 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Build][StartNPC:11][AssignTrigger:GameStart][TargetObjectID:25][EndBuildingID:25][CutsceneID:9]</Value>
+      <Value>[Type:Build][StartNPC:11][AssignTrigger:Task-0][TargetObjectID:25][EndBuildingID:25][CutsceneID:9]</Value>
     </Item>
     <Item>
       <Key>13</Key>
@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Build][StartNPC:26][AssignTrigger:Task-1][TargetObjectID:22][EndBuildingID:22][CutsceneID:15][ItemRewardID:227-5][Money:50][TriggerTask:7]</Value>
+      <Value>[Type:Build][StartNPC:26][AssignTrigger:GameStart][TargetObjectID:22][EndBuildingID:22][CutsceneID:15][Money:50][TriggerTask:7]</Value>
     </Item>
     <Item>
       <Key>17</Key>

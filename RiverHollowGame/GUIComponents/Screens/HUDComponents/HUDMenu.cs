@@ -14,9 +14,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         bool _bOpen = false;
         bool _bClose = false;
 
-        public delegate void CloseMenuDelegate();
-        private CloseMenuDelegate _closeMenu;
-
         public HUDMenu()
         {
             _liButtons = new List<GUIObject>();
@@ -100,7 +97,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
 
         public void BtnBuild()
         {
-            var _gMenuObject = new HUDTownCrafting(_closeMenu);
+            var _gMenuObject = new HUDTownCrafting();
             _gMenuObject.CenterOnScreen();
             GUIManager.OpenMainObject(_gMenuObject);
         }

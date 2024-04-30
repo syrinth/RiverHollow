@@ -94,6 +94,7 @@ namespace RiverHollow.Game_Managers
         public static bool ReadyToSleep = false;
 
         private static List<Pet> _liPets;
+        public static int PetCount => _liPets.Count;
 
         private static List<Mount> _liMounts;
 

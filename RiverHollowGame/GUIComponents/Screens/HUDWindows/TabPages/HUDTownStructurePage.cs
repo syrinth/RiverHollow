@@ -25,12 +25,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
         List<GUIItemBox> _liRequiredItems;
         readonly List<int> _liUniqueRecipes;
 
-        private CloseMenuDelegate _closeMenu;
-
-        public HUDTownStructurePage(GUIWindow winMain, CloseMenuDelegate closeMenu)
+        public HUDTownStructurePage(GUIWindow winMain)
         {
             _mainWindow = winMain;
-            _closeMenu = closeMenu;
 
             _liRequiredItems = new List<GUIItemBox>();
             _liUniqueRecipes = new List<int>();
@@ -123,7 +120,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
             obj = (Buildable)DataManager.CreateWorldObjectByID(_liUniqueRecipes[_iIndex]);
             var requiredToMake = obj.RequiredToMake;
 
-            GameManager.BuildInTownMode(requiredToMake, obj, _closeMenu);
+            GameManager.BuildInTownMode(requiredToMake, obj);
         }
     }
 }

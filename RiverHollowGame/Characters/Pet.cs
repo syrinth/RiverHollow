@@ -68,20 +68,23 @@ namespace RiverHollow.Characters
 
         public void SpawnNearPlayer()
         {
-            if (CurrentMap == null) { MapManager.CurrentMap.AddCharacterImmediately(this); }
-            else { MapManager.CurrentMap.AddActor(this); }
-
-            List<RHTile> validTiles = new List<RHTile>();
-            Point playerLocation = PlayerManager.PlayerActor.CollisionBox.Location;
-            foreach (Point p in Util.GetAllPointsInArea(playerLocation.X - (3 * Constants.TILE_SIZE), playerLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
+            if (!CutsceneManager.Playing)
             {
-                RHTile t = MapManager.CurrentMap.GetTileByPixelPosition(p);
-                if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
+                if (CurrentMap == null) { MapManager.CurrentMap.AddCharacterImmediately(this); }
+                else { MapManager.CurrentMap.AddActor(this); }
+
+                List<RHTile> validTiles = new List<RHTile>();
+                Point playerLocation = PlayerManager.PlayerActor.CollisionBox.Location;
+                foreach (Point p in Util.GetAllPointsInArea(playerLocation.X - (3 * Constants.TILE_SIZE), playerLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
+                {
+                    RHTile t = MapManager.CurrentMap.GetTileByPixelPosition(p);
+                    if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
+                }
+
+                SetPosition(Util.GetRandomItem(validTiles).Position);
+
+                ChangeState(NPCStateEnum.Wander);
             }
-
-            SetPosition(Util.GetRandomItem(validTiles).Position);
-
-            ChangeState(NPCStateEnum.Wander);
         }
     }
 }

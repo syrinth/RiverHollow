@@ -96,7 +96,7 @@
  <objectgroup id="6" name="Character">
   <object id="71" name="NPC" x="272" y="160" width="16" height="16">
    <properties>
-    <property name="NPC_ID" type="int" value="26"/>
+    <property name="NPC_ID" type="int" value="43"/>
    </properties>
   </object>
  </objectgroup>

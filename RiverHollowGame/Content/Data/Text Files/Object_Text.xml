@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>Task_1</Key>
-      <Value>[Name:I belief you've got it!][Description:$Actor_26$ needs a few $Item_227$ before she gets to work.]</Value>
+      <Value>[Name:Berry Big Job!][Description:$Actor_43$ needs a few $Item_162$ before she gets to work.]</Value>
     </Item>
     <Item>
       <Key>Task_2</Key>
@@ -51,7 +51,7 @@
     </Item>
     <Item>
       <Key>Task_12</Key>
-      <Value>[Name:Specially For You][Description:Harrison's Specialty Shop]</Value>
+      <Value>[Name:Generally Useful][Description:Harrison's General Store]</Value>
     </Item>
     <Item>
       <Key>Task_13</Key>
@@ -1536,7 +1536,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_12</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Pet Cafe]</Value>
     </Item>
     <Item>
       <Key>WorldObject_13</Key>

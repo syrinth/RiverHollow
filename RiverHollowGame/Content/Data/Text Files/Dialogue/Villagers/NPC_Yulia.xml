@@ -3,8 +3,9 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Name:Introduction][Text:Hm? Oh my, I didn't expect to see anyone else out here.
-Such wonderful woods, no? They're so lush and vibrant! The plants grow here extremely fast.]</Value>
+      <Value>[Name:Introduction][Text:Hello there. My name is $Actor_26$ and I'm.. honestly not exactly sure how I got here..? 
+This is such a nice little village, isn't it?
+Although... where is here exactly?]</Value>
     </Item>
     <Item>
       <Key>1</Key>
@@ -28,7 +29,7 @@ Such wonderful woods, no? They're so lush and vibrant! The plants grow here extr
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Text:What do you want to do?][Name:Maintenance]</Value>
+      <Value>[Name:Maintenance][Text:What do you want to do?]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -53,7 +54,7 @@ Such wonderful woods, no? They're so lush and vibrant! The plants grow here extr
 Oh, you're looking for me? But I just got here... Oh, would you look at the time... I guess I did get a bit distracted. I'm $Actor_26$, it's delight to meet you.
 I suppose I should be getting back to town, these old bones are getting rather tired. Is there any chance you could lend me a hand?
 I was looking for some $Item_227$. It's a magical herb and very useful for making rods. If you could look for a few for me, that'd be very helpful.
-I'll see you back at the $WorldObject_28$.][SendToTown]</Value>
+I'll see you back at the $WorldObject_28$.]</Value>
     </Item>
     <Item>
       <Key>12</Key>

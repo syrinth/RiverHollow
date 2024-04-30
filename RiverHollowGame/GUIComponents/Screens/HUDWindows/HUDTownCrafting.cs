@@ -16,11 +16,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 {
     internal class HUDTownCrafting : GUITabWindow
     {
-        private CloseMenuDelegate _closeMenu;
-        public HUDTownCrafting(CloseMenuDelegate closeMenu) : base(186, 152)
+        public HUDTownCrafting() : base(186, 152)
         {
-            _closeMenu = closeMenu;
-
             AddTab(ShowStructures, GUIUtils.TAB_STRUCTURE_ICON);
             AddTab(ShowFlooring, GUIUtils.TAB_FLOOR_ICON);
             AddTab(ShowWalls, GUIUtils.TAB_WALL_ICON);
@@ -34,22 +31,22 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         public void ShowStructures()
         {
             CleanTabWindow();
-            ShowTabPage(new HUDTownStructurePage(_winMain, _closeMenu));
+            ShowTabPage(new HUDTownStructurePage(_winMain));
         }
         public void ShowFlooring()
         {
             CleanTabWindow();
-            ShowTabPage(new HUDTownCraftingFloors(_winMain, _closeMenu));
+            ShowTabPage(new HUDTownCraftingFloors(_winMain));
         }
         public void ShowWalls()
         {
             CleanTabWindow();
-            ShowTabPage(new HUDTownCraftingWalls(_winMain, _closeMenu));
+            ShowTabPage(new HUDTownCraftingWalls(_winMain));
         }
         public void ShowFurniture()
         {
             CleanTabWindow();
-            ShowTabPage(new HUDTownCraftingFurniture(_winMain, _closeMenu));
+            ShowTabPage(new HUDTownCraftingFurniture(_winMain));
         }
         public void ShowLighting()
         {

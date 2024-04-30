@@ -275,7 +275,7 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void BuildInTownMode(Dictionary<int, int> requiredToMake, Buildable obj, CloseMenuDelegate _closeMenu)
+        public static void BuildInTownMode(Dictionary<int, int> requiredToMake, Buildable obj)
         {
             if (InventoryManager.HasSufficientItems(requiredToMake))
             {
@@ -283,7 +283,7 @@ namespace RiverHollow.Game_Managers
                 GameManager.PickUpWorldObject(obj);
 
                 GUIManager.CloseMainObject();
-                _closeMenu();
+                GUIManager.CloseMenu();
             }
         }
         #endregion

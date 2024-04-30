@@ -31,12 +31,9 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
         int _iIndex = 0;
         List<GUIItemBox> _liRequiredItems;
 
-        private readonly CloseMenuDelegate _closeMenu;
-
-        public HUDTownCraftingPage(GUIWindow winMain, List<int> recipes, CloseMenuDelegate closeMenu)
+        public HUDTownCraftingPage(GUIWindow winMain, List<int> recipes)
         {
             _mainWindow = winMain;
-            _closeMenu = closeMenu;
 
             _liRequiredItems = new List<GUIItemBox>();
             _liItemDisplay = new List<GUIItemBoxHover>();
@@ -167,7 +164,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
                             }
                             else
                             {
-                                GameManager.BuildInTownMode(requiredToMake, obj, _closeMenu);
+                                GameManager.BuildInTownMode(requiredToMake, obj);
                             }
                         }
                         break;
@@ -194,16 +191,16 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
     internal class HUDTownCraftingFloors : HUDTownCraftingPage
     {
-        public HUDTownCraftingFloors(GUIWindow winMain, CloseMenuDelegate closeMenu) : base(winMain, PlayerManager.GetNonUniqueByTypes(new List<BuildableEnum>() { BuildableEnum.Floor }), closeMenu) { }
+        public HUDTownCraftingFloors(GUIWindow winMain) : base(winMain, PlayerManager.GetNonUniqueByTypes(new List<BuildableEnum>() { BuildableEnum.Floor })) { }
     }
 
     internal class HUDTownCraftingWalls : HUDTownCraftingPage
     {
-        public HUDTownCraftingWalls(GUIWindow winMain, CloseMenuDelegate closeMenu) : base(winMain, PlayerManager.GetNonUniqueByTypes(new List<BuildableEnum>() { BuildableEnum.Wall }), closeMenu) { }
+        public HUDTownCraftingWalls(GUIWindow winMain) : base(winMain, PlayerManager.GetNonUniqueByTypes(new List<BuildableEnum>() { BuildableEnum.Wall })) { }
     }
 
     internal class HUDTownCraftingFurniture : HUDTownCraftingPage
     {
-        public HUDTownCraftingFurniture(GUIWindow winMain, CloseMenuDelegate closeMenu) : base(winMain, PlayerManager.GetNonUniqueByTypes(new List<BuildableEnum>() { BuildableEnum.Decor, BuildableEnum.Basic, BuildableEnum.Container }), closeMenu) { }
+        public HUDTownCraftingFurniture(GUIWindow winMain) : base(winMain, PlayerManager.GetNonUniqueByTypes(new List<BuildableEnum>() { BuildableEnum.Decor, BuildableEnum.Basic, BuildableEnum.Container })) { }
     }
 }

@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-80/0-30][UpgradeID:0-1][Traveller:10][Upgradable:4/4-0][CraftAmount:2][TownScore:35][Shop]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-70/0-30][UpgradeID:0-1][Traveller:10][Upgradable:4/4-0][CraftAmount:2][TownScore:35][Shop]</Value>
     </Item>
     <Item>
       <Key>19</Key>

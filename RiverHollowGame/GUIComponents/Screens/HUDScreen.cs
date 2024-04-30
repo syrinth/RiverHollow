@@ -184,7 +184,7 @@ namespace RiverHollow.GUIComponents.Screens
 
                 if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyBuild))
                 {
-                    OpenMenuObject(new HUDTownCrafting(CloseMenu));
+                    OpenMenuObject(new HUDTownCrafting());
                 }
 
                 if (InputManager.CheckForInitialKeyDown(GameManager.HotkeyEdit))
