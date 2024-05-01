@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-33][Traits:Anxious][Craft:20-00][Inn:13-00][Friends:16/43/26]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-33][Traits:Anxious][Craft:20-00][Inn:13-00][Friends:16/43/26][PetCafe:10-00]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -264,6 +264,14 @@
     <Item>
       <Key>65</Key>
       <Value>[Type:Traveler][Subtype:Adventurer][Group:Mage][Key:Adventurer_1][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Dessert][Disliked:Seafood][Building:22]</Value>
+    </Item>
+    <Item>
+      <Key>66</Key>
+      <Value>[Type:Pet][Key:Wisp][Walk:4-.2-F][Idle:4-.2-F][Alert:0-64-3-0.5-T][ObjectID:4]</Value>
+    </Item>
+    <Item>
+      <Key>67</Key>
+      <Value>[Type:Pet][Key:Spitter][Idle:0-0-1-0--T][Walk:64-0-3-0.15-T][Alert:0-64-3-0.5-T][ObjectID:4]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -67,7 +67,7 @@
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Build][StartNPC:26][AssignTrigger:GameStart][TargetObjectID:22][EndBuildingID:22][CutsceneID:15][Money:50][TriggerTask:7]</Value>
+      <Value>[Type:Build][StartNPC:8][AssignTrigger:GameStart][TargetObjectID:22][EndBuildingID:22][CutsceneID:15][Money:50][TriggerTask:7]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -76,6 +76,10 @@
     <Item>
       <Key>18</Key>
       <Value>[Type:Craft][StartNPC:16][AssignTrigger:Task-0][GoalItem:60-40]</Value>
+    </Item>
+    <Item>
+      <Key>19</Key>
+      <Value>[Type:Build][StartNPC:26][AssignTrigger:GameStart][TargetObjectID:12][EndBuildingID:12]</Value>
     </Item>
   </Asset>
 </XnaContent>

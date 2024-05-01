@@ -99,7 +99,7 @@ namespace RiverHollow.Characters
                 return false;
             }
 
-            if (PetCount != -1 && PetCount > PlayerManager.PetCount)
+            if (PetCount != -1 && PetCount > PlayerManager.Pets.Count)
             {
                 return false;
             }

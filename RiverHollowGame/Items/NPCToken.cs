@@ -1,6 +1,6 @@
 ﻿using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using System.Collections.Generic;
+using RiverHollow.Utilities;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Items
@@ -22,19 +22,33 @@ namespace RiverHollow.Items
                 Mount act = DataManager.CreateMount(NPCID);
                 PlayerManager.AddMount(act);
                 act.SpawnInHome();
+                Remove(1);
             }
             else if (TokenType == NPCTokenTypeEnum.Pet)
             {
-                Pet act = DataManager.CreatePet(NPCID);
-                PlayerManager.AddPet(act);
-                act.SpawnNearPlayer();
-                if (PlayerManager.PlayerActor.ActivePet == null)
+                if (TownManager.PetCafe != null || PlayerManager.Pets.Count == 0)
                 {
-                    PlayerManager.PlayerActor.SetPet(act);
+                    Pet p = DataManager.CreatePet(NPCID);
+                    PlayerManager.AddPet(p);
+
+                    if (PlayerManager.PlayerActor.ActivePet == null)
+                    {
+                        PlayerManager.PlayerActor.SetPet(p);
+                        p.SpawnNearPlayer();
+                    }
+                    else if (MapManager.CurrentMap == TownManager.PetCafe.InnerMap)
+                    {
+                        p.SetPosition(MapManager.CurrentMap.GetRandomPosition(MapManager.CurrentMap.GetCharacterObject("Destination")));
+                        MapManager.CurrentMap.AddActor(p);
+                    }
+
+                    Remove(1);
+                }
+                else
+                {
+                    GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_PET_CAFE);
                 }
             }
-
-            Remove(1);
 
             return true;
         }

@@ -35,34 +35,10 @@ namespace RiverHollow.Characters
 
         public override void ProcessRightButtonClick()
         {
-            //TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "Unfollow" : "PetFollow");
-            //text.FormatText(_sName);
-            //GUIManager.OpenTextWindow(text, this, true);
-        }
-
-        public void SpawnInHome()
-        {
-            WorldObject obj = Util.GetRandomItem(TownManager.GetTownObjectsByID(GatherZoneID));
-            if (obj == null)
+            if (TownManager.PetCafe != null && CurrentMap == TownManager.PetCafe.InnerMap)
             {
-                if (CurrentMap == null) { MapManager.TownMap.AddCharacterImmediately(this); }
-                else { MapManager.TownMap.AddActor(this); }
-                SetPosition(Util.GetRandomItem(MapManager.TownMap.FindFreeTiles()).Position);
-            }
-            else
-            {
-                List<RHTile> validTiles = new List<RHTile>();
-                Point objLocation = obj.CollisionBox.Location;
-                foreach (Point p in Util.GetAllPointsInArea(objLocation.X - (3 * Constants.TILE_SIZE), objLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
-                {
-                    RHTile t = obj.CurrentMap.GetTileByPixelPosition(p);
-                    if (t != null && t.Passable() && (t.WorldObject == null || t.WorldObject.Walkable)) { validTiles.Add(t); }
-                }
-
-                obj.CurrentMap.AddActor(this);
-                SetPosition(Util.GetRandomItem(validTiles).Position);
-
-                ChangeState(NPCStateEnum.Wander);
+                TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "PetUnfollow" : "PetFollow", Name());
+                GUIManager.OpenTextWindow(text, this, true);
             }
         }
 

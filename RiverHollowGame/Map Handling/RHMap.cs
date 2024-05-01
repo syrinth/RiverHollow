@@ -2569,6 +2569,14 @@ namespace RiverHollow.Map_Handling
                     v.SendToTown();
                 }
             }
+
+            if (GetMapProperties().ContainsKey("PetCafe"))
+            {
+                foreach(var p in _liActors.Where(x => x is Pet))
+                {
+                    RemoveActor(p);
+                }
+            }
         }
 
         public void EnterMap()

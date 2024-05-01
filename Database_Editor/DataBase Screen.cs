@@ -542,6 +542,10 @@ namespace Database_Editor
         {
             cbItemSubtype.Items.Clear();
             cbItemGroup.Items.Clear();
+
+            cbItemSubtype.Visible = false;
+            cbItemGroup.Visible = false;
+
             ItemTypeEnum itemType = Util.ParseEnum<ItemTypeEnum>(cbItemType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
             {
@@ -564,10 +568,6 @@ namespace Database_Editor
                     break;
                 case ItemTypeEnum.Tool:
                     ItemComboBoxHelper<ToolEnum>(ref cbItemSubtype);
-                    break;
-                default:
-                    cbItemSubtype.Visible = false;
-                    cbItemGroup.Visible = false;
                     break;
             }
 

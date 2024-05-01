@@ -51,7 +51,7 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_14][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][LightID:3-30-86/3-80-86]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Pet_Cafe][Size:7-7][Base:0-4-7-3][Entrance:4-5-1-2][ReqItems:0-20/60-40][UpgradeID:0-1][Upgradable:3/3-0][TownScore:40][Profit:25][Traveller:30][Pet_Cafe]</Value>
     </Item>
     <Item>
       <Key>13</Key>
@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-70/0-30][UpgradeID:0-1][Traveller:10][Upgradable:4/4-0][CraftAmount:2][TownScore:35][Shop]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-70/0-30][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][Traveller:10][TownScore:35][Shop]</Value>
     </Item>
     <Item>
       <Key>19</Key>

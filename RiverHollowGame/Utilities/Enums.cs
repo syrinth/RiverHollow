@@ -68,7 +68,7 @@
         public enum TravelerMoodEnum { Angry, Sad, Neutral, Happy };
         public enum NPCStateEnum { Alert, Idle, Leashing, MaintainDistance, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
-        public enum NPCActionState { Home, Inn, Craft, Shop, Market, Visit };
+        public enum NPCActionState { Craft, Home, Inn, Market, PetCafe, Shop, Visit };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
         public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task, Letter };

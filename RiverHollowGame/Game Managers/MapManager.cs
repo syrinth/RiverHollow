@@ -231,6 +231,19 @@ namespace RiverHollow.Game_Managers
                         else { PlayerManager.PlayerActor.ActiveMount.SyncToPlayer(); }
                     }
 
+                    if (CurrentMap.GetMapProperties().ContainsKey("PetCafe"))
+                    {
+                        Pet activePet = PlayerManager.PlayerActor.ActivePet;
+                        foreach (var p in PlayerManager.Pets)
+                        {
+                            if(activePet == null || p.ID != activePet.ID)
+                            {
+                                p.SetPosition(CurrentMap.GetRandomPosition(CurrentMap.GetCharacterObject("Destination")));
+                                CurrentMap.AddActor(p);
+                            }
+                        }
+                    }
+
                     MapChangeTimer.Reset();
                 }
                 else

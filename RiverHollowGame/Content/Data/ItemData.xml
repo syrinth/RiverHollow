@@ -945,5 +945,9 @@
       <Key>235</Key>
       <Value>[Type:Merchandise][Subtype:Generic][Group:None][Image:3-16][Value:30][ReqItems:56-2/93-1]</Value>
     </Item>
+    <Item>
+      <Key>236</Key>
+      <Value>[Type:NPCToken][Subtype:Pet][Image:0-0][Value:10][NPC_ID:66]</Value>
+    </Item>
   </Asset>
 </XnaContent>

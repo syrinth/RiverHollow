@@ -800,6 +800,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapMushroomery.tmx
 
+#begin Maps/Town/mapPet_Cafe.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapPet_Cafe.tmx
+
 #begin Maps/Town/mapPotionHut.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -1480,6 +1485,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Shipping_Gremlin.png
 
+#begin Textures/Actors/NPCs/Spitter.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Spitter.png
+
 #begin Textures/Actors/NPCs/Travelers/Adventurer_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1983,6 +2000,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Villagers/Yulia.png
+
+#begin Textures/Actors/NPCs/Wisp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Wisp.png
 
 #begin Textures/Actors/PartyMembers/Class_00.png
 /importer:TextureImporter
@@ -3471,6 +3500,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Mushroomery.png
+
+#begin Textures/WorldObjects/Buildings/Pet_Cafe.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WorldObjects/Buildings/Pet_Cafe.png
 
 #begin Textures/WorldObjects/Buildings/Pottery.png
 /importer:TextureImporter

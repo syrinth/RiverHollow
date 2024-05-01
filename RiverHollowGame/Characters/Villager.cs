@@ -116,11 +116,6 @@ namespace RiverHollow.Characters
             {
                 Activate(false);
             }
-
-            if (stringData.ContainsKey("Town"))
-            {
-                //SendToTown();
-            }
         }
 
         public override void Update(GameTime gTime)
@@ -343,7 +338,7 @@ namespace RiverHollow.Characters
                     switch (_eSpawnStatus)
                     {
                         case SpawnStateEnum.WaitAtInn:
-                            SetPosition(map.GetRandomPosition(map.GetCharacterObject("Inn_Floor")));
+                            SetPosition(map.GetRandomPosition(map.GetCharacterObject("Destination")));
                             break;
                         case SpawnStateEnum.HasHome:
                         case SpawnStateEnum.NonTownMap:
@@ -392,6 +387,7 @@ namespace RiverHollow.Characters
                 AddScheduleAction(NPCActionState.Shop);
                 AddScheduleAction(NPCActionState.Market);
                 AddScheduleAction(NPCActionState.Visit);
+                AddScheduleAction(NPCActionState.PetCafe);
 
                 _liSchedule = _liSchedule.OrderBy(x => x.Key).ToList();
             }
@@ -496,6 +492,9 @@ namespace RiverHollow.Characters
                 case NPCActionState.Home:
                     rv = Constants.VILLAGER_HOME_DEFAULT;
                     break;
+                case NPCActionState.PetCafe:
+                    rv = Constants.VILLAGER_PETCAFE_DEFAULT;
+                    break;
             }
 
             return rv;
@@ -547,12 +546,12 @@ namespace RiverHollow.Characters
         }
         private bool ProcessActionStateData(out Point targetPosition, out string targetMapName, out DirectionEnum dir)
         {
+            dir = DirectionEnum.Down;
             var currentAction = _liSchedule[0].Value;
             switch (currentAction)
             {
                 case NPCActionState.Inn:
-                    dir = DirectionEnum.Down;
-                    return ProcessActionStateDataHandler(TownManager.Inn.ID, "Inn_Floor", out targetPosition, out targetMapName);
+                    return ProcessActionStateDataHandler(TownManager.Inn.ID, "Destination", out targetPosition, out targetMapName);
                 case NPCActionState.Craft:
                     dir = DirectionEnum.Up;
                     if (ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_CRAFT, out targetPosition, out targetMapName))
@@ -561,22 +560,18 @@ namespace RiverHollow.Characters
                     }
                     else { goto case NPCActionState.Home; }
                 case NPCActionState.Shop:
-                    dir = DirectionEnum.Down;
                     if (ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_SHOP, out targetPosition, out targetMapName))
                     {
                         return true;
                     }
                     else { goto case NPCActionState.Home; }
                 case NPCActionState.Market:
-                    dir = DirectionEnum.Down;
-                    dir = DirectionEnum.Down;
                     if (TownManager.Merchant != null)
                     {
                         return ProcessActionStateDataHandler(TownManager.Market, out targetPosition, out targetMapName);
                     }
                     else { goto case NPCActionState.Home; }
                 case NPCActionState.Visit:
-                    dir = DirectionEnum.Down;
                     var friend = GetRandomFriend(x => true);
                     if (friend != null)
                     {
@@ -584,11 +579,11 @@ namespace RiverHollow.Characters
                     }
                     else { goto case NPCActionState.Home; }
                 case NPCActionState.Home:
-                    dir = DirectionEnum.Down;
                     return ProcessActionStateDataHandler(HouseID, SpawnID, out targetPosition, out targetMapName);
+                case NPCActionState.PetCafe:
+                    return ProcessActionStateDataHandler(TownManager.PetCafe.ID, "Destination", out targetPosition, out targetMapName);
             }
 
-            dir = DirectionEnum.None;
             targetPosition = Point.Zero;
             targetMapName = string.Empty;
 
@@ -743,7 +738,7 @@ namespace RiverHollow.Characters
 
         private bool EmojiStateSocial()
         {
-            var validStates = new List<NPCActionState>() { NPCActionState.Visit, NPCActionState.Market, NPCActionState.Inn };
+            var validStates = new List<NPCActionState>() { NPCActionState.Visit, NPCActionState.Market, NPCActionState.Inn, NPCActionState.PetCafe };
             return validStates.Contains(CurrentActionState);
         }
 
@@ -806,7 +801,7 @@ namespace RiverHollow.Characters
             }
 
             //Going Home at night
-            if(_liSchedule.Count == 1 && _liSchedule[0].Value == NPCActionState.Home)
+            if (_liSchedule.Count == 1 && _liSchedule[0].Value == NPCActionState.Home)
             {
                 if (EmojiActionAboutToEnd(Constants.EMOJI_SLEEPY_DEFAULT_RATE))
                 {
@@ -817,7 +812,7 @@ namespace RiverHollow.Characters
 
         private bool EmojiActionAboutToEnd(int percentRate)
         {
-            return Util.MinutesLeft(GameCalendar.GetTime(), _liSchedule[0].Key, 1) && RHRandom.RollPercent(percentRate);
+            return _liSchedule.Count > 0 && Util.MinutesLeft(GameCalendar.GetTime(), _liSchedule[0].Key, 1) && RHRandom.RollPercent(percentRate);
         }
 
         public bool CheckTaskLog(ref TextEntry taskEntry)

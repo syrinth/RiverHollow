@@ -62,7 +62,7 @@ I'll see you back at the $WorldObject_28$.]</Value>
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Name:Task_16_Start][Text:Not quite what I'd call a town, but it's a lovely start. Could I bother you to build a little something for me? Once that's done, I can get to work.][UnlockObjectID:22]</Value>
+      <Value>[Name:Task_19_Start][Text:Not quite what I'd call a town, but it's a lovely start. Could I bother you to build a little something for me? Once that's done, I can get to work.][UnlockObjectID:12]</Value>
     </Item>
   </Asset>
 </XnaContent>

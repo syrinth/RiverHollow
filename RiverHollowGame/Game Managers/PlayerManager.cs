@@ -93,8 +93,7 @@ namespace RiverHollow.Game_Managers
 
         public static bool ReadyToSleep = false;
 
-        private static List<Pet> _liPets;
-        public static int PetCount => _liPets.Count;
+        public static List<Pet> Pets { get; private set; }
 
         private static List<Mount> _liMounts;
 
@@ -157,7 +156,7 @@ namespace RiverHollow.Game_Managers
             _liCrafting = new List<int>();
 
             Children = new List<Child>();
-            _liPets = new List<Pet>();
+            Pets = new List<Pet>();
             _liMounts = new List<Mount>();
 
             _liUniqueItemsBought = new List<int>();
@@ -544,11 +543,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            foreach (Pet p in _liPets)
-            {
-                if (PlayerActor.ActivePet == p) { p.SpawnNearPlayer(); }
-                else { p.SpawnInHome(); }
-            }
+            PlayerActor.ActivePet?.SpawnNearPlayer();
 
             foreach(Child c in Children) { c.Rollover(); }
 
@@ -830,7 +825,11 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         public static void AddChild(Child actor) { Children.Add(actor); }
-        public static void AddPet(Pet actor) { _liPets.Add(actor); }
+        public static void AddPet(Pet actor) {
+            if (!Pets.Any(x => x.ID == actor.ID)){
+                Pets.Add(actor);
+            }
+        }
         public static void AddMount(Mount actor) { _liMounts.Add(actor); }
         public static void SpawnMounts()
         {
@@ -875,7 +874,7 @@ namespace RiverHollow.Game_Managers
             }
 
             data.activePet = PlayerManager.PlayerActor.ActivePet == null ? -1 : PlayerManager.PlayerActor.ActivePet.ID;
-            foreach (Pet p in _liPets)
+            foreach (Pet p in Pets)
             {
                 data.liPets.Add(p.ID);
             }
@@ -950,7 +949,6 @@ namespace RiverHollow.Game_Managers
                     p.SpawnNearPlayer();
                     PlayerActor.SetPet(p);
                 }
-                else { p.SpawnInHome(); }
                 AddPet(p);
             }
 

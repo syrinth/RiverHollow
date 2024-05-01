@@ -78,6 +78,10 @@
       <Value>[Name:Lumber Time]</Value>
     </Item>
     <Item>
+      <Key>Task_19</Key>
+      <Value>[Name:Pet Time]</Value>
+    </Item>
+    <Item>
       <Key>Actor_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
@@ -341,6 +345,14 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Actor_65</Key>
       <Value>[Name:Traveling Mage]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_66</Key>
+      <Value>[Name:Wisp]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_67</Key>
+      <Value>[Name:Spitter]</Value>
     </Item>
     <Item>
       <Key>StatusEffect_0</Key>
@@ -1485,6 +1497,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Item_235</Key>
       <Value>[Name:Small Pouch]</Value>
+    </Item>
+    <Item>
+      <Key>Item_236</Key>
+      <Value>[Name:WispPet]</Value>
     </Item>
     <Item>
       <Key>WorldObject_0</Key>

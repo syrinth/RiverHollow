@@ -63,16 +63,16 @@ namespace RiverHollow.GUIComponents.Screens
 
         private class SaveWindow : GUIWindow
         {
-            GUIButton _gDelete;
-            GUIText _gName;
-            GUIText _gTimeStamp;
-            GUIText _gDate;
+            readonly GUIButton _gDelete;
+            readonly GUIText _gName;
+            readonly GUIText _gTimeStamp;
+            readonly GUIText _gDate;
             public SaveInfoData Data { get; }
 
             public delegate void ReloadScreenDelegate();
             private ReloadScreenDelegate _delAction;
 
-            int _iId;
+            readonly int _iId;
             public int SaveID => _iId;
 
             public SaveWindow(SaveInfoData data, int id, ReloadScreenDelegate del)

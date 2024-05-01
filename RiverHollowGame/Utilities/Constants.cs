@@ -115,6 +115,7 @@ namespace RiverHollow.Utilities
         public const string VILLAGER_HOME_DEFAULT = "22:00";
         public const string VILLAGER_MARKET_DEFAULT = "Skip";
         public const string VILLAGER_VISIT_DEFAULT = "Skip";
+        public const string VILLAGER_PETCAFE_DEFAULT = "Skip";
 
         public const string TRAVELER_SHOP_DEFAULT = "09:00";
         public const string TRAVELER_INN_DEFAULT = "12:00";
@@ -165,5 +166,6 @@ namespace RiverHollow.Utilities
         public const string STR_ALERT_FINISHED = "Alert_Finished";
         public const string STR_ALERT_ENERGY = "Alert_Energy";
         public const string STR_ALERT_CODEX = "Codex_Unlocked";
+        public const string STR_ALERT_PET_CAFE = "Alert_Needs_Pet_Cafe";
     }
 }
