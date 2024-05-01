@@ -586,7 +586,7 @@ namespace RiverHollow.Misc
                     }
                     else
                     {
-                        rv = string.Format("Speak to {0}", goalNPC.Name());
+                        rv = string.Format("Speak to {0}", goalNPC.Name);
                     }
                 }
             }
@@ -647,7 +647,7 @@ namespace RiverHollow.Misc
                         }
                         break;
                     case TaskTypeEnum.Talk:
-                        rv = "Speak to " + goalNPC.Name();
+                        rv = "Speak to " + goalNPC.Name;
                         break;
                 }
             }

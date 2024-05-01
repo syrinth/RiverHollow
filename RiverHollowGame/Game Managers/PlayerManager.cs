@@ -637,7 +637,7 @@ namespace RiverHollow.Game_Managers
                 _timer = null;
 
                 //Safety for if we hit a map change while holding a tile
-                if (GrabbedObject?.Tiles.Count == 0) { GrabbedObject.PlaceOnMap(MoveObjectToPosition, GrabbedObject.CurrentMap, true); }
+                if (GrabbedObject?.Tiles().Count == 0) { GrabbedObject.PlaceOnMap(MoveObjectToPosition, GrabbedObject.CurrentMap, true); }
 
                 GrabbedObject = null;
                 PlayerActor.SetState(ActorStateEnum.Walk);

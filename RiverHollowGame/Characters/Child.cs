@@ -81,7 +81,7 @@ namespace RiverHollow.Characters
 
         public override void ProcessRightButtonClick()
         {
-            GUIManager.OpenTextWindow(_bFollow ? "PetUnfollow" : "PetFollow", Name(), this, true);
+            GUIManager.OpenTextWindow(_bFollow ? "PetUnfollow" : "PetFollow", Name, this, true);
         }
 
         public void SpawnInHome()

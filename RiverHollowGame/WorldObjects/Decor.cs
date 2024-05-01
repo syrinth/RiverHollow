@@ -215,7 +215,7 @@ namespace RiverHollow.WorldObjects
                 }
 
                 //Updates the sprite info
-                Sprite = new AnimatedSprite(DataManager.FILE_WORLDOBJECTS);
+                Sprite = new AnimatedSprite(DataManager.FILE_DECOR);
                 Sprite.AddAnimation(AnimationEnum.ObjectIdle, newImage.X, newImage.Y, _pSize);
 
                 if (RotationType == RotationalEnum.FourWay && Facing == DirectionEnum.Left)

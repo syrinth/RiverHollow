@@ -28,7 +28,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
             _gVillagerWindow = new GUIWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
 
-            GUIText text = new GUIText(_npc.Name());
+            GUIText text = new GUIText(_npc.Name);
             text.AnchorToInnerSide(_gVillagerWindow, SideEnum.Top, 1);
 
             GUIImage img = new GUIImage(GUIUtils.HUD_SCROLL_S);

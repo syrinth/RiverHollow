@@ -20,7 +20,7 @@ namespace RiverHollow.WorldObjects
             float value = base.GetTownScore();
             float rv = value;
 
-            var t = Tiles[0];
+            var t = FirstTile();
             var adj = t.GetAdjacentTiles();
             var count = adj.Where(x => x.WorldObject != null && x.WorldObject.ID == ID).Count();
 

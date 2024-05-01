@@ -5,11 +5,11 @@ using RiverHollow.Characters;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
+using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
-using static RiverHollow.GUIComponents.Screens.HUDComponents.HUDMenu;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
@@ -45,6 +45,8 @@ namespace RiverHollow.Game_Managers
         public static Building CurrentBuilding { get; set; }
 
         public static ShopItem CurrentMerchandise => MapManager.CurrentMap.TheShop.SelectedMerchandise;
+
+        public static List<RHTile> TestTiles;
         #endregion
 
         #region Game State Values
@@ -65,6 +67,7 @@ namespace RiverHollow.Game_Managers
         {
             _liSpirits = new List<Spirit>();
             _liTriggerObjects = new List<TriggerObject>();
+            TestTiles = new List<RHTile>();
             GameManager.HUDItemCol = 0;
         }
 

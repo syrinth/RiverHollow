@@ -89,7 +89,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
             _btnBuild.Enable(sufficientItems && obj.CanBuild() && MapManager.CurrentMap == MapManager.TownMap);
             _gStructure.Alpha(sufficientItems ? 1 : 0.3f);
 
-            _gName = new GUIText(obj.Name());
+            _gName = new GUIText(obj.Name);
             _gName.SetColor(sufficientItems ? Color.Black : Color.Red);
             _gName.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 4);
 

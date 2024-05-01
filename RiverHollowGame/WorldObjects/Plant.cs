@@ -193,7 +193,7 @@ namespace RiverHollow.WorldObjects
                 var spreadParams = Util.FindIntParams(GetStringByIDKey("Spread"));
                 if (RHRandom.RollPercent(spreadParams[0]))
                 {
-                    var targetTile = Util.GetRandomItem(CurrentMap.GetAllTilesInRange(Tiles[0], spreadParams[1]));
+                    var targetTile = Util.GetRandomItem(CurrentMap.GetAllTilesInRange(FirstTile(), spreadParams[1]));
                     if (targetTile != null && targetTile.WorldObject == null && targetTile.Flooring == null)
                     {
                         DataManager.CreateAndPlaceNewWorldObject(ID, targetTile.Position, CurrentMap);
@@ -256,10 +256,22 @@ namespace RiverHollow.WorldObjects
                 if (GetBoolByIDKey("Hp")) { HP = int.Parse(GetStringParamsByIDKey("Hp")[CurrentState]); }
                 else { HP = 1; }
 
+                Point initBase = _rBase.Location;
                 _bWalkable = GetStringParamsByIDKey("Walkable", "0")[CurrentState] == "T";
                 _bDrawUnder = GetStringParamsByIDKey("DrawUnder", "0")[CurrentState] == "T";
                 _pSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[CurrentState]);
                 _rBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[CurrentState]);
+
+                var deltaBase = _rBase.Location - initBase;
+                if (deltaBase.Y > 0)
+                {
+                    MapPosition = new Point(MapPosition.X, MapPosition.Y - (deltaBase.Y * Constants.TILE_SIZE));
+                }
+                if (deltaBase.X > 0)
+                {
+                    MapPosition = new Point(MapPosition.X - (deltaBase.X * Constants.TILE_SIZE), MapPosition.Y);
+                }
+
                 if (GetBoolByIDKey("BaseOffset"))
                 {
                     _pSpriteOffset = Util.ParsePoint(GetStringParamsByIDKey("BaseOffset")[CurrentState]);
@@ -268,9 +280,10 @@ namespace RiverHollow.WorldObjects
                 if (CurrentState < MaxStates - 1) { _iDaysToNextState = int.Parse(GetStringParamsByIDKey("Time", "F")[CurrentState]); }
                 else { _iDaysToNextState = -1; }
 
-                if (Tiles != null && Tiles.Count > 0)
+                var tiles = Tiles();
+                if (tiles.Count > 0 && CurrentMap != null)
                 {
-                    var tile = Tiles[0];
+                    var tile = FirstTile();
                     RemoveSelfFromTiles();
                     PlaceOnMap(tile.Position, CurrentMap);
                 }

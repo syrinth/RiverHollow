@@ -67,7 +67,6 @@ namespace RiverHollow.Map_Handling
         public Dictionary<string, List<TiledMapTileLayer>> Layers => _diTileLayers;
 
         private List<Light> _liLights;
-        private List<RHTile> _liTestTiles;
         private List<Actor> _liActors;
         public IList<Actor> Actors { get { return _liActors.AsReadOnly(); } }
         protected List<Mob> _liMobs;
@@ -99,7 +98,6 @@ namespace RiverHollow.Map_Handling
             _liResourceSpawns = new List<ResourceSpawn>();
             _liMobSpawns = new List<MobSpawn>();
             _liSpecialTiles = new List<RHTile>();
-            _liTestTiles = new List<RHTile>();
             _liTilesets = new List<TiledMapTileset>();
             _liActors = new List<Actor>();
             _liMobs = new List<Mob>();
@@ -370,7 +368,7 @@ namespace RiverHollow.Map_Handling
 
             if (HeldObject != null && (!GameManager.GamePaused() || Scrying()))
             {
-                foreach (RHTile t in _liTestTiles)
+                foreach (RHTile t in TestTiles)
                 {
                     bool passable = CanPlaceObject(t, HeldObject);
                     if (!passable || (passable && !HeldObject.BuildableType(BuildableEnum.Wallpaper)))
@@ -741,7 +739,7 @@ namespace RiverHollow.Map_Handling
                     }
                 } while (!placed);
 
-                foreach (RHTile t in obj.Tiles)
+                foreach (RHTile t in obj.Tiles())
                 {
                     possibleTiles.Remove(t);
                 }
@@ -1704,7 +1702,7 @@ namespace RiverHollow.Map_Handling
                                 PlayerManager.SetTool(PlayerManager.RetrieveTool(ToolEnum.WateringCan));
                                 rv = true;
                             }
-                            else if (obj != null && obj.Tiles.Any(x => PlayerManager.InRangeOfPlayer(x.CollisionBox)))
+                            else if (obj != null && obj.Tiles().Any(x => PlayerManager.InRangeOfPlayer(x.CollisionBox)))
                             {
                                 rv = obj.ProcessLeftClick();
                             }
@@ -1847,7 +1845,7 @@ namespace RiverHollow.Map_Handling
                 return rv;
             }
 
-            if (_liTestTiles.Count > 0) { _liTestTiles.Clear(); }
+            GameManager.TestTiles.Clear();
 
             _objSelectedObject?.SelectObject(false);
             _objSelectedObject = null;
@@ -1863,8 +1861,8 @@ namespace RiverHollow.Map_Handling
 
             if (GameManager.HeldObject != null)
             {
-                _liTestTiles = new List<RHTile>();
-                TestMapTiles(GameManager.HeldObject, _liTestTiles);
+                GameManager.TestTiles.Clear();
+                TestMapTiles(GameManager.HeldObject, GameManager.TestTiles);
             }
             else
             {
@@ -1989,7 +1987,7 @@ namespace RiverHollow.Map_Handling
                     {
                         SoundManager.PlayEffect(SoundEffectEnum.Thump);
                     }
-                    else if (InputManager.ButtonHeld)
+                    else
                     {
                         SoundManager.PlayEffect(SoundEffectEnum.Cancel);
                     }
@@ -2435,13 +2433,12 @@ namespace RiverHollow.Map_Handling
         /// <param name="tiles">The list of tiles to add to the object</param>
         public void AssignMapTiles(WorldObject obj, List<RHTile> tiles)
         {
-            tiles.FindAll(t => !obj.Tiles.Contains(t)).ForEach(t => obj.Tiles.Add(t));
-
             AddToWorldObjects(obj);
 
             //Sets the WorldObject to each RHTile
             tiles.ForEach(x => x.SetObject(obj));
 
+            var tileList = obj.Tiles();
             //Iterate over the WorldObject image in Constants.TILE_SIZE increments to discover any tiles
             //that the image overlaps. Add those tiles as Shadow Tiles as long as they're not
             //actual Tiles the object sits on. Also add the Tiles to the objects Shadow Tiles list
@@ -2450,10 +2447,9 @@ namespace RiverHollow.Map_Handling
                 for (int j = obj.MapPosition.Y; j < obj.MapPosition.Y + obj.Height; j += Constants.TILE_SIZE)
                 {
                     RHTile t = GetTileByGridCoords(Util.GetGridCoords(i, j));
-                    if (t != null && !obj.Tiles.Contains(t))
+                    if (t != null && !tileList.Contains(t))
                     {
                         t.SetShadowObject(obj);
-                        obj.AddTile(t);
                     }
                 }
             }
@@ -2662,7 +2658,7 @@ namespace RiverHollow.Map_Handling
                 for (int x = obj.Left; x < obj.Left + obj.Width; x += Constants.TILE_SIZE)
                 {
                     RHTile tile = GetTileByPixelPosition(new Point(x, y));
-                    if (!rvList.Contains(tile))
+                    if (tile != null && !rvList.Contains(tile))
                     {
                         rvList.Add(tile);
                     }

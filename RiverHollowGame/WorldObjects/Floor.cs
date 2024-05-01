@@ -77,22 +77,23 @@ namespace RiverHollow.WorldObjects
 
         public override bool PlayerCanEdit()
         {
-            return Tiles[0].WorldObject == null;
+            return FirstTile().WorldObject == null;
         }
 
         public override void Rollover()
         {
             base.Rollover();
 
-            if (HasBeenWatered && Tiles[0].WorldObject != null && Tiles[0].WorldObject.CompareType(ObjectTypeEnum.Plant))
+            var firstTile = FirstTile();
+            if (HasBeenWatered && firstTile.WorldObject != null && firstTile.WorldObject.CompareType(ObjectTypeEnum.Plant))
             {
-                (Tiles[0].WorldObject as Plant).Grow();
+                (firstTile.WorldObject as Plant).Grow();
             }
 
             if (EnvironmentManager.IsRaining() && CurrentMap.IsOutside) { SetWatered(true); }
             else { SetWatered(false); }
 
-            if (Tiles[0].WorldObject == null)
+            if (firstTile.WorldObject == null)
             {
                 if (RHRandom.RollPercent(10))
                 {
@@ -107,7 +108,7 @@ namespace RiverHollow.WorldObjects
 
             if (rv)
             {
-                CurrentMap.AddSpecialTile(Tiles[0]);
+                CurrentMap.AddSpecialTile(FirstTile());
                 if (EnvironmentManager.IsRaining() && CurrentMap.IsOutside)
                 {
                     SetWatered(true);

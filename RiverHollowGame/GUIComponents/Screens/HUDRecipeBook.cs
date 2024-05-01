@@ -45,7 +45,7 @@ namespace RiverHollow.GUIComponents.Screens
             AddControl(_winMain);
 
             //Add Machine Name
-            var machineName = new GUIText(_objMachine.Name());
+            var machineName = new GUIText(_objMachine.Name);
             machineName.Position(_winMain);
             machineName.AlignToObject(_winMain, SideEnum.CenterX);
             machineName.MoveBy(0, (GUIUtils.WINDOW_WOODEN_TITLE.ScaledTopEdge - machineName.Height) / 2);

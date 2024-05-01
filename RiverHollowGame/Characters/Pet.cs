@@ -37,7 +37,7 @@ namespace RiverHollow.Characters
         {
             if (TownManager.PetCafe != null && CurrentMap == TownManager.PetCafe.InnerMap)
             {
-                TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "PetUnfollow" : "PetFollow", Name());
+                TextEntry text = DataManager.GetGameTextEntry(_bFollow ? "PetUnfollow" : "PetFollow", Name);
                 GUIManager.OpenTextWindow(text, this, true);
             }
         }

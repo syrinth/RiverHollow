@@ -132,7 +132,7 @@ namespace RiverHollow.WorldObjects
                     RHTile targetTile = GetSubObjectTile(info);
                     if (targetTile.WorldObject != null)
                     {
-                        foreach (var tile in targetTile.WorldObject.Tiles)
+                        foreach (var tile in targetTile.WorldObject.Tiles())
                         {
                             if (PlayerManager.InRangeOfPlayer(tile.CollisionBox))
                             {

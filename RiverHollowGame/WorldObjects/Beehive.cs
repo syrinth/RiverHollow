@@ -46,19 +46,20 @@ namespace RiverHollow.WorldObjects
         {
             if (_iDaysToHoney == 0 && !_bReady)
             {
-                RHTile closestPlantTile = Tiles[0];
-                foreach (RHTile t in MapManager.Maps[Tiles[0].MapName].GetAllTilesInRange(Tiles[0], 7))
+                var firstTile = FirstTile();
+                RHTile closestPlantTile = firstTile;
+                foreach (RHTile t in MapManager.Maps[firstTile.MapName].GetAllTilesInRange(firstTile, 7))
                 {
                     if (t.WorldObject != null && t.WorldObject is Plant plantObj)
                     {
-                        if (plantObj.HoneyID != -1 && plantObj.FinishedGrowing() && (closestPlantTile == Tiles[0] || Util.GetRHTileDelta(Tiles[0], t) < Util.GetRHTileDelta(Tiles[0], closestPlantTile)))
+                        if (plantObj.HoneyID != -1 && plantObj.FinishedGrowing() && (closestPlantTile == firstTile || Util.GetRHTileDelta(firstTile, t) < Util.GetRHTileDelta(firstTile, closestPlantTile)))
                         {
                             closestPlantTile = t;
                         }
                     }
                 }
 
-                if (closestPlantTile == Tiles[0]) { _iHoneyToGather = _iItemID; }
+                if (closestPlantTile == firstTile) { _iHoneyToGather = _iItemID; }
                 else { _iHoneyToGather = ((Plant)closestPlantTile.WorldObject).HoneyID; }
 
                 _bReady = true;

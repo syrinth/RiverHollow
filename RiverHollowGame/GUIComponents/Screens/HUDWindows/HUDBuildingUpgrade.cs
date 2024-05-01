@@ -41,7 +41,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             var levelTab = new GUIImage(GUIUtils.LEVEL_TAB);
             levelTab.PositionAndMove(_winMain, new Point(59, 16));
 
-            GUIText name = new GUIText(_building.Name());
+            GUIText name = new GUIText(_building.Name);
             name.AnchorToObjectInnerSide(_winMain, SideEnum.Top, GameManager.ScaledPixel * 3);
             _winMain.AddControl(name);
 

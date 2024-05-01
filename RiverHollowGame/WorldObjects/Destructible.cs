@@ -80,7 +80,7 @@ namespace RiverHollow.WorldObjects
             {
                 if (_spriteKO == null || _spriteKO.AnimationFinished(AnimationEnum.KO))
                 {
-                    MapManager.Maps[Tiles[0].MapName].RemoveWorldObject(this);
+                    MapManager.Maps[FirstTile().MapName].RemoveWorldObject(this);
                 }
             }
         }

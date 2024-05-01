@@ -138,7 +138,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 Buildable building = (Buildable)DataManager.CreateWorldObjectByID(objID);
                 GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, building.RequiredToMake);
 
-                _gName.SetText(building.Name());
+                _gName.SetText(building.Name);
                 _gName.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 4);
 
                 GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), base._winMain, _gScroll, 2, 22);

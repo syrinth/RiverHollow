@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents;
-using RiverHollow.Misc;
 
 namespace RiverHollow.WorldObjects
 {
@@ -20,10 +19,6 @@ namespace RiverHollow.WorldObjects
         public ObjectTypeEnum Type => _eObjectType;
 
         public AnimatedSprite Sprite { get; protected set; }
-
-        public List<RHTile> Tiles;
-
-        protected bool AssignedToTiles => Tiles.Count > 0;
 
         public string MapName { get; protected set; } = string.Empty;
         public RHMap CurrentMap => MapManager.Maps.ContainsKey(MapName) ? MapManager.Maps[MapName] : null;
@@ -39,7 +34,7 @@ namespace RiverHollow.WorldObjects
         protected Point _pImagePos;
         public Point PickupOffset { get; private set; }
 
-        public Point MapPosition { get; protected set; }
+        public Point MapPosition { get; protected set; } = new Point(-1, -1);
 
         protected Point _pSize;
         public int Width => _pSize.X * Constants.TILE_SIZE;
@@ -65,13 +60,18 @@ namespace RiverHollow.WorldObjects
         public int ID { get; protected set; }
         #endregion
 
-        public virtual string Name()
+        public virtual string Name => GetTextData("Name");
+
+        public virtual string Description => GetTextData("Description");
+
+        public List<RHTile> Tiles()
         {
-            return GetTextData("Name");
+            return MapManager.CurrentMap.GetTilesFromRectangleExcludeEdgePoints(CollisionBox);
         }
-        public virtual string Description()
+
+        public RHTile FirstTile()
         {
-            return GetTextData("Description");
+            return MapManager.CurrentMap.GetTileByPixelPosition(CollisionPosition);
         }
 
         public bool Reset { get; protected set; } = false;
@@ -85,8 +85,6 @@ namespace RiverHollow.WorldObjects
 
         public WorldObject(int id)
         {
-            Tiles = new List<RHTile>();
-
             ID = id;
 
             string[] split = GetStringParamsByIDKey("Image");
@@ -272,7 +270,7 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = false;
 
-            foreach (var tile in Tiles)
+            foreach (var tile in Tiles())
             {
                 if (PlayerManager.InRangeOfPlayer(tile.CollisionBox))
                 {
@@ -346,28 +344,17 @@ namespace RiverHollow.WorldObjects
         }
 
         /// <summary>
-        /// If the given RHTile is not present in the list of Tiles, add it
-        /// </summary>
-        /// <param name="t">The Tile to add to the list of known RHTiles</param>
-        public void AddTile(RHTile t)
-        {
-            Util.AddUniquelyToList(ref Tiles, t);
-        }
-
-        /// <summary>
         /// Removes the object from the Tiles this Object sits upon
         /// then clears the Tile list that belongs to the WorldObject
         /// </summary>
         public virtual void RemoveSelfFromTiles()
         {
-            foreach (RHTile t in Tiles)
+            foreach (RHTile t in Tiles())
             {
                 if (t.Flooring == this) { t.RemoveFlooring(); }
                 if (t.WorldObject == this) { t.RemoveWorldObject(); }
                 if (t.ShadowObject == this) { t.RemoveShadowObject(); }
             }
-
-            Tiles.Clear();
         }
 
         /// <summary>

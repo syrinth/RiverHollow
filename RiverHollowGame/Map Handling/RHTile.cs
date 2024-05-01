@@ -199,7 +199,10 @@ namespace RiverHollow.Map_Handling
         }
         public void SetShadowObject(WorldObject o)
         {
-            ShadowObject = o;
+            if (ShadowObject == null || ShadowObject.Sprite.LayerDepth < o.Sprite.LayerDepth)
+            {
+                ShadowObject = o;
+            }
         }
         public WorldObject GetFloorObject()
         {

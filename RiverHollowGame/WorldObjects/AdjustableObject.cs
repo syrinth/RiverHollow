@@ -80,9 +80,10 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override void RemoveSelfFromTiles()
         {
-            if (Tiles.Count > 0)
+            var tiles = Tiles();
+            if (tiles.Count > 0)
             {
-                RHTile startTile = Tiles[0];
+                RHTile startTile = tiles[0];
                 base.RemoveSelfFromTiles();
                 AdjustmentHelper(startTile);
                 Sprite.PlayAnimation("None");
@@ -94,7 +95,7 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public void AdjustObject()
         {
-            AdjustmentHelper(Tiles[0]);
+            AdjustmentHelper(FirstTile());
         }
 
         /// <summary>

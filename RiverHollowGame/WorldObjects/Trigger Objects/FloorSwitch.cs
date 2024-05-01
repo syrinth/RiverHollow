@@ -71,7 +71,7 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
                 }
                 else
                 {
-                    _trackedObject = Tiles[0].WorldObject;
+                    _trackedObject = FirstTile().WorldObject;
                 }
             }
             else if (!CollisionBox.Contains(_trackedObject.CollisionCenter)) { _trackedObject = null; }

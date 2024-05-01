@@ -116,7 +116,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
                 Buildable building = (Buildable)DataManager.CreateWorldObjectByID(objID);
                 bool sufficientItems = GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, building.RequiredToMake);
 
-                _gName.SetText(building.Name());
+                _gName.SetText(building.Name);
                 _gName.SetColor(sufficientItems ? Color.Black : Color.Red);
                 _gName.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 4);
 

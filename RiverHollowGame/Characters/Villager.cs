@@ -599,7 +599,7 @@ namespace RiverHollow.Characters
             {
                 RHTile nextTile = _liTilePath.Count > 0 ? _liTilePath[0] : null;
                 Point startPosition = nextTile != null ? nextTile.Position : CollisionBoxLocation;
-                List<RHTile> timePath = TravelManager.FindRouteToPositionOnMap(targetPosition, targetMapName, CurrentMapName, startPosition, Name());
+                List<RHTile> timePath = TravelManager.FindRouteToPositionOnMap(targetPosition, targetMapName, CurrentMapName, startPosition, Name);
 
                 string animation = string.Empty;
                 _currentPathData = new PathData(timePath, dir, animation);
