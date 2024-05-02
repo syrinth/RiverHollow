@@ -66,12 +66,26 @@ namespace RiverHollow.WorldObjects
 
         public List<RHTile> Tiles()
         {
-            return MapManager.CurrentMap.GetTilesFromRectangleExcludeEdgePoints(CollisionBox);
+            if (CurrentMap == null)
+            {
+                return new List<RHTile>();
+            }
+            else
+            {
+                return CurrentMap.GetTilesFromRectangleExcludeEdgePoints(CollisionBox);
+            }
         }
 
         public RHTile FirstTile()
         {
-            return MapManager.CurrentMap.GetTileByPixelPosition(CollisionPosition);
+            if (CurrentMap == null)
+            {
+                return null;
+            }
+            else
+            {
+                return CurrentMap.GetTileByPixelPosition(CollisionPosition);
+            }
         }
 
         public bool Reset { get; protected set; } = false;
@@ -318,12 +332,13 @@ namespace RiverHollow.WorldObjects
 
         public virtual bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
+            MapName = map.Name;
             pos = new Point(pos.X - (_rBase.X * Constants.TILE_SIZE), pos.Y - (_rBase.Y * Constants.TILE_SIZE));
             SnapPositionToGrid(pos);
             bool rv = map.PlaceWorldObject(this, ignoreActors);
-            if (rv)
+            if (!rv)
             {
-                MapName = map.Name;
+                MapName = string.Empty;
             }
 
             return rv;
