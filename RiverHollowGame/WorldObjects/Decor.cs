@@ -164,7 +164,7 @@ namespace RiverHollow.WorldObjects
                 Point crawl = new Point(spriteFrameRectangle.Width, 0);
                 if (Facing == DirectionEnum.Up)
                 {
-                    crawl = Util.MultiplyPoint(crawl, -1);
+                    crawl = new Point(_rBase.Width * Constants.TILE_SIZE * -1, 0);
                 }
 
                 Point newImage = spriteFrameRectangle.Location + crawl;
