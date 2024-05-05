@@ -57,6 +57,9 @@ namespace RiverHollow
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            LogManager.Initialize();
+
             GameManager.Initialize();
             DungeonManager.Instantiate();
             InputManager.Load();
@@ -103,6 +106,7 @@ namespace RiverHollow
             {
                 if (_bExit)
                 {
+                    LogManager.CloseLogFile();
                     Exit();
                 }
 

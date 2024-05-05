@@ -694,7 +694,7 @@ namespace RiverHollow.Characters
             targetPosition = Point.Zero;
             if (HasTrait(ActorTraitsEnum.Anxious) || (RHRandom.RollPercent(Constants.WALK_TO_FRIEND_PERCENT) && _emoji?.Emoji != ActorEmojiEnum.Dots))
             {
-                var chosenFriend = GetRandomFriend(x => x.GetOccupantTile().MapName.Equals(targetMapName));
+                var chosenFriend = GetRandomFriend(x => x.GetOccupantTile() != null && x.GetOccupantTile().MapName.Equals(targetMapName));
                 if (chosenFriend != null && chosenFriend.CurrentActionState == currentAction)
                 {
                     var tile = chosenFriend.GetOccupantTile();

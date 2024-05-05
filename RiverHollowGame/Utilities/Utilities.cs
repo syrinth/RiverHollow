@@ -641,7 +641,7 @@ namespace RiverHollow.Utilities
             }
             else
             {
-                ErrorManager.TrackError();
+                LogManager.WriteToLog("Dictionary does not contain [{0}]", key.ToString());
             }
 
             return rv;

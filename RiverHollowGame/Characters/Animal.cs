@@ -37,7 +37,7 @@ namespace RiverHollow.Characters
                 RHMap map = MapManager.Maps[TownManager.GetBuildingByID(HouseID).InnerMapName];
                 if(!new WrappedItem(ItemID).PlaceOnMap(map.GetRandomPosition(), map))
                 {
-                    ErrorManager.TrackError();
+                    LogManager.WriteToLog("Could not place item ID {0} on map {1}", ItemID, map);
                 }
             }
         }

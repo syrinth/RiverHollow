@@ -325,7 +325,7 @@ namespace RiverHollow.Game_Managers
                         }
                         else
                         {
-                            ErrorManager.TrackError();
+                            LogManager.WriteToLog("Route Error");
                         }
                     }
 

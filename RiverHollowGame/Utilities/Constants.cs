@@ -13,6 +13,8 @@ namespace RiverHollow.Utilities
 #else
         public const bool DRAW_ADJACENCY = false;
 #endif
+        public const bool WRITE_TO_ERROR_LOG = true;
+
         public const int PLAYER_ADJACENCY_SIZE = TILE_SIZE / 2;
         public const int GRAB_REACH = 1;
         public const float MOUSE_PRESS_INTERVAL = 0.4f;
@@ -167,5 +169,9 @@ namespace RiverHollow.Utilities
         public const string STR_ALERT_ENERGY = "Alert_Energy";
         public const string STR_ALERT_CODEX = "Codex_Unlocked";
         public const string STR_ALERT_PET_CAFE = "Alert_Needs_Pet_Cafe";
+
+        public const string INFO_FILE_NAME = "SaveInfo";
+        public const string RIVER_HOLLOW_LOG = "Logs";
+        public const string RIVER_HOLLOW_SAVES = "Save Games";
     }
 }

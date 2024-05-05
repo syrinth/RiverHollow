@@ -73,7 +73,7 @@ namespace RiverHollow.SpriteAnimations
 
             if(_texture == null)
             {
-                ErrorManager.TrackError();
+                LogManager.WriteToLog("Texture {0} is null", Texture);
             }
         }
 
@@ -285,7 +285,7 @@ namespace RiverHollow.SpriteAnimations
                     }
                     else
                     {
-                        ErrorManager.TrackError();
+                        LogManager.WriteToLog("Texture is null at: {0}", Environment.StackTrace);
                     }
                 }
             }
@@ -327,7 +327,7 @@ namespace RiverHollow.SpriteAnimations
             }
             else
             {
-                ErrorManager.TrackError();
+                LogManager.WriteToLog("Texture is null at: {0}", Environment.StackTrace);
             }
         }
 

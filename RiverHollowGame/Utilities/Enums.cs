@@ -2,6 +2,7 @@
 {
     public static class Enums
     {
+        public enum LogEnum { Info, Warning, Error };
         public enum ButtonEnum { Left, Right, Middle };
         public enum DataType { Actor, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
         public enum BuildTypeEnum { Structure, WorldObject };

@@ -90,7 +90,7 @@
     <Compile Include="Characters\Mobs\Summoner.cs" />
     <Compile Include="Characters\Projectile.cs" />
     <Compile Include="Characters\Traveler.cs" />
-    <Compile Include="Game Managers\ErrorManager.cs" />
+    <Compile Include="Game Managers\LogManager.cs" />
     <Compile Include="Game Managers\FishingManager.cs" />
     <Compile Include="Game Managers\TownManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIToggle.cs" />

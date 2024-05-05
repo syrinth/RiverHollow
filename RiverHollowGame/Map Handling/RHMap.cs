@@ -665,7 +665,6 @@ namespace RiverHollow.Map_Handling
             {
                 if (!float.TryParse(_map.Properties["FillerPercent"], out float fillPercent)) 
                 {
-                    ErrorManager.TrackError();
                     return;
                 }
 
@@ -702,7 +701,6 @@ namespace RiverHollow.Map_Handling
                     {
                         if (!float.TryParse(_map.Properties["FillerRate"], out float fillerRate))
                         {
-                            ErrorManager.TrackError();
                             return;
                         }
 
@@ -734,7 +732,7 @@ namespace RiverHollow.Map_Handling
 
                     if (possibleTiles.Count <= 1)
                     {
-                        ErrorManager.TrackError();
+                        LogManager.WriteToLog("No possible tiles for object ID {0} on map {1}", obj.ID, Name);
                         return;
                     }
                 } while (!placed);
@@ -876,7 +874,7 @@ namespace RiverHollow.Map_Handling
                                 {
                                     if (!int.TryParse(tiledObj.Properties["Every"], out placeEvery))
                                     {
-                                        ErrorManager.TrackError();
+                                        LogManager.WriteToLog("Failed on Every");
                                     }
                                 }
 
@@ -895,7 +893,7 @@ namespace RiverHollow.Map_Handling
                                     }
                                     else
                                     {
-                                        ErrorManager.TrackError();
+                                        LogManager.WriteToLog("Could not place objID {0} at {1}", obj.ID, new Point(x, y));
                                     }
                                 }
                             }
@@ -2067,7 +2065,7 @@ namespace RiverHollow.Map_Handling
                 }
                 else if(dummyItem == null)
                 {
-                    ErrorManager.TrackError();
+                    LogManager.WriteToLog("Dummy item is NULL", LogEnum.Warning);
                 }
             }
         }

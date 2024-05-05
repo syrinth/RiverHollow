@@ -18,6 +18,7 @@ using RiverHollow.Characters.Mobs;
 using System.Linq;
 
 using static RiverHollow.Utilities.Enums;
+using System;
 
 namespace RiverHollow.Game_Managers
 {
@@ -890,13 +891,16 @@ namespace RiverHollow.Game_Managers
         {
             Texture2D rv = null;
 
-            if(_diTextures.ContainsKey(texture))
+            try
             {
-                rv = _diTextures[texture];
+                if (_diTextures.ContainsKey(texture))
+                {
+                    rv = _diTextures[texture];
+                }
             }
-            else
+            catch(Exception ex)
             {
-                ErrorManager.TrackError();
+                LogManager.LogException(ex);
             }
 
             return rv;

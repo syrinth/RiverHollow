@@ -2,6 +2,7 @@
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
+using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,8 +15,6 @@ namespace RiverHollow.Game_Managers
 {
     public class SaveManager
     {
-        static readonly string INFO_FILE_NAME = "SaveInfo";
-        public static string RIVER_HOLLOW_SAVES = "Save Games";
         static long _iSaveID = -1;
 
         private static bool _bSaving = false;
@@ -591,9 +590,9 @@ namespace RiverHollow.Game_Managers
             }
 
             string saveName = String.Format("{0}_{1}", PlayerManager.Name, _iSaveID);
-            string saveFolder = String.Format(@"{0}\{1}", RIVER_HOLLOW_SAVES, saveName);
+            string saveFolder = String.Format(@"{0}\{1}", Constants.RIVER_HOLLOW_SAVES, saveName);
 
-            if (!Directory.Exists(RIVER_HOLLOW_SAVES)) { Directory.CreateDirectory(RIVER_HOLLOW_SAVES); }
+            if (!Directory.Exists(Constants.RIVER_HOLLOW_SAVES)) { Directory.CreateDirectory(Constants.RIVER_HOLLOW_SAVES); }
             if (!Directory.Exists(saveFolder)) { Directory.CreateDirectory(saveFolder); }
             File.WriteAllText(String.Format(@"{0}\{1}", saveFolder, saveName), sb.ToString());
 
@@ -616,7 +615,7 @@ namespace RiverHollow.Game_Managers
                 serializer.Serialize(sr, infoData);
             }
 
-            File.WriteAllText(String.Format(@"{0}\{1}", saveFolder, INFO_FILE_NAME), sb.ToString());
+            File.WriteAllText(String.Format(@"{0}\{1}", saveFolder, Constants.INFO_FILE_NAME), sb.ToString());
         }
 
         public static OptionsData SaveOptions()
@@ -641,10 +640,10 @@ namespace RiverHollow.Game_Managers
         {
             List<SaveInfoData> games = new List<SaveInfoData>();
 
-            if (Directory.Exists(Environment.CurrentDirectory + "\\" + RIVER_HOLLOW_SAVES)) {
-                foreach (string dir in Directory.GetDirectories(Environment.CurrentDirectory + "\\" + RIVER_HOLLOW_SAVES))
+            if (Directory.Exists(Environment.CurrentDirectory + "\\" + Constants.RIVER_HOLLOW_SAVES)) {
+                foreach (string dir in Directory.GetDirectories(Environment.CurrentDirectory + "\\" + Constants. RIVER_HOLLOW_SAVES))
                 {
-                    string pathToSaveInfo = String.Format(@"{0}\{1}", dir, INFO_FILE_NAME);
+                    string pathToSaveInfo = String.Format(@"{0}\{1}", dir, Constants.INFO_FILE_NAME);
                     if (File.Exists(pathToSaveInfo))
                     {
                         games.Add(LoadSaveInfoData(pathToSaveInfo));

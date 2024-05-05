@@ -105,7 +105,7 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 if (!Show())
                 {
-                    ErrorManager.TrackError();
+                    LogManager.WriteToLog("Show is false");
                 }
                 base.Draw(spriteBatch);
             }
