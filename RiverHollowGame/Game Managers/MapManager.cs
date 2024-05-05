@@ -310,27 +310,15 @@ namespace RiverHollow.Game_Managers
 
         public static bool ProcessLeftButtonClick(Point mouseLocation)
         {
-            bool rv = false;
-
-            rv = CurrentMap.ProcessLeftButtonClick(mouseLocation);
-
-            return rv;
+            return CurrentMap.ProcessLeftButtonClick(mouseLocation);
         }
         public static bool ProcessRightButtonClick(Point mouseLocation)
         {
-            bool rv = false;
-
-            rv = CurrentMap.ProcessRightButtonClick(mouseLocation);
-
-            return rv;
+            return CurrentMap.ProcessRightButtonClick(mouseLocation);
         }
         public static bool ProcessHover(Point mouseLocation)
         {
-            bool rv = false;
-
-            rv = CurrentMap.ProcessHover(mouseLocation);
-
-            return rv;
+            return CurrentMap.ProcessHover(mouseLocation);
         }
         public static RHTile RetrieveTile(int x, int y)
         {

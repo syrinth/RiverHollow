@@ -148,20 +148,14 @@ namespace RiverHollow
                 }
                 else if (InputManager.ButtonPressed(ButtonEnum.Left, out bool wasInterval))
                 {
-                    bool response = false;
                     if (wasInterval || (!GUIManager.ProcessLeftButtonClick(mousePoint) && IsMapShown()))
                     {
                         mousePoint.X = (int)((mousePoint.X - translate.X) / CurrentScale);
                         mousePoint.Y = (int)((mousePoint.Y - translate.Y) / CurrentScale);
                         if (!PlayerManager.Defeated() && (!GamePaused() || Scrying()))
                         {
-                            response = MapManager.ProcessLeftButtonClick(mousePoint);
+                            MapManager.ProcessLeftButtonClick(mousePoint);
                         }
-                    }
-
-                    if (response && wasInterval)
-                    {
-                        InputManager.ConsumeHeldButton();
                     }
                 }
                 else

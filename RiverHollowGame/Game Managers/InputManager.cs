@@ -56,10 +56,11 @@ namespace RiverHollow.Game_Managers
                         else if (_mouseTimer.Finished())
                         {
                             interval = true;
+                            _mouseTimer.Reset();
                             return true;
                         }
                     }
-                    else
+                    else if (_lastMouseState.LeftButton == ButtonState.Pressed)
                     {
                         _mouseTimer = null;
                         return false;
