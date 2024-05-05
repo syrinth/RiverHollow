@@ -14,23 +14,23 @@ namespace RiverHollow.Misc
         public string Key { get; } = string.Empty;
 
         //The type of selection menu to create, identifies the options
-        TextEntrySelectionEnum _eSelectionType = TextEntrySelectionEnum.None;
+        readonly TextEntrySelectionEnum _eSelectionType = TextEntrySelectionEnum.None;
         public TextEntrySelectionEnum SelectionType => _eSelectionType;
 
         //The type of selection taking place. Determines what the chosen action will do
-        TextEntryTriggerEnum _eGameTrigger = TextEntryTriggerEnum.None;
+        readonly TextEntryTriggerEnum _eGameTrigger = TextEntryTriggerEnum.None;
         public TextEntryTriggerEnum GameTrigger => _eGameTrigger;
 
         //The tied result to the indicated option
-        TextEntryVerbEnum _eVerb = TextEntryVerbEnum.None;
+        readonly TextEntryVerbEnum _eVerb = TextEntryVerbEnum.None;
         public TextEntryVerbEnum TextVerb => _eVerb;
 
-        Dictionary<string, string> _diTags;
+        readonly Dictionary<string, string> _diTags;
         //int _iLookupID = -1;
 
         public string NextEntry => _diTags.ContainsKey("NextEntry") ? _diTags["NextEntry"] : string.Empty;
         private string _sText;
-        double _dPriority = 100;
+        readonly double _dPriority = 100;
         public double Priority => _dPriority;
 
         bool _bSpoken = false;

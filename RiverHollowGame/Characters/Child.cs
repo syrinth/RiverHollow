@@ -13,17 +13,17 @@ namespace RiverHollow.Characters
     public class Child : TalkingActor
     {
         int _iCurrentGrowth = 0;
-        private List<int> _liGrowthPeriods;
-        List<AnimationData> _liData;
+        private readonly List<int> _liGrowthPeriods;
+        readonly List<AnimationData> _liData;
 
         private ChildStageEnum _eCurrentStage = ChildStageEnum.Newborn;
 
-        private int _iGatherZoneID;
+        private readonly int _iGatherZoneID;
 
         const double MOVE_COUNTDOWN = 2.5;
-        private bool _bIdleCooldown = false;
+        private readonly bool _bIdleCooldown = false;
 
-        private double _dCountdown = 0;
+        private readonly double _dCountdown = 0;
 
         public Child(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {

@@ -405,6 +405,8 @@ namespace RiverHollow.WorldObjects
             _iDaysToNextState = int.Parse(strData[2]);
 
             SetState(CurrentState);
+
+            SnapPositionToGrid(new Point(data.X, data.Y));
         }
     }
 }

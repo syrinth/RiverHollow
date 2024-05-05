@@ -581,7 +581,11 @@ namespace RiverHollow.Characters
                 case NPCActionState.Home:
                     return ProcessActionStateDataHandler(HouseID, SpawnID, out targetPosition, out targetMapName);
                 case NPCActionState.PetCafe:
-                    return ProcessActionStateDataHandler(TownManager.PetCafe.ID, "Destination", out targetPosition, out targetMapName);
+                    if (TownManager.PetCafe != null)
+                    {
+                        return ProcessActionStateDataHandler(TownManager.PetCafe.ID, "Destination", out targetPosition, out targetMapName);
+                    }
+                    break;
             }
 
             targetPosition = Point.Zero;
