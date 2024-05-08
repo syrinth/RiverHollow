@@ -49,9 +49,9 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void Kickstart(Mob user, bool aims)
+        public void Kickstart(Mob user, Point startPos, bool aims)
         {
-            SetPosition(user.CollisionBoxLocation);
+            SetPosition(startPos);
             CurrentMapName = user.CurrentMapName;
 
             if (aims)

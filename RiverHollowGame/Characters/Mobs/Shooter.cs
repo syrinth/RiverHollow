@@ -30,12 +30,35 @@ namespace RiverHollow.Characters.Mobs
             {
                 var data = Util.FindParams(GetStringByIDKey("Projectile"));
 
-                if (CanFire(gTime, data))
+                if (int.TryParse(data[0], out int projectileID) && CanFire(gTime, data))
                 {
                     _cooldownTimer.Reset(Cooldown + (Cooldown * RHRandom.Instance().Next(1, 5) / 10));
 
-                    Projectile p = DataManager.CreateProjectile(int.Parse(data[0]));
-                    p.Kickstart(this, AimsProjectiles(data));
+                    Projectile p = DataManager.CreateProjectile(projectileID);
+
+                    //Important! Note that this starts at the CollisionBox of the Enemy!
+                    //Always check the CollisionBox size and location
+                    Point startPoint = CollisionBoxLocation;
+                    if (data.Length > 1)
+                    {
+                        Point newP = Util.ParsePoint(data[(int)Facing]);
+                        switch (Facing)
+                        {
+                            case DirectionEnum.Down:
+                            case DirectionEnum.Right:
+                                startPoint += newP;
+                                break;
+                            case DirectionEnum.Up:
+                                startPoint += new Point(newP.X, -newP.Y);
+                                break;
+                            case DirectionEnum.Left:
+                                startPoint += new Point(-newP.X, newP.Y);
+                                break;
+
+                        }
+                    }
+                        
+                    p.Kickstart(this, startPoint, GetBoolByIDKey("Aim"));
 
                     _liProjectiles.Add(p);
                 }
@@ -54,16 +77,11 @@ namespace RiverHollow.Characters.Mobs
 
             if (MapManager.MapChangeTimer.Finished() && _cooldownTimer.TickDown(gTime))
             {
-                if (AimsProjectiles(data)) { rv = true; }
+                if (GetBoolByIDKey("Aim")) { rv = true; }
                 else if (Facing == Util.GetDirection(GetPlayerDirection())) { rv = true; }
             }
 
             return rv;
-        }
-
-        private bool AimsProjectiles(string[] data)
-        {
-            return data.Length > 1 && data[1].Equals("Aim") && _eCurrentState == NPCStateEnum.TrackPlayer;
         }
     } 
 }
