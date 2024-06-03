@@ -129,5 +129,13 @@
         <Item>[Speed:Player-0.5/26-0.8][Move:Player-1-Up][Move:Player-3-Right-Down][Activate:26][Move:26-2-Up][Face:Player-Left][Move:26-4-Right-Up][Wait:1][GoTo:26-Craft-Up][Speak:26-0][Move:26-3-Right][Move:26-2-Up-Down][GoTo:Player-Craft-Up][Speak:26-1][MoveToTown:26]</Item>
       </Value>
     </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>
+        <Item></Item>
+        <Item>[Map:mapWeaver][Actors:9-Start][Face:9-Up][Deactivate:9]</Item>
+        <Item>[Speed:Player-0.5/9-0.8][Move:Player-1-Up][Move:Player-3-Right-Down][Activate:9][Move:9-2-Up][Face:Player-Left][Move:9-4-Right-Up][Wait:1][GoTo:9-Craft-Up][Speak:9-0][Move:9-3-Right][Move:9-2-Up-Down][GoTo:Player-Craft-Up][Speak:9-1][MoveToTown:9]</Item>
+      </Value>
+    </Item>
   </Asset>
 </XnaContent>

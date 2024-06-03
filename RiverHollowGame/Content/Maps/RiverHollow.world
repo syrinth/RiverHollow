@@ -33,7 +33,21 @@
             "height": 416,
             "width": 320,
             "x": 688,
-            "y": -896
+            "y": -800
+        },
+        {
+            "fileName": "Misc/mapWindspire_Peaks.tmx",
+            "height": 1200,
+            "width": 1200,
+            "x": -208,
+            "y": -2000
+        },
+        {
+            "fileName": "Misc/mapWindspire_Peaks_Cave.tmx",
+            "height": 480,
+            "width": 1120,
+            "x": 992,
+            "y": -1840
         }
     ],
     "onlyShowAdjacentMaps": false,

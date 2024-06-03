@@ -239,7 +239,7 @@
     </Item>
     <Item>
       <Key>59</Key>
-      <Value>[Type:Destructible][Image:10-3][Tool:Pick][Hp:10][ReqLvl:1][ItemID:46]</Value>
+      <Value>[Type:Destructible][Image:10-3][Tool:Pick][Hp:4][ReqLvl:1][ItemID:46]</Value>
     </Item>
     <Item>
       <Key>60</Key>
@@ -367,7 +367,7 @@
     </Item>
     <Item>
       <Key>91</Key>
-      <Value>[Type:Machine][Image:0-10][Work:3-0.15][Size:2-2][Makes:3/7/52/53/122][Base:0-0-2-1]</Value>
+      <Value>[Type:Machine][Image:0-10][Size:3-2][Base:0-1-3-1][Makes:3/7/52/53][Work:3-0.15]</Value>
     </Item>
     <Item>
       <Key>92</Key>
@@ -447,7 +447,7 @@
     </Item>
     <Item>
       <Key>111</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-0/1-0/0-1/1-1][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96][BonusItemID:87-1-U][HoneyID:142][Season:Spring][Spread:5/1][SpriteOffset:4]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-0/1-0/0-1/1-1][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96-3][BonusItemID:87-1-R][HoneyID:142][Season:Spring][Spread:5/1][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>112</Key>

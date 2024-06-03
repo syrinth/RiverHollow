@@ -585,6 +585,16 @@
 /processor:TiledMapProcessor
 /build:Maps/Misc/mapShroomCity.tmx
 
+#begin Maps/Misc/mapWindspire_Peaks.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapWindspire_Peaks.tmx
+
+#begin Maps/Misc/mapWindspire_Peaks_Cave.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Misc/mapWindspire_Peaks_Cave.tmx
+
 #begin Maps/Misc/mapWoods_Small.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -618,6 +628,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Maps/Tilesets/Stairs.png
+
+#begin Maps/Tilesets/tileset_mountain.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Tilesets/tileset_mountain.png
 
 #begin Maps/Tilesets/tilesetDungeon.png
 /importer:TextureImporter
@@ -3608,6 +3630,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Wandmaker.png
+
+#begin Textures/WorldObjects/Buildings/Weaver.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WorldObjects/Buildings/Weaver.png
 
 #begin Textures/WorldObjects/DarkWoodTree.png
 /importer:TextureImporter

@@ -393,17 +393,23 @@ namespace RiverHollow.Map_Handling
         /// <returns>True if the tile is not itself locked down</returns>
         public bool Passable()
         {
-            bool rv = TileIsPassable() && (WorldObject == null || WorldObject.Walkable);
+            bool rv = TileCheck() && (WorldObject == null || WorldObject.Walkable);
 
             return rv;
         }
 
-        public bool TileIsPassable()
+        public bool TileCheck(bool barrenCheck = false)
         {
-            bool rv = true;
+            bool rv = _diProps.Count > 0;
             foreach (TiledMapTileLayer l in _diProps.Keys)
             {
                 if (l.IsVisible && !l.Name.Contains("Upper") && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
+                {
+                    rv = false;
+                    break;
+                }
+
+                if (barrenCheck && ContainsProperty(l, "Barren", out val) && val.Equals("true"))
                 {
                     rv = false;
                     break;

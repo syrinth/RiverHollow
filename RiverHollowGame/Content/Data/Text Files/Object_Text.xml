@@ -82,6 +82,10 @@
       <Value>[Name:Pet Time]</Value>
     </Item>
     <Item>
+      <Key>Task_20</Key>
+      <Value>[Name:Time to Weave]</Value>
+    </Item>
+    <Item>
       <Key>Actor_0</Key>
       <Value>[Name:Amanda]</Value>
     </Item>
@@ -568,7 +572,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_3</Key>
-      <Value>[Name:Cotton Cloth][Description:Soft cloth made from the finest picked cotton.]</Value>
+      <Value>[Name:Wind Cotton][Description:Light and breezy]</Value>
     </Item>
     <Item>
       <Key>Item_4</Key>
@@ -584,7 +588,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_7</Key>
-      <Value>[Name:Linen Cloth][Description:A fabric used to make typical clothing.]</Value>
+      <Value>[Name:Linen][Description:Light and breezy]</Value>
     </Item>
     <Item>
       <Key>Item_8</Key>
@@ -940,7 +944,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_96</Key>
-      <Value>[Name:Windblossom][Description:A tall stem covered with tiny fragrant flowers. The aroma carries on the wind for miles.]</Value>
+      <Value>[Name:Wind Blossom][Description:A tall stem covered with tiny fragrant flowers. The aroma carries on the wind for miles.]</Value>
     </Item>
     <Item>
       <Key>Item_97</Key>
@@ -1948,7 +1952,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_111</Key>
-      <Value>[Name:Windblossom]</Value>
+      <Value>[Name:Wind Blossom]</Value>
     </Item>
     <Item>
       <Key>WorldObject_112</Key>
@@ -2281,6 +2285,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Cutscene_15</Key>
       <Value>[Name:Enough Wood]</Value>
+    </Item>
+    <Item>
+      <Key>Cutscene_16</Key>
+      <Value>[Name:]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillager:3][FirstArrival:7][Key:Gale][Size:16-35]</Value>
+      <Value>[Type:Villager][PortRow:3][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Gale][HouseID:8][Size:16-35][Collection:7/188][Market:14-00][Craft:16-00][Traits:Precise/Chatty][Friends:26/16/10][StartMap:mapWindspire_Peaks]</Value>
     </Item>
     <Item>
       <Key>10</Key>
@@ -99,7 +99,7 @@
     </Item>
     <Item>
       <Key>24</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:8][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Penelope]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:99][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Penelope]</Value>
     </Item>
     <Item>
       <Key>25</Key>

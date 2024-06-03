@@ -33,7 +33,7 @@ namespace RiverHollow.WorldObjects
             
             var posParams = GetStringParamsByIDKey("TriggerPos");
             _arrPoints = new Rectangle[posParams.Length];
-            for (int i = 0; i < posParams.Length; i++)
+            for (int i = 0; i < posParams.Length && i < _iTriggerNumber; i++)
             {
                 var drawPoint = Util.ParsePoint(posParams[i]);
                 _arrPoints[i] = new Rectangle(drawPoint, sourceSize);

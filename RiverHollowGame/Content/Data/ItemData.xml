@@ -7,7 +7,7 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Resource][Subtype:Magic][Image:2-0][Value:100]</Value>
+      <Value>[Type:Resource][Subtype:None][Image:2-0][Value:100]</Value>
     </Item>
     <Item>
       <Key>2</Key>
@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Resource][Subtype:None][Image:7-0][Value:100][ReqItems:26-5]</Value>
+      <Value>[Type:Resource][Subtype:Fabric][Image:6-0][Value:15][ReqItems:96-3]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -31,7 +31,7 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Resource][Subtype:Clothing][Image:6-0][Value:20][ReqItems:25-5]</Value>
+      <Value>[Type:Resource][Subtype:Fabric][Image:7-0][Value:20][ReqItems:96-3]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -211,11 +211,11 @@
     </Item>
     <Item>
       <Key>52</Key>
-      <Value>[Type:Resource][Subtype:Clothing][Image:8-0][Value:20][ReqItems:30-5]</Value>
+      <Value>[Type:Resource][Subtype:Fabric][Image:8-0][Value:20][ReqItems:30-5]</Value>
     </Item>
     <Item>
       <Key>53</Key>
-      <Value>[Type:Resource][Subtype:Clothing][Image:9-0][Value:20][ReqItems:31-5]</Value>
+      <Value>[Type:Resource][Subtype:Fabric][Image:9-0][Value:20][ReqItems:31-5]</Value>
     </Item>
     <Item>
       <Key>54</Key>

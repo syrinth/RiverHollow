@@ -213,7 +213,7 @@ namespace RiverHollow.Map_Handling
         private void DetermineUsableTiles()
         {
             List<RHTile> possibleTiles = TileList;
-            var impassable = possibleTiles.FindAll(x => !x.TileIsPassable());
+            var impassable = possibleTiles.FindAll(x => !x.TileCheck());
 
             impassable.ForEach(x => possibleTiles.Remove(x));
 
@@ -554,7 +554,8 @@ namespace RiverHollow.Map_Handling
         private List<RHTile> GetValidTiles()
         {
             List<RHTile> possibleTiles = TileList;
-            var impassable = possibleTiles.FindAll(x => !x.TileIsPassable());
+
+            var impassable = possibleTiles.FindAll(x => !x.TileCheck(true));
             var obj = possibleTiles.FindAll(x => x.WorldObject != null);
             var flooring = possibleTiles.FindAll(x => x.Flooring != null);
 
@@ -595,7 +596,7 @@ namespace RiverHollow.Map_Handling
             var possibleTiles = GetValidTiles();
 
             //Step 3 Map Resources need to be generated
-            List<RHTile> hiddenTiles = possibleTiles.FindAll(x => !x.GetTileByDirection(DirectionEnum.Down).TileIsPassable());
+            List<RHTile> hiddenTiles = possibleTiles.FindAll(x => !x.GetTileByDirection(DirectionEnum.Down).TileCheck());
             hiddenTiles.ForEach(x => possibleTiles.Remove(x));
             GenerateMapResources(false,  ref possibleTiles);
 
@@ -728,7 +729,7 @@ namespace RiverHollow.Map_Handling
                 {
                     var tile = Util.GetRandomItem(possibleTiles);
                     obj.SnapPositionToGrid(new Point(tile.Position.X, tile.Position.Y));
-                    placed = obj.PlaceOnMap(this);
+                    placed = obj.PlaceOnMap(this, false);
 
                     if (possibleTiles.Count <= 1)
                     {
@@ -760,7 +761,7 @@ namespace RiverHollow.Map_Handling
                 var possibleTiles = GetValidTiles();
 
                 //Step 3 Map Resources need to be generated
-                List<RHTile> hiddenTiles = possibleTiles.FindAll(x => !x.GetTileByDirection(DirectionEnum.Down).TileIsPassable());
+                List<RHTile> hiddenTiles = possibleTiles.FindAll(x => !x.GetTileByDirection(DirectionEnum.Down).TileCheck());
                 hiddenTiles.ForEach(x => possibleTiles.Remove(x));
                 GenerateMapResources(true, ref possibleTiles);
 
@@ -2360,7 +2361,7 @@ namespace RiverHollow.Map_Handling
             //We can place flooring anywhere there isn't flooring as long as the base tile is passable.
             if (obj.BuildableType(BuildableEnum.Floor))
             {
-                if (testTile.Flooring == null && (testTile.TileIsPassable() && testTile.WorldObject == null))
+                if (testTile.Flooring == null && (testTile.TileCheck() && testTile.WorldObject == null))
                 {
                     rv = true;
                 }
@@ -2371,7 +2372,7 @@ namespace RiverHollow.Map_Handling
             }
             else if (ignoreActors || !TileContainsBlockingActor(testTile))
             {
-                if (testTile.CanPlaceOnTabletop(obj) || (testTile.TileIsPassable() && testTile.WorldObject == null))
+                if (testTile.CanPlaceOnTabletop(obj) || (testTile.TileCheck() && testTile.WorldObject == null))
                 {
                     rv = true;
                 }

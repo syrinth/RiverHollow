@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Name:Introduction][Text:Well hello there! Name's $Actor_9$. Weaver by trade, although I admit that I'm a bit far out of the way.
+I usually make my way down to the nearest town once a season to sell my wares, but if it's looking like new neighbours are moving in, we might be able to help each other.]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Name:BAM][Text:Every once in a while, some beastie thinks I look like a snack. A quick whack to the head with a stone pestle will sort out most things.
+BAM!
+Hehe...][Default]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Name:Mortar and Pestle][Text:I've found that there's not much in life that can't be solved with a sturdy mortar and pestle. Need a drink? It's a bowl. Door is stuck? Give it a smack.
+Someone giving you lip? Just imagine they're a stuck door.][Default]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Name:ShopOpen][Text:Yes, what is it?][Selection:Shop]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Name:Gift][Text:Wow! Thanks!]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Text:Hey.][Selection:VillageTalk][Name:Selection]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Name:Task_1_Start][Text:Yeah? Oh, you're looking for me?
+Would ya look at that, time flies don't it? Ok look, I need your help a bit yeah? I'm running way behind schedule, so it'd be a big favor for me if you gathered a few more $Item_162$ for me.
+Town is this way, yeah? I'll see you there!][SendToTown]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Name:Task_1_End][Text:Is that $Item_162$ I smell?
+Knew I could count on you! This'll keep us stocked for a little bit as a base, but we'll need more ingredients to actually make anything.]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Name:Task_2_Start][Text:You call this a town? More like a sad clump of buildings if you ask me...
+Lucky for you, I am an expert Apothecary. You build me a nice little home to call my own, and I'll see to it that the merchants have more than enough potions and unguents to keep them coming.][UnlockObjectID:18]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Name:Collection][Text:I've been wanting one of these for years! Thanks.]</Value>
+    </Item>
+    <Item>
+      <Key>10</Key>
+      <Value>[Name:Gift_Happy][Text:For me? You sure you don't want it? Great, mine now.]</Value>
+    </Item>
+    <Item>
+      <Key>11</Key>
+      <Value>[Name:Gift_Pleased][Text:Ooh, that's for me?]</Value>
+    </Item>
+    <Item>
+      <Key>12</Key>
+      <Value>[Name:Gift_Neutral][Text:Hm, thanks I guess.]</Value>
+    </Item>
+    <Item>
+      <Key>13</Key>
+      <Value>[Name:Gift_Sad][Text:Now why would you think I'd want one of these things?]</Value>
+    </Item>
+    <Item>
+      <Key>14</Key>
+      <Value>[Name:Gift_Miserable][Text:Nope. Don't want it, you can keep it.
+
+Or maybe burn it.]</Value>
+    </Item>
+  </Asset>
+</XnaContent>
