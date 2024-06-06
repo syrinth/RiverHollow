@@ -748,7 +748,7 @@ namespace RiverHollow.Characters
 
         public void EmojiChecks(GameTime gTime)
         {
-            if (PeriodicEmojiReady(gTime))
+            if (LivesInTown && PeriodicEmojiReady(gTime))
             {
                 if (!FollowingPath)
                 {
