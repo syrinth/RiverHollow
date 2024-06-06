@@ -310,45 +310,26 @@ namespace RiverHollow.Misc
             {
                 PlayerManager.AddToCraftingDictionary(int.Parse(_diTags["UnlockObjectID"]));
             }
-            if (_diTags.ContainsKey("ItemID"))
+
+            if (_diTags.ContainsKey("AssignTaskID"))
             {
-                string[] itemSplit = Util.FindParams(_diTags["ItemID"]);
-                for (int i = 0; i < itemSplit.Length; i++)
+                if (int.TryParse(_diTags["AssignTaskID"], out int taskID))
                 {
-                    string[] split = Util.FindArguments(itemSplit[i]);
-                    int id = int.Parse(split[0]);
-                    int number = split.Length == 1 ? 1 : int.Parse(split[1]);
-
-                    if (InventoryManager.HasSpaceInInventory(id, number) || talker == null)
-                    {
-                        InventoryManager.AddToInventory(id, number);
-                    }
-                    else
-                    {
-                        talker.AssignItemToNPC(id, number);
-                    }
+                    TaskManager.GetTaskByID(taskID).AssignTaskToNPC();
                 }
-
-                talker.CheckInventoryAlert();
             }
+
             if (_diTags.ContainsKey("Money") && int.TryParse(_diTags["Money"], out int moneyTotal))
             {
                 PlayerManager.AddMoney(moneyTotal);
             }
-            if (_diTags.ContainsKey("GiveItems"))
-            {
-                talker.GiveItemsToPlayer();
-            }
+
             if (_diTags.ContainsKey("UnlockItemID"))
             {
                 if (int.TryParse(_diTags["ShopTargetID"], out int shopID) && int.TryParse(_diTags["UnlockItemID"], out int itemID))
                 {
                     GameManager.DIShops[shopID].UnlockMerchandise(itemID);
                 }
-            }
-            if (_diTags.ContainsKey("SendToTown"))
-            {
-                ((Villager)GameManager.CurrentNPC).ReadySmokeBomb();
             }
 
             if (_diTags.ContainsKey("AddTaskID"))
@@ -359,18 +340,49 @@ namespace RiverHollow.Misc
                 }
             }
 
-            if (talker != null &&  talker.HasAssignedTask() && !CutsceneManager.Playing)
+            if (talker != null)
             {
-                RHTask task = talker.GetAssignedTask();
-                task.TaskIsTalking();
-                GUIManager.QueueTextWindow(GameManager.CurrentNPC.GetDialogEntry(task.StartTaskDialogue));
-            }
-
-            if (_diTags.ContainsKey("AssignTaskID"))
-            {
-                if (int.TryParse(_diTags["AssignTaskID"], out int taskID))
+                if (_diTags.ContainsKey("ItemID"))
                 {
-                    TaskManager.GetTaskByID(taskID).AssignTaskToNPC();
+                    string[] itemSplit = Util.FindParams(_diTags["ItemID"]);
+                    for (int i = 0; i < itemSplit.Length; i++)
+                    {
+                        string[] split = Util.FindArguments(itemSplit[i]);
+                        int id = int.Parse(split[0]);
+                        int number = split.Length == 1 ? 1 : int.Parse(split[1]);
+
+                        if (InventoryManager.HasSpaceInInventory(id, number) || talker == null)
+                        {
+                            InventoryManager.AddToInventory(id, number);
+                        }
+                        else
+                        {
+                            talker.AssignItemToNPC(id, number);
+                        }
+                    }
+
+                    talker.CheckInventoryAlert();
+                }
+
+                if (_diTags.ContainsKey("GiveItems"))
+                {
+                    talker.GiveItemsToPlayer();
+                }
+
+                Villager villager = talker is Villager v ? v : null;
+                if (_diTags.ContainsKey("SendToTown") && villager != null)
+                {
+                    villager.ReadySmokeBomb();
+                }
+
+                if (talker.HasAssignedTask() && !CutsceneManager.Playing)
+                {
+                    if (villager == null || villager.SpawnStatus != SpawnStateEnum.SendingToInn)
+                    {
+                        RHTask task = talker.GetAssignedTask();
+                        task.TaskIsTalking();
+                        GUIManager.QueueTextWindow(GameManager.CurrentNPC.GetDialogEntry(task.StartTaskDialogue));
+                    }
                 }
             }
         }
