@@ -9,7 +9,7 @@
   <property name="Randomize" type="bool" value="true"/>
   <property name="ResourceItemID" value="162-C/227-C/148-U/163-R"/>
   <property name="ResourceObjectID" value="105-U/106-U"/>
-  <property name="ResourceTotal" value="3-5"/>
+  <property name="ResourceTotal" value="5"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>

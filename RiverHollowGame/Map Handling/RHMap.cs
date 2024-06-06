@@ -608,8 +608,26 @@ namespace RiverHollow.Map_Handling
         {
             if (_map.Properties.ContainsKey("ResourceTotal"))
             {
-                var total = Util.FindIntArguments(_map.Properties["ResourceTotal"]);
-                int totalResources = total.Length == 1 ? total[0] : RHRandom.Instance().Next(total[0], total[1]);
+                var resources = new Dictionary<RarityEnum, KeyValuePair<int, int>>();
+
+                int min = 1;
+                string[] spawnResources = Util.FindParams(_map.Properties["ResourceTotal"]);
+                foreach (string s in spawnResources)
+                {
+                    var split = Util.FindArguments(s);
+                    if (!int.TryParse(split[0], out int max))
+                    {
+                        max = min;
+                    }
+
+                    var rarity = split.Length > 1 ? Util.ParseEnum<RarityEnum>(split[1]) : RarityEnum.C;
+                    var kvp = new KeyValuePair<int, int>(min, max);
+                    Util.SafeAddToDictionary(ref resources, rarity, kvp);
+                    min = max;
+                }
+
+                var rarityRoll = Util.RollOnRarityTable(resources);
+                int totalResources = RHRandom.Instance().Next(rarityRoll.Key, rarityRoll.Value);
 
                 var rarityTable = new Dictionary<RarityEnum, List<SpawnData>>();
                 if (_map.Properties.ContainsKey("ResourceItemID"))
@@ -624,7 +642,7 @@ namespace RiverHollow.Map_Handling
 
                 int presentResources = 0;
                 var keys = new List<RarityEnum>(rarityTable.Keys);
-                foreach(var key in keys)
+                foreach (var key in keys)
                 {
                     foreach (var data in rarityTable[key])
                     {
@@ -636,7 +654,7 @@ namespace RiverHollow.Map_Handling
                         {
                             // -1 because we're looking for WrappedItem Objects here
                             var objList = GetObjectsByID(-1);
-                            foreach(var obj in objList)
+                            foreach (var obj in objList)
                             {
                                 var wrappedObj = (WrappedItem)obj;
                                 if (wrappedObj.ItemID == data.ID)
@@ -660,6 +678,7 @@ namespace RiverHollow.Map_Handling
                 }
             }
         }
+
         private void GenerateFillerResources(bool refresh, ref List<RHTile> possibleTiles)
         {
             if (_map.Properties.ContainsKey("FillerPercent") && _map.Properties.ContainsKey("FillerID"))

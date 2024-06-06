@@ -8,7 +8,7 @@
   <property name="Mobs" value="1-3"/>
   <property name="Randomize" type="bool" value="true"/>
   <property name="ResourceItemID" value="23-C/63-U/149-U"/>
-  <property name="ResourceTotal" value="6"/>
+  <property name="ResourceTotal" value="3-C/6-U/10-R"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>

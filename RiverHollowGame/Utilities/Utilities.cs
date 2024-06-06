@@ -591,6 +591,28 @@ namespace RiverHollow.Utilities
             }
         }
 
+        public static RarityEnum RollRarity()
+        {
+            RarityEnum rolledRarity = RarityEnum.C;
+
+            int rarityIndex = RHRandom.Instance().Next(1, 1000);
+
+            if (rarityIndex > 990) { rolledRarity = RarityEnum.M; }
+            else if (rarityIndex > 900) { rolledRarity = RarityEnum.R; }
+            else if (rarityIndex > 600) { rolledRarity = RarityEnum.U; }
+
+            return rolledRarity;
+        }
+
+        private static RarityEnum CompressRolledRarity<T>(Dictionary<RarityEnum, T> dictionary, RarityEnum rolledRarity)
+        {
+            if (rolledRarity == RarityEnum.M && !dictionary.ContainsKey(RarityEnum.M)) { rolledRarity = RarityEnum.R; }
+            if (rolledRarity == RarityEnum.R && !dictionary.ContainsKey(RarityEnum.R)) { rolledRarity = RarityEnum.U; }
+            if (rolledRarity == RarityEnum.U && !dictionary.ContainsKey(RarityEnum.U)) { rolledRarity = RarityEnum.C; }
+
+            return rolledRarity;
+        }
+
         /// <summary>
         /// Makes a roll against the rarity table and returns the determined rarity enum
         /// </summary>
@@ -598,20 +620,31 @@ namespace RiverHollow.Utilities
         /// <returns>The highest valid rarity</returns>
         public static T RollOnRarityTable<T>(Dictionary<RarityEnum, List<T>> dictionary, T notFound = default)
         {
-            RarityEnum rolledRarity = RarityEnum.C;
-
-            int rarityIndex = RHRandom.Instance().Next(1, 1000);
-
-            if (rarityIndex > 990 && dictionary.ContainsKey(RarityEnum.M)) { rolledRarity = RarityEnum.M; }
-            else if (rarityIndex > 900 && dictionary.ContainsKey(RarityEnum.R)) { rolledRarity = RarityEnum.R; }
-            else if (rarityIndex > 600 && dictionary.ContainsKey(RarityEnum.U)) { rolledRarity = RarityEnum.U; }
-            else if (!dictionary.ContainsKey(RarityEnum.C))
+            var rolledRarity = CompressRolledRarity(dictionary, RollRarity());
+            if (rolledRarity == RarityEnum.C && !dictionary.ContainsKey(RarityEnum.C))
             {
                 return notFound;
             }
 
             return dictionary[rolledRarity][RHRandom.Instance().Next(0, dictionary[rolledRarity].Count - 1)];
         }
+
+        /// <summary>
+        /// Makes a roll against the rarity table and returns the determined rarity enum
+        /// </summary>
+        /// <param name="dictionary">The dictionary to check against the rarities</param>
+        /// <returns>The highest valid rarity</returns>
+        public static T RollOnRarityTable<T>(Dictionary<RarityEnum, T> dictionary, T notFound = default)
+        {
+            var rolledRarity = CompressRolledRarity(dictionary, RollRarity());
+            if (rolledRarity == RarityEnum.C && !dictionary.ContainsKey(RarityEnum.C))
+            {
+                return notFound;
+            }
+
+            return dictionary[rolledRarity];
+        }
+
 
         /// <summary>
         /// Adds an object to a list as long as the object is not already present in it

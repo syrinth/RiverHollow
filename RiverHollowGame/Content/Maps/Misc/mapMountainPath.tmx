@@ -10,7 +10,7 @@
   <property name="ResourceItemID" value="23-U"/>
   <property name="ResourceObjectID" value="53-C"/>
   <property name="ResourceRate" type="int" value="1"/>
-  <property name="ResourceTotal" value="2-8"/>
+  <property name="ResourceTotal" value="4-C/8-U/12-R"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsWalls_Floors.tsx"/>
