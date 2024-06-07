@@ -19,6 +19,8 @@ namespace RiverHollow.Characters
         public int ItemID { get; private set;} = -1;
         public int Income { get; private set; } = 0;
 
+        private int _iMerchBuildingID = -1;
+
         public int BuildingID()
         {
             return GetIntByIDKey("Building");
@@ -111,31 +113,29 @@ namespace RiverHollow.Characters
 
         public void PurchaseItem(Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Container>>> merchData)
         {
-            if (BuildingID() != -1)
+            if (merchData.Count > 0)
             {
-                if (merchData.Count > 0)
+                ClassTypeEnum itemType = ClassTypeEnum.None;
+                if (merchData[ClassType].Count > 0)
                 {
-                    ClassTypeEnum itemType = ClassTypeEnum.None;
-                    if (merchData[ClassType].Count > 0)
+                    itemType = ClassType;
+                }
+
+                if (merchData[itemType].Count > 0)
+                {
+                    var randomKvp = Util.GetRandomItem(merchData[itemType]);
+                    var table = randomKvp.Value;
+                    var item = randomKvp.Key;
+
+                    InventoryManager.InitExtraInventory(table.Inventory);
+                    item.Remove(1, false);
+                    InventoryManager.ClearExtraInventory();
+                    ItemID = item.ID;
+                    _iMerchBuildingID = table.CurrentMap.BuildingID;
+
+                    if (item.Number == 0)
                     {
-                        itemType = ClassType;
-                    }
-
-                    if (merchData[itemType].Count > 0)
-                    {
-                        var randomKvp = Util.GetRandomItem(merchData[itemType]);
-                        var table = randomKvp.Value;
-                        var item = randomKvp.Key;
-
-                        InventoryManager.InitExtraInventory(table.Inventory);
-                        item.Remove(1, false);
-                        InventoryManager.ClearExtraInventory();
-                        ItemID = item.ID;
-
-                        if(item.Number == 0)
-                        {
-                            merchData[itemType].Remove(randomKvp);
-                        }
+                        merchData[itemType].Remove(randomKvp);
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace RiverHollow.Characters
 
         public int CalculateIncome()
         {
-            CalculateProfit(ItemID, TownManager.GetBuildingByID(BuildingID()));
+            CalculateProfit(ItemID, TownManager.GetBuildingByID(_iMerchBuildingID));
             CalculateProfit(FoodID, TownManager.Inn);
 
             return Income;
