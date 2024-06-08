@@ -1066,12 +1066,18 @@ namespace RiverHollow.Map_Handling
 
         public void Rollover()
         {
+            MobsSpawned = false;
+
             if (Randomize)
             {
                 Visited = false;
                 foreach (var objectList in _diWorldObjects.Values)
                 {
-                    if (objectList[0] is Trigger)
+                    var firstObj = objectList[0];
+
+                    if (firstObj is Building) { continue; }
+
+                    if (firstObj is Trigger || firstObj is TriggerDoor) 
                     {
                         foreach (var trigger in objectList)
                         {
@@ -1083,7 +1089,10 @@ namespace RiverHollow.Map_Handling
                     }
                     else
                     {
-                        objectList.ForEach(x => RemoveWorldObject(x));
+                        foreach (var obj in objectList)
+                        {
+                            RemoveWorldObject(obj);
+                        }
                     }
                 }
             }
@@ -1798,7 +1807,7 @@ namespace RiverHollow.Map_Handling
                     {
                         foreach(var obj in _liHoverObjects)
                         {
-                            if (obj.ProcessRightClick())
+                            if (PlayerManager.InRangeOfPlayer(obj.CollisionBox) && obj.GetHoverBox().Contains(mouseLocation) && obj.ProcessRightClick())
                             {
                                 rv = true;
                                 break;

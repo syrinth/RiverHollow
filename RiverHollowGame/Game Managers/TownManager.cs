@@ -235,6 +235,11 @@ namespace RiverHollow.Game_Managers
                 }
 
                 var building = GetBuildingByID(targetID);
+                if(building == null)
+                {
+                    continue;
+                }
+
                 var map = MapManager.Maps[building.InnerMapName];
 
                 var containers = map.GetObjectsByType<Container>().Cast<Container>().ToList();
