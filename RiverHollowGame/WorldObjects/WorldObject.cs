@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents;
+using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.Screens;
+using RiverHollow.Misc;
 
 namespace RiverHollow.WorldObjects
 {
@@ -48,9 +51,6 @@ namespace RiverHollow.WorldObjects
 
         protected Rectangle _rBase = new Rectangle(0, 0, 1, 1);
         protected Point _pSpriteOffset = new Point(0,0);
-
-        //The ClickBox is always the Sprite itself
-        public Rectangle ClickBox => new Rectangle(MapPosition, _pSize);
 
         //Base is always described in # of Tiles so we must multiply by the Constants.TILE_SIZE
         public Point CollisionPosition => CollisionBox.Location;
@@ -147,6 +147,8 @@ namespace RiverHollow.WorldObjects
             {
                 _bDrawUnder = true;
             }
+
+            _pSpriteOffset = GetPointByIDKey("BaseOffset");
 
             LoadSprite();
         }
@@ -255,16 +257,59 @@ namespace RiverHollow.WorldObjects
         {
             bool rv = false;
 
-            if (GetBoolByIDKey("Bed"))
+            if (!GetBoolByIDKey("HoverBox") || GetHoverBox().Contains(GUICursor.GetWorldMousePosition()))
             {
-                rv = true;
-                GUIManager.OpenTextWindow("Selection_Bed");
+                if (GetBoolByIDKey("Bed"))
+                {
+                    rv = true;
+                    GUIManager.OpenTextWindow("Selection_Bed");
+                }
+                else if (GetBoolByIDKey("Shop"))
+                {
+                    rv = true;
+
+                    if (CurrentMap.TheShop is Shop shop)
+                    {
+                        GUIManager.OpenMainObject(new HUDShopWindow(shop.GetUnlockedMerchandise()));
+                    }
+                }
+                else if (GetBoolByIDKey("UnlockUpgradeID"))
+                {
+                    rv = true;
+                    if (TownManager.TownHall == null) { GUIManager.OpenTextWindow("UpgradeNoTownHall"); }
+                    else { TownManager.UnlockUpgrade(GetIntByIDKey("UnlockUpgradeID")); }
+                }
             }
-            if (GetBoolByIDKey("UnlockUpgradeID"))
+
+            return rv;
+        }
+
+        public bool HasHover()
+        {
+            return CanPickUp() || HasInteract() || GetBoolByIDKey("HoverBox");
+        }
+
+        public virtual bool ProcessHover(Point mouseLocation)
+        {
+            bool rv = false;
+
+            if (GetHoverBox().Contains(mouseLocation))
             {
-                rv = true;
-                if (TownManager.TownHall == null) { GUIManager.OpenTextWindow("UpgradeNoTownHall"); }
-                else { TownManager.UnlockUpgrade(GetIntByIDKey("UnlockUpgradeID")); }
+                if (CanPickUp())
+                {
+                    rv = true;
+                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, CollisionBox);
+                }
+                else if (HasInteract())
+                {
+                    rv = true;
+                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Interact, CollisionBox);
+                }
+                else if (GetBoolByIDKey("Shop"))
+                {
+                    rv = true;
+                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Shop, CollisionBox);
+                }
             }
 
             return rv;
@@ -446,8 +491,10 @@ namespace RiverHollow.WorldObjects
             return CompareType(ObjectTypeEnum.Buildable) && GetEnumByIDKey<BuildableEnum>("Subtype") == t;
         }
 
-        public bool WallObject() { return _ePlacement == ObjectPlacementEnum.Wall; }
-        public bool FlooringObject() { return _ePlacement == ObjectPlacementEnum.Floor; }
+        public bool CheckPlacement(ObjectPlacementEnum e)
+        {
+            return _ePlacement == e;
+        }
 
         public bool IsDirectBuild()
         {
@@ -513,6 +560,19 @@ namespace RiverHollow.WorldObjects
         public virtual float GetTownScore()
         {
             return GetFloatByIDKey("TownScore", 0);
+        }
+
+        public Rectangle GetHoverBox()
+        {
+            Rectangle rv = Sprite.SpriteRectangle;
+
+            if (GetBoolByIDKey("HoverBox"))
+            {
+                Rectangle hover = GetRectangleByIDKey("HoverBox");
+                rv = new Rectangle(MapPosition.X + hover.X - _pSpriteOffset.X, MapPosition.Y + hover.Y - _pSpriteOffset.Y, hover.Width, hover.Height);
+            }
+
+            return rv;
         }
 
         #region Lookup Handlers

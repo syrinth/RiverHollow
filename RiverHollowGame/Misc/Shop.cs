@@ -1,4 +1,5 @@
-﻿using RiverHollow.Game_Managers;
+﻿using RiverHollow.Characters;
+using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace RiverHollow.Misc
     public class Shop
     {
         public int ShopkeeperID { get; private set; }
+
         readonly int _iShopID;
         readonly int _iShopBuildingID = -1;
         readonly List<ShopItem> _liMerchandise;
@@ -125,6 +127,18 @@ namespace RiverHollow.Misc
             }
 
             return rv;
+        }
+
+        public Actor Shopkeep()
+        {
+            if (TownManager.Villagers.ContainsKey(ShopkeeperID))
+            {
+                return TownManager.Villagers[ShopkeeperID];
+            }
+            else
+            {
+                return TownManager.Merchant;
+            }
         }
 
         public ShopData SaveData()

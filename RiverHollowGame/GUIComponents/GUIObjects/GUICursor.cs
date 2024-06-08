@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 {
     public static class GUICursor
     {
-        public enum CursorTypeEnum { Normal, Talk, Gift, Door, Pickup, Interact};
+        public enum CursorTypeEnum { Normal, Door, Gift, Interact, Pickup, Shop, Talk};
         private static CursorTypeEnum _eCursorType;
         private static Rectangle _rCollisionRectangle;
         public static int WorkerToPlace { get; private set; } = -1;
@@ -78,9 +78,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 case CursorTypeEnum.Normal:
                     _rSource = GUIUtils.CURSOR_POINT;
                     break;
-                case CursorTypeEnum.Talk:
-                    _rSource = GUIUtils.CURSOR_TALK;
-                    break;
                 case CursorTypeEnum.Door:
                     _rSource = GUIUtils.CURSOR_DOOR;
                     break;
@@ -89,6 +86,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     break;
                 case CursorTypeEnum.Pickup:
                     _rSource = GUIUtils.CURSOR_PICKUP;
+                    break;
+                case CursorTypeEnum.Shop:
+                    _rSource = GUIUtils.CURSOR_SHOP;
+                    break;
+                case CursorTypeEnum.Talk:
+                    _rSource = GUIUtils.CURSOR_TALK;
                     break;
             }
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="48">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="49">
  <properties>
   <property name="BuildingID" type="int" value="31"/>
   <property name="MapType" value="Town"/>
@@ -45,7 +45,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,342,418,419,418,472,0,0,0,0,0,0,0,0,
+0,342,418,419,0,472,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -84,9 +84,13 @@
     <property name="ObjectID" type="int" value="152"/>
    </properties>
   </object>
+  <object id="48" name="Shop Slate" x="64" y="80" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="179"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
-  <object id="16" name="Shop" x="48" y="64" width="16" height="16"/>
   <object id="18" name="NPC_10" x="112" y="32" width="16" height="16"/>
   <object id="41" name="Cutscene_Entrance" x="48" y="160" width="16" height="16">
    <properties>

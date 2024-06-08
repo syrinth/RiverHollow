@@ -46,7 +46,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             CenterOnScreen();
 
-            var display = new NPCDisplayWindow(GameManager.CurrentNPC, false);
+            var display = new NPCDisplayWindow(MapManager.CurrentMap.TheShop.Shopkeep(), false);
             display.AnchorAndAlignWithSpacing(_winMain, SideEnum.Left, SideEnum.Top, 2);
             AddControl(display);
         }

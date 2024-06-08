@@ -64,9 +64,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 case TextEntrySelectionEnum.YesNo:
                     AddYesNoOptions();
                     break;
-                case TextEntrySelectionEnum.Shop:
-                    AddShopOptions();
-                    break;
                 case TextEntrySelectionEnum.Bed:
                     AddBedOptions();
                     break;
@@ -111,27 +108,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     DataManager.GetGameTextEntry("Selection_Sell"),
                     DataManager.GetGameTextEntry("Selection_NeverMind")
                 };
-
-                AddOptions(liCommands);
-            }
-        }
-
-        /// <summary>
-        /// Adds the TextEntry options for a Shop
-        /// </summary>
-        private void AddShopOptions()
-        {
-            if (GameManager.CurrentNPC != null)
-            {
-                TalkingActor act = CurrentNPC;
-                List<TextEntry> liCommands = new List<TextEntry> { DataManager.GetGameTextEntry("Selection_Talk") };
-
-                if (act.IsActorType(ActorTypeEnum.Villager) && ((Villager)act).CanGiveGift)
-                {
-                    liCommands.Add(DataManager.GetGameTextEntry("Selection_Gift"));
-                }
-                liCommands.Add(DataManager.GetGameTextEntry("Selection_Buy"));
-                liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
 
                 AddOptions(liCommands);
             }
@@ -243,9 +219,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     Point pos = PlayerManager.PlayerActor.CollisionCenter;
                     PlayerManager.SetPath(TravelManager.FindPathToLocation(ref pos, MapManager.CurrentMap.GetCharacterObject("PlayerSpawn").Location));
                     GUIManager.SetScreen(new DayEndScreen());
-                    break;
-                case TextEntryVerbEnum.Buy:
-                    npc?.OpenShop();
                     break;
                 case TextEntryVerbEnum.Date:
                     if (npc != null)

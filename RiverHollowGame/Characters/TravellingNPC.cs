@@ -45,11 +45,6 @@ namespace RiverHollow.Characters
             OnTheMap = !stringData.ContainsKey("Inactive");
         }
 
-        public override void OpenShop()
-        {
-            GUIManager.OpenMainObject(new HUDShopWindow(CurrentMap.TheShop.GetUnlockedMerchandise()));
-        }
-
         protected bool CheckArrivalTriggers()
         {
             //If they have no triggers. Do not pass go

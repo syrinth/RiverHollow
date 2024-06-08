@@ -131,7 +131,6 @@ namespace RiverHollow.Characters
 
         public virtual void Gift(Item item) { }
         public virtual TextEntry JoinParty() { return null; }
-        public virtual void OpenShop()  { }
         public virtual void OpenMerchantWindow() { }
 
         public virtual void StopTalking() {

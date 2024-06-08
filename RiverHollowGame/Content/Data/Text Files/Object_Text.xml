@@ -2223,6 +2223,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Wooden Path]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_179</Key>
+      <Value>[Name:Shop Slate]</Value>
+    </Item>
+    <Item>
       <Key>Cutscene_0</Key>
       <Value>[Name:Mush Mush Ritual]</Value>
     </Item>

@@ -232,10 +232,6 @@ namespace RiverHollow.Characters
                     _assignedTask.TaskIsTalking();
                     rv = GetDialogEntry(_assignedTask.StartTaskDialogue);
                 }
-                else if (CurrentMap.TheShop != null && CurrentMap.TheShop.ShopkeeperID == ID)
-                {
-                    rv = GetDialogEntry("ShopOpen");
-                }
                 else if (!_bHasTalked) { rv = GetDailyDialogue(); }
                 else
                 {

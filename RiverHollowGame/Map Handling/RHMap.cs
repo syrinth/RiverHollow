@@ -72,10 +72,10 @@ namespace RiverHollow.Map_Handling
         protected List<Mob> _liMobs;
         public IList<Mob> Mobs { get { return _liMobs.AsReadOnly(); } }
         public List<Actor> ToAdd;
-        private Dictionary<int, List<WorldObject>> _diWorldObjects;
-        private List<ResourceSpawn> _liResourceSpawns;
-        private List<MobSpawn> _liMobSpawns;
-        private List<int> _liCutscenes;
+        private readonly Dictionary<int, List<WorldObject>> _diWorldObjects;
+        private readonly List<ResourceSpawn> _liResourceSpawns;
+        private readonly List<MobSpawn> _liMobSpawns;
+        private readonly List<int> _liCutscenes;
         protected List<MapItem> _liItems;
         private Dictionary<string, TravelPoint> _diTravelPoints;
         public IReadOnlyDictionary<string, TravelPoint> TravelPoints => _diTravelPoints;
@@ -85,9 +85,11 @@ namespace RiverHollow.Map_Handling
         private int _iShopID = -1;
         public Shop TheShop => (_iShopID > -1) ? GameManager.DIShops[_iShopID] : null;
 
-        private List<MapItem> _liItemsToRemove;
+        private readonly List<MapItem> _liItemsToRemove;
         private List<Actor> _liActorsToRemove;
-        private List<WorldObject> _liObjectsToRemove;
+        private readonly List<WorldObject> _liObjectsToRemove;
+
+        private readonly List<WorldObject> _liHoverObjects;
 
         public MapNode WorldMapNode { get; private set; }
 
@@ -114,6 +116,7 @@ namespace RiverHollow.Map_Handling
             _liItemsToRemove = new List<MapItem>();
             _liActorsToRemove = new List<Actor>();
             _liObjectsToRemove = new List<WorldObject>();
+            _liHoverObjects = new List<WorldObject>();
 
             ToAdd = new List<Actor>();
         }
@@ -458,9 +461,15 @@ namespace RiverHollow.Map_Handling
             {
                 _diWorldObjects[obj.ID] = new List<WorldObject>();
             }
+
             if (!_diWorldObjects[obj.ID].Contains(obj))
             {
                 _diWorldObjects[obj.ID].Add(obj);
+
+                if (obj.HasHover())
+                {
+                    _liHoverObjects.Add(obj);
+                }
             }
         }
         public void DIRemoveObject(WorldObject obj)
@@ -468,6 +477,12 @@ namespace RiverHollow.Map_Handling
             if (_diWorldObjects[obj.ID].Contains(obj))
             {
                 _diWorldObjects[obj.ID].Remove(obj);
+
+                if (obj.HasHover())
+                {
+                    _liHoverObjects.Remove(obj);
+                }
+
                 if (_diWorldObjects[obj.ID].Count == 0)
                 {
                     _diWorldObjects.Remove(obj.ID);
@@ -1781,6 +1796,18 @@ namespace RiverHollow.Map_Handling
 
                     if (!rv)
                     {
+                        foreach(var obj in _liHoverObjects)
+                        {
+                            if (obj.ProcessRightClick())
+                            {
+                                rv = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!rv)
+                    {
                         foreach (Actor c in _liActors)
                         {
                             if (PlayerManager.InRangeOfPlayer(c.HoverBox) && c.HoverContains(mouseLocation) && c.OnTheMap)
@@ -1894,22 +1921,21 @@ namespace RiverHollow.Map_Handling
                         found = true;
                         GUICursor.SetCursor(GUICursor.CursorTypeEnum.Door, t.GetTravelPoint().CollisionBox);
                     }
-                    else if (t.GetWorldObject(false) != null && t.GetWorldObject().CanPickUp())
-                    {
-                        found = true;
-                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, t.GetWorldObject().CollisionBox);
-                    } 
-                    else if (t.GetWorldObject(false) != null && t.GetWorldObject().HasInteract())
-                    {
-                        found = true;
-                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Interact, t.GetWorldObject().CollisionBox);
-                    }
 
                     MapItem hoverItem = _liItems.Find(x => x.CollisionBox.Contains(GUICursor.GetWorldMousePosition()));
                     if (hoverItem != null && hoverItem.PickupState == ItemPickupState.Manual)
                     {
                         found = true;
                         GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, hoverItem.CollisionBox);
+                    }
+
+                    foreach(var obj in _liHoverObjects)
+                    {
+                        if (obj.ProcessHover(mouseLocation))
+                        {
+                            found = true;
+                            break;
+                        }
                     }
                 }
 
@@ -2385,9 +2411,13 @@ namespace RiverHollow.Map_Handling
                     rv = true;
                 }
             }
-            else if (obj.WallObject())
+            else if (obj.CheckPlacement(ObjectPlacementEnum.Wall))
             {
-                rv = (testTile.WorldObject == null && testTile.IsWallpaperWall);
+                rv = testTile.WorldObject == null && testTile.IsWallpaperWall;
+            }
+            else if (obj.CheckPlacement(ObjectPlacementEnum.Impassable))
+            {
+                rv = testTile.WorldObject == null && !testTile.TileCheck();
             }
             else if (ignoreActors || !TileContainsBlockingActor(testTile))
             {

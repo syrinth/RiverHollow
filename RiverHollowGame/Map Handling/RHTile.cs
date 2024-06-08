@@ -186,15 +186,22 @@ namespace RiverHollow.Map_Handling
         public bool SetObject(WorldObject o)
         {
             bool rv = false;
-            if (o.FlooringObject())
+
+            if (o.CheckPlacement(ObjectPlacementEnum.Floor))
             {
                 rv = SetFloorObject(o);
             }
-            else if ((!o.WallObject() && Passable()) || (o.WallObject() && IsWallpaperWall))
+            else if (o.CheckPlacement(ObjectPlacementEnum.Impassable) && !TileCheck())
             {
-                WorldObject = o;
                 rv = true;
+                WorldObject = o;
             }
+            else if ((!o.CheckPlacement(ObjectPlacementEnum.Wall) && Passable()) || (o.CheckPlacement(ObjectPlacementEnum.Wall) && IsWallpaperWall))
+            {
+                rv = true;
+                WorldObject = o;
+            }
+
             return rv;
         }
         public void SetShadowObject(WorldObject o)

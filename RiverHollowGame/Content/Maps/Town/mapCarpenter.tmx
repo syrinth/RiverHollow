@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="55">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="57">
  <properties>
   <property name="BuildingID" type="int" value="39"/>
   <property name="Cutscenes" value="2"/>
@@ -313,7 +313,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,2328,0,
-0,0,0,0,0,0,902,903,956,0,0,0,0,0,0,
+0,0,0,0,0,0,0,903,956,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -347,6 +347,11 @@
     <property name="ObjectID" type="int" value="142"/>
    </properties>
   </object>
+  <object id="55" name="Shop Slate" x="96" y="80" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="179"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="41" name="NPC_16" x="160" y="64" width="16" height="16"/>
@@ -354,7 +359,6 @@
   <object id="51" name="CS1" x="176" y="80" width="16" height="16"/>
   <object id="52" name="CS0" x="160" y="128" width="16" height="16"/>
   <object id="53" name="Craft" x="192" y="128" width="16" height="16"/>
-  <object id="44" name="Shop" x="112" y="64" width="16" height="32"/>
   <object id="54" name="Visitor" x="96" y="96" width="63.75" height="63.75"/>
  </objectgroup>
 </map>

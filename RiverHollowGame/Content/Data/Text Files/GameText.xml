@@ -131,7 +131,7 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Name:Selection_Buy][Text:Buy Items][TextVerb:Buy]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>33</Key>
@@ -171,7 +171,7 @@
     </Item>
 	<Item>
       <Key>42</Key>
-      <Value>[Name:BuyMerch_NoShopkeep][Text:There's no one here to take your money...]</Value>
+      <Value>[Name:]</Value>
     </Item>
 	<Item>
       <Key>43</Key>
