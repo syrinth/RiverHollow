@@ -29,7 +29,7 @@
       <Key>6</Key>
       <Value>[Name:Task_0_Start][Text:We have to build a $WorldObject_112$ so that visiting merchants will have a place to trade goods. You'll need wooden planks and some clay to build it.
 	  I've got some extra planks in the chest there, but you'll need to find the clay yourself. I think I saw a cave in the woods where you that should be able to find some. Just follow the cleared path to the West.
-	  Once you've got that, choose a spot, set it up, and let me know when you're done, OK?][UnlockObjectID:112]</Value>
+	  Once you've got that, choose a spot, set it up, and let me know when you're done, OK?][UnlockObjectID:112][ItemID:60-15]</Value>
     </Item>
     <Item>
       <Key>7</Key>

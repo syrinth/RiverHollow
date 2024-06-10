@@ -1,42 +1,49 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Game_Managers;
-using RiverHollow.Utilities;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
     internal class GUIToggle : GUIObject
     {
+        public enum ToggleTypeEnum { Image, Tab, Fade };
+        private readonly ToggleTypeEnum _toggleType;
+
         public bool Selected { get; private set; }
-        private bool _bTab = false;
-        GUIImage _gUnselected;
-        GUIImage _gSelected;
-        GUIImage _gIcon;
+        readonly GUIImage _gUnselected;
+        readonly GUIImage _gSelected;
+        readonly GUIImage _gIcon;
         GUIToggle[] toggleGroup;
 
-        EmptyDelegate _delAction;
-        public GUIToggle(Rectangle icon, string texture, EmptyDelegate del)
+        readonly EmptyDelegate _delAction;
+        public GUIToggle(Rectangle icon, ToggleTypeEnum toggleType, string texture, EmptyDelegate del)
         {
             _delAction = del;
-            _bTab = true;
+            _toggleType = toggleType;
 
-            _gUnselected = new GUIImage(GUIUtils.TAB_UNSELECTED, texture);
-            _gSelected = new GUIImage(GUIUtils.TAB_SELECTED, texture);
             _gIcon = new GUIImage(icon, texture);
-            _gSelected.MoveBy(0, _gUnselected.Height - _gSelected.Height);
+            if (toggleType == ToggleTypeEnum.Tab)
+            {
+                _gUnselected = new GUIImage(GUIUtils.TAB_UNSELECTED, texture);
+                _gSelected = new GUIImage(GUIUtils.TAB_SELECTED, texture);
 
-            Width = _gUnselected.Width;
-            Height = _gUnselected.Height;
+                _gSelected.MoveBy(0, _gUnselected.Height - _gSelected.Height);
 
-            AddControl(_gSelected);
-            AddControl(_gUnselected);
+                Width = _gUnselected.Width;
+                Height = _gUnselected.Height;
+                AddControls(_gSelected, _gUnselected);
+            }
+            else
+            {
+                Width = _gIcon.Width;
+                Height = _gIcon.Height;
+            }
+
             AddControl(_gIcon);
-
             Select(false);
         }
         public GUIToggle(Rectangle unselected, Rectangle selected, Rectangle icon, string texture, EmptyDelegate del)
         {
             _delAction = del;
-            _bTab = false;
+            _toggleType = ToggleTypeEnum.Image;
 
             _gUnselected = new GUIImage(unselected, texture);
             _gSelected = new GUIImage(selected, texture);
@@ -45,9 +52,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             Width = _gUnselected.Width;
             Height = _gUnselected.Height;
 
-            AddControl(_gSelected);
-            AddControl(_gUnselected);
-            AddControl(_gIcon);
+            AddControls(_gSelected, _gUnselected, _gIcon);
 
             Select(false);
         }
@@ -57,10 +62,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
             Visible = val;
         }
 
+        public override bool Contains(Point mouse)
+        {
+            bool unselectedHit = _gUnselected != null && _gUnselected.Contains(mouse);
+            return unselectedHit || base.Contains(mouse);
+        }
         public override bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (Active && !Selected && _gUnselected.Contains(mouse))
+            if (Active && !Selected && Contains(mouse))
             {
                 rv = true;
                 SyncToggles();
@@ -73,10 +83,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private void Select(bool value)
         {
             Selected = value;
-            _gSelected.Show(Selected);
-            _gUnselected.Show(!Selected);
+            _gSelected?.Show(Selected);
+            _gUnselected?.Show(!Selected);
 
-            if (_bTab)
+            if (_toggleType == ToggleTypeEnum.Tab)
             {
                 if (Selected)
                 {
@@ -86,6 +96,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 {
                     _gIcon.PositionAndMove(_gUnselected, 4, 4);
                 }
+            }
+            else if(_toggleType == ToggleTypeEnum.Fade)
+            {
+                _gIcon.Alpha(Selected ? 1f : 0.5f);
             }
         }
 

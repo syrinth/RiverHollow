@@ -58,6 +58,8 @@ namespace RiverHollow.Game_Managers
         public static bool PrintTextImmediately = true;
 
         public static GameScreenEnum CurrentScreen;
+
+        public static Point DescriptionBoxDrawPoint { get; private set; } = Point.Zero;
         #endregion
 
         public static int HUDItemRow;
@@ -74,6 +76,11 @@ namespace RiverHollow.Game_Managers
         public static void LoadManagedDataLists()
         {
             DIShops = DataManager.GetShopInfoList();
+        }
+
+        public static void SetDescriptionDrawPoint(Point p)
+        {
+            DescriptionBoxDrawPoint = Util.MultiplyPoint(p, CurrentScale);
         }
 
         public static void SetCurrentNPC(TalkingActor npc)

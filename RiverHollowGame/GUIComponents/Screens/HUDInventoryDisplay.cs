@@ -25,10 +25,9 @@ namespace RiverHollow.GUIComponents.Screens
             CenterOnScreen();
         }
 
-        public HUDInventoryDisplay(Item[,] inventory, DisplayTypeEnum display, bool lockExtraInventory = false, List<int> _liValidIDs = null)
+        public HUDInventoryDisplay(Item[,] inventory, DisplayTypeEnum display, bool lockExtraInventory = false)
         {
             InventoryManager.LockedInventory = lockExtraInventory;
-            InventoryManager.ValidIDs = _liValidIDs;
 
             InventoryManager.ClearExtraInventory();
             InventoryManager.InitExtraInventory(inventory);

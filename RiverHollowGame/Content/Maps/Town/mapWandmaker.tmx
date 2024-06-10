@@ -78,11 +78,6 @@
    </properties>
   </object>
   <object id="41" name="Talk_Woodworker" x="128" y="96" width="16" height="32"/>
-  <object id="38" name="WorldObject" x="64" y="64" width="16" height="16">
-   <properties>
-    <property name="ObjectID" type="int" value="165"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup id="5" name="Character Layer">
   <object id="44" name="NPC_26" x="128" y="96" width="16" height="16"/>

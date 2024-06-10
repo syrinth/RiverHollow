@@ -78,11 +78,6 @@
     <property name="ObjectID" type="int" value="88"/>
    </properties>
   </object>
-  <object id="59" name="WorldObject" x="160" y="128" width="16" height="16">
-   <properties>
-    <property name="ObjectID" type="int" value="165"/>
-   </properties>
-  </object>
   <object id="65" name="Shop Slate" x="80" y="112" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="179"/>

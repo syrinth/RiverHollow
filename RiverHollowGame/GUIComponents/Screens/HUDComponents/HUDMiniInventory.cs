@@ -1,15 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Newtonsoft.Json.Linq;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -56,9 +51,14 @@ namespace RiverHollow.GUIComponents.Screens
 
             Snap(SideEnum.Bottom);
         }
+
+        private bool Functional()
+        {
+            return !CutsceneManager.Playing && !GUIManager.IsMainObjectOpen() && !GUIManager.IsTextWindowOpen();
+        }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!CutsceneManager.Playing && !GUIManager.IsMainObjectOpen() && !GUIManager.IsTextWindowOpen())
+            if (Functional())
             {
                 base.Draw(spriteBatch);
             }
@@ -66,7 +66,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override void Update(GameTime gTime)
         {
-            if (Show())
+            if (Functional())
             {
                 HandleInput();
 
@@ -208,7 +208,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            if (!GameManager.GamePaused() && Contains(mouse))
+            if (Functional() && Contains(mouse))
             {
                 rv = true;
 
@@ -235,7 +235,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             bool rv = false;
 
-            if (!GameManager.GamePaused() && Contains(mouse))
+            if (Functional() && Contains(mouse))
             {
                 rv = true;
 
@@ -255,14 +255,21 @@ namespace RiverHollow.GUIComponents.Screens
 
         public override bool ProcessHover(Point mouse)
         {
-            bool rv = base.ProcessHover(mouse);
-
-            if (rv && !GameManager.GamePaused())
+            if (Functional())
             {
-                _eFadeState = StateEnum.FadeIn;
-            }
+                bool rv = base.ProcessHover(mouse);
 
-            return rv;
+                if (rv && !GameManager.GamePaused())
+                {
+                    _eFadeState = StateEnum.FadeIn;
+                }
+
+                return rv;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         protected override void EndHover()

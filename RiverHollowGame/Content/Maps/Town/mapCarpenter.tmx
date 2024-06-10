@@ -336,14 +336,8 @@
     <property name="ObjectID" type="int" value="92"/>
    </properties>
   </object>
-  <object id="47" name="WorldObject" x="16" y="112" width="16" height="16">
-   <properties>
-    <property name="ObjectID" type="int" value="177"/>
-   </properties>
-  </object>
   <object id="48" name="WorldObject" x="32" y="112" width="64" height="16">
    <properties>
-    <property name="ItemID" value="60-15"/>
     <property name="ObjectID" type="int" value="142"/>
    </properties>
   </object>

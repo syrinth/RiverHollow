@@ -10,50 +10,36 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUIMoneyDisplay : GUIObject
     {
-        GUIText _gTextMoney;
-        GUIImage _gCoin;
-        bool _bIsPlayerMoney;
-        bool _bCoinOnRight;
+        readonly GUIText _gTextMoney;
 
-        //Player Money Display
-        public GUIMoneyDisplay(bool playermoney = true)
+        readonly bool _bIsPlayerMoney = false;
+
+        public GUIMoneyDisplay(bool tinyDisplay = false) : this(PlayerManager.Money, DirectionEnum.Left, tinyDisplay)
         {
-            _bIsPlayerMoney = playermoney;
-            _bCoinOnRight = false;
-
-            _gTextMoney = new GUIText(PlayerManager.Money.ToString("N0"));
-            Setup();
+            _bIsPlayerMoney = true;
         }
 
-        public GUIMoneyDisplay(int cost, bool coinOnRight = true)
+        public GUIMoneyDisplay(int cost, DirectionEnum coinDirection = DirectionEnum.Left, bool tinyDisplay = false)
         {
-            _bIsPlayerMoney = false;
-            _bCoinOnRight = coinOnRight;
+            var fontName = tinyDisplay ? DataManager.FONT_STAT_DISPLAY : DataManager.FONT_NEW;
+            _gTextMoney = new GUIText(cost.ToString("N0"), true, fontName);
 
-            _gTextMoney = new GUIText(cost.ToString("N0"));
-            Setup();
-        }
+            var gCoin = new GUIImage(tinyDisplay ? GUIUtils.ICON_TINY_COIN : GUIUtils.ICON_COIN);
 
-        private void Setup()
-        {
-            _gCoin = new GUIImage(GUIUtils.ICON_COIN);
-            if (_bCoinOnRight)
+            var margin = tinyDisplay ? 0 : GUIManager.STANDARD_MARGIN;
+            //Text created at 0,0 so we put the coin beside it, then move the text
+            if (coinDirection == DirectionEnum.Right)
             {
-                _gCoin.AnchorToObject(_gTextMoney, SideEnum.Right, GUIManager.STANDARD_MARGIN);
-                _gTextMoney.AlignToObject(_gCoin, SideEnum.CenterY);
+                gCoin.AnchorToObject(_gTextMoney, SideEnum.Right, margin);
+                _gTextMoney.AlignToObject(gCoin, SideEnum.CenterY);
             }
-            else { 
-                _gTextMoney.AnchorAndAlignWithSpacing(_gCoin, SideEnum.Right, SideEnum.CenterY, GUIManager.STANDARD_MARGIN);
+            else
+            {
+                _gTextMoney.AnchorAndAlignWithSpacing(gCoin, SideEnum.Right, SideEnum.CenterY, margin);
             }
 
-            AddControls(_gCoin, _gTextMoney);
+            AddControls(gCoin, _gTextMoney);
             DetermineSize();
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            _gTextMoney.Draw(spriteBatch);
-            _gCoin.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gTime)
@@ -69,9 +55,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gTextMoney.SetColor(c);
         }
     }
+
     public class GUIDungeonKeyDisplay : GUIObject
     {
-        GUIText _gKeysText;
+        readonly GUIText _gKeysText;
         GUIImage _gKeys;
 
         //Player Monster Energy Display
@@ -282,12 +269,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _bDrawShadow = drawShadow;
         }
 
-        public bool CompareNumToInventory(Container c)
+        public bool CompareNumToInventory(Item[,] inventory)
         {
             bool rv = true;
             CompareToInventory = true;
             DrawNumbers = ItemBoxDraw.Always;
-            int inventoryNumber = InventoryManager.GetNumberInInventory(ItemObject.ID, c == null ? InventoryManager.PlayerInventory : c.Inventory);
+            int inventoryNumber = InventoryManager.GetNumberInInventory(ItemObject.ID, inventory == null ? InventoryManager.PlayerInventory : inventory);
             _gText.SetText(string.Format("{0}/{1}", inventoryNumber, ItemObject.Number));
             SetTextPosition();
 
@@ -304,9 +291,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             if (_gImg.ObjColor != Color.Black)
             {
-                var win = new GUIItemDescriptionWindow(ItemObject);
-                win.AnchorToScreen(SideEnum.BottomRight);
-                GUIManager.OpenHoverObject(win, DrawRectangle, true);
+                var descriptionBox = new GUIItemDescriptionWindow(ItemObject);
+
+                if (GameManager.DescriptionBoxDrawPoint == Point.Zero)
+                {
+                    descriptionBox.AnchorToScreen(SideEnum.BottomRight);
+                }
+                else
+                {
+                    descriptionBox.Position(GameManager.DescriptionBoxDrawPoint);
+                }
+
+                GUIManager.OpenHoverObject(descriptionBox, DrawRectangle, true);
             }
         }
     }

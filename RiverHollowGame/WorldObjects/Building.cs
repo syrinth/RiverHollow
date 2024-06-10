@@ -9,6 +9,7 @@ using RiverHollow.Misc;
 using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Items;
 
 namespace RiverHollow.Buildings
 {
@@ -33,10 +34,15 @@ namespace RiverHollow.Buildings
 
         public bool UpgradeQueued { get; private set; } = false;
 
+        public Item[,] Stash;
+        public Item[,] Merchandise;
+
         public Building(int id) : base(id)
         {
             ID = id;
 
+            Stash = new Item[5, 5];
+            Merchandise = new Item[5, 5];
             Unique = true;
             OutsideOnly = true;
 
@@ -118,6 +124,11 @@ namespace RiverHollow.Buildings
                 _rShadowTarget = _rShadowSource;
                 _rShadowTarget.Location = Sprite.Position;
                 _rShadowTarget.Offset(0, Sprite.Height - Constants.TILE_SIZE);
+            }
+
+            if (InnerMap.GetMapProperties().ContainsKey("Pantry"))
+            {
+                TownManager.SetPantry(Merchandise);
             }
 
             return rv;
@@ -228,16 +239,77 @@ namespace RiverHollow.Buildings
         public override WorldObjectData SaveData()
         {
             WorldObjectData data = base.SaveData();
-            data.stringData = Level.ToString();
+
+            data.stringData += string.Format("[Level:{0}]", Level.ToString());
+
+            data.stringData += "[Stash:";
+            foreach (Item i in Stash)
+            {
+                data.stringData += string.Format("{0}/", Item.SaveItemToString(i));
+            }
+            data.stringData = data.stringData.Remove(data.stringData.Length - 1);
+            data.stringData += "]";
+
+            data.stringData += "[Merchandise:";
+            foreach (Item i in Merchandise)
+            {
+                data.stringData += string.Format("{0}/", Item.SaveItemToString(i));
+            }
+            data.stringData = data.stringData.Remove(data.stringData.Length - 1);
+            data.stringData += "]";
 
             return data;
         }
         public override void LoadData(WorldObjectData data)
         {
             base.LoadData(data);
-            string[] strData = Util.FindParams(data.stringData);
 
-            Level = Util.ParseInt(strData[0]);
+            var dataDictionary = Util.DictionaryFromTaggedString(data.stringData);
+            Level = Util.ParseInt(dataDictionary["Level"]);
+
+            string[] stashData = Util.FindParams(dataDictionary["Stash"]);
+            if (stashData.Length > 0)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        int index = Util.ListIndexFromMultiArray(i, j, 5);
+                        if (!string.IsNullOrEmpty(stashData[index]))
+                        {
+                            string[] itemData = Util.FindArguments(stashData[index]);
+                            Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
+                            if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
+
+                            InventoryManager.InitExtraInventory(this.Stash);
+                            InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
+                            InventoryManager.ClearExtraInventory();
+                        }
+                    }
+                }
+            }
+
+            string[] merchData = Util.FindParams(dataDictionary["Merchandise"]);
+            if (merchData.Length > 0)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        int index = Util.ListIndexFromMultiArray(i, j, 5);
+                        if (!string.IsNullOrEmpty(merchData[index]))
+                        {
+                            string[] itemData = Util.FindArguments(merchData[index]);
+                            Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
+                            if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
+
+                            InventoryManager.InitExtraInventory(this.Merchandise);
+                            InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
+                            InventoryManager.ClearExtraInventory();
+                        }
+                    }
+                }
+            }
         }
     }
 }

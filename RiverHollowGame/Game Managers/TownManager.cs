@@ -43,7 +43,7 @@ namespace RiverHollow.Game_Managers
         public static List<Animal> TownAnimals { get; set; }
         public static List<Traveler> Travelers { get; set; }
 
-        public static Container Pantry { get; private set; }
+        public static Item[,] Pantry { get; private set; }
 
         #region Trackers
         public static int TotalDefeatedMobs;
@@ -175,17 +175,17 @@ namespace RiverHollow.Game_Managers
             if (Travelers.Count > 0)
             {
 
-                var merchantTables = new Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Container>>>();
-                GatherTables(ref merchantTables);
+                var merchantTables = new Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Building>>>();
+                GatherMerch(ref merchantTables);
 
                 foreach (var traveler in Travelers)
                 {
                     traveler.PurchaseItem(merchantTables);
                 }
 
-                InventoryManager.InitExtraInventory(Pantry.Inventory);
+                InventoryManager.InitExtraInventory(Pantry);
 
-                List<Food> sortedFood = Util.MultiArrayToList(Pantry.Inventory).FindAll(x => x.CompareType(ItemTypeEnum.Food)).ConvertAll(x => (Food)x);
+                List<Food> sortedFood = Util.MultiArrayToList(Pantry).FindAll(x => x.CompareType(ItemTypeEnum.Food)).ConvertAll(x => (Food)x);
                 sortedFood = sortedFood.OrderBy(x => x.FoodType).ThenByDescending(x => x.Value).ToList();
 
                 foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
@@ -218,42 +218,22 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        private static void GatherTables(ref Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Container>>> townMerchData)
+        private static void GatherMerch(ref Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Building>>> townMerchData)
         {
             foreach (ClassTypeEnum e in Enum.GetValues(typeof(ClassTypeEnum)))
             {
-                townMerchData[e] = new List<KeyValuePair<Item, Container>>();
+                townMerchData[e] = new List<KeyValuePair<Item, Building>>();
             }
 
-            var shopIDs = DataManager.GetWorldObjectsWithKey("Shop");
-            for (int i = 0; i < shopIDs.Count; i++)
+            var allBuildings = MapManager.TownMap.GetObjectsByType<Building>();
+            foreach (var building in allBuildings)
             {
-                int targetID = shopIDs[i];
-                if (!TownObjectBuilt(targetID))
+                foreach (var i in building.Merchandise)
                 {
-                    continue;
-                }
-
-                var building = GetBuildingByID(targetID);
-                if(building == null)
-                {
-                    continue;
-                }
-
-                var map = MapManager.Maps[building.InnerMapName];
-
-                var containers = map.GetObjectsByType<Container>().Cast<Container>().ToList();
-                var shopTables = containers.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
-
-                foreach (var table in shopTables)
-                {
-                    foreach (var item in table.Inventory)
+                    if (i is Merchandise merchItem)
                     {
-                        if (item is Merchandise merchItem)
-                        {
-                            var itemData = new KeyValuePair<Item, Container>(item, table);
-                            townMerchData[merchItem.ClassType].Add(itemData);
-                        }
+                        var itemData = new KeyValuePair<Item, Building>(i, building);
+                        townMerchData[merchItem.ClassType].Add(itemData);
                     }
                 }
             }
@@ -449,6 +429,11 @@ namespace RiverHollow.Game_Managers
             DITravelerInfo[npc.ID] = new ValueTuple<bool, int>(DITravelerInfo[npc.ID].Item1, DITravelerInfo[npc.ID].Item2 + 1);
         }
 
+        public static void SetPantry(Item[,] arr)
+        {
+            Pantry = arr;
+        }
+
         private static void TryToEat(List<Food> sortedFood, Traveler t, FoodTypeEnum e)
         {
             var eatMe = sortedFood.Find(f => f.FoodType == e);
@@ -600,13 +585,6 @@ namespace RiverHollow.Game_Managers
                 else if (obj.GetBoolByIDKey("Market")) { Market = obj as Structure; }
                 else if (obj.GetBoolByIDKey("Mailbox")) { TownMailbox = obj as Mailbox; }
             }
-            else if (map == MapManager.InnMap)
-            {
-                if (obj.GetBoolByIDKey("Pantry"))
-                {
-                    Pantry = obj as Container;
-                }
-            }
         }
         public static int GetNumberTownObjects(int objID)
         {
@@ -619,6 +597,20 @@ namespace RiverHollow.Game_Managers
         public static List<WorldObject> GetTownObjectsByID(int objID)
         {
             return MapManager.TownMap.GetObjectsByID(objID);
+        }
+        public static Building GetCurrentBuilding()
+        {
+            Building rv = null;
+            if (MapManager.CurrentMap.BuildingID != -1)
+            {
+                int objID = MapManager.CurrentMap.BuildingID;
+                if (TownObjectBuilt(objID) && DataManager.GetEnumByIDKey<BuildableEnum>(objID, "Subtype", DataType.WorldObject) == BuildableEnum.Building)
+                {
+                    rv = (Building)MapManager.TownMap.GetObjectsByID(objID)[0];
+                }
+            }
+
+            return rv;
         }
         public static Building GetBuildingByID(int objID)
         {
@@ -854,6 +846,12 @@ namespace RiverHollow.Game_Managers
             {
                 Merchant = DIMerchants[saveData.MerchantID];
                 Merchant.MoveToSpawn();
+            }
+
+            var allBuildings = MapManager.TownMap.GetObjectsByType<Building>();
+            foreach(var b in allBuildings)
+            {
+                b.InnerMap.AssignMerchandise();
             }
         }
     }

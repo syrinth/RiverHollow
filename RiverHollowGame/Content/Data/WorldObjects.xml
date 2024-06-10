@@ -571,7 +571,7 @@
     </Item>
     <Item>
       <Key>142</Key>
-      <Value>[Type:Buildable][Subtype:Container][Image:7-38][Size:4-2][Base:0-1-4-1][Texture:Decor][ShopTable:6-3/18][Rows:1][Cols:3]</Value>
+      <Value>[Type:Buildable][Subtype:Decor][Image:7-38][Size:4-2][Base:0-1-4-1][Texture:Decor][ShopTable:6-3/18/3]</Value>
     </Item>
     <Item>
       <Key>143</Key>
@@ -699,7 +699,7 @@
     </Item>
     <Item>
       <Key>174</Key>
-      <Value>[Type:Buildable][Subtype:Container][Image:7-38][Size:4-2][Base:0-1-4-1][Texture:Decor][ShopTable:6-3/18][Rows:1][Cols:3][Pantry]</Value>
+      <Value>[Type:Buildable][Subtype:Decor][Image:7-38][Size:4-2][Base:0-1-4-1][Texture:Decor][ShopTable:6-3/18/3]</Value>
     </Item>
     <Item>
       <Key>175</Key>

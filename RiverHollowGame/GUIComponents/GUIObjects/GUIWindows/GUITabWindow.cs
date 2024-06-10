@@ -78,7 +78,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
         protected void AddTab(EmptyDelegate del, Rectangle icon)
         {
             var index = _gTabToggles.Count;
-            _gTabToggles.Add(new GUIToggle(icon, DataManager.HUD_COMPONENTS, del));
+            _gTabToggles.Add(new GUIToggle(icon, GUIToggle.ToggleTypeEnum.Tab, DataManager.HUD_COMPONENTS, del));
             AddControl(_gTabToggles[index]);
             if (index == 0)
             {

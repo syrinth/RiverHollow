@@ -177,7 +177,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
                 if(q.RewardMoney > 0)
                 {
-                    rewards.Add(new GUIMoneyDisplay(q.RewardMoney, false));
+                    rewards.Add(new GUIMoneyDisplay(q.RewardMoney));
                 }
 
                 GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(rewards), this, scroll, 4, GUIUtils.HUD_SCROLL_L.Height + 2);

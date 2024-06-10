@@ -525,15 +525,22 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
-        public List<WorldObject> GetObjectsByType<T>()
+        public List<T> GetObjectsByType<T>()
         {
-            List<WorldObject> rv = new List<WorldObject>();
+            List<T> rv = new List<T>();
 
-            foreach (var obj in _diWorldObjects.Values)
+            foreach (var objList in _diWorldObjects.Values)
             {
-                if (obj[0] is T)
+                if (objList[0] is T)
                 {
-                    rv.AddRange(obj);
+                    foreach (var o in objList)
+                    {
+                        if (o is T castObj)
+                        {
+                            rv.Add(castObj);
+                        }
+                    }
+
                 }
             }
 
@@ -1113,6 +1120,42 @@ namespace RiverHollow.Map_Handling
             PopulateMap(Randomize);
             CheckSpirits();
             _liItems.Clear();
+
+            AssignMerchandise();
+        }
+
+        public void AssignMerchandise()
+        {
+            if (GetMapProperties().ContainsKey("BuildingID") && int.TryParse(GetMapProperties()["BuildingID"], out int buildingID))
+            {
+                var building = TownManager.GetBuildingByID(buildingID);
+
+                if (building != null)
+                {
+                    //Assign setting drawing to ShopTables
+                    var worldObjects = building.InnerMap.GetObjectsByType<WorldObject>();
+                    var displayTables = worldObjects.Where(x => x.GetBoolByIDKey("ShopTable")).Cast<Decor>().ToList();
+                    displayTables.ForEach(x => x.ClearMerchandise());
+
+                    int index = 0;
+                    foreach (var merch in building.Merchandise)
+                    {
+                        if (index < displayTables.Count)
+                        {
+                            if (merch != null)
+                            {
+                                //MaxMerchandise
+                                var table = displayTables[index];
+                                if (table.MerchandiseSpaceLeft())
+                                {
+                                    table.AddMerchandiseItem(merch);
+                                }
+                                else { index++; }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
+using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -19,6 +20,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private readonly bool _bStandard;
         private readonly bool _bPlayerInventory;
+
+        protected GUIInventory() { }
 
         public GUIInventory(bool PlayerInventory = false, bool standard = true)
         {
@@ -59,7 +62,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// Centers the gui object on the screen, then initializes
         /// the ItemBox array and positions them appropriately.
         /// </summary>
-        private void Setup(bool playerInventory)
+        protected void Setup(bool playerInventory)
         {
             if (_bStandard)
             {
@@ -194,6 +197,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public override bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
+
+            if (InventoryManager.ExtraInventory == null)
+            {
+                return false;
+            }
 
             //If we're not holding anything
             if (GameManager.HeldItem == null)
@@ -472,6 +480,39 @@ Exit:
 
             Width = WidthEdges() + Inventory.Width;
             Height = HeightEdges() + Inventory.Height;
+        }
+    }
+
+    public class GUIShopInventory : GUIInventory
+    {
+        public GUIShopInventory() : base()
+        {
+            Position(Point.Zero);
+
+            //Retrieve the dimensions of the Inventory we're working on from the InventoryManager
+            InventoryManager.GetDimensions(ref _iRows, ref _iColumns, false);
+
+            _arrItemBoxes = new GUIItemBox[_iRows, _iColumns];
+
+            Setup();
+            DetermineSize();
+        }
+
+        protected void Setup()
+        {
+            for (int i = 0; i < _iRows; i++)
+            {
+                for (int j = 0; j < _iColumns; j++)
+                {
+                    _arrItemBoxes[i, j] = new GUIItemBox(i, j, null, false);
+
+                    if (i == 0 && j == 0) { }
+                    else if (j == 0) { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i - 1, j], SideEnum.Bottom, SideEnum.Left, 16); }
+                    else { _arrItemBoxes[i, j].AnchorAndAlignWithSpacing(_arrItemBoxes[i, j - 1], SideEnum.Right, SideEnum.Top, 8); }
+
+                    AddControl(_arrItemBoxes[i, j]);
+                }
+            }
         }
     }
 }

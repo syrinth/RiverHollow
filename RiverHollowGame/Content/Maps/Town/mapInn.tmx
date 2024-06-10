@@ -4,6 +4,7 @@
   <property name="BuildingID" type="int" value="28"/>
   <property name="Cutscenes" value="13"/>
   <property name="MapType" value="Town"/>
+  <property name="Pantry" type="bool" value="true"/>
   <property name="Shop" type="int" value="1"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
@@ -81,11 +82,6 @@
   <object id="47" name="WorldObject" x="304" y="64" width="32" height="16">
    <properties>
     <property name="ObjectID" type="int" value="148"/>
-   </properties>
-  </object>
-  <object id="48" name="WorldObject" x="288" y="64" width="16" height="16">
-   <properties>
-    <property name="ObjectID" type="int" value="165"/>
    </properties>
   </object>
   <object id="49" name="WorldObject" x="224" y="64" width="64" height="16">

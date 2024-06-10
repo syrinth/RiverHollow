@@ -177,7 +177,7 @@
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDTaskLog.cs" />
     <Compile Include="GUIComponents\Screens\LoadScreen.cs" />
     <Compile Include="GUIComponents\Screens\NewGameScreen.cs" />
-    <Compile Include="GUIComponents\Screens\HUDShopWindow.cs" />
+    <Compile Include="GUIComponents\Screens\HUDShopSlateWindow.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
     <Compile Include="Items\Blueprint.cs" />
     <Compile Include="Items\Clothing.cs" />

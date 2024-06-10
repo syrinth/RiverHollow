@@ -1,17 +1,67 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
-using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
-    public class GUIItemDescriptionWindow : GUIWindow
+    public class GUIItemDescriptionWindow : GUIObject
     {
-        public GUIItemDescriptionWindow(Item it) : base(GUIUtils.WINDOW_BROWN)
+        readonly int MAX_TEXT_WIDTH = 166 * GameManager.CurrentScale;
+
+        public GUIItemDescriptionWindow(Item it) : base()
         {
-            Color typeColor = Color.Black;
-            var strType = Util.GetEnumString(it.ItemType);
+            //HEADER
+            var top = new GUIImage(GUIUtils.HUD_DESC_TOP);
+            AddControl(top);
+
+            var gItem = new GUIItem(it, ItemBoxDraw.Never);
+            gItem.PositionAndMove(top, 7, 7);
+            
+            var gName = new GUIText(it.Name());
+            gName.PositionAndMove(top, 29, 7);
+
+            if (it is Merchandise m)
+            {
+                var classIcon = GUIUtils.GetClassIcon(m.ClassType);
+                classIcon.PositionAndMove(top, 161, 5);
+            }
+
+            //MID
+            var gDescription = new GUIText(it.Description());
+            gDescription.ParseAndSetText(gDescription.Text, MAX_TEXT_WIDTH, 5, true);
+
+            var middle = new GUIImage(GUIUtils.HUD_DESC_MID);
+            middle.AnchorAndAlign(top, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
+            middle.Height = gDescription.Height + GameManager.CurrentScale;
+
+            var strType = GetItemStats(it, out var typeColor);
+
+            gDescription.PositionAndMove(middle, 4, 0);
+
+            var gType = new GUIText(strType);
+            gType.SetColor(typeColor);
+            gType.PositionAndMove(top, 29, 17);
+             
+            var details = it.GetDetails();
+            if (!string.IsNullOrEmpty(details))
+            {
+                GUIText gDetails = new GUIText(details);
+                gDetails.PositionAndMove(top, 100, 7);
+            }
+
+            //BOTTOM
+            var bottom = new GUIImage(GUIUtils.HUD_DESC_BOT);
+            bottom.AnchorAndAlign(middle, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
+
+            DetermineSize();
+        }
+
+        private string GetItemStats(Item it, out Color typeColor)
+        {
+            typeColor = Color.Black;
+            var rv = Util.GetEnumString(it.ItemType);
             if (it.ItemType == ItemTypeEnum.Resource)
             {
                 var itemGroup = it.GetEnumByIDKey<ResourceTypeEnum>("Subtype");
@@ -34,7 +84,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         case ResourceTypeEnum.Ore:
                             typeColor = Color.Silver; break;
                     }
-                    strType = Util.GetEnumString(itemGroup, true);
+                    rv = Util.GetEnumString(itemGroup, true);
                 }
             }
             else if (it is Merchandise merchItem)
@@ -51,52 +101,15 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         case MerchandiseTypeEnum.Clothing:
                             typeColor = Color.DarkBlue; break;
                     }
-                    strType = Util.GetEnumString(merchGroup, true);
+                    rv = Util.GetEnumString(merchGroup, true);
                 }
             }
             else
             {
-                strType = Util.GetEnumString(it.GetEnumByIDKey<BuildableEnum>("Subtype"));
+                rv = Util.GetEnumString(it.GetEnumByIDKey<BuildableEnum>("Subtype"));
             }
 
-            var gName = new GUIText(it.Name());
-            gName.AnchorToInnerSide(this, SideEnum.TopLeft);
-
-            var gType = new GUIText(strType);
-            gType.SetColor(typeColor);
-            gType.AnchorAndAlignWithSpacing(gName, SideEnum.Bottom, SideEnum.Left, 2);
-
-            GUIText gDetails = null;
-            var details = it.GetDetails();
-            if (!string.IsNullOrEmpty(details))
-            {
-                gDetails = new GUIText(details);
-            }
-
-            var gDescription = new GUIText(it.Description());
-            gDescription.ParseAndSetText(gDescription.Text, Constants.MAX_ITEM_DESC_SIZE - WidthEdges(), 10, true);
-
-            var gBar = new GUIImage(GUIUtils.HUD_DIVIDER, gDescription.Width, ScaleIt(1));
-            gBar.AnchorAndAlignWithSpacing(gType, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);
-
-            if (gDetails != null)
-            {
-                gDetails.AnchorAndAlignWithSpacing(gBar, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);
-                gDescription.AnchorAndAlignWithSpacing(gDetails, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);
-            }
-            else
-            {
-                gDescription.AnchorAndAlignWithSpacing(gBar, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);
-            }
-
-            DetermineSize();
-            Width = Constants.MAX_ITEM_DESC_SIZE;
-
-            if (it is Merchandise m)
-            {
-                GUIImage classIcon = GUIUtils.GetClassIcon(m.ClassType);
-                classIcon.AnchorToInnerSide(this, SideEnum.TopRight, 1);
-            }
+            return rv;
         }
     }
 }

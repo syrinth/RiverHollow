@@ -111,7 +111,7 @@ namespace RiverHollow.Characters
             }
         }
 
-        public void PurchaseItem(Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Container>>> merchData)
+        public void PurchaseItem(Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Building>>> merchData)
         {
             if (merchData.Count > 0)
             {
@@ -124,14 +124,14 @@ namespace RiverHollow.Characters
                 if (merchData[itemType].Count > 0)
                 {
                     var randomKvp = Util.GetRandomItem(merchData[itemType]);
-                    var table = randomKvp.Value;
+                    var building = randomKvp.Value;
                     var item = randomKvp.Key;
 
-                    InventoryManager.InitExtraInventory(table.Inventory);
+                    InventoryManager.InitExtraInventory(building.Merchandise);
                     item.Remove(1, false);
                     InventoryManager.ClearExtraInventory();
                     ItemID = item.ID;
-                    _iMerchBuildingID = table.CurrentMap.BuildingID;
+                    _iMerchBuildingID = building.ID;
 
                     if (item.Number == 0)
                     {

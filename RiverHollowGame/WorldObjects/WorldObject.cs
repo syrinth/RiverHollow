@@ -270,7 +270,7 @@ namespace RiverHollow.WorldObjects
 
                     if (CurrentMap.TheShop is Shop shop)
                     {
-                        GUIManager.OpenMainObject(new HUDShopWindow(shop.GetUnlockedMerchandise()));
+                        GUIManager.OpenMainObject(new HUDShopSlateWindow());
                     }
                 }
                 else if (GetBoolByIDKey("UnlockUpgradeID"))
@@ -630,7 +630,8 @@ namespace RiverHollow.WorldObjects
             {
                 ID = ID,
                 X = CollisionBox.X,
-                Y = CollisionBox.Y
+                Y = CollisionBox.Y,
+                stringData = string.Empty
             };
 
             return data;

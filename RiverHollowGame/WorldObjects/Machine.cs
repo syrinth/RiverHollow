@@ -8,7 +8,6 @@ using System.Collections.Generic;
 
 using static RiverHollow.Utilities.Enums;
 using Microsoft.Xna.Framework.Graphics;
-using RiverHollow.Map_Handling;
 using System.Linq;
 using System;
 using RiverHollow.Buildings;
@@ -22,13 +21,7 @@ namespace RiverHollow.WorldObjects
 
         private Point ItemOffset => GetPointByIDKey("ItemOffset");
 
-        public Container Stash { get; private set; }
-        private readonly List<Container> _liShopTables;
-
-        public Machine(int id) : base(id)
-        {
-            _liShopTables = new List<Container>();
-        }
+        public Machine(int id) : base(id) { }
 
         protected override void LoadSprite()
         {
@@ -92,90 +85,59 @@ namespace RiverHollow.WorldObjects
         /// </summary>
         public override void Rollover()
         {
-            var mapProperties = CurrentMap.GetMapProperties();
-            if (Stash != null && mapProperties.ContainsKey("BuildingID") && int.TryParse(mapProperties["BuildingID"], out int buildingID))
+            if (GetObjectBuilding() is Building b)
             {
-                Building b = TownManager.GetBuildingByID(buildingID);
-                if (b != null)
+                int craftsLeft = b.GetDailyCraftingLimit();
+                var craftingList = GetCurrentCraftingList();
+                var validItems = WhatCanWeCraft(craftingList);
+
+                var merchandiseStock = GetMerchandiseStock();
+                InventoryManager.InitExtraInventory(merchandiseStock);
+
+                bool emptySlotFound = InventoryManager.HasSpaceInInventory(9999999, 1, false);
+                while (craftsLeft > 0)
                 {
-
-                    int craftsLeft = b.GetDailyCraftingLimit();
-                    var craftingList = GetCurrentCraftingList();
-                    var validItems = WhatCanWeCraft(craftingList);
-
-                    //Create a Dictionary to represent the stock we currently have
-                    var shopInventory = CreateShopInventory(craftingList);
-                    bool emptySlotFound = shopInventory.ContainsKey(-1);
-
-                    while (craftsLeft > 0)
+                    if (validItems.Count > 0)
                     {
-                        if (validItems.Count > 0)
+                        var tempItems = validItems;
+                        bool success = false;
+                        //Determine if there are any items missing in stock
+                        var missingItems = tempItems.Where(x => !InventoryManager.HasItemInInventory(x.ID, 1, merchandiseStock)).ToList();
+
+                        //We found at least one missing item and an empty slot so make it
+                        if (missingItems.Count > 0 && emptySlotFound)
                         {
-                            var tempItems = validItems;
-                            bool success = false;
-                            if (_liShopTables.Count > 0)
+                            var item = missingItems[0];
+                            if (TryCraftAtTarget(item, merchandiseStock, craftingList, ref validItems))
                             {
-                                //Determine if there are any items missing in stock
-                                var missingItems = tempItems.Where(x => !shopInventory.ContainsKey(x.ID)).ToList();
+                                success = true;
 
-                                //We found at least one missing item and an empty slot so make it
-                                if (missingItems.Count > 0 && emptySlotFound)
-                                {
-                                    var item = missingItems[0];
-                                    var table = Util.GetRandomItem(shopInventory[-1].Item2);
-                                    if (TryCraftAtTarget(item, table, craftingList, ref validItems))
-                                    {
-                                        success = true;
-
-                                        //Update the ShopInventory with the new item
-                                        AddItemToShopInventory(ref shopInventory, item, table);
-
-                                        //Remove one instance of table from the shopInventory. If there are multiple empty slots in the table
-                                        //It will be present multiple times.
-                                        shopInventory[-1].Item2.Remove(table);
-                                        if (shopInventory[-1].Item2.Count == 0)
-                                        {
-                                            shopInventory.Remove(-1);
-                                            emptySlotFound = shopInventory.ContainsKey(-1);
-                                        }
-                                    }
-                                }
-                                else  //Unable to make a new item, make whichever item we have the fewest of
-                                {
-                                    List<Tuple<int, int>> numberList = new List<Tuple<int, int>>();
-                                    foreach (var key in shopInventory.Keys)
-                                    {
-                                        if (key > -1)
-                                        {
-                                            numberList.Add(new Tuple<int, int>(key, shopInventory[key].Item1));
-                                        }
-                                    }
-
-                                    numberList = numberList.OrderBy(x => x.Item2).ToList();
-
-                                    var item = DataManager.GetItem(numberList[0].Item1);
-                                    var table = Util.GetRandomItem(shopInventory[item.ID].Item2);
-                                    if (TryCraftAtTarget(item, table, craftingList, ref validItems))
-                                    {
-                                        success = true;
-                                        AddItemToShopInventory(ref shopInventory, item, table);
-                                    }
-                                }
                             }
-                            else
-                            {
-                                var craftedItem = DataManager.CraftItem(validItems[0].ID);
-                                if (TryCraftAtTarget(craftedItem, Stash, craftingList, ref validItems))
-                                {
-                                    success = true;
-                                }
-                            }
-
-                            if (!success) { break; }
-                            else { craftsLeft--; }
                         }
-                        else { break; }
+                        else  //Unable to make a new item, make whichever item we have the fewest of
+                        {
+                            List<Tuple<int, int>> numberList = new List<Tuple<int, int>>();
+                            foreach (var i in merchandiseStock)
+                            {
+                                if (i != null && i.ID > -1)
+                                {
+                                    numberList.Add(new Tuple<int, int>(i.ID, i.Number));
+                                }
+                            }
+
+                            numberList = numberList.OrderBy(x => x.Item2).ToList();
+
+                            var item = DataManager.GetItem(numberList[0].Item1);
+                            if (TryCraftAtTarget(item, GetMerchandiseStock(), craftingList, ref validItems))
+                            {
+                                success = true;
+                            }
+                        }
+
+                        if (!success) { break; }
+                        else { craftsLeft--; }
                     }
+                    else { break; }
                 }
             }
         }
@@ -197,45 +159,6 @@ namespace RiverHollow.WorldObjects
             return validItems;
         }
 
-        private Dictionary<int, Tuple<int, List<Container>>> CreateShopInventory(List<int> craftingList)
-        {
-            var shopInventory = new Dictionary<int, Tuple<int, List<Container>>>();
-            foreach (var table in _liShopTables)
-            {
-                foreach (Item i in table.Inventory)
-                {
-                    if (i == null)
-                    {
-                        AddEmptyToShopInventory(ref shopInventory, -1, table);
-                    }
-                    else
-                    {
-                        AddItemToShopInventory(ref shopInventory, i, table);
-                    }
-                }
-            }
-            return shopInventory;
-        }
-
-        private void AddEmptyToShopInventory(ref Dictionary<int, Tuple<int, List<Container>>> shopInventory, int id, Container table)
-        {
-            CheckAddToShopInventory(ref shopInventory, -1);
-            shopInventory[-1].Item2.Add(table);
-        }
-
-        private void AddItemToShopInventory(ref Dictionary<int, Tuple<int, List<Container>>> shopInventory, Item i, Container table)
-        {
-            CheckAddToShopInventory(ref shopInventory, i.ID);
-
-            var inventory = shopInventory[i.ID];
-            int numberofItems = inventory.Item1;
-
-            inventory.Item2.Add(table);
-            numberofItems += i.Number;
-
-            shopInventory[i.ID] = new Tuple<int, List<Container>>(numberofItems, inventory.Item2);
-        }
-
         private void CheckAddToShopInventory(ref Dictionary<int, Tuple<int, List<Container>>> shopInventory, int id)
         {
             if (!shopInventory.ContainsKey(id))
@@ -244,16 +167,16 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        private bool TryCraftAtTarget(Item chosenItem, Container targetContainer, List<int> craftingList, ref List<Item> validItems)
+        private bool TryCraftAtTarget(Item chosenItem, Item[,] targetInventory, List<int> craftingList, ref List<Item> validItems)
         {
             bool rv = false;
 
-            if (InventoryManager.ExpendResources(chosenItem.GetRequiredItems(), Stash))
+            if (InventoryManager.ExpendResources(chosenItem.GetRequiredItems(), GetStash()))
             {
                 rv = true;
 
                 var targetItem = DataManager.CraftItem(chosenItem.ID);
-                InventoryManager.InitExtraInventory(targetContainer.Inventory);
+                InventoryManager.InitExtraInventory(targetInventory);
                 InventoryManager.AddToInventory(targetItem, false, true);
                 InventoryManager.ClearExtraInventory();
 
@@ -271,7 +194,7 @@ namespace RiverHollow.WorldObjects
             bool rv = false;
             if (GetCurrentCraftingList().Contains(targetItem.ID))
             {
-                if (InventoryManager.HasSufficientItems(targetItem.GetRequiredItems(), Stash))
+                if (InventoryManager.HasSufficientItems(targetItem.GetRequiredItems(), GetStash()))
                 {
                     rv = true;
                 }
@@ -280,42 +203,42 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
+        public Building GetObjectBuilding()
         {
-            bool rv = base.PlaceOnMap(pos, map, ignoreActors);
-
-            if (rv)
+            Building rv = null;
+            if (CurrentMap.BuildingID != -1)
             {
-                var containers = CurrentMap.GetObjectsByType<Container>();
-                var stash = containers.Where(x => x.GetBoolByIDKey("Stash")).ToList();
-
-                if (stash != null && stash.Count > 0 && stash[0] is Container c)
+                int objID = CurrentMap.BuildingID;
+                if (TownManager.TownObjectBuilt(objID) && DataManager.GetEnumByIDKey<BuildableEnum>(objID, "Subtype", DataType.WorldObject) == BuildableEnum.Building)
                 {
-                    SetStash(c);
-                }
-
-                var shopTables = containers.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
-
-                if (shopTables != null && shopTables.Count > 0 && shopTables[0] is Container t)
-                {
-                    AddShopTable(t);
+                    rv = (Building)MapManager.TownMap.GetObjectsByID(objID)[0];
                 }
             }
 
             return rv;
         }
-
-        public void SetStash(Container obj)
+        public Item[,] GetStash()
         {
-            if (Stash == null)
+            Item[,] rv = null;
+
+            if(GetObjectBuilding() is Building store)
             {
-                Stash = obj;
+                rv = store.Stash;
             }
+
+            return rv;
         }
 
-        public void AddShopTable(Container obj)
+        public Item[,] GetMerchandiseStock()
         {
-            _liShopTables?.Add(obj);
+            Item[,] rv = null;
+
+            if (GetObjectBuilding() is Building store)
+            {
+                rv = store.Merchandise;
+            }
+
+            return rv;
         }
 
         public bool MakingSomething()

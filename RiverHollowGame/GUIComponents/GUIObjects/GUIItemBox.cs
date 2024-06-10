@@ -1,17 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
+using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
-    public class GUIItemBox : GUIImage
+    public class GUIItemBox : GUIObject
     {
         public Item BoxItem => _guiItem?.ItemObject;
+        readonly GUIImage _gBackground;
         GUIItem _guiItem;
         GUIImage _imgIcon;
         public EquipmentEnum EquipmentType { get; private set; } = EquipmentEnum.None;
@@ -19,17 +20,45 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public int ColumnID { get; }
         public int RowID { get; }
 
-        public GUIItemBox(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks) : base(GUIUtils.ITEM_BOX)
+        public GUIItemBox(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
         {
+            _gBackground = new GUIImage(GUIUtils.ITEM_BOX);
+            AddControl(_gBackground);
+
+            SetSize();
             SetItem(it, e);
         }
 
-        public GUIItemBox(int row, int col, Item item) : base(GUIUtils.ITEM_BOX)
+        public GUIItemBox(int row, int col, Item item, bool drawBox = true)
         {
+            if (drawBox)
+            {
+                _gBackground = new GUIImage(GUIUtils.ITEM_BOX);
+                AddControl(_gBackground);
+            }
+            else
+            {
+                AddControl(_gBackground);
+            }
+            SetSize();
             SetItem(item);
             
             ColumnID = col;
             RowID = row;
+        }
+
+        private void SetSize()
+        {
+            if(_gBackground != null)
+            {
+                Width = _gBackground.Width;
+                Height = _gBackground.Height;
+            }
+            else
+            {
+                Width = GameManager.ScaledTileSize;
+                Height = GameManager.ScaledTileSize;
+            }
         }
 
         public override void Update(GameTime gTime)
@@ -50,15 +79,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        protected override void BeginHover()
-        {
-            if (BoxItem != null)
-            {
-                var win = new GUIItemDescriptionWindow(BoxItem);
-                win.AnchorToScreen(SideEnum.BottomRight);
-                GUIManager.OpenHoverObject(win, DrawRectangle, true);
-            }
-        }
         public void SetEquipmentType(EquipmentEnum e)
         {
             EquipmentType = e;
@@ -91,8 +111,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void SetItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
         {
-            HoverControls = false;
-
             if (it != null)
             {
                 if (_guiItem == null || (_guiItem != null && _guiItem.ItemObject != it))
@@ -116,7 +134,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public bool CompareNumToInventory(Container c)
         {
-            return _guiItem.CompareNumToInventory(c);
+            return _guiItem.CompareNumToInventory(c.Inventory);
         }
 
         public void SetAlpha(float val)

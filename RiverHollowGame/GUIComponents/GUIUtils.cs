@@ -39,10 +39,12 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle ICON_BOOK = new Rectangle(288, 80, 14, 14);
         internal static Rectangle ICON_COIN = new Rectangle(304, 80, 16, 16);
+        internal static Rectangle ICON_TINY_COIN = new Rectangle(0, 16, 6, 6);
         internal static Rectangle ICON_HAMMER = new Rectangle(320, 80, 14, 14);
         internal static Rectangle ICON_KEY = new Rectangle(320, 112, 16, 16);
         internal static Rectangle ICON_TRAVELER = new Rectangle(336, 80, 14, 15);
-        internal static Rectangle ICON_CAPACITY = new Rectangle(336, 64, 14, 14);
+        internal static Rectangle ICON_BAG = new Rectangle(336, 64, 16, 16);
+        internal static Rectangle ICON_CHEST = new Rectangle(304, 64, 16, 16);
         internal static Rectangle ICON_FACE = new Rectangle(288, 112, 16, 16);
         internal static Rectangle ICON_MAP_MARKER = new Rectangle(304, 112, 16, 16);
         internal static Rectangle ICON_HEART = new Rectangle(208, 72, 10, 9);
@@ -122,6 +124,14 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle HUD_SCROLL_L = new Rectangle(209, 96, 142, 3);
         internal static Rectangle HUD_DIVIDER = new Rectangle(106, 122, 8, 1);
 
+        internal static Rectangle HUD_DESC_TOP = new Rectangle(0, 352, 176, 30);
+        internal static Rectangle HUD_DESC_MID = new Rectangle(0, 383, 176, 9);
+        internal static Rectangle HUD_DESC_BOT = new Rectangle(0, 393, 176, 7);
+
+        internal static Rectangle HUD_SHOP_TOP = new Rectangle(176, 288, 176, 80);
+        internal static Rectangle HUD_SHOP_MID = new Rectangle(176, 368, 176, 32);
+        internal static Rectangle HUD_SHOP_BOT = new Rectangle(176, 400, 176, 48);
+
         internal static Rectangle WIN_IMAGE_CRAFTING = new Rectangle(192, 0, 160, 50);
         internal static Rectangle LEVEL_TAB = new Rectangle(48, 144, 44, 16);
 
@@ -144,7 +154,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle RECIPE_TOP = new Rectangle(0, 288, 176, 19);
         internal static Rectangle RECIPE_MIDDLE = new Rectangle(0, 307, 176, 19);
         internal static Rectangle RECIPE_BOTTOM = new Rectangle(0, 326, 176, 20);
-        internal static Rectangle RECIPE_DOTS = new Rectangle(176, 288, 16, 16);
+        internal static Rectangle RECIPE_DOTS = new Rectangle(160, 272, 16, 16);
 
         public static bool ProcessLeftMouseButton(Point mouse, params GUIObject[] list)
         {

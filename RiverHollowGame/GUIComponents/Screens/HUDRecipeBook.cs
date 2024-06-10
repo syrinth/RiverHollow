@@ -184,7 +184,7 @@ namespace RiverHollow.GUIComponents.Screens
                         var recipeItem = DataManager.GetItem(kvp.Key, kvp.Value);
                         var guiRecipeItem = new GUIItem(recipeItem, ItemBoxDraw.MoreThanOne, false);
 
-                        if (!guiRecipeItem.CompareNumToInventory(m.Stash))
+                        if (!guiRecipeItem.CompareNumToInventory(m.GetStash()))
                         {
                             itemToCraft.SetImageAlpha(0.3f);
                             dots.Alpha(0.3f);

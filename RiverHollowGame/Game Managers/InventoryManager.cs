@@ -197,11 +197,6 @@ namespace RiverHollow.Game_Managers
             return HasItemInInventory(itemID, x, PlayerInventory);
         }
 
-        public static bool HasItemInStashInventory(int itemID, int x, Container m)
-        {
-            return HasItemInInventory(itemID, x, m.Inventory);
-        }
-
         /// <summary>
         /// Iterates through the given Inventory, looking for an item
         /// of the given type and number
@@ -210,7 +205,7 @@ namespace RiverHollow.Game_Managers
         /// <param name="number">The number to find</param>
         /// <param name="inventory">Inventory to search</param>
         /// <returns></returns>
-        private static bool HasItemInInventory(int itemID, int number, Item [,] inventory)
+        public static bool HasItemInInventory(int itemID, int number, Item [,] inventory)
         {
             bool rv = false;
 
@@ -278,7 +273,7 @@ Exit:
                         int temp = testItem.Number;
                         if (testItem.Number >= leftToRemove)
                         {
-                            testItem.Remove(leftToRemove);
+                            testItem.Remove(leftToRemove, inventory == PlayerInventory);
                             if (testItem.Number == 0)
                             {
                                 toRemove.Add(inventory[i, j]);
@@ -286,7 +281,7 @@ Exit:
                         }
                         else
                         {
-                            testItem.Remove(testItem.Number);
+                            testItem.Remove(testItem.Number, inventory == PlayerInventory);
                             toRemove.Add(inventory[i, j]);
                         }
 
@@ -580,6 +575,37 @@ Exit:
             return rv;
         }
 
+        public static bool ExpendResources(Dictionary<int, int> requiredItems, Item[,] inventory)
+        {
+            bool rv = false;
+            if (requiredItems == null)
+            {
+                return false;
+            }
+
+            if (InventoryManager.HasSufficientItems(requiredItems, inventory))
+            {
+                rv = true;
+
+                if (inventory != null)
+                {
+                    InitExtraInventory(inventory);
+                }
+
+                foreach (KeyValuePair<int, int> kvp in requiredItems)
+                {
+                    InventoryManager.RemoveItemsFromInventory(kvp.Key, kvp.Value, inventory);
+                }
+
+                if (inventory != null)
+                {
+                    ClearExtraInventory();
+                }
+            }
+
+            return rv;
+        }
+
         public static Item GetCurrentItem()
         {
             return PlayerInventory[GameManager.HUDItemRow, GameManager.HUDItemCol];
@@ -615,6 +641,21 @@ Exit:
                         rv = false;
                         break;
                     }
+                }
+            }
+
+            return rv;
+        }
+
+        public static bool HasSufficientItems(Dictionary<int, int> requiredItems, Item[,] inventory)
+        {
+            bool rv = true;
+            foreach (KeyValuePair<int, int> kvp in requiredItems)
+            {
+                if (!HasItemInInventory(kvp.Key, kvp.Value, inventory))
+                {
+                    rv = false;
+                    break;
                 }
             }
 
