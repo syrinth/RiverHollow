@@ -253,6 +253,8 @@ namespace RiverHollow.GUIComponents.Screens
                 _gMainObject = o;
                 AddControl(_gMainObject);
             }
+
+            GUICursor.ResetCursor();
         }
         public virtual bool CloseMainObject()
         {

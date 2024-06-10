@@ -6,12 +6,14 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
-using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Game_Managers.SaveManager;
 using RiverHollow.GUIComponents;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Misc;
+using RiverHollow.GUIComponents.Screens.HUDWindows;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.WorldObjects
 {
@@ -264,13 +266,22 @@ namespace RiverHollow.WorldObjects
                     rv = true;
                     GUIManager.OpenTextWindow("Selection_Bed");
                 }
-                else if (GetBoolByIDKey("Shop"))
+                else if (GetBoolByIDKey("ShopSlate"))
                 {
                     rv = true;
 
-                    if (CurrentMap.TheShop is Shop shop)
+                    if (CurrentMap.TheShop is Shop)
                     {
                         GUIManager.OpenMainObject(new HUDShopSlateWindow());
+                    }
+                }
+                else if (GetBoolByIDKey("MerchantScales") && TownManager.Merchant != null)
+                {
+                    rv = true;
+
+                    if (CurrentMap.TheShop is Shop)
+                    {
+                        GUIManager.OpenMainObject(new HUDMerchantWindow(TownManager.Merchant));
                     }
                 }
                 else if (GetBoolByIDKey("UnlockUpgradeID"))
@@ -305,7 +316,12 @@ namespace RiverHollow.WorldObjects
                     rv = true;
                     GUICursor.SetCursor(GUICursor.CursorTypeEnum.Interact, CollisionBox);
                 }
-                else if (GetBoolByIDKey("Shop"))
+                else if (GetBoolByIDKey("ShopSlate"))
+                {
+                    rv = true;
+                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Shop, CollisionBox);
+                }
+                else if (GetBoolByIDKey("MerchantScales"))
                 {
                     rv = true;
                     GUICursor.SetCursor(GUICursor.CursorTypeEnum.Shop, CollisionBox);

@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-70/0-30][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][Traveller:10][TownScore:35][Shop]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:60-60/0-30][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][Traveller:10][TownScore:35][Shop]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -451,7 +451,7 @@
     </Item>
     <Item>
       <Key>112</Key>
-      <Value>[Type:Buildable][Subtype:Structure][Image:0-54][Size:5-4][Base:0-0-5-4][ReqItems:60-15/66-10][SpecialCoords:32-16][SubObjects:175-0-32][Unique][Market][HoverBox:16-11-16-24][Shop]</Value>
+      <Value>[Type:Buildable][Subtype:Structure][Image:0-54][Size:5-4][Base:0-0-5-4][ReqItems:60-15/66-10][SpecialCoords:32-16][SubObjects:175-0-32/176-48-32][Unique][Market][HoverBox:16-11-16-24]</Value>
     </Item>
     <Item>
       <Key>113</Key>
@@ -571,7 +571,7 @@
     </Item>
     <Item>
       <Key>142</Key>
-      <Value>[Type:Buildable][Subtype:Decor][Image:7-38][Size:4-2][Base:0-1-4-1][Texture:Decor][ShopTable:6-3/18/3]</Value>
+      <Value>[Type:WorldObject][Image:7-38][Size:4-2][Base:0-1-4-1][Texture:Decor][ShopTable:6-3/18/3]</Value>
     </Item>
     <Item>
       <Key>143</Key>
@@ -703,11 +703,11 @@
     </Item>
     <Item>
       <Key>175</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:14-37][Size:5-3][Base:0-2-5-1][ReqItems][MerchantCounter]</Value>
+      <Value>[Type:WorldObject][Image:14-37][Size:3-3][Base:0-2-3-1][ReqItems][ShopSlate][HoverBox:17-13-14-21][NoAlpha]</Value>
     </Item>
     <Item>
       <Key>176</Key>
-      <Value>[Type:WorldObject]</Value>
+      <Value>[Type:WorldObject][Image:17-38][Size:2-2][Base:0-1-2-1][ReqItems][MerchantScales][HoverBox:1-6-14-14]</Value>
     </Item>
     <Item>
       <Key>177</Key>
@@ -719,7 +719,7 @@
     </Item>
     <Item>
       <Key>179</Key>
-      <Value>[Type:WorldObject][Image:10-0][Size:1-2][Base:0-1-1-1][BaseOffset:0-12][HoverBox:0-7-16-24][Placement:Impassable][Shop]</Value>
+      <Value>[Type:WorldObject][Image:10-0][Size:1-3][Base:0-2-1-1][HoverBox:0-10-16-24][ShopSlate][NoAlpha]</Value>
     </Item>
   </Asset>
 </XnaContent>

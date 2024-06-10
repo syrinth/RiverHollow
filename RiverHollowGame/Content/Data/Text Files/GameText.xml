@@ -271,7 +271,7 @@
     </Item>
 	<Item>
       <Key>67</Key>
-      <Value>[Name:Selection_Sell][Text:Sell][TextVerb:Sell]</Value>
+      <Value>[Name:Empty]</Value>
     </Item>
 	<Item>
       <Key>68</Key>

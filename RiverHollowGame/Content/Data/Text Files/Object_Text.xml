@@ -744,7 +744,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_46</Key>
-      <Value>[Name:Opal][Description:A scintillating stone]</Value>
+      <Value>[Name:Sky Opal][Description:A scintillating stone]</Value>
     </Item>
     <Item>
       <Key>Item_47</Key>
@@ -1744,7 +1744,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_59</Key>
-      <Value>[Name:Opal Node]</Value>
+      <Value>[Name:Sky Opal Node]</Value>
     </Item>
     <Item>
       <Key>WorldObject_60</Key>
@@ -2208,11 +2208,11 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_175</Key>
-      <Value>[Name:Merchant Counter]</Value>
+      <Value>[Name:Merchant Counter Slate]</Value>
     </Item>
     <Item>
       <Key>WorldObject_176</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Merchant Counter Scale]</Value>
     </Item>
     <Item>
       <Key>WorldObject_177</Key>

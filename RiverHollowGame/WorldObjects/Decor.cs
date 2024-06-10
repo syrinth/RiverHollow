@@ -31,7 +31,6 @@ namespace RiverHollow.WorldObjects
 
         private Item _itemDisplay;
         private Decor _objDisplay;
-        private readonly List<Item> _liMerchIDs;
 
         public bool HasDisplay => _objDisplay != null || _itemDisplay != null;
         public bool Archive => GetBoolByIDKey("Archive");
@@ -58,11 +57,6 @@ namespace RiverHollow.WorldObjects
                     _itemDisplay.DrawShadow(true);
                 }
             }
-
-            if (GetBoolByIDKey("ShopTable"))
-            {
-                _liMerchIDs = new List<Item>();
-            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -78,21 +72,6 @@ namespace RiverHollow.WorldObjects
                 //Because Items don't exist directly on the map, we only need to tell it where to draw itself here
                 _itemDisplay.SetColor(Selected ? Color.Green : Color.White);
                 _itemDisplay.Draw(spriteBatch, new Rectangle(MapPosition.X + _pDisplayOffset.X, MapPosition.Y + _pDisplayOffset.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), Sprite.LayerDepth + 1);
-            }
-
-            if (_liMerchIDs != null && _liMerchIDs.Count > 0 && GetBoolByIDKey("ShopTable"))
-            {
-                var strData = GetStringParamsByIDKey("ShopTable");
-                var point = Util.ParsePoint(strData[0]);
-                var offset = int.Parse(strData[1]);
-                var spots = int.Parse(strData[2]);
-                for (int i = 0; i < spots && i < _liMerchIDs.Count; i++)
-                {
-                    _liMerchIDs[i]?.DrawShadow(true);
-                    _liMerchIDs[i]?.Draw(spriteBatch, new Rectangle(MapPosition.X + point.X, MapPosition.Y + point.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), Sprite.LayerDepth + 1);
-
-                    point.X += offset;
-                }
             }
         }
 
@@ -405,29 +384,6 @@ namespace RiverHollow.WorldObjects
                 rv = int.Parse(strData[2]);
             }
             return rv;
-        }
-
-        public bool MerchandiseSpaceLeft()
-        {
-            bool rv = false;
-            if (GetBoolByIDKey("ShopTable"))
-            {
-                var strData = GetStringParamsByIDKey("ShopTable");
-                rv = _liMerchIDs.Count + 1< int.Parse(strData[2]);
-            }
-            return rv;
-        }
-        public void AddMerchandiseItem(Item i)
-        {
-            if (i != null)
-            {
-                _liMerchIDs.Add(i);
-            }
-        }
-
-        public void ClearMerchandise()
-        {
-            _liMerchIDs.Clear();
         }
 
         public override WorldObjectData SaveData()

@@ -210,7 +210,7 @@
   </object>
   <object id="115" name="SpiritBlock" x="160" y="96" width="16" height="16">
    <properties>
-    <property name="ItemKeyID" type="int" value="162"/>
+    <property name="ItemKeyID" type="int" value="46"/>
     <property name="ObjectID" type="int" value="72"/>
     <property name="OutTrigger" value="MushCaveItem"/>
    </properties>

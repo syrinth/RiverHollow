@@ -102,11 +102,6 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public override void OpenMerchantWindow()
-        {
-            GUIManager.OpenMainObject(new HUDMerchantWindow(this));
-        }
-
         public int[] GetCurrentRequests()
         {
             int[] rv = new int[Constants.MERCHANT_REQUEST_NUM];

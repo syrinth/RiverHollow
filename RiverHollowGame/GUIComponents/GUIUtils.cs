@@ -170,7 +170,7 @@ namespace RiverHollow.GUIComponents
 
             return rv;
         }
-        public static bool CreateRequiredItemsList(ref List<GUIItemBox> _liRequiredItems, Dictionary<int, int> requiredItemList, Container c = null)
+        public static bool CreateRequiredItemsList(ref List<GUIItemBox> _liRequiredItems, Dictionary<int, int> requiredItemList)
         {
             bool rv = true;
 
@@ -181,7 +181,7 @@ namespace RiverHollow.GUIComponents
             {
                 GUIItemBox newItem = new GUIItemBox(DataManager.GetItem(kvp.Key, kvp.Value));
                 
-                if (!newItem.CompareNumToInventory(c))
+                if (!newItem.CompareNumToInventory())
                 {
                     rv = false;
                 }

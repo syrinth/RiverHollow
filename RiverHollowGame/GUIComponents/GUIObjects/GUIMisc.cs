@@ -334,7 +334,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 case GameIconEnum.Book:
                     iconDescription = "Upgrade_Recipe";
                     break;
-                case GameIconEnum.Capacity:
+                case GameIconEnum.Bag:
                     iconDescription = "Icon_Capacity";
                     break;
             }

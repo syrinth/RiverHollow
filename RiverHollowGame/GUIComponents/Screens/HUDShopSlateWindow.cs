@@ -16,6 +16,8 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDShopSlateWindow : GUIMainObject
     {
+        readonly Point startPoint = new Point(32, 53);
+
         private readonly List<GUIObject> _liItems;
         private readonly List<GUIToggle> _gSlateToggles;
         private readonly GUIImage _gTop;
@@ -26,6 +28,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         public HUDShopSlateWindow()
         {
+            Position(Util.MultiplyPoint(startPoint, GameManager.CurrentScale));
             GameManager.SetDescriptionDrawPoint(new Point(240, 48));
 
             _liItems = new List<GUIObject>();
@@ -111,11 +114,6 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            if (Contains(mouse))
-            {
-                rv = true;
-            }
-
             return rv;
         }
 
@@ -151,7 +149,7 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else { continue; }
 
-                if (i == 0) { newBox.PositionAndMove(_gTop, 32, 51); }
+                if (i == 0) { newBox.PositionAndMove(_gTop, startPoint); }
                 else if (i % 5 == 0) { newBox.AnchorAndAlignWithSpacing(_liItems[i - 5], SideEnum.Bottom, SideEnum.Left, 16); }
                 else { newBox.AnchorAndAlignWithSpacing(_liItems[i - 1], SideEnum.Right, SideEnum.Top, 8); }
 
@@ -184,7 +182,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gShopInventory = new GUIShopInventory();
             AddControl(_gShopInventory);
-            _gShopInventory.PositionAndMove(_gTop, 32, 51);
+            _gShopInventory.PositionAndMove(_gTop, startPoint);
         }
 
         private void DisplaySupplyInfo()
@@ -197,7 +195,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gShopInventory = new GUIShopInventory();
             AddControl(_gShopInventory);
-            _gShopInventory.PositionAndMove(_gTop, 32, 51);
+            _gShopInventory.PositionAndMove(_gTop, startPoint);
         }
 
         private void AddSlateToggle(EmptyDelegate del, Rectangle icon)
@@ -208,13 +206,17 @@ namespace RiverHollow.GUIComponents.Screens
 
             if (index == 0)
             {
-                if (IsShop())
+                if (IsShop() && MakesItems())
                 {
                     _gSlateToggles[index].PositionAndMove(_gTop, 64, 20);
                 }
-                else
+                else if (MakesItems())
                 {
                     _gSlateToggles[index].PositionAndMove(_gTop, 72, 20);
+                }
+                else
+                {
+                    _gSlateToggles[index].PositionAndMove(_gTop, 80, 20);
                 }
             }
             else
@@ -260,7 +262,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             Cost = cost;
             ShopItem = i;
-            _giItem = new GUIItem(i, ItemBoxDraw.OnlyStacks, !(i is WrappedObjectItem));
+            _giItem = new GUIItem(i, ItemBoxDraw.MoreThanOne, !(i is WrappedObjectItem));
             AddControl(_giItem);
 
             _giItem.SetColor(i.ItemColor);

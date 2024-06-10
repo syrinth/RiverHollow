@@ -132,9 +132,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _guiItem?.SetColor(c);
         }
 
-        public bool CompareNumToInventory(Container c)
+        public bool CompareNumToInventory()
         {
-            return _guiItem.CompareNumToInventory(c.Inventory);
+            return _guiItem.CompareNumToInventory(null);
         }
 
         public void SetAlpha(float val)

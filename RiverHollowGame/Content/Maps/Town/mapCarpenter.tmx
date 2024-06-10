@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="57">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="15" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="59">
  <properties>
   <property name="BuildingID" type="int" value="39"/>
   <property name="Cutscenes" value="2"/>
@@ -299,7 +299,7 @@
 0,0,0,0,0,1095,0,2593,0,1008,1009,1010,2642,2643,1117,
 1093,1028,1028,1028,1028,1029,1072,1072,1072,1030,1031,1032,1072,1072,1117,
 1095,0,2571,2572,0,1051,0,0,0,0,0,0,0,2351,1117,
-1095,0,2594,2595,0,1051,928,929,930,0,0,0,0,0,1117,
+1095,0,2594,2595,0,1051,0,929,930,0,0,0,0,0,1117,
 1095,1072,1072,1072,1072,1073,2087,0,0,0,0,0,0,0,1117,
 1095,0,0,0,0,0,0,0,0,0,0,0,0,0,1117,
 1095,0,0,0,0,0,0,0,0,0,0,0,0,0,1117,

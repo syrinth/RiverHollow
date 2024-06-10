@@ -73,8 +73,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             capacityWindow.PositionAndMove(_gMerchantWindow, 115, 47);
             AddControl(capacityWindow);
 
-            var icon = new GUIIcon(GUIUtils.ICON_BAG, GameIconEnum.Capacity);
-            icon.AnchorToInnerSide(capacityWindow, SideEnum.TopLeft, 1);
+            var icon = new GUIIcon(GUIUtils.ICON_BAG, GameIconEnum.Bag);
+            icon.AnchorToInnerSide(capacityWindow, SideEnum.TopLeft);
             capacityWindow.AddControl(icon);
 
             _gCapacity = new GUIText(_merchant.Capacity);

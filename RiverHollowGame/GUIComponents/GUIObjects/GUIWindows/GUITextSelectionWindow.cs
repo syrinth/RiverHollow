@@ -58,9 +58,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 case TextEntrySelectionEnum.VillageTalk:
                     AddVillagerTalkOptions();
                     break;
-                case TextEntrySelectionEnum.MerchantTalk:
-                    AddMerchantTalkOptions();
-                    break;
                 case TextEntrySelectionEnum.YesNo:
                     AddYesNoOptions();
                     break;
@@ -89,25 +86,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     else if (v.AvailableToMarry() && InventoryManager.HasItemInPlayerInventory(int.Parse(DataManager.Config[16]["ItemID"]), 1)) { liCommands.Add(DataManager.GetGameTextEntry("Selection_Propose")); }
                 }
                 liCommands.Add(DataManager.GetGameTextEntry("Selection_NeverMind"));
-
-                AddOptions(liCommands);
-            }
-        }
-
-        /// <summary>
-        /// Adds the appropriate Merchant talk options
-        /// </summary>
-        private void AddMerchantTalkOptions()
-        {
-            if (GameManager.CurrentNPC != null)
-            {
-                List<TextEntry> liCommands = new List<TextEntry>
-                {
-                    DataManager.GetGameTextEntry("Selection_Talk"),
-                    DataManager.GetGameTextEntry("Selection_Buy"),
-                    DataManager.GetGameTextEntry("Selection_Sell"),
-                    DataManager.GetGameTextEntry("Selection_NeverMind")
-                };
 
                 AddOptions(liCommands);
             }
@@ -254,9 +232,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         nextText = npc.GetDialogEntry("MarriageYes");
                     }
                     else { nextText = npc?.GetDialogEntry("MarriageNo"); }
-                    break;
-                case TextEntryVerbEnum.Sell:
-                    npc?.OpenMerchantWindow();
                     break;
                 case TextEntryVerbEnum.Talk:
                     nextText = npc?.GetDailyDialogue();

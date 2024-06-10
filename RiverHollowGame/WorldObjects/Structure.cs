@@ -167,7 +167,14 @@ namespace RiverHollow.WorldObjects
 
         public override bool ProcessRightClick()
         {
-            return _mainObj.ProcessRightClick();
+            bool rv = base.ProcessRightClick();
+
+            if (!rv)
+            {
+                rv = _mainObj.ProcessRightClick();
+            }
+
+            return rv;
         }
 
         public override void SelectObject(bool val, bool selectParent = true)

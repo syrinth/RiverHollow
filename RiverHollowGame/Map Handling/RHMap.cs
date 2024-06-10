@@ -73,6 +73,7 @@ namespace RiverHollow.Map_Handling
         public IList<Mob> Mobs { get { return _liMobs.AsReadOnly(); } }
         public List<Actor> ToAdd;
         private readonly Dictionary<int, List<WorldObject>> _diWorldObjects;
+        private List<Tuple<Item, Point, float>> _liMerchDisplayPoints;
         private readonly List<ResourceSpawn> _liResourceSpawns;
         private readonly List<MobSpawn> _liMobSpawns;
         private readonly List<int> _liCutscenes;
@@ -191,6 +192,10 @@ namespace RiverHollow.Map_Handling
             {
                 DungeonName = props["Dungeon"];
                 DungeonManager.AddMapToDungeon(props["Dungeon"], props.ContainsKey("Procedural"), this);
+            }
+            if (props.ContainsKey("BuildingID"))
+            {
+                _liMerchDisplayPoints = new List<Tuple<Item, Point, float>>();
             }
 
             if (props.ContainsKey("Cutscenes"))
@@ -368,6 +373,16 @@ namespace RiverHollow.Map_Handling
             {
                 objectList.ForEach(x => x.Draw(spriteBatch));
             }
+
+            if (_liMerchDisplayPoints != null)
+            {
+                foreach(var obj in _liMerchDisplayPoints)
+                {
+                    obj.Item1?.DrawShadow(true);
+                    obj.Item1?.Draw(spriteBatch, new Rectangle(obj.Item2.X, obj.Item2.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), obj.Item3);
+                }
+            }
+
 
             if (HeldObject != null && (!GameManager.GamePaused() || Scrying()))
             {
@@ -1134,29 +1149,86 @@ namespace RiverHollow.Map_Handling
                 {
                     //Assign setting drawing to ShopTables
                     var worldObjects = building.InnerMap.GetObjectsByType<WorldObject>();
-                    var displayTables = worldObjects.Where(x => x.GetBoolByIDKey("ShopTable")).Cast<Decor>().ToList();
-                    displayTables.ForEach(x => x.ClearMerchandise());
+                    var displayTables = worldObjects.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
+                    _liMerchDisplayPoints.Clear();
 
                     int index = 0;
+                    int tableCount = 0;
+                    int maxTableSpots = GetMaxTableSpots(displayTables[index]);
                     foreach (var merch in building.Merchandise)
                     {
-                        if (index < displayTables.Count)
+                        if (index < displayTables.Count && merch != null)
                         {
-                            if (merch != null)
+                            var table = displayTables[index];
+
+                            var strData = table.GetStringParamsByIDKey("ShopTable");
+                            var point = Util.ParsePoint(strData[0]);
+                            var offset = int.Parse(strData[1]);
+                            var spots = int.Parse(strData[2]);
+
+                            if (tableCount < maxTableSpots)
                             {
-                                //MaxMerchandise
-                                var table = displayTables[index];
-                                if (table.MerchandiseSpaceLeft())
+                                if (merch != null)
                                 {
-                                    table.AddMerchandiseItem(merch);
+                                    var merchSpot = point + new Point(offset * tableCount++, 0);
+                                    _liMerchDisplayPoints.Add(new Tuple<Item, Point, float>(merch, table.MapPosition + merchSpot, table.Sprite.LayerDepth + 1));
                                 }
-                                else { index++; }
+                            }
+                            else
+                            {
+                                index++;
+                                tableCount = 0;
+                                maxTableSpots = GetMaxTableSpots(displayTables[index]);
                             }
                         }
                     }
                 }
             }
         }
+
+        private int GetMaxTableSpots(WorldObject obj)
+        {
+            var strData = obj.GetStringParamsByIDKey("ShopTable");
+            return int.Parse(strData[2]);
+        }
+
+        //        if (_liMerchIDs != null && _liMerchIDs.Count > 0 && GetBoolByIDKey("ShopTable"))
+        //            {
+        //                var strData = GetStringParamsByIDKey("ShopTable");
+        //        var point = Util.ParsePoint(strData[0]);
+        //        var offset = int.Parse(strData[1]);
+        //        var spots = int.Parse(strData[2]);
+        //                for (int i = 0; i<spots && i<_liMerchIDs.Count; i++)
+        //                {
+        //                    _liMerchIDs[i]?.DrawShadow(true);
+        //        _liMerchIDs[i]?.Draw(spriteBatch, new Rectangle(MapPosition.X + point.X, MapPosition.Y + point.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), Sprite.LayerDepth + 1);
+
+        //                    point.X += offset;
+        //                }
+        //}
+
+        //          public bool MerchandiseSpaceLeft()
+        //        {
+        //            bool rv = false;
+        //            if (GetBoolByIDKey("ShopTable"))
+        //            {
+        //                var strData = GetStringParamsByIDKey("ShopTable");
+        //                rv = _liMerchIDs.Count + 1 < int.Parse(strData[2]);
+        //            }
+        //            return rv;
+        //        }
+        //        public void AddMerchandiseItem(Item i)
+        //        {
+        //            if (i != null)
+        //            {
+        //                _liMerchIDs.Add(i);
+        //            }
+        //        }
+
+        //        public void ClearMerchandise()
+        //        {
+        //            _liMerchIDs.Clear();
+        //        }
 
         /// <summary>
         /// Creates the TravelPoint object necessary for the given Building
@@ -1972,6 +2044,11 @@ namespace RiverHollow.Map_Handling
                     {
                         found = true;
                         GUICursor.SetCursor(GUICursor.CursorTypeEnum.Door, t.GetTravelPoint().CollisionBox);
+                    }
+                    else if (t.GetWorldObject(false) != null && t.GetWorldObject().CanPickUp())
+                    {
+                        found = true;
+                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, t.GetWorldObject().CollisionBox);
                     }
 
                     MapItem hoverItem = _liItems.Find(x => x.CollisionBox.Contains(GUICursor.GetWorldMousePosition()));

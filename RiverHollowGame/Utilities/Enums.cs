@@ -6,8 +6,8 @@
         public enum ButtonEnum { Left, Right, Middle };
         public enum DataType { Actor, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
         public enum BuildTypeEnum { Structure, WorldObject };
-        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Sell, Propose, Date, EndDay, Option_0, Option_1, Option_2, Option_3 };
-        public enum TextEntrySelectionEnum { None, VillageTalk, MerchantTalk, YesNo, Bed };
+        public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Propose, Date, EndDay, Option_0, Option_1, Option_2, Option_3 };
+        public enum TextEntrySelectionEnum { None, VillageTalk, YesNo, Bed };
         public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Donate, PetFollow, PetUnfollow, GetBaby }
 
         public enum SpawnTypeEnum { Item, Object, Mob };
@@ -78,7 +78,7 @@
         public enum VillagerRequestEnum { Close, Far, TownWide };
         public enum MailboxEnum { Unsent, Processed, Waiting };
 
-        public enum GameIconEnum { None, Book, Coin, Hammer, Traveler, Capacity };
+        public enum GameIconEnum { None, Book, Coin, Hammer, Traveler, Bag };
 
         public enum PlayerResourceEnum { Energy, Health, Magic };
 
