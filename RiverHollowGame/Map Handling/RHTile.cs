@@ -3,12 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.MainObjects;
-using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
-using System;
 using System.Collections.Generic;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
@@ -401,6 +398,21 @@ namespace RiverHollow.Map_Handling
         public bool Passable()
         {
             bool rv = TileCheck() && (WorldObject == null || WorldObject.Walkable);
+
+            return rv;
+        }
+
+        public bool HasUpperLayer()
+        {
+            bool rv = false;
+            foreach (TiledMapTileLayer l in _diProps.Keys)
+            {
+                if (l.Name.Contains("Upper"))
+                {
+                    rv = true;
+                    break;
+                }
+            }
 
             return rv;
         }

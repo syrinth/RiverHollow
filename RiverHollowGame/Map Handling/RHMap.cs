@@ -633,7 +633,7 @@ namespace RiverHollow.Map_Handling
             var possibleTiles = GetValidTiles();
 
             //Step 3 Map Resources need to be generated
-            List<RHTile> hiddenTiles = possibleTiles.FindAll(x => !x.GetTileByDirection(DirectionEnum.Down).TileCheck());
+            List<RHTile> hiddenTiles = possibleTiles.FindAll(x => x.HasUpperLayer());
             hiddenTiles.ForEach(x => possibleTiles.Remove(x));
             GenerateMapResources(false,  ref possibleTiles);
 
