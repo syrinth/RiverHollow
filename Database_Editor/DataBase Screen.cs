@@ -1652,7 +1652,7 @@ namespace Database_Editor
                     defaultTags = DEFAULT_ITEM_TAGS + ",ObjectID:";
                     break;
                 case ItemTypeEnum.Food:
-                    defaultTags = DEFAULT_ITEM_TAGS + ",FoodType:,FoodValue:,Stam:";
+                    defaultTags = DEFAULT_ITEM_TAGS + ",FoodType:,FoodValue:,EnergyRecovery:";
                     break;
                 case ItemTypeEnum.NPCToken:
                     defaultTags = DEFAULT_ITEM_TAGS + ",NPC_ID:";
@@ -1664,7 +1664,7 @@ namespace Database_Editor
                     defaultTags = DEFAULT_ITEM_TAGS + ",ObjectID:,Season:";
                     break;
                 case ItemTypeEnum.Tool:
-                    defaultTags = DEFAULT_ITEM_TAGS + ",Level:,Stam:";
+                    defaultTags = DEFAULT_ITEM_TAGS + ",Level:,EnergyCost:";
                     break;
                 default:
                     defaultTags = DEFAULT_ITEM_TAGS + ",Count:";

@@ -17,7 +17,7 @@ namespace RiverHollow.Items
     public class Tool : Item
     {
         public ToolEnum ToolType => GetEnumByIDKey<ToolEnum>("Subtype");
-        public float EnergyCost => GetFloatByIDKey("Stam", 0);
+        public float EnergyCost => GetFloatByIDKey("EnergyCost", 0);
         public int ToolLevel => GetIntByIDKey("Level");
 
         public bool IsAutomatic => ToolType != ToolEnum.Sword && ToolType != ToolEnum.Hoe;
@@ -204,11 +204,6 @@ namespace RiverHollow.Items
         public bool HasCharges()
         {
             return _iCharges > 0;
-        }
-
-        public override string GetDetails()
-        {
-            return string.Format("Level: {0}", ToolLevel);
         }
     }
 }

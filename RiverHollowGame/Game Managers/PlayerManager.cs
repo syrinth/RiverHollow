@@ -552,7 +552,7 @@ namespace RiverHollow.Game_Managers
             MoveToSpawn();
         }
 
-        public static void GetStamina(ref float curr, ref float max)
+        public static void GetEnergy(ref float curr, ref float max)
         {
             curr = CurrentEnergy;
             max = MaxEnergy();

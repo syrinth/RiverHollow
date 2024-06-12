@@ -1,6 +1,4 @@
 ﻿using RiverHollow.Game_Managers;
-using RiverHollow.Misc;
-using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -8,22 +6,13 @@ namespace RiverHollow.Items
 {
     public class Food : Item
     {
-        public int Stamina => GetIntByIDKey("Stam");
+        public int EnergyRecovery => GetIntByIDKey("EnergyRecovery");
         public int FoodValue => GetIntByIDKey("FoodValue");
         public FoodTypeEnum FoodType => GetEnumByIDKey<FoodTypeEnum>("FoodType");
 
         public Food(int id, int num) : base(id, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Food");
-        }
-
-        public override string GetDetails()
-        {
-            string rv = string.Empty;
-            if (Stamina > 0) { rv += "Stamina: +" + Stamina + " "; }
-            rv = rv.Trim();
-
-            return rv;
         }
 
         public override bool HasUse() { return true; }
@@ -40,7 +29,7 @@ namespace RiverHollow.Items
             if (Number > 0)
             {
                 Remove(1);
-                PlayerManager.RecoverEnergy(Stamina);
+                PlayerManager.RecoverEnergy(EnergyRecovery);
             }
             ClearGMObjects();
         }

@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -347,18 +346,30 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
     public class GUIIconText : GUIObject
     {
-        readonly GUIIcon _gIcon;
         readonly GUIText _gText;
 
-        public GUIIconText(string text, int spacing, Rectangle sourceRect, GameIconEnum e, SideEnum anchorTo, SideEnum alignTo)
+        public GUIIconText(string text, int spacing, Rectangle sourceRect, GameIconEnum e, SideEnum anchorTo, SideEnum alignTo, string fontText = DataManager.FONT_NEW)
         {
-            _gIcon = new GUIIcon(sourceRect, e);
-            _gText = new GUIText(text);
-            _gText.AnchorAndAlignWithSpacing(_gIcon, anchorTo, alignTo, spacing);
+            var icon = new GUIIcon(sourceRect, e);
+            _gText = new GUIText(text, true, fontText);
+            _gText.AnchorAndAlignWithSpacing(icon, anchorTo, alignTo, spacing);
 
-            AddControls(_gIcon, _gText);
+            AddControls(icon, _gText);
 
             DetermineSize();
+
+            //The Icon is at 0,0 so we need to reorient if the text is to the left of it
+            var delta = _gText.Position() - icon.Position();
+            if (delta.X < 0)
+            {
+                _gText.MoveBy(-delta.X, 0);
+                icon.MoveBy(-delta.X, 0);
+            }
+        }
+
+        public override void SetColor(Color c)
+        {
+            _gText.SetColor(c);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         GUIButton _btnSkipCutscene;
         GUIOldStatDisplay _gHealthDisplay;
-        GUIOldStatDisplay _gStaminaDisplay;
+        GUIOldStatDisplay _gEnergyDisplay;
         GUIOldStatDisplay _gMagicDisplay;
         GUIWindow _gMoneyWindow;
         GUIMoneyDisplay _gMoney;
@@ -44,20 +44,20 @@ namespace RiverHollow.GUIComponents.Screens
             _gHealthDisplay = new GUIOldStatDisplay(PlayerManager.GetHP, Color.Red);
             _gHealthDisplay.AnchorToScreen(SideEnum.TopLeft, 3);
 
-            _gStaminaDisplay = new GUIOldStatDisplay(PlayerManager.GetStamina, Color.ForestGreen);
-            _gStaminaDisplay.AnchorAndAlignWithSpacing(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
+            _gEnergyDisplay = new GUIOldStatDisplay(PlayerManager.GetEnergy, Color.ForestGreen);
+            _gEnergyDisplay.AnchorAndAlignWithSpacing(_gHealthDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
 
             if (PlayerManager.MagicUnlocked)
             {
                 _gMagicDisplay = new GUIOldStatDisplay(PlayerManager.GetMagic, Color.Blue);
-                _gMagicDisplay.AnchorAndAlignWithSpacing(_gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
+                _gMagicDisplay.AnchorAndAlignWithSpacing(_gEnergyDisplay, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
             }
 
             _gMoneyWindow = new GUIWindow(GUIUtils.WINDOW_BROWN, ScaleIt(48), ScaleIt(26));
             
             _gMoney = new GUIMoneyDisplay();
             _gMoney.AnchorToInnerSide(_gMoneyWindow, SideEnum.TopLeft);
-            _gMoneyWindow.AnchorAndAlignWithSpacing(PlayerManager.MagicUnlocked ? _gMagicDisplay : _gStaminaDisplay, SideEnum.Bottom, SideEnum.Left, 2);
+            _gMoneyWindow.AnchorAndAlignWithSpacing(PlayerManager.MagicUnlocked ? _gMagicDisplay : _gEnergyDisplay, SideEnum.Bottom, SideEnum.Left, 2);
 
             _gDungeonKeys = new GUIDungeonKeyDisplay();
             _gDungeonKeys.AnchorAndAlignWithSpacing(_gMoneyWindow, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
@@ -138,7 +138,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _gMoney.Show(!InTownMode());
                 _gDungeonKeys.Show(!InTownMode());
                 _gHealthDisplay.Show(!InTownMode());
-                _gStaminaDisplay.Show(!InTownMode());
+                _gEnergyDisplay.Show(!InTownMode());
                 _gMagicDisplay?.Show(!InTownMode());
             }
         }

@@ -5,7 +5,7 @@ namespace RiverHollow.Items
 {
     public class Seed : Item
     {
-        int _iSeedPlantID => GetIntByIDKey("ObjectID");
+        public int PlantID => GetIntByIDKey("ObjectID");
         public Seed(int id, int num) : base(id, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Seeds");
@@ -16,12 +16,12 @@ namespace RiverHollow.Items
         {
             GameManager.EnterTownModeEdit();
 
-            if (MapManager.CurrentMap == MapManager.TownMap || DataManager.GetBoolByIDKey(_iSeedPlantID, "NoWater", Enums.DataType.WorldObject))
+            if (MapManager.CurrentMap == MapManager.TownMap || DataManager.GetBoolByIDKey(PlantID, "NoWater", Enums.DataType.WorldObject))
             {
                 if (Number > 1) { Remove(1); }
                 else { InventoryManager.RemoveItemFromInventory(this); }
 
-                GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(_iSeedPlantID));
+                GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(PlantID));
 
                 return true;
             }

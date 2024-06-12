@@ -95,7 +95,7 @@
     </Item>
     <Item>
       <Key>23</Key>
-      <Value>[Type:Food][Subtype:Food][Image:1-0][Value:10][FoodType:Forage][Stam:10][FoodValue:0]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:1-0][Value:10][FoodType:Forage][EnergyRecovery:10][FoodValue:0]</Value>
     </Item>
     <Item>
       <Key>24</Key>
@@ -283,7 +283,7 @@
     </Item>
     <Item>
       <Key>70</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:0-3][FoodType:Dessert][Value:10][Stam:5][ReqItems:149-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:0-3][FoodType:Dessert][Value:10][EnergyRecovery:5][ReqItems:149-2]</Value>
     </Item>
     <Item>
       <Key>71</Key>
@@ -303,7 +303,7 @@
     </Item>
     <Item>
       <Key>75</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:1-3][FoodType:Dessert][Value:15][Stam:15][ReqItems:23-1/149-1]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:1-3][FoodType:Dessert][Value:15][EnergyRecovery:15][ReqItems:23-1/149-1]</Value>
     </Item>
     <Item>
       <Key>76</Key>
@@ -403,7 +403,7 @@
     </Item>
     <Item>
       <Key>100</Key>
-      <Value>[Type:Food][Subtype:Food][Image:0-1][Value:5][FoodType:Forage][Stam:15][FoodValue:0]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:0-1][Value:5][FoodType:Forage][EnergyRecovery:15][FoodValue:0]</Value>
     </Item>
     <Item>
       <Key>101</Key>
@@ -531,11 +531,11 @@
     </Item>
     <Item>
       <Key>132</Key>
-      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Level:1][SoundEffect:Pick][AnimationData:0-0/3-4/5/0.08][Stam:2][HitAt:1]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Level:1][SoundEffect:Pick][AnimationData:0-0/3-4/5/0.08][EnergyCost:2][HitAt:1]</Value>
     </Item>
     <Item>
       <Key>133</Key>
-      <Value>[Type:Tool][Subtype:Axe][Image:0-1][Level:1][SoundEffect:Axe][AnimationData:0-64/3-4/5/0.08][Stam:2][HitAt:1]</Value>
+      <Value>[Type:Tool][Subtype:Axe][Image:0-1][Level:1][SoundEffect:Axe][AnimationData:0-64/3-4/5/0.08][EnergyCost:2][HitAt:1]</Value>
     </Item>
     <Item>
       <Key>134</Key>
@@ -543,11 +543,11 @@
     </Item>
     <Item>
       <Key>135</Key>
-      <Value>[Type:Tool][Subtype:WateringCan][Image:0-3][Stam:1][Level:1][Value:100][AnimationData:0-256/3-4/5/0.04]</Value>
+      <Value>[Type:Tool][Subtype:WateringCan][Image:0-3][EnergyCost:1][Level:1][Value:100][AnimationData:0-256/3-4/5/0.04]</Value>
     </Item>
     <Item>
       <Key>136</Key>
-      <Value>[Type:Tool][Subtype:Harp][Image:0-6][Stam:1][Level:1]</Value>
+      <Value>[Type:Tool][Subtype:Harp][Image:0-6][EnergyCost:1][Level:1]</Value>
     </Item>
     <Item>
       <Key>137</Key>
@@ -559,7 +559,7 @@
     </Item>
     <Item>
       <Key>139</Key>
-      <Value>[Type:Tool][Subtype:Scythe][Image:0-8][Level:1][SoundEffect:Scythe][AnimationData:0-128/3-4/5/0.06][Stam:0.5][HitAt:2]</Value>
+      <Value>[Type:Tool][Subtype:Scythe][Image:0-8][Level:1][SoundEffect:Scythe][AnimationData:0-128/3-4/5/0.06][HitAt:2]</Value>
     </Item>
     <Item>
       <Key>140</Key>
@@ -595,11 +595,11 @@
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Food][Subtype:Food][Image:0-0][Stam:12][WrappedImage:8-0]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:0-0][EnergyRecovery:12][WrappedImage:8-0]</Value>
     </Item>
     <Item>
       <Key>149</Key>
-      <Value>[Type:Food][Subtype:Food][Image:2-0][Value:5][Stam:35]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:2-0][Value:5][EnergyRecovery:35]</Value>
     </Item>
     <Item>
       <Key>150</Key>
@@ -611,19 +611,19 @@
     </Item>
     <Item>
       <Key>152</Key>
-      <Value>[Type:Food][Subtype:Food][Image:0-1][Value:20][Stam:2]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:0-1][Value:20][EnergyRecovery:2]</Value>
     </Item>
     <Item>
       <Key>153</Key>
-      <Value>[Type:Food][Subtype:Food][Image:1-1][Value:25][Stam:3]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:1-1][Value:25][EnergyRecovery:3]</Value>
     </Item>
     <Item>
       <Key>154</Key>
-      <Value>[Type:Food][Subtype:Food][Image:4-2][Value:8][Stam:4]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:4-2][Value:8][EnergyRecovery:10]</Value>
     </Item>
     <Item>
       <Key>155</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:2-3][FoodType:Healthy][Value:15][Stam:55][ReqItems:148-1/163-1]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:2-3][FoodType:Healthy][Value:15][EnergyRecovery:55][ReqItems:148-1/163-1]</Value>
     </Item>
     <Item>
       <Key>156</Key>
@@ -631,7 +631,7 @@
     </Item>
     <Item>
       <Key>157</Key>
-      <Value>[Type:Food][Subtype:Food][Image:9-6][Stam:5]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:9-6][EnergyRecovery:5]</Value>
     </Item>
     <Item>
       <Key>158</Key>
@@ -655,7 +655,7 @@
     </Item>
     <Item>
       <Key>163</Key>
-      <Value>[Type:Food][Subtype:Food][Image:5-2][ItemGroups:Herb][Value:30][Stam:40][FoodType:Healthy]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:5-2][ItemGroups:Herb][Value:30][EnergyRecovery:40][FoodType:Healthy]</Value>
     </Item>
     <Item>
       <Key>164</Key>
@@ -783,7 +783,7 @@
     </Item>
     <Item>
       <Key>195</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:8-0][FoodType:Plain][Value:10][Stam:10][ReqItems:150-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:8-0][FoodType:Plain][Value:10][EnergyRecovery:10][ReqItems:150-2]</Value>
     </Item>
     <Item>
       <Key>196</Key>
@@ -839,7 +839,7 @@
     </Item>
     <Item>
       <Key>209</Key>
-      <Value>[Type:Tool][Subtype:FishingRod][Image:0-11][Level:1][Stam:2][AnimationData:0-256/3-4/5/0.04][ReelAnimation:0-320/3-4/5/0.04]</Value>
+      <Value>[Type:Tool][Subtype:FishingRod][Image:0-11][Level:1][EnergyCost:2][AnimationData:0-256/3-4/5/0.04][ReelAnimation:0-320/3-4/5/0.04]</Value>
     </Item>
     <Item>
       <Key>210</Key>
@@ -855,15 +855,15 @@
     </Item>
     <Item>
       <Key>213</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:9-0][FoodType:Healthy][Value:10][Stam:25][ReqItems:23-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:9-0][FoodType:Healthy][Value:10][EnergyRecovery:25][ReqItems:23-2]</Value>
     </Item>
     <Item>
       <Key>214</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:8-1][FoodType:Seafood][Value:35][Stam:30][ReqItems:210-1/211-1]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:8-1][FoodType:Seafood][Value:35][EnergyRecovery:30][ReqItems:210-1/211-1]</Value>
     </Item>
     <Item>
       <Key>215</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:9-1][FoodType:Fancy][Value:20][Stam:30][ReqItems:154-2]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:9-1][FoodType:Fancy][Value:20][EnergyRecovery:30][ReqItems:154-2]</Value>
     </Item>
     <Item>
       <Key>216</Key>
@@ -871,7 +871,7 @@
     </Item>
     <Item>
       <Key>217</Key>
-      <Value>[Type:Food][Subtype:Meal][Image:8-2][FoodType:Dessert][Value:50][Stam:5][ReqItems:151-1/150-1/216-1][CraftAmount:3]</Value>
+      <Value>[Type:Food][Subtype:Meal][Image:8-2][FoodType:Dessert][Value:50][EnergyRecovery:5][ReqItems:151-1/150-1/216-1][CraftAmount:3]</Value>
     </Item>
     <Item>
       <Key>218</Key>

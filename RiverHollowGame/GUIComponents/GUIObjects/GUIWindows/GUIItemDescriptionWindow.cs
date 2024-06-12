@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Utilities;
+using System.Collections.Generic;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -43,17 +44,63 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             var gType = new GUIText(strType);
             gType.SetColor(typeColor);
             gType.PositionAndMove(top, 29, 17);
-             
+
+            var middleTemp = middle;
             var details = it.GetDetails();
-            if (!string.IsNullOrEmpty(details))
+            if (details != null)
             {
-                GUIText gDetails = new GUIText(details);
-                gDetails.PositionAndMove(top, 100, 7);
+                var middleIcons = new GUIImage(GUIUtils.HUD_DESC_MID);
+                middleIcons.AnchorAndAlign(middle, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
+                middleIcons.Height = 9 * GameManager.CurrentScale;
+
+                var icons = new List<GUIIconText>();
+                foreach (var iconData in details)
+                {
+                    var source = Rectangle.Empty;
+                    switch (iconData.Item1)
+                    {
+                        case GameIconEnum.Health:
+                            source = GUIUtils.ICON_DESC_HEALTH;
+                            break;
+                        case GameIconEnum.Energy:
+                            source = GUIUtils.ICON_DESC_ENERGY;
+                            break;
+                        case GameIconEnum.Time:
+                            source = GUIUtils.ICON_DESC_TIME;
+                            break;
+                        case GameIconEnum.Level:
+                            source = GUIUtils.ICON_DESC_LEVEL;
+                            break;
+                    }
+
+                    icons.Add(new GUIIconText(iconData.Item2.ToString(), 1, source, iconData.Item1, SideEnum.Left, SideEnum.CenterY, DataManager.FONT_STAT_DISPLAY));
+                }
+
+                icons.Reverse();
+                for(int i =0; i < icons.Count; i++)
+                {
+                    var icon = icons[i];
+                    icon.SetColor(Color.White);
+                    middleIcons.AddControl(icon);
+
+                    if(i == 0)
+                    {
+                        //icon.AnchorAndAlignWithSpacing(middle, SideEnum.Bottom, SideEnum.Right, 2);
+                        icon.AnchorAndAlign(middle, SideEnum.Bottom, SideEnum.Right);
+                        icon.ScaledMoveBy(-5, 0);
+                    }
+                    else
+                    {
+                        icon.AnchorAndAlignWithSpacing(icons[i-1], SideEnum.Right, SideEnum.Top, 6);
+                    }
+                }
+
+                middleTemp = middleIcons;
             }
 
             //BOTTOM
             var bottom = new GUIImage(GUIUtils.HUD_DESC_BOT);
-            bottom.AnchorAndAlign(middle, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
+            bottom.AnchorAndAlign(middleTemp, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
 
             DetermineSize();
         }

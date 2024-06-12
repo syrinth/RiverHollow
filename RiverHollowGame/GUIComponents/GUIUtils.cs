@@ -60,6 +60,11 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle ICON_CLASS_MAGE = new Rectangle(30, 0, 10, 10);
         internal static Rectangle ICON_CLASS_ROGUE = new Rectangle(40, 0, 10, 10);
 
+        internal static Rectangle ICON_DESC_HEALTH = new Rectangle(0, 32, 10, 9);
+        internal static Rectangle ICON_DESC_ENERGY = new Rectangle(11, 32, 10, 9);
+        internal static Rectangle ICON_DESC_TIME = new Rectangle(22, 32, 10, 9);
+        internal static Rectangle ICON_DESC_LEVEL = new Rectangle(33, 32, 9, 9);
+
         internal static Rectangle DIALOGUE_MORE = new Rectangle(160, 80, 16, 16);
         internal static Rectangle DIALOGUE_DONE = new Rectangle(176, 80, 16, 16);
 
@@ -126,7 +131,7 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle HUD_DESC_TOP = new Rectangle(0, 352, 176, 30);
         internal static Rectangle HUD_DESC_MID = new Rectangle(0, 383, 176, 9);
-        internal static Rectangle HUD_DESC_BOT = new Rectangle(0, 393, 176, 7);
+        internal static Rectangle HUD_DESC_BOT = new Rectangle(0, 393, 176, 5);
 
         internal static Rectangle HUD_SHOP_TOP = new Rectangle(176, 288, 176, 80);
         internal static Rectangle HUD_SHOP_MID = new Rectangle(176, 368, 176, 32);

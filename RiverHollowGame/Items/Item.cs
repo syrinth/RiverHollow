@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static RiverHollow.Game_Managers.GameManager;
@@ -111,9 +112,43 @@ namespace RiverHollow.Items
             return DataManager.GetTextData(ID, "Description", DataType.Item);
         }
 
-        public virtual string GetDetails()
+        public List<Tuple<GameIconEnum, int>> GetDetails()
         {
-            return string.Empty;
+            var rv = new List<Tuple<GameIconEnum, int>>();
+
+            if (GetBoolByIDKey("Hp"))
+            {
+                rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Health, GetIntByIDKey("Hp")));
+            }
+            else if (GetBoolByIDKey("EnergyRecovery"))
+            {
+                rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Energy, GetIntByIDKey("EnergyRecovery")));
+            }
+            else if (this is Seed seedItem)
+            {
+                int totalTime = 0;
+
+                var timeParam = DataManager.GetStringParamsByIDKey(seedItem.PlantID, "Time", DataType.WorldObject);
+                foreach (var t in timeParam)
+                {
+                    if (int.TryParse(t, out int val))
+                    {
+                        totalTime += val;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Time, totalTime));
+            }
+            else if (this is Tool toolItem)
+            {
+                rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Level, toolItem.ToolLevel));
+            }
+
+            return rv;
         }
 
         /// <summary>

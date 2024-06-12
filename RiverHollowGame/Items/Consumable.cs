@@ -1,7 +1,5 @@
 ﻿using RiverHollow.Game_Managers;
-using RiverHollow.Misc;
 using RiverHollow.Utilities;
-using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.Items
@@ -16,17 +14,6 @@ namespace RiverHollow.Items
         public Consumable(int id, int num) : base(id, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
-        }
-
-        public override string GetDetails()
-        {
-            string rv = string.Empty;
-
-            if (Health > 0) { rv += "Health: +" + Health + " "; }
-            if (Mana > 0) { rv += "Mana: +" + Mana + " "; }
-            rv = rv.Trim();
-
-            return rv;
         }
 
         public override bool HasUse() { return true; }
