@@ -6,7 +6,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Misc;
-using RiverHollow.Utilities;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -14,6 +13,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextSelectionWindow : GUITextWindow
     {
+        protected const int SELECTION_MAX_ROWS = 6;
+
         string _sStatement;
         protected Point _poiMouse = Point.Zero;
         protected GUIImage _giSelection;
@@ -23,6 +24,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextSelectionWindow(TextEntry selectionText, bool open = true)
         {
+            _iMaxRows = SELECTION_MAX_ROWS;
+
+            _giSelection = new GUIImage(GUIUtils.BTN_RIGHT_SMALL);
+            AddControl(_giSelection);
             _textEntry = selectionText;
             _textEntry.HandlePreWindowActions();
             _diOptions = new Dictionary<int, SelectionData>();
@@ -38,11 +43,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public void PostParse()
         {
             SyncText(_sStatement, true);
-            _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
-            _giSelection = new GUIImage(GUIUtils.POINTER);
-            _giSelection.AnchorAndAlignWithSpacing(_gText, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
-            AddControl(_giSelection);
-
+            _gText.AnchorToInnerSide(this, SideEnum.TopLeft, BORDER_EDGE);
+            _giSelection.AnchorAndAlignWithSpacing(_gText, SideEnum.Bottom, SideEnum.Left, BORDER_EDGE);
+            
             AssignToColumn();
         }
 
@@ -161,12 +164,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         _poiMouse = GUICursor.Position;
                         if (_iKeySelection - 1 >= 0 && GUICursor.Position.Y < _giSelection.Position().Y)
                         {
-                            _giSelection.AlignToObject(_diOptions[_iKeySelection - 1].GText, SideEnum.Bottom);
+                            _giSelection.AlignToObject(_diOptions[_iKeySelection - 1].GText, SideEnum.CenterY);
                             _iKeySelection--;
                         }
                         else if (_iKeySelection + 1 < _diOptions.Count && GUICursor.Position.Y > _giSelection.Position().Y + _giSelection.Height)
                         {
-                            _giSelection.AlignToObject(_diOptions[_iKeySelection + 1].GText, SideEnum.Bottom);
+                            _giSelection.AlignToObject(_diOptions[_iKeySelection + 1].GText, SideEnum.CenterY);
                             _iKeySelection++;
                         }
                     }
@@ -258,7 +261,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             GameManager.CurrentItem.UseItem();
                             GameManager.SetSelectedItem(null);
                             break;
-                            break;
 
                     }
                     break;
@@ -294,12 +296,26 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _diOptions.Clear();
         }
 
+        protected override void SyncObjects()
+        {
+            base.SyncObjects();
+            AssignToColumn();
+            if (_diOptions.Count > 0)
+            {
+                _giSelection.AnchorAndAlignWithSpacing(_diOptions[0].GText, SideEnum.Left, SideEnum.CenterY, BORDER_EDGE);
+            }
+        }
+
         protected void AssignToColumn()
         {
             for (int i = 0; i < _diOptions.Count; i++)
             {
                 GUIText gText = _diOptions[i].GText;
-                if (i == 0) { gText.AnchorAndAlign(_giSelection, SideEnum.Right, SideEnum.Bottom); }
+                if (i == 0)
+                {
+                    gText.AnchorAndAlign(_gText, SideEnum.Bottom, SideEnum.Left);
+                    gText.MoveBy(_giSelection.Width + (GameManager.CurrentScale * 2), 0);
+                }
                 else { gText.AnchorAndAlign(_diOptions[i - 1].GText, SideEnum.Bottom, SideEnum.Left); }
                 AddControl(gText);
             }
@@ -307,17 +323,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         protected class SelectionData
         {
-            GUIText _gText;
+            readonly GUIText _gText;
             public GUIText GText => _gText;
-
-            public string Text => _gText.Text;
 
             public TextEntry SelectionEntry { get; private set; }
 
-            public SelectionData(TextEntry textEntry, string fontName = DataManager.FONT_NEW)
+            public SelectionData(TextEntry textEntry, string fontName = DataManager.FONT_MAIN)
             {
                 SelectionEntry = textEntry;
                 _gText = new GUIText(textEntry.GetFormattedText(), true, fontName);
+                _gText.SetTextColors(Color.White, GUIUtils.MAIN_DROP_SHADOW);
             }
         }
 

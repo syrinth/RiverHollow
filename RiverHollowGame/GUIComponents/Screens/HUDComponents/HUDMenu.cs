@@ -2,6 +2,7 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
+using RiverHollow.Utilities;
 using System.Collections.Generic;
 
 namespace RiverHollow.GUIComponents.Screens.HUDComponents
@@ -45,26 +46,33 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            int _openingFinished = 0;
-            foreach (GUIObject o in Controls)
+            if (_bOpen)
             {
-                int val = 0;
-                if (_bOpen)
+                int _openingFinished = 0;
+                foreach (GUIObject o in Controls)
                 {
-                    if (o.Position().X < 0) { val = 16; }
-                }
-                if (_bClose)
-                {
-                    if (o.Position().X > -o.Width) { val = -16; }
-                }
+                    int mod = 4 * GameManager.CurrentScale;
+                    int val = 0;
+                    if (_bOpen)
+                    {
+                        if (o.Position().X < 0) { val = mod; }
+                    }
+                    if (_bClose)
+                    {
+                        if (o.Position().X > -o.Width) { val = -mod; }
+                    }
 
-                Point temp = o.Position();
-                temp.X += val;
-                o.Position(temp);
-                if (_bOpen && o.Position().X == 0) { _openingFinished++; }
-                if (_bClose && o.Position().X == -o.Width) { /*Finished closing */ }
+                    Point temp = o.Position();
+                    temp.X += val;
+                    o.Position(temp);
+                    if (_bOpen && o.Position().X == 0)
+                    {
+                        _openingFinished++;
+                    }
+                    if (_bClose && o.Position().X == -o.Width) { /*Finished closing */ }
+                }
+                if (_openingFinished == _liButtons.Count) { _bOpen = false; }
             }
-            if (_openingFinished == _liButtons.Count) { _bOpen = false; }
         }
 
         #region Buttons

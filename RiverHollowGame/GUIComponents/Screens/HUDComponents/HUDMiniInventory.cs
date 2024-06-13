@@ -27,7 +27,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             for (int i = 0; i < InventoryManager.maxItemColumns; i++)
             {
-                GUIItemBox ib = new GUIItemBox(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i], Enums.ItemBoxDraw.OnlyStacks);
+                GUIItemBox ib = new GUIItemBox(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i], Enums.ItemBoxDraw.MoreThanOne);
                 _liItems[i] = ib;
 
                 if (i == 0) { ib.AnchorToInnerSide(this, SideEnum.TopLeft); }

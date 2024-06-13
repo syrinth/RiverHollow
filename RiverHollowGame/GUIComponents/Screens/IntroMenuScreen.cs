@@ -11,9 +11,9 @@ namespace RiverHollow.GUIComponents.Screens
     public class IntroMenuScreen : GUIScreen
     {
         const int BTN_PADDING = 50;
-        private GUIButton _btnNewGame;
-        private GUIButton _btnLoadGame;
-        private GUIButton _btnExit;
+        private readonly GUIButton _btnNewGame;
+        private readonly GUIButton _btnLoadGame;
+        private readonly GUIButton _btnExit;
         //private GUIButton _btnGameData;
 
         public IntroMenuScreen()

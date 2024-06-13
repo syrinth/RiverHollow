@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -149,7 +148,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gMarker.Position(_gText.Position());
             if (_gText.Text.Length > 0)
             {
-                _gMarker.PositionAdd(new Point((int)_gText.MeasureString(_iCurr).X, 0));
+                _gMarker.PositionAdd(new Point((int)_gText.MeasureSubstring(_iCurr).X, 0));
             }
         }
 

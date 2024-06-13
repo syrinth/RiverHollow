@@ -12,15 +12,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
     public class GUIItemBox : GUIObject
     {
         public Item BoxItem => _guiItem?.ItemObject;
-        readonly GUIImage _gBackground;
-        GUIItem _guiItem;
-        GUIImage _imgIcon;
+        private readonly GUIImage _gBackground;
+        private GUIItem _guiItem;
+        private GUIImage _imgIcon;
         public EquipmentEnum EquipmentType { get; private set; } = EquipmentEnum.None;
 
         public int ColumnID { get; }
         public int RowID { get; }
 
-        public GUIItemBox(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
+        public GUIItemBox(Item it = null, ItemBoxDraw e = ItemBoxDraw.MoreThanOne)
         {
             _gBackground = new GUIImage(GUIUtils.ITEM_BOX);
             AddControl(_gBackground);
@@ -82,7 +82,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public void SetEquipmentType(EquipmentEnum e)
         {
             EquipmentType = e;
-            Rectangle icon = Rectangle.Empty;
+            Rectangle icon;
             switch (EquipmentType)
             {
                 case EquipmentEnum.Hat:
@@ -109,7 +109,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _imgIcon.CenterOnObject(this, GUIUtils.ParentRuleEnum.ForceToObject);
         }
 
-        public void SetItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks)
+        public void SetItem(Item it, ItemBoxDraw e = ItemBoxDraw.MoreThanOne)
         {
             if (it != null)
             {
@@ -163,7 +163,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public delegate void HoverMethod(GUIItemBoxHover obj);
         private readonly HoverMethod _delAction;
 
-        public GUIItemBoxHover(Item it = null, ItemBoxDraw e = ItemBoxDraw.OnlyStacks, HoverMethod action = null) : base(it, e)
+        public GUIItemBoxHover(Item it = null, ItemBoxDraw e = ItemBoxDraw.MoreThanOne, HoverMethod action = null) : base(it, e)
         {
             _delAction = action;
             SetItem(it, e);

@@ -70,7 +70,7 @@ namespace RiverHollow.GUIComponents.Screens
             public SaveInfoData Data { get; }
 
             public delegate void ReloadScreenDelegate();
-            private ReloadScreenDelegate _delAction;
+            private readonly ReloadScreenDelegate _delAction;
 
             readonly int _iId;
             public int SaveID => _iId;
@@ -92,7 +92,7 @@ namespace RiverHollow.GUIComponents.Screens
                 Height = (int)stringsize.Y + _gDelete.Height + HeightEdges();
                 _gDelete.AnchorToInnerSide(this, SideEnum.BottomRight, GUIManager.STANDARD_MARGIN);
 
-                _gDate = new GUIText("Day: " + data.Calendar.dayOfMonth.ToString("00") + ", " + GameCalendar.GetSeason(data.Calendar.currSeason));
+                _gDate = new GUIText("Day " + data.Calendar.dayOfMonth.ToString("00") + ", " + GameCalendar.GetSeason(data.Calendar.currSeason));
                 _gDate.AnchorToInnerSide(this, SideEnum.BottomLeft, GUIManager.STANDARD_MARGIN);
 
                 _gTimeStamp = new GUIText(data.timeStamp.ToString("g"));

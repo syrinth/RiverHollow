@@ -2,7 +2,6 @@
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
@@ -19,7 +18,6 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle SELECT_CORNER = new Rectangle(160, 128, 20, 20);
         internal static Rectangle SELECT_HIGHLIGHT = new Rectangle(163, 20, 20, 20);
-        internal static Rectangle POINTER = new Rectangle(192, 87, 8, 9);
         internal static Rectangle WORLDMAP = new Rectangle(0, 0, 480, 270);
         internal static Rectangle NEW_DISPLAY = new Rectangle(112, 208, 50, 49);
         internal static Rectangle ITEM_BOX = new Rectangle(182, 130, 20, 20);
@@ -79,7 +77,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle CURSOR_INTERACT = new Rectangle(304, 176, 16, 16);
         internal static Rectangle CURSOR_SHOP = new Rectangle(288, 176, 16, 16);
 
-        internal static Rectangle BTN_MAIN = new Rectangle(176, 112, 52, 16);
+        internal static Rectangle BTN_MAIN = new Rectangle(0, 64, 64, 18);
         internal static Rectangle BTN_UP_SMALL = new Rectangle(295, 147, 12, 10);
         internal static Rectangle BTN_DOWN_SMALL = new Rectangle(307, 157, 12, 10);
         internal static Rectangle BTN_LEFT_SMALL = new Rectangle(297, 157, 10, 12);
@@ -160,6 +158,9 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle RECIPE_MIDDLE = new Rectangle(0, 307, 176, 19);
         internal static Rectangle RECIPE_BOTTOM = new Rectangle(0, 326, 176, 20);
         internal static Rectangle RECIPE_DOTS = new Rectangle(160, 272, 16, 16);
+
+        internal static Color MAIN_DROP_SHADOW = new Color(50, 32, 24);
+        internal static Color DESCRIPTION_HEADER_SHADOW = new Color(100, 58, 18);
 
         public static bool ProcessLeftMouseButton(Point mouse, params GUIObject[] list)
         {

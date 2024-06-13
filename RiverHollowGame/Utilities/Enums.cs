@@ -19,7 +19,7 @@
 
         public enum GameScreenEnum { Info, World };
         public enum DisplayTypeEnum { None, Inventory, PlayerInventory, ShopTable };
-        public enum ItemBoxDraw { Always, Never, OnlyStacks, MoreThanOne };
+        public enum ItemBoxDraw { Always, Never, MoreThanOne };
         public enum CodexPageEnum { Villagers, Merchants, Travelers, Mobs, Items };
         public enum BuildPageEnum { Structures, Flooring, Walls, Furniture, Lighting };
 

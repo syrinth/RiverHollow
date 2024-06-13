@@ -11,14 +11,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUITextWindow : GUIWindow
     {
+        protected const int DIALOGUE_MAX_ROWS = 3;
+        protected const int BORDER_EDGE = 2;
+        protected int _iMaxRows = DIALOGUE_MAX_ROWS;
+
         public bool ProcessClicks = true;
 
         GUIImage _gNext;
         protected GUIText _gText;
         protected GUIImage _giPortrait;
         protected List<string> _liTextPages;
-
-        protected const int MAX_ROWS = 7;
 
         #region Parsing
         protected int _iCurrText = 0;
@@ -43,7 +45,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUITextWindow() : base()
         {
-            _gText = new GUIText("", true, DataManager.FONT_NEW);
+            Width = (int)(RiverHollow.ScreenWidth * 0.75);
+
+            _gText = new GUIText("", true, DataManager.FONT_MAIN);
+            _gText.SetTextColors(Color.White, GUIUtils.MAIN_DROP_SHADOW);
+
             _liTextPages = new List<string>();
             _iCharWidth = _gText.CharWidth;
             _iCharHeight = _gText.CharHeight;
@@ -78,7 +84,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _textEntry = text;
             _textEntry.HandlePreWindowActions();
             Height = (int)_gText.MeasureString(_textEntry.GetFormattedText()).Y + HeightEdges();
-            Width = (int)(RiverHollow.ScreenWidth / 4);
+            Width = RiverHollow.ScreenWidth / 4;
 
             SyncText(_textEntry.GetFormattedText());
 
@@ -95,7 +101,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Position(position);
 
             _gText.PrintAll = true;
-            _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
+            _gText.AnchorToInnerSide(this, SideEnum.TopLeft, BORDER_EDGE);
             Resize();
 
             if (GameManager.PrintTextImmediately)
@@ -128,14 +134,19 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
+        public int TotalScaledBorder()
+        {
+            return BORDER_EDGE * 2 * GameManager.CurrentScale;
+        }
         protected void ConfigureHeight()
         {
-            Height = Math.Max(Height, (_iCharHeight * MAX_ROWS) + HeightEdges() + (2 * GUIManager.STANDARD_MARGIN));
+            var heightEdges = HeightEdges();
+            Height = Math.Max(Height, (_iCharHeight * _iMaxRows) + HeightEdges() + TotalScaledBorder());
         }
 
         protected void SyncText(string text, bool printAll = false)
         {
-            _liTextPages = _gText.ParseText(text, InnerWidth(), MAX_ROWS, printAll);
+            _liTextPages = _gText.ParseText(text, InnerWidth() - TotalScaledBorder(), DIALOGUE_MAX_ROWS, printAll);
             if (_gText.PrintAll) { _gText.SetText(_liTextPages[0]); }
             else { _gText.ResetText(_liTextPages[0]); }
         }
@@ -144,11 +155,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         /// together. Called on finishing the opening animation, or immediately after
         /// creating the window if we do not play it.
         /// </summary>
-        protected void SyncObjects()
+        protected virtual void SyncObjects()
         {
             DisplayCharacterPortrait();
 
-            _gText.AnchorToInnerSide(this, SideEnum.TopLeft, GUIManager.STANDARD_MARGIN);
+            _gText.AnchorToInnerSide(this, SideEnum.TopLeft, BORDER_EDGE);
 
             DisplayDialogueFinishedIcon();
 

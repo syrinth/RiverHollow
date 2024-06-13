@@ -17,12 +17,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         protected string _sText;
         protected string _sFullText;
         public string Text => _sText;
-        protected BitmapFont _font;
+        protected string _sFont;
+        protected Color _cShadowColor = Color.White;
 
         protected Vector2 _vTextSize;
-        public Vector2 TextSize => _vTextSize;
         protected Vector2 _vCharSize;
-        public Vector2 CharacterSize => _vCharSize;
         public int CharWidth => (int)_vCharSize.X;
         public int CharHeight => (int)_vCharSize.Y;
 
@@ -40,19 +39,24 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public GUIText(bool printAll = true)
         {
-            _Color = Color.Black;
+            _Color = Color.White;
             PrintAll = printAll;
             _sText = "";
             _sFullText = _sText;
-            _font = DataManager.GetBitMapFont(DataManager.FONT_NEW);
+
+            _sFont = DataManager.FONT_MAIN;
+            SetShadowTextDefault();
+
             SetDimensions("X");
         }
 
-        public GUIText(int val, bool printAll = true, string f = DataManager.FONT_NEW) : this(val.ToString(), printAll, f){}
+        public GUIText(int val, bool printAll = true, string f = DataManager.FONT_MAIN) : this(val.ToString(), printAll, f) {}
 
-        public GUIText(string text, bool printAll = true, string f = DataManager.FONT_NEW) : this()
+        public GUIText(string text, bool printAll = true, string f = DataManager.FONT_MAIN) : this()
         {
-            _font = DataManager.GetBitMapFont(f);
+            _sFont = f;
+            SetShadowTextDefault();
+
             PrintAll = printAll;
 
             if (printAll) { 
@@ -63,49 +67,50 @@ namespace RiverHollow.GUIComponents.GUIObjects
             SetDimensions(text);
         }
 
-        public GUIText(string text, BitmapFont font) : this(text)
+        private void SetShadowTextDefault()
         {
-            _font = font;
-            SetDimensions(text);
+            _cShadowColor = _sFont == DataManager.FONT_MAIN ? Color.Black : Color.White;
+        }
+
+        private BitmapFont Font()
+        {
+            return DataManager.GetBitMapFont(_sFont);
+        }
+        public Vector2 MeasureSubstring(int toLoc)
+        {
+            return MeasureString(_sText.Substring(0, toLoc));
+        }
+
+        public Vector2 MeasureString(string val)
+        {
+            var v = Font().MeasureString(val);
+            return new Vector2(v.Width * GameManager.CurrentScale, v.Height * GameManager.CurrentScale);
         }
 
         protected void SetDimensions(string val)
         {
-            _vCharSize = _font.MeasureString("X");
-            _vTextSize = _font.MeasureString(val);
+            _vCharSize = MeasureString("X");
+            _vTextSize = MeasureString(val);
             Width = (int)_vTextSize.X;
             Height = (int)_vTextSize.Y;
         }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (!string.IsNullOrEmpty(_sText) && Show())
             {
-                spriteBatch.DrawString(_font, _sText, Position().ToVector2(), _Color * Alpha());
+                spriteBatch.DrawString(Font(), _sText, Position().ToVector2(), _Color * Alpha(), 0, Vector2.Zero, GameManager.CurrentScale, SpriteEffects.None, 0);
+
+                if (_cShadowColor != Color.White) {
+                    spriteBatch.DrawString(DataManager.GetBitMapFont(DataManager.FONT_MAIN_DROPSHADOW), _sText, Position().ToVector2(), _cShadowColor, 0, Vector2.Zero, GameManager.CurrentScale, SpriteEffects.None, 0);
+                }
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, string newText)
+        public void SetTextColors(Color mainColor, Color shadowColor)
         {
-            _sText = newText;
-            _vTextSize = _font.MeasureString(_sText);
-
-            Width = (int)_vTextSize.X;
-            Height = (int)_vTextSize.Y;
-
-            this.Draw(spriteBatch);
-        }
-
-        public Vector2 MeasureString()
-        {
-            return _font.MeasureString(_sText);
-        }
-        public Vector2 MeasureString(int toLoc)
-        {
-            return _font.MeasureString(_sText.Substring(0, toLoc));
-        }
-        public Vector2 MeasureString(string s)
-        {
-            return _font.MeasureString(s);
+            _Color = mainColor;
+            _cShadowColor = shadowColor;
         }
 
         public void SetText(string text)
@@ -274,8 +279,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             //Measure the current line and the new word and see if adding the word will put the line out of bounds.
             //If so, we need to insert a carriage return character and clear the current line of text.
-            if ((vMeasurement.Length() >= width - GUIManager.STANDARD_MARGIN * 2) ||
-                (numReturns == maxRows - 1 && vMeasurement.Length() >= (Width) - CharHeight))
+
+            bool checkOne = (vMeasurement.X >= width);
+            if (checkOne)
             {
                 textToDisplay += currentLineOfText + '\n';
                 currentLineOfText = string.Empty;

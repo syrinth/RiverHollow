@@ -37,16 +37,14 @@ namespace RiverHollow.Game_Managers
         public const string FOLDER_ITEMS = TEXTURES + @"Items\";
         public const string FOLDER_EFFECTS = TEXTURES + @"ActionEffects\";
         public const string FOLDER_ENVIRONMENT = TEXTURES + @"Environmental\";
-        public const string FOLDER_MONSTERS = TEXTURES + @"ctors\Monsters\";
         public const string FOLDER_MOBS = TEXTURES + @"Actors\Mobs\";
         public const string FOLDER_SUMMONS = TEXTURES + @"Actors\Summons\";
         public const string FOLDER_PLAYER = TEXTURES + @"Actors\Player\";
         public const string FOLDER_PARTY = TEXTURES + @"Actors\PartyMembers\";
         public const string FOLDER_TEXTFILES = @"Data\Text Files\";
-        public const string FONT_NEW = @"Fonts\Font_New\Font_New";
-        public const string FONT_MAIN = @"Fonts\Font_Main";
-        public const string FONT_NUMBER_DISPLAY = @"Fonts\Font_Number_Display";
-        public const string FONT_STAT_DISPLAY = @"Fonts\Font_Stat_Display";
+        public const string FONT_MAIN = @"Fonts\Font_Main\Font_Main";
+        public const string FONT_MAIN_DROPSHADOW = @"Fonts\Font_Main\Drop_Shadow\Font_Drop_Shadow";
+        public const string FONT_NUMBERS = @"Fonts\Font_Numbers\Font_Numbers";
 
         public const string FOLDER_WORLDOBJECTS = TEXTURES + @"WorldObjects\";
         public const string FOLDER_BUILDINGS = FOLDER_WORLDOBJECTS + @"Buildings\";
@@ -269,11 +267,9 @@ namespace RiverHollow.Game_Managers
         private static void LoadBMFonts(ContentManager Content)
         {
             _diBMFonts = new Dictionary<string, BitmapFont>();
-            AddBMFont(@"Fonts\FontBattle", Content);
-            AddBMFont(FONT_NEW, Content);
             AddBMFont(FONT_MAIN, Content);
-            AddBMFont(FONT_NUMBER_DISPLAY, Content);
-            AddBMFont(FONT_STAT_DISPLAY, Content);
+            AddBMFont(FONT_MAIN_DROPSHADOW, Content);
+            AddBMFont(FONT_NUMBERS, Content);
         }
         private static void AddBMFont(string font, ContentManager Content)
         {

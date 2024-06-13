@@ -268,9 +268,8 @@ namespace RiverHollow.GUIComponents.Screens
             _giItem.SetColor(i.ItemColor);
 
             _gMoney = new GUIMoneyDisplay(Cost, DirectionEnum.Right, true);
-            _gMoney.AnchorAndAlign(_giItem, SideEnum.Left, SideEnum.Bottom);
-            _gMoney.MoveBy(_gMoney.Width, 0);
-            _gMoney.ScaledMoveBy(10, 4);
+            _gMoney.AnchorAndAlign(_giItem, SideEnum.Bottom, SideEnum.Right);
+            _gMoney.ScaledMoveBy(5, -5);
             AddControl(_gMoney);
 
             Width = _giItem.Width;

@@ -96,7 +96,7 @@ namespace RiverHollow.Game_Managers
         {
             int minToFifteen = CurrentMin / 15;
             string mins = "00";
-            string hours = CurrentHour.ToString();
+            string hours = CurrentHour.ToString("00");
             if (CurrentHour > 12 && CurrentHour < 25)
             {
                 hours = (CurrentHour - 12).ToString("00");

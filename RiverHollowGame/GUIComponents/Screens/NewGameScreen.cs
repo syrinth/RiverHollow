@@ -370,7 +370,7 @@ namespace RiverHollow.GUIComponents.Screens
                     AddControl(_gDecrease);
 
                     _gIndex = new GUIText("00");
-                    _gIndex.AnchorAndAlignThenMove(_gDecrease, SideEnum.Right, SideEnum.Top, 2, 2);
+                    _gIndex.AnchorAndAlignWithSpacing(_gDecrease, SideEnum.Right, SideEnum.CenterY, 2);
                     AddControl(_gIndex);
 
                     _gIncrease = new GUIImage(GUIUtils.BTN_RIGHT_SMALL);

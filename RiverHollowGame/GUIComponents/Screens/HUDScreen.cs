@@ -18,15 +18,15 @@ namespace RiverHollow.GUIComponents.Screens
     {
         bool _bTownMode = false;
 
-        List<HUDNewAlert> _liAlertIcons;
+        readonly List<HUDNewAlert> _liAlertIcons;
 
         GUIButton _btnSkipCutscene;
-        GUIOldStatDisplay _gHealthDisplay;
-        GUIOldStatDisplay _gEnergyDisplay;
-        GUIOldStatDisplay _gMagicDisplay;
-        GUIWindow _gMoneyWindow;
-        GUIMoneyDisplay _gMoney;
-        GUIDungeonKeyDisplay _gDungeonKeys;
+        readonly GUIOldStatDisplay _gHealthDisplay;
+        readonly GUIOldStatDisplay _gEnergyDisplay;
+        readonly GUIOldStatDisplay _gMagicDisplay;
+        readonly GUIWindow _gMoneyWindow;
+        readonly GUIMoneyDisplay _gMoney;
+        readonly GUIDungeonKeyDisplay _gDungeonKeys;
 
         GUIImage[] _gBuildIcons;
 
@@ -62,8 +62,8 @@ namespace RiverHollow.GUIComponents.Screens
             _gDungeonKeys = new GUIDungeonKeyDisplay();
             _gDungeonKeys.AnchorAndAlignWithSpacing(_gMoneyWindow, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
 
-            _gInventory = new HUDMiniInventory();
-            _gInventory.AnchorToScreen(SideEnum.Bottom, 1);
+            //_gInventory = new HUDMiniInventory();
+            //_gInventory.AnchorToScreen(SideEnum.Bottom, 1);
 
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 3);
@@ -232,12 +232,12 @@ namespace RiverHollow.GUIComponents.Screens
         public override void OpenTextWindow(TextEntry text, bool open = true, bool displayDialogueIcon = false)
         {
             base.OpenTextWindow(text, open, displayDialogueIcon);
-            _gInventory.Show(false);
+            //_gInventory.Show(false);
         }
         public override bool CloseTextWindow()
         {
             bool rv = base.CloseTextWindow();
-            _gInventory.Show(true);
+            //_gInventory.Show(true);
             return rv;
         }
         #endregion
@@ -302,10 +302,10 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDCalendar : GUIWindow
     {
         static GUIText _gText;
-        public HUDCalendar() : base(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(75), GameManager.ScaleIt(21))
+        public HUDCalendar() : base(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(76), GameManager.ScaleIt(22))
         {
-            _gText = new GUIText("Day XX, XX:XX", DataManager.GetBitMapFont(DataManager.FONT_NEW));
-            _gText.AnchorToInnerSide(this, SideEnum.TopLeft);
+            _gText = new GUIText("Day 00, 00:00", true, DataManager.FONT_MAIN);
+            _gText.CenterOnObject(this);
         }
 
         public override void Update(GameTime gTime)

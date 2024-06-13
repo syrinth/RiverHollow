@@ -235,6 +235,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _pPos += value;
             _drawRect.Location += value;
 
+            //Ensures the GUI is ALWAYS snapped to the Pixel-Perfect scale gride
+            _pPos.X += _pPos.X % GameManager.CurrentScale;
+            _pPos.Y += _pPos.Y % GameManager.CurrentScale;
+
             foreach (GUIObject g in Controls)
             {
                 g.PositionSub(value);
@@ -258,6 +262,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _pPos -= value;
             _drawRect.Location -= value;
+
+            //Ensures the GUI is ALWAYS snapped to the Pixel-Perfect scale gride
+            _pPos.X -= _pPos.X % GameManager.CurrentScale;
+            _pPos.Y -= _pPos.Y % GameManager.CurrentScale;
 
             foreach (GUIObject g in Controls)
             {
@@ -559,6 +567,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
                     this.SetX(focus.DrawRectangle.Center.X - this.Width / 2);
                     this.SetY(focus.DrawRectangle.Center.Y - this.Height / 2);
                     break;
+                case SideEnum.BottomRight:
+                    this.SetX(focus.Position().X + focus.Width - this.Width);
+                    this.SetY(focus.Position().Y + focus.Height - this.Height);
+                    break;
+
                 default:
                     break;
             }

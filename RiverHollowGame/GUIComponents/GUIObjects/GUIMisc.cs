@@ -20,7 +20,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         public GUIMoneyDisplay(int cost, DirectionEnum coinDirection = DirectionEnum.Left, bool tinyDisplay = false)
         {
-            var fontName = tinyDisplay ? DataManager.FONT_STAT_DISPLAY : DataManager.FONT_NEW;
+            var fontName = tinyDisplay ? DataManager.FONT_NUMBERS : DataManager.FONT_MAIN;
             _gTextMoney = new GUIText(cost.ToString("N0"), true, fontName);
 
             var gCoin = new GUIImage(tinyDisplay ? GUIUtils.ICON_TINY_COIN : GUIUtils.ICON_COIN);
@@ -29,12 +29,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             //Text created at 0,0 so we put the coin beside it, then move the text
             if (coinDirection == DirectionEnum.Right)
             {
-                gCoin.AnchorToObject(_gTextMoney, SideEnum.Right, margin);
-                _gTextMoney.AlignToObject(gCoin, SideEnum.CenterY);
+                gCoin.AnchorAndAlignWithSpacing(_gTextMoney, SideEnum.Right, SideEnum.Bottom, margin);
             }
             else
             {
                 _gTextMoney.AnchorAndAlignWithSpacing(gCoin, SideEnum.Right, SideEnum.CenterY, margin);
+            }
+
+            if(tinyDisplay)
+            {
+                gCoin.ScaledMoveBy(-1, 0);
             }
 
             AddControls(gCoin, _gTextMoney);
@@ -166,14 +170,13 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         public Item ItemObject {get;}
         readonly GUIImage _gShadow;
         readonly GUIImage _gImg;
-        readonly GUIImage _gInvisible;
         readonly GUIText _gText;
         public ItemBoxDraw DrawNumbers { get; private set; }
         public bool CompareToInventory = false;
 
         bool _bDrawShadow;
 
-        public GUIItem(Item it, ItemBoxDraw e = ItemBoxDraw.OnlyStacks, bool drawShadow = true)
+        public GUIItem(Item it, ItemBoxDraw e = ItemBoxDraw.MoreThanOne, bool drawShadow = true)
         {
             HoverControls = false;
 
@@ -188,15 +191,12 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gShadow = new GUIImage(Constants.ITEM_SHADOW, DataManager.FILE_MISC_SPRITES);
             _gShadow.CenterOnObject(this);
 
-            _gInvisible = new GUIImage(GUIUtils.INVISIBLE);
-            _gInvisible.CenterOnObject(this);
-
             _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.Texture);
             GUIUtils.SetObjectScale(_gImg, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, 1);
-            _gImg.CenterOnObject(_gInvisible);
 
-            _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBER_DISPLAY);
+            _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBERS);
             _gText.SetColor(Color.White);
+            AddControls(_gImg, _gText);
 
             SetTextPosition();
         }
@@ -223,12 +223,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 case ItemBoxDraw.Always:
                     _gText.Draw(spriteBatch);
                     break;
-                case ItemBoxDraw.OnlyStacks:
-                    if (ItemObject.Stacks())
-                    {
-                        _gText.Draw(spriteBatch);
-                    }
-                    break;
                 case ItemBoxDraw.MoreThanOne:
                     if(ItemObject.Number > 1)
                     {
@@ -240,8 +234,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private void SetTextPosition()
         {
-            _gText.AlignToObject(_gInvisible, SideEnum.Right);
-            _gText.AlignToObject(_gInvisible, SideEnum.Bottom);
+            _gText.AlignToObject(_gImg, SideEnum.BottomRight, GUIUtils.ParentRuleEnum.Skip);
+            _gText.ScaledMoveBy(2, 2);
         }
 
         public override void SetColor(Color c)
@@ -348,7 +342,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
     {
         readonly GUIText _gText;
 
-        public GUIIconText(string text, int spacing, Rectangle sourceRect, GameIconEnum e, SideEnum anchorTo, SideEnum alignTo, string fontText = DataManager.FONT_NEW)
+        public GUIIconText(string text, int spacing, Rectangle sourceRect, GameIconEnum e, SideEnum anchorTo, SideEnum alignTo, string fontText = DataManager.FONT_MAIN)
         {
             var icon = new GUIIcon(sourceRect, e);
             _gText = new GUIText(text, true, fontText);

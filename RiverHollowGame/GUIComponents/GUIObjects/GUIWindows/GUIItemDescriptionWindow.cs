@@ -21,6 +21,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             gItem.PositionAndMove(top, 7, 7);
             
             var gName = new GUIText(it.Name());
+            gName.SetTextColors(Color.White, GUIUtils.DESCRIPTION_HEADER_SHADOW);
             gName.PositionAndMove(top, 29, 7);
 
             if (it is Merchandise m)
@@ -32,17 +33,18 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             //MID
             var gDescription = new GUIText(it.Description());
             gDescription.ParseAndSetText(gDescription.Text, MAX_TEXT_WIDTH, 5, true);
+            gDescription.SetTextColors(Color.White, GUIUtils.MAIN_DROP_SHADOW);
 
             var middle = new GUIImage(GUIUtils.HUD_DESC_MID);
             middle.AnchorAndAlign(top, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
             middle.Height = gDescription.Height + GameManager.CurrentScale;
 
-            var strType = GetItemStats(it, out var typeColor);
+            var strTypeColor = GetItemStats(it, out var typeColor);
 
             gDescription.PositionAndMove(middle, 4, 0);
 
-            var gType = new GUIText(strType);
-            gType.SetColor(typeColor);
+            var gType = new GUIText(strTypeColor);
+            gType.SetTextColors(typeColor, GUIUtils.DESCRIPTION_HEADER_SHADOW);
             gType.PositionAndMove(top, 29, 17);
 
             var middleTemp = middle;
@@ -73,7 +75,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             break;
                     }
 
-                    icons.Add(new GUIIconText(iconData.Item2.ToString(), 1, source, iconData.Item1, SideEnum.Left, SideEnum.CenterY, DataManager.FONT_STAT_DISPLAY));
+                    icons.Add(new GUIIconText(iconData.Item2.ToString(), 1, source, iconData.Item1, SideEnum.Left, SideEnum.CenterY, DataManager.FONT_NUMBERS));
                 }
 
                 icons.Reverse();
@@ -107,7 +109,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private string GetItemStats(Item it, out Color typeColor)
         {
-            typeColor = Color.Black;
+            typeColor = Color.White;
             var rv = Util.GetEnumString(it.ItemType);
             if (it.ItemType == ItemTypeEnum.Resource)
             {

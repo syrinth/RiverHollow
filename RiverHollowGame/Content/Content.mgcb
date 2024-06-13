@@ -440,12 +440,12 @@
 /processorParam:DebugMode=Auto
 /build:Effects/lighteffect.fx
 
-#begin Fonts/Font_Main.fnt
+#begin Fonts/Font_Main/Drop_Shadow/Font_Drop_Shadow.fnt
 /importer:BitmapFontImporter
 /processor:BitmapFontProcessor
-/build:Fonts/Font_Main.fnt
+/build:Fonts/Font_Main/Drop_Shadow/Font_Drop_Shadow.fnt
 
-#begin Fonts/Font_Main_0.png
+#begin Fonts/Font_Main/Drop_Shadow/Font_Drop_Shadow_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -455,14 +455,14 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Fonts/Font_Main_0.png
+/build:Fonts/Font_Main/Drop_Shadow/Font_Drop_Shadow_0.png
 
-#begin Fonts/Font_New/Font_New.fnt
+#begin Fonts/Font_Main/Font_Main.fnt
 /importer:BitmapFontImporter
 /processor:BitmapFontProcessor
-/build:Fonts/Font_New/Font_New.fnt
+/build:Fonts/Font_Main/Font_Main.fnt
 
-#begin Fonts/Font_New/Font_New_0.png
+#begin Fonts/Font_Main/Font_Main_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -472,14 +472,14 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Fonts/Font_New/Font_New_0.png
+/build:Fonts/Font_Main/Font_Main_0.png
 
-#begin Fonts/Font_Number_Display.fnt
+#begin Fonts/Font_Numbers/Font_Numbers.fnt
 /importer:BitmapFontImporter
 /processor:BitmapFontProcessor
-/build:Fonts/Font_Number_Display.fnt
+/build:Fonts/Font_Numbers/Font_Numbers.fnt
 
-#begin Fonts/Font_Number_Display_0.png
+#begin Fonts/Font_Numbers/Font_Numbers_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -489,41 +489,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Fonts/Font_Number_Display_0.png
-
-#begin Fonts/Font_Stat_Display.fnt
-/importer:BitmapFontImporter
-/processor:BitmapFontProcessor
-/build:Fonts/Font_Stat_Display.fnt
-
-#begin Fonts/Font_Stat_Display_0.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/Font_Stat_Display_0.png
-
-#begin Fonts/FontBattle.fnt
-/importer:BitmapFontImporter
-/processor:BitmapFontProcessor
-/build:Fonts/FontBattle.fnt
-
-#begin Fonts/FontBattle_0.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Fonts/FontBattle_0.png
+/build:Fonts/Font_Numbers/Font_Numbers_0.png
 
 #begin Maps/Misc/mapCave_Small.tmx
 /importer:TiledMapImporter

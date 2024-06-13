@@ -12,7 +12,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             var btnExit = new GUIButton("Quit", Exit);
             btnExit.AnchorToInnerSide(_winMain, SideEnum.TopLeft, 4);
 
-            var btnTitle = new GUIButton("Go to Title", Title);
+            var btnTitle = new GUIButton("Title", Title);
             btnTitle.AnchorAndAlignWithSpacing(btnExit, SideEnum.Bottom, SideEnum.Left, 4, GUIUtils.ParentRuleEnum.ForceToParent);
 
             var btnCancel = new GUIButton("Cancel", Cancel);

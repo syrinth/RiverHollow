@@ -1,14 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
 using RiverHollow.Game_Managers;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
     public class GUIOldStatDisplay : GUIWindow
     {
-        readonly BitmapFont _font;
-
         readonly GUIImage _gFill;
         readonly GUIText _gText;
 
@@ -26,12 +23,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _fCurr = 0;
 
             _delAction = del;
-            _font = DataManager.GetBitMapFont(DataManager.FONT_STAT_DISPLAY);
 
             _gFill = new GUIImage(GUIUtils.HUD_FILL, Width - WidthEdges(), Height - HeightEdges(), DataManager.HUD_COMPONENTS);
             _gFill.AnchorToInnerSide(this, SideEnum.TopLeft);
 
-            _gText = new GUIText("", _font);
+            _gText = new GUIText("", true, DataManager.FONT_NUMBERS);
             _gText.SetColor(Color.White);
             _gText.AlignToObject(this, SideEnum.Center);
 
