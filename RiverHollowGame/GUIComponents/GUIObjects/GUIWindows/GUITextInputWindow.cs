@@ -87,8 +87,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                                         IncrementMarker();
                                     }
                                 }
-
-                                UpdateMarkerPosition();
                             }
                         }
                     }
@@ -107,6 +105,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (_iCurr < _iMaxLength)
             {
                 _iCurr++;
+                UpdateMarkerPosition();
             }
         }
 
@@ -115,6 +114,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             if (_iCurr > 0)
             {
                 _iCurr--;
+                UpdateMarkerPosition();
             }
         }
 
@@ -160,7 +160,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         protected class GUIMarker : GUIText
         {
             bool _bShow;
-            RHTimer _timer;
+            readonly RHTimer _timer;
 
             public GUIMarker()
             {

@@ -153,7 +153,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public void Remove(int loc)
         {
-            if (_sText.Length > 0)
+            if (_sText.Length > 0 && loc - 1 < _sText.Length)
             {
                 _sText = _sText.Remove(loc - 1, 1);
                 SetDimensions(_sText);
