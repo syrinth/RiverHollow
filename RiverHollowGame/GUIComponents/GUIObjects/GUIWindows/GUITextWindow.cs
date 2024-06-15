@@ -48,7 +48,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             Width = (int)(RiverHollow.ScreenWidth * 0.75);
 
             _gText = new GUIText("", true, DataManager.FONT_MAIN);
-            _gText.SetTextColors(Color.White, GUIUtils.MAIN_DROP_SHADOW);
 
             _liTextPages = new List<string>();
             _iCharWidth = _gText.CharWidth;

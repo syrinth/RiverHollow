@@ -92,7 +92,6 @@ namespace RiverHollow.Items
         {
             DrawShadow(spriteBatch, drawBox, forcedLayerDepth, alpha);
             spriteBatch.Draw(_texTexture, drawBox, SourceRectangle, _c * alpha, 0, Vector2.Zero, SpriteEffects.None, forcedLayerDepth);
-
         }
 
         public void DrawShadow(SpriteBatch spriteBatch, Rectangle drawBox, float forcedLayerDepth = Constants.MAX_LAYER_DEPTH, float alpha = 1f)
@@ -120,11 +119,11 @@ namespace RiverHollow.Items
             {
                 rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Health, GetIntByIDKey("Hp")));
             }
-            else if (GetBoolByIDKey("EnergyRecovery"))
+            if (GetBoolByIDKey("EnergyRecovery"))
             {
                 rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Energy, GetIntByIDKey("EnergyRecovery")));
             }
-            else if (this is Seed seedItem)
+            if (this is Seed seedItem)
             {
                 int totalTime = 0;
 
@@ -143,9 +142,13 @@ namespace RiverHollow.Items
 
                 rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Time, totalTime));
             }
-            else if (this is Tool toolItem)
+            if (this is Tool toolItem)
             {
                 rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Level, toolItem.ToolLevel));
+            }
+            if (Value > 0)
+            {
+                rv.Add(new Tuple<GameIconEnum, int>(GameIconEnum.Coin, Value));
             }
 
             return rv;

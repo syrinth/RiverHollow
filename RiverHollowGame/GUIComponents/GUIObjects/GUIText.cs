@@ -69,7 +69,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         private void SetShadowTextDefault()
         {
-            _cShadowColor = _sFont == DataManager.FONT_MAIN ? Color.Black : Color.White;
+            _cShadowColor = _sFont == DataManager.FONT_MAIN ? GUIUtils.MAIN_DROP_SHADOW : Color.White;
         }
 
         private BitmapFont Font()

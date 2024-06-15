@@ -42,8 +42,8 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                 _gMerchantWindow.AddControl(boxes[i]);
             }
 
-            GUIText text = new GUIText("Special Requests");
-            text.ScaledMoveBy(31, 7);
+            GUIText text = new GUIText("Requests");
+            text.ScaledMoveBy(44, 6);
             _gMerchantWindow.AddControl(text);
 
             GUIImage img = new GUIImage(GUIUtils.HUD_SCROLL_S);
@@ -60,7 +60,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             _gMerchantWindow.AddControl(_btnSell);
 
             _gSellValue = new GUIText(0);
-            _gSellValue.AnchorAndAlignWithSpacing(_btnSell, SideEnum.Left, SideEnum.CenterY, 2);
             _gMerchantWindow.AddControl(_gSellValue);
             AddControl(_gMerchantWindow);
 
@@ -86,6 +85,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             Height = _inventory.Bottom - _gMerchantWindow.Top;
 
             CenterOnScreen();
+            RefreshOffer();
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -148,7 +148,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
 
         private void RefreshOffer()
         {
-            Color c = Color.Black;
+            Color c = Color.White;
             int offer = _merchant.EvaluateItem(_arrToSell[0, 0], ref c);
             _gSellValue.SetText(offer);
             _gSellValue.SetColor(c);

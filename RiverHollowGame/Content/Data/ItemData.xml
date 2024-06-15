@@ -691,7 +691,7 @@
     </Item>
     <Item>
       <Key>172</Key>
-      <Value>[Type:Clothing][Subtype:Hat][Image:0-0][Value:1500]</Value>
+      <Value>[Type:Clothing][Subtype:Hat][Image:0-0]</Value>
     </Item>
     <Item>
       <Key>173</Key>
@@ -707,11 +707,11 @@
     </Item>
     <Item>
       <Key>176</Key>
-      <Value>[Type:NPCToken][Subtype:Pet][Image:0-0][Value:500][NPC_ID:30]</Value>
+      <Value>[Type:NPCToken][Subtype:Pet][Image:0-0][NPC_ID:30]</Value>
     </Item>
     <Item>
       <Key>177</Key>
-      <Value>[Type:NPCToken][Subtype:Mount][Image:7-11][Value:1000][NPC_ID:31]</Value>
+      <Value>[Type:NPCToken][Subtype:Mount][Image:7-11][NPC_ID:31]</Value>
     </Item>
     <Item>
       <Key>178</Key>
@@ -947,7 +947,7 @@
     </Item>
     <Item>
       <Key>236</Key>
-      <Value>[Type:NPCToken][Subtype:Pet][Image:0-0][Value:10][NPC_ID:66]</Value>
+      <Value>[Type:NPCToken][Subtype:Pet][Image:0-0][NPC_ID:66]</Value>
     </Item>
   </Asset>
 </XnaContent>

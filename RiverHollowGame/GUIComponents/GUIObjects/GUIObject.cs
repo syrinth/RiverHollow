@@ -63,6 +63,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         protected Color EnabledColor => _bEnabled ? _Color : Color.Gray;
         protected bool _bEnabled = true;
         public bool Active => _bEnabled && Visible;
+        protected bool _bSnapToGrid = true;
 
         public bool Visible { get; protected set; } = true;
 
@@ -236,8 +237,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _drawRect.Location += value;
 
             //Ensures the GUI is ALWAYS snapped to the Pixel-Perfect scale gride
-            _pPos.X += _pPos.X % GameManager.CurrentScale;
-            _pPos.Y += _pPos.Y % GameManager.CurrentScale;
+            if (_bSnapToGrid)
+            {
+                _pPos.X += _pPos.X % GameManager.CurrentScale;
+                _pPos.Y += _pPos.Y % GameManager.CurrentScale;
+            }
 
             foreach (GUIObject g in Controls)
             {
@@ -264,8 +268,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _drawRect.Location -= value;
 
             //Ensures the GUI is ALWAYS snapped to the Pixel-Perfect scale gride
-            _pPos.X -= _pPos.X % GameManager.CurrentScale;
-            _pPos.Y -= _pPos.Y % GameManager.CurrentScale;
+            if (_bSnapToGrid)
+            {
+                _pPos.X -= _pPos.X % GameManager.CurrentScale;
+                _pPos.Y -= _pPos.Y % GameManager.CurrentScale;
+            }
 
             foreach (GUIObject g in Controls)
             {
@@ -426,6 +433,15 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             Parent?.RemoveControl(this);
             Screen?.RemoveControl(this);
+        }
+
+        public void SnapToGrid(bool val)
+        {
+            _bSnapToGrid = val;
+            foreach(GUIObject o in Controls)
+            {
+                o.SnapToGrid(val);
+            }
         }
 
         #region Alpha

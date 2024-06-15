@@ -30,8 +30,8 @@ namespace RiverHollow.GUIComponents.Screens
 
         GUIImage[] _gBuildIcons;
 
-        HUDMiniInventory _gInventory;
-        HUDCalendar _gCalendar;
+        readonly HUDMiniInventory _gInventory;
+        readonly HUDCalendar _gCalendar;
         GUIItemBox _addedItem;
 
         double _dAlphaTimer;
@@ -316,32 +316,33 @@ namespace RiverHollow.GUIComponents.Screens
 
     class HUDNewAlert : GUIWindow
     {
-        GUIImage _gMarker;
-        GUIText _gText;
+        readonly GUIImage _gIcon;
+        readonly GUIText _gText;
 
         public delegate void RemoveDelegate(HUDNewAlert q);
-        private RemoveDelegate _delAction;
+        private readonly RemoveDelegate _delAction;
 
-        bool _bSlow = false;
+        readonly bool _bSlow = false;
         public HUDNewAlert(string textEntryName, Color c, RemoveDelegate del) : base(GUIUtils.WINDOW_BROWN, 10, 10)
         {
             _delAction = del;
             if (c == Color.Red)
             {
                 _bSlow = true;
-                _gMarker = new GUIImage(GUIUtils.ICON_ERROR);
+                _gIcon = new GUIImage(GUIUtils.ICON_ERROR);
             }
-            else { _gMarker = new GUIImage(GUIUtils.ICON_EXCLAMATION); }
+            else { _gIcon = new GUIImage(GUIUtils.ICON_EXCLAMATION); }
 
             _gText = new GUIText(DataManager.GetGameTextEntry(textEntryName).GetFormattedText());
-            _gText.SetColor(c);
+            _gText.SetTextColors(c, GUIUtils.MAIN_DROP_SHADOW);
 
-            _gMarker.AnchorToInnerSide(this, SideEnum.TopLeft);
-            _gText.AnchorAndAlignWithSpacing(_gMarker, SideEnum.Right, SideEnum.CenterY, 1);
-            AddControl(_gMarker);
-            AddControl(_gText);
+            _gIcon.AnchorToInnerSide(this, SideEnum.TopLeft, 1);
+            _gText.AnchorAndAlignWithSpacing(_gIcon, SideEnum.Right, SideEnum.CenterY, 1);
+            AddControls(_gIcon, _gText);
 
             DetermineSize();
+            Width += 2 * GameManager.ScaledPixel;
+            SnapToGrid(false);
         }
 
         public override void Update(GameTime gTime)

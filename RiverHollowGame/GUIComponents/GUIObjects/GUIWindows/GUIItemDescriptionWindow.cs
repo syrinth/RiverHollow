@@ -33,7 +33,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             //MID
             var gDescription = new GUIText(it.Description());
             gDescription.ParseAndSetText(gDescription.Text, MAX_TEXT_WIDTH, 5, true);
-            gDescription.SetTextColors(Color.White, GUIUtils.MAIN_DROP_SHADOW);
 
             var middle = new GUIImage(GUIUtils.HUD_DESC_MID);
             middle.AnchorAndAlign(top, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
@@ -73,6 +72,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         case GameIconEnum.Level:
                             source = GUIUtils.ICON_DESC_LEVEL;
                             break;
+                        case GameIconEnum.Coin:
+                            source = GUIUtils.ICON_DESC_COIN;
+                            break;
                     }
 
                     icons.Add(new GUIIconText(iconData.Item2.ToString(), 1, source, iconData.Item1, SideEnum.Left, SideEnum.CenterY, DataManager.FONT_NUMBERS));
@@ -93,7 +95,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     }
                     else
                     {
-                        icon.AnchorAndAlignWithSpacing(icons[i-1], SideEnum.Right, SideEnum.Top, 6);
+                        icon.AnchorAndAlignWithSpacing(icons[i-1], SideEnum.Left, SideEnum.Top, 3);
                     }
                 }
 

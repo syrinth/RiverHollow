@@ -332,7 +332,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 SelectionEntry = textEntry;
                 _gText = new GUIText(textEntry.GetFormattedText(), true, fontName);
-                _gText.SetTextColors(Color.White, GUIUtils.MAIN_DROP_SHADOW);
             }
         }
 

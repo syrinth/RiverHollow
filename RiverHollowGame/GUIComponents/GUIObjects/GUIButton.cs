@@ -22,6 +22,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public GUIButton(string text, EmptyDelegate del = null) : base(GUIUtils.BTN_MAIN, DataManager.HUD_COMPONENTS)
         {
             _gText = new GUIText(text);
+            _gText.SetTextColors(Color.White, GUIUtils.BUTTON_DROP_SHADOW);
             _gText.CenterOnObject(this);
 
             if (del != null)

@@ -60,8 +60,9 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle ICON_DESC_HEALTH = new Rectangle(0, 32, 10, 9);
         internal static Rectangle ICON_DESC_ENERGY = new Rectangle(11, 32, 10, 9);
-        internal static Rectangle ICON_DESC_TIME = new Rectangle(22, 32, 10, 9);
+        internal static Rectangle ICON_DESC_TIME = new Rectangle(22, 32, 9, 9);
         internal static Rectangle ICON_DESC_LEVEL = new Rectangle(33, 32, 9, 9);
+        internal static Rectangle ICON_DESC_COIN = new Rectangle(43, 32, 9, 9);
 
         internal static Rectangle DIALOGUE_MORE = new Rectangle(160, 80, 16, 16);
         internal static Rectangle DIALOGUE_DONE = new Rectangle(176, 80, 16, 16);
@@ -160,6 +161,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle RECIPE_DOTS = new Rectangle(160, 272, 16, 16);
 
         internal static Color MAIN_DROP_SHADOW = new Color(50, 32, 24);
+        internal static Color BUTTON_DROP_SHADOW = new Color(117, 6, 17);
         internal static Color DESCRIPTION_HEADER_SHADOW = new Color(100, 58, 18);
 
         public static bool ProcessLeftMouseButton(Point mouse, params GUIObject[] list)
