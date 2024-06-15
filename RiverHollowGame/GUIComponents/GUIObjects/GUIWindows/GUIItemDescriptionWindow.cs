@@ -22,7 +22,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             
             var gName = new GUIText(it.Name());
             gName.SetTextColors(Color.White, GUIUtils.DESCRIPTION_HEADER_SHADOW);
-            gName.PositionAndMove(top, 29, 7);
+            gName.PositionAndMove(top, 29, 5);
 
             if (it is Merchandise m)
             {
@@ -45,7 +45,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             var gType = new GUIText(strTypeColor);
             gType.SetTextColors(typeColor, GUIUtils.DESCRIPTION_HEADER_SHADOW);
-            gType.PositionAndMove(top, 29, 17);
+            gType.PositionAndMove(top, 29, 15);
 
             var middleTemp = middle;
             var details = it.GetDetails();

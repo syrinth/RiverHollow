@@ -317,7 +317,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
         private bool HoldsItem(Item i, bool goingToPlayerInventory)
         {
-            bool playerInventoryCheck = _bPlayerInventory || InventoryManager.HoldItem == ItemTypeEnum.None || i.ItemType == InventoryManager.HoldItem;
+            bool playerInventoryCheck = !goingToPlayerInventory || InventoryManager.HoldItemType == ItemTypeEnum.None || i.ItemType == InventoryManager.HoldItemType;
             bool validIDsCheck = !goingToPlayerInventory || InventoryManager.ValidIDs == null || InventoryManager.ValidIDs.Contains(i.ID);
             bool shopToolCheck = InventoryManager.CurrentInventoryDisplay != DisplayTypeEnum.ShopTable || !i.CompareType(ItemTypeEnum.Special, ItemTypeEnum.Tool);
 
