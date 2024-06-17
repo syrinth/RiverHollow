@@ -87,6 +87,7 @@ namespace RiverHollow
             MapManager.LoadObjects();
 
             TaskManager.Initialize();
+            FishingManager.Initialize();
 
             GUICursor.ResetCursor();
             //Set the Main Menu Screen
@@ -391,6 +392,7 @@ namespace RiverHollow
 
             TaskManager.Initialize();
             TravelManager.Reset();
+            FishingManager.Initialize();
 
             //Set the Main Menu Screen
             GUIManager.SetScreen(new IntroMenuScreen());

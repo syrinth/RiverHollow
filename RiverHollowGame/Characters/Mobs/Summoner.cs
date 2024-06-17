@@ -36,7 +36,7 @@ namespace RiverHollow.Characters.Mobs
 
                 if (_liMinions.Count < GetIntByIDKey("Max", 1))
                 {
-                    var minion = DataManager.CreateMob(GetIntByIDKey("Summon"));
+                    var minion = DataManager.CreateActor<Mob>(GetIntByIDKey("Summon"));
                     if (minion != null)
                     {
                         _liMinions.Add(minion);

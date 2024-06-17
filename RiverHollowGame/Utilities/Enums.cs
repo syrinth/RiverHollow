@@ -29,13 +29,13 @@
         public enum DirectionEnum { None, Down, Right, Up, Left };
         public enum CardinalDirectionsEnum { North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest };
         public enum VerbEnum { Idle, Walk, GrabIdle, Pull, Push, Ground, Air, UseTool, FinishTool, MakeItem, Action1, Action2 };
-        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, ObjectIdle, Action1, Action2, Action_Finished, Alert, KO, Spawn, Pose };
+        public enum AnimationEnum { None, PlayAnimation, Rain, Snow, Fish_Nibble, ObjectIdle, Action1, Action2, Action_Finished, Alert, KO, Spawn, Pose };
         public enum ItemPickupState { Auto, Manual, None };
         public enum ItemMovementState { None, Bounce, Magnet };
 
         public enum WorldObjAnimEnum { Idle, Working, Shake, Gathered };
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
-        public enum FishingStateEnum { None, Cast, WaitForFish, AttemptToCatch, Finish, Get };
+        public enum FishingStateEnum { None, Cast, Waiting, Reeling, Finish, Get };
 
         public enum ClassTypeEnum { None, Healer, Mage, Fighter, Rogue };
         public enum ResourceTypeEnum { None, Artifact, Construction, Fabric, Fish, Flower, Food, Gem, Herb, Ingredient, Meal, Metal, MonsterPart, Ore};
@@ -54,7 +54,7 @@
         public enum ActorTraitsEnum { Early, Late, Prompt, Chatty, Anxious, Recluse, Musical };
         public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum ActorTypeEnum { Animal, Child, Critter, Effect, Merchant, Mob, Mount, Pet, Projectile, Spirit, TalkingActor, Traveler, Villager };
+        public enum ActorTypeEnum { Animal, Child, Critter, Effect, Fish, Merchant, Mob, Mount, Pet, Projectile, Spirit, TalkingActor, Traveler, Villager };
         public enum MobTypeEnum { Basic, Mage, Shooter, Summoner };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Magi, Noble};
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RiverHollow.Characters;
+using RiverHollow.GUIComponents;
 using RiverHollow.Items.Tools;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
@@ -10,35 +12,43 @@ namespace RiverHollow.Game_Managers
     static class FishingManager
     {
         private enum FishSpeedEnum { Slow, Normal, Fast };
+        private enum BobberStateEnum { None, Fakeout, Bite };
 
         private static FishingStateEnum _eState = FishingStateEnum.None;
+        private static BobberStateEnum _eBobberState = BobberStateEnum.None;
         private static FishingData _fishData;
         private static int _iHits;
         private static int _iMisses;
+        private static Fish _fish;
         private static FishingRod _rod;
+        private static AnimatedSprite _sprBobber;
+        public static Rectangle BobberRectangle => _sprBobber.SpriteRectangle;
 
-        private static AnimatedSprite _targetIcon;
         private static RHTimer _timer;
 
         public static bool Fishing => _eState != FishingStateEnum.None;
+        public static bool Waiting => _eState == FishingStateEnum.Waiting;
 
-        public static void SetFish(int id, Point p)
+        public static void Initialize()
         {
-            if (id != -1)
+            _timer = new RHTimer();
+            _sprBobber = new AnimatedSprite(DataManager.FILE_MISC_SPRITES);
+            _sprBobber.AddAnimation(AnimationEnum.None, 0, 80, Constants.TILE_SIZE, Constants.TILE_SIZE, 2, .5f);
+            _sprBobber.AddAnimation(AnimationEnum.Fish_Nibble, 0, 96, Constants.TILE_SIZE, Constants.TILE_SIZE, 1, 0.5f, false, true);
+        }
+
+        public static void Draw(SpriteBatch spriteBatch)
+        {
+            if (Fishing && _eState != FishingStateEnum.Cast)
             {
-                _eState = FishingStateEnum.WaitForFish;
-                _fishData = new FishingData(id, DataManager.GetStringByIDKey(id, "FishingData", DataType.Item));
+                _sprBobber.Draw(spriteBatch, Constants.MAX_LAYER_DEPTH);
 
-                var size = new Point(1, 1);
-                _targetIcon = new AnimatedSprite(DataManager.FOLDER_ENVIRONMENT + "FishingIcon");
-                _targetIcon.AddAnimation(FishSpeedEnum.Slow, 0, 0, size, 4, .3f, false, true);
-                _targetIcon.AddAnimation(FishSpeedEnum.Normal, 0, 0, size, 4, .25f, false, true);
-                _targetIcon.AddAnimation(FishSpeedEnum.Fast, 0, 0, size, 4, .18f, false, true);
-                _targetIcon.AddAnimation(VerbEnum.Action1, 64, 0, size, 1, .5f, false, true);
-
-                _targetIcon.Position = (p - new Point(Constants.TILE_SIZE / 2, Constants.TILE_SIZE / 2));
-                _targetIcon.Show = false;
-                _timer = new RHTimer(SetTimerSpeed());
+                if (_eBobberState == BobberStateEnum.Bite)
+                {
+                    var p = _sprBobber.Position - new Point(0, 8);
+                    Rectangle drawRect = new Rectangle(p, new Point(Constants.TILE_SIZE, Constants.TILE_SIZE));
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), drawRect, GUIUtils.QUEST_NEW, Color.White, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                }
             }
         }
 
@@ -46,48 +56,44 @@ namespace RiverHollow.Game_Managers
         {
             if (Fishing)
             {
+                _sprBobber.Update(gTime);
+
+                //Bobber Timed Out
+                if (_eBobberState != BobberStateEnum.None && _sprBobber.AnimationFinished(AnimationEnum.Fish_Nibble))
+                {
+                    ResetBobber();
+                    if (_eBobberState == BobberStateEnum.Bite)
+                    {
+                        AddMiss();
+                    }
+                }
+
                 var sprite = _rod.ToolSprite;
                 switch (_eState)
                 {
                     case FishingStateEnum.Cast:
                         if (sprite.Finished)
                         {
-                            var facingPoint = Util.GetPointFromDirection(PlayerManager.PlayerActor.Facing);
-                            for (int i = 2; i > 0; i--)
-                            {
-                                var checkPoint = PlayerManager.PlayerActor.CollisionCenter + Util.MultiplyPoint(facingPoint, Constants.TILE_SIZE * i);
-                                var tile = MapManager.CurrentMap.GetTileByPixelPosition(checkPoint);
-                                if (tile.IsWaterTile)
-                                {
-                                    var hole = MapManager.CurrentMap.GetFishingHole(tile);
-                                    SetFish(hole.GetRandomItemID(), checkPoint);
-                                    break;
-                                }
-                            }
+                            _sprBobber.PlayAnimation(AnimationEnum.None);
 
-                            if (_eState != FishingStateEnum.WaitForFish)
+                            _eState = FishingStateEnum.Waiting;
+                        }
+                        break;
+                    case FishingStateEnum.Waiting:
+                        break;
+                    case FishingStateEnum.Reeling:
+                        //Wait time between nibbles hit zero and we have no bobber state
+                        if (_timer.TickDown(gTime) && _eBobberState == BobberStateEnum.None)
+                        {
+                            _sprBobber.PlayAnimation(AnimationEnum.Fish_Nibble);
+                            if (RHRandom.RollPercent(35))
                             {
-                                EndFishing();
+                                _eBobberState = BobberStateEnum.Bite;
+                                _sprBobber.SetColor(Color.Red);
                             }
-                        }
-                        break;
-                    case FishingStateEnum.WaitForFish:
-                        if (_timer.TickDown(gTime))
-                        {
-                            _eState = FishingStateEnum.AttemptToCatch;
-                            _targetIcon.PlayAnimation(_fishData.FishSpeed);
-                            break;
-                        }
-                        break;
-                    case FishingStateEnum.AttemptToCatch:
-                        _targetIcon?.Update(gTime);
-                        if (_targetIcon.CurrentAnimation.Equals(Util.GetEnumString(VerbEnum.Action1)) && _targetIcon.Finished)
-                        {
-                            SetToWait();
-                        }
-                        else if (_targetIcon.Finished)
-                        {
-                            AddMiss();
+                            else {
+                                _eBobberState =  BobberStateEnum.Fakeout;
+                            }
                         }
                         break;
                     case FishingStateEnum.Finish:
@@ -102,40 +108,32 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
-        {
-            if (Fishing)
-            {
-                _targetIcon?.Draw(spriteBatch);
-            }
-        }
-
         public static bool ProcessLeftButtonClick()
         {
             bool rv = false;
             if (Fishing)
             {
                 rv = true;
-                if (_eState == FishingStateEnum.AttemptToCatch)
+                if (_eState == FishingStateEnum.Reeling)
                 {
-                    if (_targetIcon.CurrentFrame == _targetIcon.CurrentFrameAnimation.FrameCount - 1)
+
+                    if (_eBobberState == BobberStateEnum.Bite)
                     {
                         SoundManager.PlayEffect(SoundEffectEnum.Success_Fish);
+
                         _iHits++;
                         if (_iHits >= _fishData.HitsNeeded)
                         {
                             InventoryManager.AddToInventory(_fishData.FishID, 1);
                             EndFishing();
                         }
-                        else
-                        {
-                            _targetIcon.PlayAnimation(VerbEnum.Action1);
-                        }
                     }
                     else
                     {
                         AddMiss();
                     }
+
+                    ResetBobber();
                 }
             }
             return rv;
@@ -143,8 +141,13 @@ namespace RiverHollow.Game_Managers
 
         public static bool ProcessRightButtonClick()
         {
+            return CancelFishing();
+        }
+
+        private static bool CancelFishing()
+        {
             bool rv = false;
-            if (_eState == FishingStateEnum.WaitForFish)
+            if (_eState == FishingStateEnum.Waiting)
             {
                 rv = true;
                 _eState = FishingStateEnum.Finish;
@@ -154,31 +157,11 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static void BeginFishing(FishingRod r)
+        public static void BeginFishing(FishingRod r, Point p)
         {
             _rod = r;
             _eState = FishingStateEnum.Cast;
-        }
-
-        private static void AddMiss()
-        {
-            SoundManager.PlayEffect(SoundEffectEnum.Cancel);
-            _iMisses++;
-            if (_iMisses >= Constants.FISH_MISSES)
-            {
-                EndFishing();
-            }
-            else
-            {
-                SetToWait();
-            }
-        }
-
-        public static void SetToWait()
-        {
-            _eState = FishingStateEnum.WaitForFish;
-            _targetIcon.Show = false;
-            _timer.Reset(SetTimerSpeed() / 2);
+            _sprBobber.Position = p;
         }
 
         private static void EndFishing()
@@ -190,15 +173,48 @@ namespace RiverHollow.Game_Managers
             _fishData = default;
             _iMisses = 0;
 
-            _targetIcon = null;
+            _fish.Activate(false);
+            MapManager.CurrentMap.RemoveActor(_fish);
         }
 
-        private static double SetTimerSpeed()
+        public static void StartReeling(Fish f)
+        {
+            _fish = f;
+            _timer = new RHTimer();
+
+            _eState = FishingStateEnum.Reeling;
+            var hole = MapManager.CurrentMap.GetFishingHole(BobberRectangle.Location);
+            int id = hole.GetRandomItemID();
+            _fishData = new FishingData(id, DataManager.GetStringByIDKey(id, "FishingData", DataType.Item));
+
+            SetTimer();
+        }
+
+        private static void AddMiss()
+        {
+            SoundManager.PlayEffect(SoundEffectEnum.Cancel);
+            _iMisses++;
+            if (_iMisses >= Constants.FISH_MISSES)
+            {
+                EndFishing();
+            }
+        }
+
+        //Reset the hit timer between nibbles as well as the bobber state
+        private static void ResetBobber()
+        {
+            SetTimer();
+            _eBobberState = BobberStateEnum.None;
+            _sprBobber.PlayAnimation(AnimationEnum.None);
+            _sprBobber.SetColor(Color.White);
+        }
+        private static void SetTimer()
         {
             double multiplier = 100;
 
             var random = RHRandom.Instance().Next((int)(_fishData.MinTime * multiplier), (int)(_fishData.MaxTime * multiplier));
-            return random / multiplier;
+
+            _timer.Reset(random / multiplier);
         }
 
         private struct FishingData

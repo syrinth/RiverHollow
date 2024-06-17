@@ -51,10 +51,14 @@ namespace RiverHollow.Map_Handling
             return validTiles;
         }
 
+        public Rectangle GetRectangle()
+        {
+            return new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_szDimensions.Width, (int)_szDimensions.Height);
+        }
+
         public bool ContainsTile(RHTile t)
         {
-            var rect = new Rectangle((int)_vPosition.X, (int)_vPosition.Y, (int)_szDimensions.Width, (int)_szDimensions.Height);
-            return (rect.Contains(t.Center));
+            return (GetRectangle().Contains(t.Center));
         }
 
         public virtual void Spawn() { }
@@ -224,7 +228,7 @@ namespace RiverHollow.Map_Handling
                 {
                     SpawnData copyData = Util.RollOnRarityTable(copy);
 
-                    Mob m = DataManager.CreateMob(copyData.ID);
+                    Mob m = DataManager.CreateActor<Mob>(copyData.ID);
                     RHTile t = validTiles[RHRandom.Instance().Next(0, validTiles.Count - 1)];
                     _map.AddMobByPosition(m, t.Position);
                     m.SetInitialPoint(t.Position);

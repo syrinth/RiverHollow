@@ -34,7 +34,7 @@ namespace RiverHollow.Characters.Mobs
                 {
                     _cooldownTimer.Reset(Cooldown + (Cooldown * RHRandom.Instance().Next(1, 5) / 10));
 
-                    Projectile p = DataManager.CreateProjectile(projectileID);
+                    Projectile p = DataManager.CreateActor<Projectile>(projectileID);
 
                     //Important! Note that this starts at the CollisionBox of the Enemy!
                     //Always check the CollisionBox size and location

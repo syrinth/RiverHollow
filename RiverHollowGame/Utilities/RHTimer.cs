@@ -4,9 +4,16 @@ namespace RiverHollow.Utilities
 {
     public class RHTimer
     {
-        public double TimerSpeed { get; }
+        public double TimerSpeed { get; set; }
         public double TimeLeft { get; set; }
         bool _bStopped = false;
+
+        public RHTimer()
+        {
+            TimerSpeed = 0;
+            TimeLeft = 0;
+            _bStopped = true;
+        }
 
         public RHTimer(double time, bool stopped = false)
         {
@@ -17,7 +24,7 @@ namespace RiverHollow.Utilities
 
         public bool TickDown(GameTime gTime, bool autoReset = false)
         {
-            if(!_bStopped && TimerSpeed > 0)
+            if(!Finished() && !_bStopped && TimerSpeed > 0)
             {
                 TimeLeft -= gTime.ElapsedGameTime.TotalSeconds;
             }
@@ -34,7 +41,15 @@ namespace RiverHollow.Utilities
 
         public void Reset(double newTimer = -1)
         {
-            TimeLeft = (newTimer == -1 ? TimerSpeed : newTimer);
+            if(newTimer == -1)
+            {
+                TimeLeft = TimerSpeed;
+            }
+            else
+            {
+                TimeLeft = newTimer;
+                TimerSpeed = newTimer;
+            }
             _bStopped = false;
         }
 

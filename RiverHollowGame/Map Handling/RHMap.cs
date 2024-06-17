@@ -640,6 +640,29 @@ namespace RiverHollow.Map_Handling
             //Step 4 Filler Resources need to be generated
             hiddenTiles.ForEach(x => possibleTiles.Add(x));
             GenerateFillerResources(false, ref possibleTiles);
+
+            //Step 5 generate Fish
+            foreach(var obj in _liResourceSpawns)
+            {
+                if (obj.FishingHole)
+                {
+                    var tiles = GetTilesFromRectangleExcludeEdgePoints(obj.GetRectangle());
+                    var waterTiles = tiles.FindAll(x => x.IsWaterTile);
+
+                    int max = (int)Math.Ceiling(tiles.Count() / 20f);
+                    int spawnNum = RHRandom.Instance().Next(1, max);
+                    for (int i = 0; i < spawnNum; i++)
+                    {
+                        var random = Util.GetRandomItem(waterTiles);
+                        var fish = DataManager.CreateActor<Fish>(Constants.FISH_PUDDLE);
+
+                        fish.SetPosition(random.Position);
+                        AddActor(fish);
+
+                        tiles.Remove(random);
+                    }
+                }
+            }
         }
         private void GenerateMapResources(bool refresh, ref List<RHTile> possibleTiles)
         {
@@ -967,6 +990,10 @@ namespace RiverHollow.Map_Handling
             }
         }
 
+        public ResourceSpawn GetFishingHole(Point p)
+        {
+            return GetFishingHole(GetTileByPixelPosition(p));
+        }
         public ResourceSpawn GetFishingHole(RHTile t)
         {
             foreach(var obj in _liResourceSpawns)
@@ -1808,6 +1835,10 @@ namespace RiverHollow.Map_Handling
 
             if (SkipClickProcessing())
             {
+                if (FishingManager.ProcessLeftButtonClick())
+                {
+                    rv = true;
+                }
                 return rv;
             }
             else if (!PlayerManager.Busy && !CutsceneManager.Playing)
@@ -1844,9 +1875,20 @@ namespace RiverHollow.Map_Handling
                         {
                             if (!PlayerManager.InRangeOfPlayer(TargetTile.CollisionBox))
                             {
-                                var playerTile = MapManager.CurrentMap.GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionBox.Center);
-                                var dir = Util.GetDirectionFromPlayer(TargetTile.CollisionBox.Center);
-                                TargetTile = playerTile.GetTileByDirection(dir);
+                                var max = TargetTile.IsWaterTile ? 10 : 1;
+                                var init = TargetTile;
+                                var temp = MapManager.CurrentMap.GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionBox.Center);
+                                for (int x = 0; x < max; x++)
+                                {
+                                    var dir = Util.GetDirectionFromPlayer(TargetTile.CollisionBox.Center);
+                                    TargetTile = temp.GetTileByDirection(dir);
+                                    temp = TargetTile;
+
+                                    if(TargetTile == init)
+                                    {
+                                        break;
+                                    }
+                                }
                             }
 
                             //Retrieves any object associated with the tile, this will include
@@ -1873,10 +1915,6 @@ namespace RiverHollow.Map_Handling
                     }
                 }
             }
-            else if (FishingManager.ProcessLeftButtonClick())
-            {
-                rv = true;
-            }
 
             return rv;
         }
@@ -1887,7 +1925,14 @@ namespace RiverHollow.Map_Handling
 
             if (SkipClickProcessing())
             {
-                return rv;
+                if (FishingManager.ProcessRightButtonClick())
+                {
+                    return true;
+                }
+                else
+                {
+                    return rv;
+                }
             }
 
             if (InTownMode())
@@ -1902,11 +1947,6 @@ namespace RiverHollow.Map_Handling
                 if (PlayerManager.PlayerActor.Mounted && (tile == null || tile.GetTravelPoint() == null || !PlayerManager.PlayerActor.ActiveMount.CanEnterBuilding(tile.GetTravelPoint().LinkedMap)))
                 {
                     PlayerManager.PlayerActor.Dismount();
-                    return true;
-                }
-
-                if (FishingManager.ProcessRightButtonClick())
-                {
                     return true;
                 }
 

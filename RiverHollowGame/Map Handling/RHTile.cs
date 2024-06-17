@@ -229,6 +229,18 @@ namespace RiverHollow.Map_Handling
         {
             return CollisionBox.Contains(n.CollisionCenter);
         }
+
+        public bool ContainsProperty(string property)
+        {
+            bool rv = false;
+            foreach (TiledMapTileLayer l in _diProps.Keys)
+            {
+                rv = ContainsProperty(l, property, out string value) && value.Equals("True");
+                if (rv) { break; }
+            }
+
+            return rv;
+        }
         public bool ContainsProperty(string property, out string value)
         {
             bool rv = false;

@@ -85,6 +85,7 @@
     <Compile Include="Characters\ActorEmoji.cs" />
     <Compile Include="Characters\Animal.cs" />
     <Compile Include="Characters\CombatActor.cs" />
+    <Compile Include="Characters\Fish.cs" />
     <Compile Include="Characters\Mobs\Mage.cs" />
     <Compile Include="Characters\Mobs\Shooter.cs" />
     <Compile Include="Characters\Mobs\Summoner.cs" />

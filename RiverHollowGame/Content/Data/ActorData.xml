@@ -131,7 +131,7 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][ItemID:56-C/222-C/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Group:Rogue][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][ItemID:56-C/222-C/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
     </Item>
     <Item>
       <Key>33</Key>
@@ -243,7 +243,7 @@
     </Item>
     <Item>
       <Key>60</Key>
-      <Value>[Type:Villager][Key:Quentin][Size:16-34][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][Collection:0/1/2][PlantsGrown:30][Traits:Recluse/Early]</Value>
+      <Value>[Type:Villager][Group:Rogue][Key:Quentin][Size:16-34][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][HouseID:6][Collection:0/1/2][PlantsGrown:30][Traits:Recluse/Early]</Value>
     </Item>
     <Item>
       <Key>61</Key>
@@ -272,6 +272,10 @@
     <Item>
       <Key>67</Key>
       <Value>[Type:Pet][Key:Spitter][Idle:0-0-1-0--T][Walk:64-0-3-0.15-T][Alert:0-64-3-0.5-T][ObjectID:4]</Value>
+    </Item>
+    <Item>
+      <Key>68</Key>
+      <Value>[Type:Fish][Key:Fish_Pond][Size:16-16][Idle:3-.2-T]</Value>
     </Item>
   </Asset>
 </XnaContent>

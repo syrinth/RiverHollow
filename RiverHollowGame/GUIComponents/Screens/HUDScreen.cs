@@ -62,8 +62,8 @@ namespace RiverHollow.GUIComponents.Screens
             _gDungeonKeys = new GUIDungeonKeyDisplay();
             _gDungeonKeys.AnchorAndAlignWithSpacing(_gMoneyWindow, SideEnum.Bottom, SideEnum.Left, GUIManager.STANDARD_MARGIN);
 
-            //_gInventory = new HUDMiniInventory();
-            //_gInventory.AnchorToScreen(SideEnum.Bottom, 1);
+            _gInventory = new HUDMiniInventory();
+            _gInventory.AnchorToScreen(SideEnum.Bottom, 1);
 
             _gCalendar = new HUDCalendar();
             _gCalendar.AnchorToScreen(SideEnum.TopRight, 3);

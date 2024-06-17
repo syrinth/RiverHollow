@@ -563,7 +563,7 @@ namespace RiverHollow.Game_Managers
                             int npcID = int.Parse(friendData[0]);
                             act = new Villager(npcID, DataManager.ActorData[npcID]);
                         }
-                        else { act = DataManager.CreateNPCByIndex(int.Parse(friendData[0])); }
+                        else { act = DataManager.CreateActor<Actor>(int.Parse(friendData[0])); }
                         act.CurrentMapName = _cutsceneMap.Name;
                         act.SetPosition(Util.SnapToGrid(_cutsceneMap.GetCharacterSpawn(friendData[1])));
                         act.PlayAnimation(VerbEnum.Idle);

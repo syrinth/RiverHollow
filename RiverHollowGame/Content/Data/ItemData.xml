@@ -843,11 +843,11 @@
     </Item>
     <Item>
       <Key>210</Key>
-      <Value>[Type:Resource][Subtype:Fish][Image:8-8][Value:10][FishingData:2/5/Slow]</Value>
+      <Value>[Type:Resource][Subtype:Fish][Image:8-8][Value:10][FishingData:2/3/Slow]</Value>
     </Item>
     <Item>
       <Key>211</Key>
-      <Value>[Type:Resource][Subtype:Fish][Image:9-8][Value:20][FishingData:4/8/Fast/2]</Value>
+      <Value>[Type:Resource][Subtype:Fish][Image:9-8][Value:20][FishingData:2/4/Fast/2]</Value>
     </Item>
     <Item>
       <Key>212</Key>

@@ -321,7 +321,7 @@ namespace RiverHollow.Misc
                 string[] parse = Util.FindArguments(GetStringByIDKey("SpawnMob"));
                 if (parse.Length > 1 && int.TryParse(parse[0], out int mobID))
                 {
-                    var mob = DataManager.CreateMob(mobID);
+                    var mob = DataManager.CreateActor<Mob>(mobID);
                     RHMap map = MapManager.Maps[parse[1]];
                     map.AddMobByPosition(mob, map.GetCharacterObject(parse[2]).Location);
                 }

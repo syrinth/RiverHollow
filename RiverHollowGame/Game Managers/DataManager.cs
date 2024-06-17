@@ -715,7 +715,7 @@ namespace RiverHollow.Game_Managers
             return list;
         }
 
-        public static Actor CreateNPCByIndex(int id)
+        private static Actor CreateNPCByIndex(int id)
         {
             if (id != -1 && _diItemData.ContainsKey(id))
             {
@@ -755,78 +755,29 @@ namespace RiverHollow.Game_Managers
                         return new TalkingActor(id, diData);
                     case ActorTypeEnum.Traveler:
                         return new Traveler(id, diData);
+                    case ActorTypeEnum.Fish:
+                        return new Fish(id, diData);
                 }
             }
             return null;
         }
-        public static Mob CreateMob(int id)
+
+        public static T CreateActor<T>(int id) where T : class
         {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Mob))
+            T rv = null;
+            var actor = CreateNPCByIndex(id);
+
+            if(actor is T typedActor)
             {
-                rv = null;
+                rv = typedActor;
             }
-            return (Mob)rv;
-        }
-        public static Child CreateChild(int id)
-        {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Child))
-            {
-                rv = null;
-            }
-            return (Child)rv;
-        }
-        public static Mount CreateMount(int id)
-        {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Mount))
-            {
-                rv = null;
-            }
-            return (Mount)rv;
-        }
-        public static Pet CreatePet(int id)
-        {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Pet))
-            {
-                rv = null;
-            }
-            return (Pet)rv;
-        }
-        public static Projectile CreateProjectile(int id)
-        {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Projectile))
-            {
-                rv = null;
-            }
-            return (Projectile)rv;
-        }
-        public static ActionEffect CreateEffect(int id)
-        {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Effect))
-            {
-                rv = null;
-            }
-            return (ActionEffect)rv;
-        }
-        public static Traveler CreateTraveler(int id)
-        {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Traveler))
-            {
-                rv = null;
-            }
-            return (Traveler)rv;
+            return rv;
         }
 
         public static List<Actor> GetAllTravelers()
         {
             var actors = new List<Actor>();
-            TownManager.DITravelerInfo.Keys.ToList().ForEach(x => actors.Add(CreateTraveler(x)));
+            TownManager.DITravelerInfo.Keys.ToList().ForEach(x => actors.Add(CreateActor<Traveler>(x)));
 
             return actors;
         }
@@ -834,27 +785,9 @@ namespace RiverHollow.Game_Managers
         public static List<Actor> GetAllMobs()
         {
             var actors = new List<Actor>();
-            TownManager.DIMobInfo.Keys.ToList().ForEach(x => actors.Add(CreateMob(x)));
+            TownManager.DIMobInfo.Keys.ToList().ForEach(x => actors.Add(CreateActor<Mob>(x)));
 
             return actors;
-        }
-        public static Animal CreateAnimal(int id)
-        {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Animal))
-            {
-                rv = null;
-            }
-            return (Animal)rv;
-        }
-        public static Critter CreateCritter(int id)
-        {
-            Actor rv = CreateNPCByIndex(id);
-            if (rv != null && !rv.IsActorType(ActorTypeEnum.Critter))
-            {
-                rv = null;
-            }
-            return (Critter)rv;
         }
 
         public static StatusEffect GetStatusEffectByIndex(int id)

@@ -19,7 +19,7 @@ namespace RiverHollow.Items
         {
             if (TokenType == NPCTokenTypeEnum.Mount)
             {
-                Mount act = DataManager.CreateMount(NPCID);
+                Mount act = DataManager.CreateActor<Mount>(NPCID);
                 PlayerManager.AddMount(act);
                 act.SpawnInHome();
                 Remove(1);
@@ -28,7 +28,7 @@ namespace RiverHollow.Items
             {
                 if (TownManager.PetCafe != null || PlayerManager.Pets.Count == 0)
                 {
-                    Pet p = DataManager.CreatePet(NPCID);
+                    Pet p = DataManager.CreateActor<Pet>(NPCID);
                     PlayerManager.AddPet(p);
 
                     if (PlayerManager.PlayerActor.ActivePet == null)

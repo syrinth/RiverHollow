@@ -359,6 +359,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Spitter]</Value>
     </Item>
     <Item>
+      <Key>Actor_68</Key>
+      <Value>[Name:Fish Pond]</Value>
+    </Item>
+    <Item>
       <Key>StatusEffect_0</Key>
       <Value>[Name:Torchlight]</Value>
     </Item>

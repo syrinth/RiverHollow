@@ -453,6 +453,15 @@ namespace RiverHollow.Characters
         #endregion
 
         #region Pathing
+        protected virtual void CheckBumpedIntoSomething()
+        {
+            if (_bBumpedIntoSomething && _eCurrentState == NPCStateEnum.Wander)
+            {
+                ChangeState(NPCStateEnum.Idle);
+                SetMoveTo(Point.Zero);
+            }
+        }
+
         public Thread CalculatePathThreaded()
         {
             _pathingThread = new Thread(GetPathToNextAction);
@@ -496,8 +505,6 @@ namespace RiverHollow.Characters
             {
                 //Determines how much of the needed position we're capable of in one movement
                 Vector2 direction = Util.GetMoveSpeed(CollisionBoxLocation, MoveToLocation, BuffedSpeed);
-                Point projection = ProjectedMovement(direction);
-                var deltaDir = CollisionBoxLocation - MoveToLocation;
 
                 bool impeded = false;
                 Vector2 initial = direction;

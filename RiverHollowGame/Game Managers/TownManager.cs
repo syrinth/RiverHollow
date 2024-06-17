@@ -294,7 +294,7 @@ namespace RiverHollow.Game_Managers
             var travelerList = new List<Traveler>();
             foreach (int value in DITravelerInfo.Keys)
             {
-                Traveler npc = DataManager.CreateTraveler(value);
+                Traveler npc = DataManager.CreateActor<Traveler>(value);
                 if (npc.Validate()) 
                 {
                     travelerList.Add(npc);
@@ -393,7 +393,7 @@ namespace RiverHollow.Game_Managers
 
         public static void AddTraveler(int id)
         {
-            AddTraveler((Traveler)DataManager.CreateNPCByIndex(id));
+            AddTraveler(DataManager.CreateActor<Traveler>(id));
         }
         public static void AddTraveler(Traveler npc)
         {
@@ -761,7 +761,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (int id in saveData.TownAnimals)
             {
-                Animal m = DataManager.CreateAnimal(id);
+                Animal m = DataManager.CreateActor<Animal>(id);
                 AddAnimal(m);
             }
 

@@ -502,7 +502,8 @@
  </tile>
  <tile id="207">
   <properties>
-   <property name="Impassable" type="bool" value="true"/>
+   <property name="Barren" type="bool" value="true"/>
+   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="208">
@@ -563,37 +564,31 @@
  <tile id="259">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="260">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="261">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="262">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="263">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="264">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="269">
@@ -620,31 +615,27 @@
  <tile id="284">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="285">
   <properties>
-   <property name="Impassable" type="bool" value="true"/>
+   <property name="Barren" type="bool" value="true"/>
    <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="286">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="287">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="289">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="300">
@@ -665,37 +656,31 @@
  <tile id="309">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="310">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="311">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="312">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="313">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="314">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="325">
@@ -711,37 +696,31 @@
  <tile id="334">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="335">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="336">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="337">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="338">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="339">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="350">
@@ -762,31 +741,27 @@
  <tile id="359">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="360">
   <properties>
-   <property name="Impassable" type="bool" value="true"/>
+   <property name="Barren" type="bool" value="true"/>
    <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="361">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="362">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="364">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="376">
@@ -807,37 +782,31 @@
  <tile id="384">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="385">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="386">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="387">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="388">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="389">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="397">
@@ -933,37 +902,31 @@
  <tile id="436">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="437">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="438">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="439">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="440">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="441">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="444">
@@ -1004,31 +967,27 @@
  <tile id="461">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="462">
   <properties>
-   <property name="Impassable" type="bool" value="true"/>
+   <property name="Barren" type="bool" value="true"/>
    <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="463">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="464">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="466">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="467">
@@ -1079,37 +1038,31 @@
  <tile id="486">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="487">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="488">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="489">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="490">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="491">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
-   <property name="Water" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="492">

@@ -528,7 +528,7 @@ namespace RiverHollow.Game_Managers
                     if (PlayerActor.Pregnant) { PlayerActor.Pregnant = false; }
                     else if (Spouse.Pregnant) { Spouse.Pregnant = false; }
 
-                    Child p = DataManager.CreateChild(10);
+                    Child p = DataManager.CreateActor<Child>(10);
                     p.SpawnNearPlayer();
                     Children.Add(p);
                 }
@@ -744,7 +744,7 @@ namespace RiverHollow.Game_Managers
 
                         if (ToolInUse.ToolType == ToolEnum.FishingRod)
                         {
-                            FishingManager.BeginFishing((FishingRod)ToolInUse);
+                            FishingManager.BeginFishing((FishingRod)ToolInUse, MapManager.CurrentMap.TargetTile.Position);
                         }
                     }
                     else
@@ -943,7 +943,7 @@ namespace RiverHollow.Game_Managers
 
             foreach (int i in saveData.liPets)
             {
-                Pet p = DataManager.CreatePet(i);
+                Pet p = DataManager.CreateActor<Pet>(i);
                 if (p.ID == saveData.activePet)
                 {
                     p.SpawnNearPlayer();
@@ -954,13 +954,13 @@ namespace RiverHollow.Game_Managers
 
             foreach (int i in saveData.MountList)
             {
-                Mount m = DataManager.CreateMount(i);
+                Mount m = DataManager.CreateActor<Mount>(i);
                 AddMount(m);
             }
 
             foreach (ChildData data in saveData.ChildList)
             {
-                Child m = DataManager.CreateChild(data.childID);
+                Child m = DataManager.CreateActor<Child>(data.childID);
                 m.SpawnNearPlayer();
                 AddChild(m);
             }

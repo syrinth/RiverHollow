@@ -384,16 +384,5 @@ namespace RiverHollow.Characters
             return 0;
         }
         #endregion
-
-        #region Pathing Handlers
-        protected virtual void CheckBumpedIntoSomething()
-        {
-            if (_bBumpedIntoSomething && _eCurrentState == NPCStateEnum.Wander)
-            {
-                ChangeState(NPCStateEnum.Idle);
-                SetMoveTo(Point.Zero);
-            }
-        }
-        #endregion
     }
 }

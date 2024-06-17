@@ -4,11 +4,6 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Map_Handling;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Misc

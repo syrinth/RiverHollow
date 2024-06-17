@@ -81,7 +81,7 @@ namespace RiverHollow.Game_Managers
 
                 for (int i = 0; i < num; i++)
                 {
-                    Critter actor = DataManager.CreateCritter(int.Parse(DataManager.Config[20]["NPC_ID"]));
+                    Critter actor = DataManager.CreateActor<Critter>(int.Parse(DataManager.Config[20]["NPC_ID"]));
                     actor.SetPosition(Util.GetRandomItem(validTiles).Position);
                     map.AddActor(actor);
                     _liCritters.Add(actor);

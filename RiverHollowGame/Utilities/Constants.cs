@@ -106,6 +106,8 @@ namespace RiverHollow.Utilities
         public const int GROUP_DIVISOR = 3;
         public const int MEMBER_DIVISOR = 2;
 
+        public const int FISH_PUDDLE = 68;
+
         public const int ACTION_DELAY = 10;
         public const string MAPOBJ_CRAFT = "Craft";
         public const string MAPOBJ_HOME = "NPC_";

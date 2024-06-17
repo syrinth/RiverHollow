@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="72">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="74">
  <properties>
   <property name="FillerID" value="103-60-Spread-80/51-5/60-5/147-20"/>
   <property name="FillerPercent" type="float" value="0.3"/>
@@ -92,7 +92,14 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="5" name="MapObject"/>
+ <objectgroup id="5" name="MapObject">
+  <object id="73" name="Resource" x="208" y="96" width="144" height="64">
+   <properties>
+    <property name="FishingHole" type="bool" value="true"/>
+    <property name="ItemID" value="210-C/211-U"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="6" name="Character">
   <object id="71" name="NPC" x="272" y="160" width="16" height="16">
    <properties>

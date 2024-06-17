@@ -987,7 +987,7 @@ namespace RiverHollow.Characters
 
                 for (int i = 0; i < num; i++)
                 {
-                    TownManager.AddAnimal(DataManager.CreateAnimal(split[0]));
+                    TownManager.AddAnimal(DataManager.CreateActor<Animal>(split[0]));
                 }
             }
         }
