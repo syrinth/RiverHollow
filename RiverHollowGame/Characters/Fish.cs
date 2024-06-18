@@ -54,10 +54,6 @@ namespace RiverHollow.Characters
             CheckBumpedIntoSomething();
         }
 
-        public override void PlayAnimationVerb(VerbEnum verb)
-        {
-            PlayAnimation(VerbEnum.Idle);
-        }
         public override void PlayAnimation(string verb, DirectionEnum dir)
         {
             PlayAnimation(VerbEnum.Idle);

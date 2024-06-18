@@ -167,6 +167,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
     public class GUIItem : GUIObject
     {
+        Point _pNumOffset;
         public Item ItemObject {get;}
         readonly GUIImage _gShadow;
         readonly GUIImage _gImg;
@@ -181,6 +182,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             HoverControls = false;
 
             _bDrawShadow = drawShadow;
+            _pNumOffset = new Point(2, 2);
 
             ItemObject = it;
             DrawNumbers = e;
@@ -232,10 +234,15 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
         }
 
+        public void SetNumberOffset(Point val)
+        {
+            _pNumOffset = val;
+            SetTextPosition();
+        }
         private void SetTextPosition()
         {
             _gText.AlignToObject(_gImg, SideEnum.BottomRight, GUIUtils.ParentRuleEnum.Skip);
-            _gText.ScaledMoveBy(2, 2);
+            _gText.ScaledMoveBy(_pNumOffset);
         }
 
         public override void SetColor(Color c)
@@ -268,7 +275,16 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             CompareToInventory = true;
             DrawNumbers = ItemBoxDraw.Always;
             int inventoryNumber = InventoryManager.GetNumberInInventory(ItemObject.ID, inventory == null ? InventoryManager.PlayerInventory : inventory);
-            _gText.SetText(string.Format("{0}/{1}", inventoryNumber, ItemObject.Number));
+
+            var num = inventoryNumber;
+            if (CompareToInventory && num > Constants.MAX_STACK_COMPARE)
+            {
+                _gText.SetText(string.Format("{0}+/{1}", Constants.MAX_STACK_COMPARE, ItemObject.Number));
+            }
+            else
+            {
+                _gText.SetText(string.Format("{0}/{1}", inventoryNumber, ItemObject.Number));
+            }
             SetTextPosition();
 
             if (inventoryNumber < ItemObject.Number)

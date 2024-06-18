@@ -16,11 +16,11 @@ namespace RiverHollow.GUIComponents
 
         internal static Point SCREEN_CENTER = new Point(RiverHollow.ScreenWidth / 2, RiverHollow.ScreenHeight / 2);
 
-        internal static Rectangle SELECT_CORNER = new Rectangle(160, 128, 20, 20);
+        internal static Rectangle SELECT_CORNER = new Rectangle(144, 128, 24, 24);
         internal static Rectangle SELECT_HIGHLIGHT = new Rectangle(163, 20, 20, 20);
         internal static Rectangle WORLDMAP = new Rectangle(0, 0, 480, 270);
         internal static Rectangle NEW_DISPLAY = new Rectangle(112, 208, 50, 49);
-        internal static Rectangle ITEM_BOX = new Rectangle(182, 130, 20, 20);
+        internal static Rectangle ITEM_BOX = new Rectangle(176, 128, 20, 20);
         internal static Rectangle STRUCTURE_BOX = new Rectangle(284, 204, 68, 68);
         internal static Rectangle PLACEMENT_BOX = new Rectangle(272, 112, 16, 16);
         internal static Rectangle CODEX_ITEM = new Rectangle(96, 128, 20, 20);
@@ -69,7 +69,7 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle QUEST_NEW = new Rectangle(160, 96, 16, 16);
         internal static Rectangle QUEST_TURNIN = new Rectangle(176, 96, 16, 16);
-        internal static Rectangle HELD_ITEM = new Rectangle(144, 128, 16, 16);
+        internal static Rectangle HELD_ITEM = new Rectangle(192, 160, 16, 16);
 
         internal static Rectangle CURSOR_POINT = new Rectangle(320, 160, 16, 16);
         internal static Rectangle CURSOR_PICKUP = new Rectangle(336, 160, 16, 16);
@@ -128,9 +128,9 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle HUD_SCROLL_L = new Rectangle(209, 96, 142, 3);
         internal static Rectangle HUD_DIVIDER = new Rectangle(106, 122, 8, 1);
 
-        internal static Rectangle HUD_DESC_TOP = new Rectangle(0, 352, 176, 30);
-        internal static Rectangle HUD_DESC_MID = new Rectangle(0, 383, 176, 9);
-        internal static Rectangle HUD_DESC_BOT = new Rectangle(0, 393, 176, 5);
+        internal static Rectangle HUD_DESC_TOP = new Rectangle(0, 288, 176, 30);
+        internal static Rectangle HUD_DESC_MID = new Rectangle(0, 319, 176, 9);
+        internal static Rectangle HUD_DESC_BOT = new Rectangle(0, 329, 176, 5);
 
         internal static Rectangle HUD_SHOP_TOP = new Rectangle(176, 288, 176, 80);
         internal static Rectangle HUD_SHOP_MID = new Rectangle(176, 368, 176, 32);
@@ -155,9 +155,9 @@ namespace RiverHollow.GUIComponents
         internal static WindowData WINDOW_WOODEN_PANEL = new WindowData(80, 240, 3, 3, 3, 3, 10);
         internal static WindowData WINDOW_WOODEN_TITLE = new WindowData(0, 256, 17, 5, 7, 7, 10);
 
-        internal static Rectangle RECIPE_TOP = new Rectangle(0, 288, 176, 19);
-        internal static Rectangle RECIPE_MIDDLE = new Rectangle(0, 307, 176, 19);
-        internal static Rectangle RECIPE_BOTTOM = new Rectangle(0, 326, 176, 20);
+        internal static Rectangle RECIPE_TOP = new Rectangle(0, 448, 212, 23);
+        internal static Rectangle RECIPE_MIDDLE = new Rectangle(0, 471, 212, 23);
+        internal static Rectangle RECIPE_BOTTOM = new Rectangle(0, 494, 212, 24);
         internal static Rectangle RECIPE_DOTS = new Rectangle(160, 272, 16, 16);
 
         internal static Color MAIN_DROP_SHADOW = new Color(50, 32, 24);

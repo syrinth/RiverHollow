@@ -463,7 +463,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             ScaledMoveBy(new Point(x, y));
         }
-        private void ScaledMoveBy(Point dir)
+        public void ScaledMoveBy(Point dir)
         {
             MoveBy(GameManager.ScaleIt(dir.X), GameManager.ScaleIt(dir.Y));
         }

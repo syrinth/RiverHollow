@@ -34,7 +34,7 @@ forceZero=0
 widthPaddingFactor=0.00
 
 # output file
-outWidth=58
+outWidth=63
 outHeight=7
 outBitDepth=32
 fontDescFormat=1
@@ -69,3 +69,4 @@ icon="Glyphs/6.png",54,0,0,-1
 icon="Glyphs/7.png",55,0,0,-1
 icon="Glyphs/8.png",56,0,0,-1
 icon="Glyphs/9.png",57,0,0,-1
+icon="Glyphs/_plus.png",43,0,0,-1

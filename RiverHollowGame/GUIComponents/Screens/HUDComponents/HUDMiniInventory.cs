@@ -21,7 +21,7 @@ namespace RiverHollow.GUIComponents.Screens
         float _fAlphaValue;
         const float MIN_FADE = 0.1f;
 
-        public HUDMiniInventory() : base(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(221), GameManager.ScaleIt(30))
+        public HUDMiniInventory() : base(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(230), GameManager.ScaleIt(30))
         {
             _liItems = new GUIItemBox[InventoryManager.maxItemColumns];
 
@@ -31,7 +31,7 @@ namespace RiverHollow.GUIComponents.Screens
                 _liItems[i] = ib;
 
                 if (i == 0) { ib.AnchorToInnerSide(this, SideEnum.TopLeft); }
-                else { ib.AnchorAndAlignWithSpacing(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN); }
+                else { ib.AnchorAndAlignWithSpacing(_liItems[i - 1], SideEnum.Right, SideEnum.Bottom, GUIManager.STANDARD_MARGIN * 2); }
 
                 ib.SetAlpha(_fAlphaValue);
             }
