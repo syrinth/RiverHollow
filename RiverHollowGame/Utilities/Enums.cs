@@ -72,11 +72,12 @@
         public enum NPCActionState { Craft, Home, Inn, Market, PetCafe, Shop, Visit };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
-        public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task, Letter };
+        public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task };
         public enum TaskTypeEnum { Build, Fetch, Talk, TownState, Slay, Craft };
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
-        public enum MailboxEnum { Unsent, Processed, Waiting };
+        public enum LetterTemplateEnum {Sent, Unsent, Repeatable };
+        public enum LetterItemStateEnum { None, Waiting, Received };
 
         public enum GameIconEnum { None, Book, Coin, Hammer, Traveler, Bag, Health, Energy, Time, Level };
 

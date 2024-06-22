@@ -207,16 +207,28 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "TravelersCame")]
             public bool travelersCame;
 
-            [XmlArray(ElementName = "MailboxUnsent")]
-            public List<string> MailboxUnsent;
-
             [XmlArray(ElementName = "MailboxSent")]
-            public List<string> MailboxSent;
+            public List<int> MailboxSent;
 
-            [XmlArray(ElementName = "MailboxWaiting")]
-            public List<string> MailboxWaiting;
+            [XmlArray(ElementName = "Mailbox")]
+            public List<LetterData> Mailbox;
+        }
+        public struct LetterData
+        {
+            [XmlElement(ElementName = "LetterID")]
+            public int LetterID;
 
+            [XmlElement(ElementName = "ItemState")]
+            public int ItemState;
 
+            [XmlElement(ElementName = "ItemID")]
+            public int ItemID;
+
+            [XmlElement(ElementName = "ItemNum")]
+            public int ItemNum;
+
+            [XmlElement(ElementName = "Read")]
+            public bool Read;
         }
         public struct CalendarData
         {

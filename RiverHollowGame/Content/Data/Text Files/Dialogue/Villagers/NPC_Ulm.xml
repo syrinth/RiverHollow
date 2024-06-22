@@ -71,5 +71,9 @@ Lucky for you, I am an expert Apothecary. You build me a nice little home to cal
 
 Or maybe burn it.]</Value>
     </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[Name:Family][Text:Potions run in my blood, my mother was an Apothecary, as was her mother. Now, great grandma Lotha was an executioner, but HER mother was also an apothecary.]</Value>
+    </Item>
   </Asset>
 </XnaContent>

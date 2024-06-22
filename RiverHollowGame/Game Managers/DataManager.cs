@@ -61,13 +61,17 @@ namespace RiverHollow.Game_Managers
         public const string ACTION_ICONS = GUI_COMPONENTS + @"\GUI_Action_Icons";
         public const string HUD_COMPONENTS = GUI_COMPONENTS + @"\GUI_HUD_Components";
         public const string PROJECTILE_TEXTURE = TEXTURES + @"Projectiles";
+
+        public const string FACES_TEXTURE = PORTRAIT_FOLDER + @"Faces";
         #endregion
 
         #region Dictionaries
         static Dictionary<string, Texture2D> _diTextures;
         static Dictionary<string, BitmapFont> _diBMFonts;
         static Dictionary<string, string> _diGameText;
-        static Dictionary<string, string> _diMailboxData;
+
+        static Dictionary<int, string> _diLetterData;
+        public static IReadOnlyDictionary<int, string> LetterData => _diLetterData;
 
         static Dictionary<int, List<string>> _diSongs;
         static Dictionary<string, Dictionary<string, string>> _diNPCDialogue;
@@ -103,7 +107,12 @@ namespace RiverHollow.Game_Managers
             //Allocate Dictionaries
             _diTextures = new Dictionary<string, Texture2D>();
 
-            _diMailboxData = Content.Load<Dictionary<string, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
+            _diLetterData = new Dictionary<int, string>();
+            var letterTemplates = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
+            foreach(var l in letterTemplates)
+            {
+                _diLetterData[l.Key] = l.Value;
+            }
 
             //Read in Content and allocate the appropriate Dictionaries
             LoadGUIs(Content);
@@ -877,15 +886,7 @@ namespace RiverHollow.Game_Managers
             entry.FormatText(formatParameters);
             return entry;
         }
-        public static List<string> GetMailboxData()
-        {
-            return _diMailboxData.Keys.ToList();
-        }
 
-        public static TextEntry GetMailboxLetter(string messageID)
-        {
-            return new TextEntry(messageID, Util.DictionaryFromTaggedString(_diMailboxData[messageID]));
-        }
         public static Dictionary<string, TextEntry> GetNPCDialogue(string key)
         {
             Dictionary<string, TextEntry> rv = new Dictionary<string, TextEntry>();

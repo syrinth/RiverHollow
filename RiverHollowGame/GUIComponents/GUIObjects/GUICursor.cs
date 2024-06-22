@@ -54,6 +54,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (heldItem == null) { _guiItem = null; }
             else {
                 _guiItem = new GUIItem(heldItem);
+                _guiItem.SnapToGrid(false);
                 _guiItem.DrawShadow(false);
                 _guiItem.Position(new Point(Position.X + 16, Position.Y + 16));
                 GUIManager.CurrentScreen.RemoveControl(_guiItem);

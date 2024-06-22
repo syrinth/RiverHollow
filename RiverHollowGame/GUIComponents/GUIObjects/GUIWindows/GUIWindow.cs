@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-
+using System.Collections.Generic;
 using static RiverHollow.Game_Managers.GameManager;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
@@ -60,7 +60,8 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             bool rv = false;
 
-            foreach (GUIObject c in Controls)
+            var controls = new List<GUIObject>(Controls);
+            foreach (GUIObject c in controls)
             {
                 if (c.Contains(mouse) && Show())
                 {

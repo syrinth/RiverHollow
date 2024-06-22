@@ -71,7 +71,7 @@ namespace RiverHollow.Characters
  
             } 
 
-            var drawBox = new Rectangle(Villager.GetHoverPointLocation(), Constants.BasicTileSize);
+            var drawBox = new Rectangle(Villager.GetHoverPointLocation(), Constants.BASIC_TILE);
             spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, emojiBox, Color.White * _fAlpha, 0f, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
         }
     }

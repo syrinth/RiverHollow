@@ -21,6 +21,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle WORLDMAP = new Rectangle(0, 0, 480, 270);
         internal static Rectangle NEW_DISPLAY = new Rectangle(112, 208, 50, 49);
         internal static Rectangle ITEM_BOX = new Rectangle(176, 128, 20, 20);
+        internal static Rectangle MAIL_ITEM_BOX = new Rectangle(144, 160, 20, 20);
         internal static Rectangle STRUCTURE_BOX = new Rectangle(284, 204, 68, 68);
         internal static Rectangle PLACEMENT_BOX = new Rectangle(272, 112, 16, 16);
         internal static Rectangle CODEX_ITEM = new Rectangle(96, 128, 20, 20);
@@ -51,6 +52,10 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle ICON_EXCLAMATION = new Rectangle(272, 128, 4, 10);
         internal static Rectangle ICON_ERROR = new Rectangle(276, 128, 8, 8);
         internal static Rectangle ICON_BUILD = new Rectangle(336, 144, 16, 16);
+
+        internal static Rectangle ICON_LETTER_UNREAD = new Rectangle(224, 176, 16, 16);
+        internal static Rectangle ICON_LETTER_READ = new Rectangle(240, 176, 16, 16);
+        internal static Rectangle ICON_LETTER_GIFT = new Rectangle(240, 256, 10, 8);
 
         internal static Rectangle ICON_CLASS_GENERAL = new Rectangle(0, 0, 10, 10);
         internal static Rectangle ICON_CLASS_FIGHTER = new Rectangle(10, 0, 10, 10);
@@ -138,6 +143,7 @@ namespace RiverHollow.GUIComponents
 
         internal static Rectangle WIN_IMAGE_CRAFTING = new Rectangle(192, 0, 160, 50);
         internal static Rectangle LEVEL_TAB = new Rectangle(48, 144, 44, 16);
+        internal static Rectangle VERTICAL_SEPARATOR = new Rectangle(24, 256, 8, 4);
 
         internal static Rectangle PLAYER_INVENTORY_PANE = new Rectangle(256, 160, 28, 40);
         internal static Rectangle INVENTORY_ICON_HAT = new Rectangle(208, 144, 16, 16);
@@ -154,6 +160,8 @@ namespace RiverHollow.GUIComponents
         internal static WindowData WINDOW_DISPLAY = new WindowData(64, 240, 1, 1, 1, 1, 14);
         internal static WindowData WINDOW_WOODEN_PANEL = new WindowData(80, 240, 3, 3, 3, 3, 10);
         internal static WindowData WINDOW_WOODEN_TITLE = new WindowData(0, 256, 17, 5, 7, 7, 10);
+        internal static WindowData WINDOW_LETTER_DARK = new WindowData(32, 256, 2, 2, 2, 2, 12);
+        internal static WindowData WINDOW_LETTER_LIGHT = new WindowData(48, 256, 2, 2, 2, 2, 12);
 
         internal static Rectangle RECIPE_TOP = new Rectangle(0, 448, 212, 23);
         internal static Rectangle RECIPE_MIDDLE = new Rectangle(0, 471, 212, 23);

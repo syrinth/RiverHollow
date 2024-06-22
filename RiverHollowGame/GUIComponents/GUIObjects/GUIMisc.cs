@@ -382,4 +382,33 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _gText.SetColor(c);
         }
     }
+
+    public class GUIConfirmation : GUIWindow
+    {
+        readonly EmptyDelegate _delConfirm;
+        public GUIConfirmation(string text, EmptyDelegate delYes) : base(GUIUtils.WINDOW_BROWN)
+        {
+            _delConfirm = delYes;
+
+            var title = new GUIText(text);
+            title.AnchorToInnerSide(this, SideEnum.TopLeft);
+            AddControl(title);
+
+            var buttonYes = new GUIButton("Yes", Confirmation);
+            buttonYes.AnchorAndAlignWithSpacing(title, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);
+
+            var buttonNo = new GUIButton("No", GUIManager.CloseConfirmationWindow);
+            buttonNo.AnchorAndAlignWithSpacing(buttonYes, SideEnum.Right, SideEnum.Bottom, 2, GUIUtils.ParentRuleEnum.ForceToParent);
+
+            DetermineSize();
+
+            title.AlignToObject(this, SideEnum.CenterX);
+        }
+
+        private void Confirmation()
+        {
+            _delConfirm();
+            GUIManager.CloseConfirmationWindow();
+        }
+    }
 }

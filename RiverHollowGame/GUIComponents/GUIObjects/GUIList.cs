@@ -92,7 +92,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             }
         }
 
-        public void BtnUpClick()
+        private void BtnUpClick()
         {
             if (_iListPos > 0) {
                 _iListPos--;
@@ -103,7 +103,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             PopulateList();
         }
-        public void BtnDownClick()
+        private void BtnDownClick()
         {
             if (_iListPos < Objects.Count - _iMaxShownItems) {
                 _iListPos++;

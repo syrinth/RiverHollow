@@ -80,6 +80,18 @@ namespace RiverHollow.Misc
             return _diTags.ContainsKey(key);
         }
 
+        public string GetTagValue(string key)
+        {
+            string rv = string.Empty;
+
+            if (HasTag(key))
+            {
+                rv = _diTags[key];
+            }
+
+            return rv;
+        }
+
         /// <summary>
         /// Runs string.Format against the _sText using the list as the parameters.
         /// </summary>

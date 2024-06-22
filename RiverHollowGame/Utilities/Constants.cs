@@ -4,7 +4,7 @@ namespace RiverHollow.Utilities
 {
     static class Constants
     {
-        public static Point BasicTileSize = new Point(TILE_SIZE, TILE_SIZE);
+        public static Point BASIC_TILE = new Point(TILE_SIZE, TILE_SIZE);
         public const bool AUTO_TOOL = true;
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
@@ -162,6 +162,9 @@ namespace RiverHollow.Utilities
         public const int TRAIT_ANXIOUS_CHANCE = 20;
         public const int TRAIT_RECLUSE_CHANCE = 10;
 
+        public const int MAIL_PERCENT = 5;
+        public const int MAILBOX_EDGE = 2;
+
         public const string STR_ALERT_INVENTORY = "Alert_Inventory";
         public const string STR_ALERT_MISSING = "Alert_Missing";
         public const string STR_ALERT_BLUEPRINT = "Alert_BP";
@@ -176,5 +179,7 @@ namespace RiverHollow.Utilities
         public const string INFO_FILE_NAME = "SaveInfo";
         public const string RIVER_HOLLOW_LOG = "Logs";
         public const string RIVER_HOLLOW_SAVES = "Save Games";
+
+        public const string MAILBOX_ITEMS = "Sent Items";
     }
 }

@@ -391,7 +391,7 @@ namespace RiverHollow.Map_Handling
                     bool passable = CanPlaceObject(t, HeldObject);
                     if (!passable || (passable && !HeldObject.BuildableType(BuildableEnum.Wallpaper)))
                     {
-                        spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), new Rectangle(t.Position, Constants.BasicTileSize), GUIUtils.PLACEMENT_BOX, passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
+                        spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), new Rectangle(t.Position, Constants.BASIC_TILE), GUIUtils.PLACEMENT_BOX, passable ? Color.Green * 0.5f : Color.Red * 0.5f, 0, Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH);
                     }
                 }
             }

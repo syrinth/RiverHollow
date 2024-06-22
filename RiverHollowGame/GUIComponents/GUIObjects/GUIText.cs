@@ -5,6 +5,7 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
@@ -97,12 +98,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!string.IsNullOrEmpty(_sText) && Show())
+            if (!string.IsNullOrEmpty(_sText) && Show() && GUIManager.DrawingBoundedControls == _bBoundedControl)
             {
-                spriteBatch.DrawString(Font(), _sText, Position().ToVector2(), _Color * Alpha(), 0, Vector2.Zero, GameManager.CurrentScale, SpriteEffects.None, 0);
+                spriteBatch.DrawString(Font(), _sText, Position().ToVector2(), _Color * Alpha(), 0, Vector2.Zero, GameManager.CurrentScale, SpriteEffects.None, 0, null);
 
                 if (_cShadowColor != Color.White) {
-                    spriteBatch.DrawString(DataManager.GetBitMapFont(DataManager.FONT_MAIN_DROPSHADOW), _sText, Position().ToVector2(), _cShadowColor, 0, Vector2.Zero, GameManager.CurrentScale, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(DataManager.GetBitMapFont(DataManager.FONT_MAIN_DROPSHADOW), _sText, Position().ToVector2(), _cShadowColor, 0, Vector2.Zero, GameManager.CurrentScale, SpriteEffects.None, 0, null);
                 }
             }
         }
@@ -121,7 +122,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public void ParseAndSetText(string text, int width, int maxRows, bool printAll = false, bool changePos = false)
         {
-            SetText(ParseText(text, width, maxRows, printAll)[0]);
+            var str = string.Empty;
+            var textPage = ParseText(text, width, maxRows, printAll);
+
+            foreach(var s in textPage)
+            {
+                str += s;
+
+                if (textPage.Last() != s)
+                {
+                    str += Environment.NewLine + Environment.NewLine;
+                }
+            }
+            SetText(str);
         }
 
         public void SetText(int num)

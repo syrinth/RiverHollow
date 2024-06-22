@@ -1017,6 +1017,11 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
+
+        public static bool IndexInRange(int index, object[] arr)
+        {
+            return index >= 0 && index < arr.Length;
+        }
     }
 
     public class RHRandom : Random

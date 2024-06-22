@@ -39,7 +39,7 @@
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Gale][HouseID:8][Size:16-35][Collection:7/188][Market:14-00][Craft:16-00][Traits:Precise/Chatty][Friends:26/16/10][StartMap:mapWindspire_Peaks]</Value>
+      <Value>[Type:Villager][PortRow:3][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Gale][HouseID:8][Size:16-35][Collection:7/188][Market:14-00][Craft:16-00][Traits:Precise/Chatty][Friends:26/16/10][StartMap:mapWindspire_Peaks][Face:0-1]</Value>
     </Item>
     <Item>
       <Key>10</Key>
@@ -55,7 +55,7 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][Key:Isabelle]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][Key:Isabelle][Face:64-16]</Value>
     </Item>
     <Item>
       <Key>14</Key>
@@ -63,11 +63,11 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Villager][Group:None][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][TaxValue:5][TotalMoneyEarnedReq:15000][Key:June]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][TaxValue:5][TotalMoneyEarnedReq:15000][Key:June]</Value>
     </Item>
     <Item>
       <Key>16</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:8][Key:Caleb][Size:16-32][Traits:Prompt][Friends:43/60]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:39][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.11-F][ShopData:8][Key:Caleb][Size:16-32][Traits:Prompt][Friends:43/60][Face:2-0]</Value>
     </Item>
     <Item>
       <Key>17</Key>
@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-33][Traits:Anxious][Craft:20-00][Inn:13-00][Friends:16/43/26][PetCafe:10-00]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:28][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Mark][HappyID:55][PleasedID:60][NeutralID:0][SadID:2][MiserableID:23][ShopData:1][Size:16-33][Traits:Anxious][Craft:20-00][Inn:13-00][Friends:16/43/26][PetCafe:10-00][Face:0-2]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -175,7 +175,7 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][HouseID:18][Size:16-25][Market:14-00][Craft:16-00][Traits:Late/Chatty][Friends:26/16/10][StartMap:mapForest_Glade_2]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][HouseID:18][Size:16-25][Market:14-00][Craft:16-00][Traits:Late/Chatty][Friends:26/16/10][StartMap:mapForest_Glade_2][Face:8-2]</Value>
     </Item>
     <Item>
       <Key>44</Key>
@@ -275,7 +275,11 @@
     </Item>
     <Item>
       <Key>68</Key>
-      <Value>[Type:Fish][Key:Fish_Pond][Size:16-16][Idle:3-.2-T]</Value>
+      <Value>[Type:Fish][Group:None][Key:Fish_Pond][Size:16-16][Idle:3-.2-T]</Value>
+    </Item>
+    <Item>
+      <Key>69</Key>
+      <Value>[Type:Traveler][Subtype:None][Group:None][Key:Caspian][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Plain][Disliked:Seafood][Building:101][Face:0-4]</Value>
     </Item>
   </Asset>
 </XnaContent>

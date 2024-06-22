@@ -37,7 +37,8 @@ namespace RiverHollow.Game_Managers
         public static Dictionary<int, ValueTuple<bool, int>> DITravelerInfo { get; private set; }
         public static Dictionary<int, ItemDataState> DIArchive { get; private set; }
 
-        private static Dictionary<MailboxEnum, List<string>> _diMailbox;
+        private static Dictionary<LetterTemplateEnum, List<int>> _diAllLetters;
+        private static List<Letter> _liMailbox;
 
         public static Merchant Merchant { get; private set; }
         public static List<Animal> TownAnimals { get; set; }
@@ -66,15 +67,20 @@ namespace RiverHollow.Game_Managers
 
             TownAnimals = new List<Animal>();
             Travelers = new List<Traveler>();
-            _diMailbox = new Dictionary<MailboxEnum, List<string>>
+
+            _liMailbox = new List<Letter>();
+            _diAllLetters = new Dictionary<LetterTemplateEnum, List<int>>
             {
-                [MailboxEnum.Waiting] = new List<string>(),
-                [MailboxEnum.Unsent] = new List<string>(),
-                [MailboxEnum.Processed] = new List<string>()
+                [LetterTemplateEnum.Sent] = new List<int>(),
+                [LetterTemplateEnum.Unsent] = new List<int>(),
+                [LetterTemplateEnum.Repeatable] = new List<int>()
             };
-            foreach (var key in DataManager.GetMailboxData())
+
+            foreach (var kvp in DataManager.LetterData)
             {
-                _diMailbox[MailboxEnum.Unsent].Add(key);
+                var letter = new Letter(kvp.Key);
+                var target = letter.Repeatable ? LetterTemplateEnum.Repeatable : LetterTemplateEnum.Unsent;
+                _diAllLetters[target].Add(kvp.Key);
             }
 
             DIMerchants = new Dictionary<int, Merchant>();
@@ -140,7 +146,6 @@ namespace RiverHollow.Game_Managers
         {
             TaskManager.TaskLog.ForEach(x => x.AttemptProgress());
 
-            //DataManager.GetMailboxMessage();
             if (GameCalendar.DayOfWeek == 0)
             {
                 _bTravelersCame = false;
@@ -626,49 +631,87 @@ namespace RiverHollow.Game_Managers
         #endregion
 
         #region Mailbox
+        public static List<Letter> GetAllLetters()
+        {
+            return _liMailbox;
+        }
+
         private static void RolloverMailbox()
         {
-            var allLetters = new List<string>(_diMailbox[MailboxEnum.Unsent]);
+            var allLetters = new List<int>(_diAllLetters[LetterTemplateEnum.Unsent]);
+
             foreach (var letterID in allLetters)
             {
-                TextEntry entry = DataManager.GetMailboxLetter(letterID);
-                if (entry.Validate())
+                var letter = new Letter(letterID);
+                if (letter.Text.Validate())
                 {
-                    _diMailbox[MailboxEnum.Unsent].Remove(letterID);
-                    _diMailbox[MailboxEnum.Waiting].Add(letterID);
+                    _diAllLetters[LetterTemplateEnum.Unsent].Remove(letterID);
+                    _diAllLetters[LetterTemplateEnum.Sent].Add(letterID);
+
+                    _liMailbox.Insert(0, letter);
+                }
+            }
+
+            if (RHRandom.RollPercent(Constants.MAIL_PERCENT))
+            {
+                var inTown = new List<Villager>();
+                foreach (var item in Villagers.Values)
+                {
+                    if (item.LivesInTown)
+                    {
+                        inTown.Add(item);
+                    }
+                }
+
+                var chosenVillager = Util.GetRandomItem(inTown);
+
+                var letters = new List<Letter>();
+                foreach (var letterID in _diAllLetters[LetterTemplateEnum.Repeatable])
+                {
+                    var letter = new Letter(letterID);
+                    if(letter.NPCID == chosenVillager.ID && letter.Text.Validate())
+                    {
+                        letters.Add(letter);
+                    }
+                }
+
+                if (letters.Count > 0)
+                {
+                    var letter = new Letter(Util.GetRandomItem(letters));
+                    _liMailbox.Insert(0, letter);
+                }
+            }
+        }
+        public static bool MailboxHasUnreadLetters()
+        {
+            bool rv = false;
+
+            foreach (var letter in _liMailbox)
+            {
+                if (!letter.LetterRead)
+                {
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
+        }
+        public static void ReadLetter(Letter l)
+        {
+            foreach(var letter in _liMailbox)
+            {
+                if(letter.Equals(l))
+                {
+                    letter.ReadLetter();
+                    break;
                 }
             }
         }
 
-        //Only use this for messages that can recur.
-        public static void MailboxSendMessage(string letterID)
+        public static void DeleteLetter(Letter l)
         {
-            _diMailbox[MailboxEnum.Waiting].Add(letterID);
-        }
-
-        public static TextEntry MailboxTakeMessage()
-        {
-            TextEntry entry = null;
-            if (_diMailbox[MailboxEnum.Waiting].Count > 0)
-            {
-                string str = _diMailbox[MailboxEnum.Waiting][0];
-                entry = DataManager.GetMailboxLetter(str);
-
-                _diMailbox[MailboxEnum.Waiting].Remove(str);
-                Util.AddToListDictionary(ref _diMailbox, Enums.MailboxEnum.Processed, str);
-            }
-
-            return entry;
-        }
-
-        public static bool MailboxHasMessages()
-        {
-            return _diMailbox[MailboxEnum.Waiting].Count > 0;
-        }
-
-        public static bool MailboxMessageRead(int id)
-        {
-            return _diMailbox[MailboxEnum.Processed].Contains(id.ToString());
+            _liMailbox.Remove(l);
         }
         #endregion
 
@@ -688,19 +731,26 @@ namespace RiverHollow.Game_Managers
                 MobInfo = new List<ValueTuple<int, int>>(),
                 GlobalUpgrades = new List<ValueTuple<int, int>>(),
                 GoodsSold = new List<ValueTuple<int, int>>(),
-                MailboxSent = new List<string>(),
-                MailboxUnsent = new List<string>(),
-                MailboxWaiting = new List<string>(),
+                Mailbox = new List<LetterData>(),
+                MailboxSent = new List<int>(),
                 MerchantID = Merchant != null ? Merchant.ID : -1
             };
 
             Travelers.ForEach(x => data.Travelers.Add(x.ID));
             TownAnimals.ForEach(x => data.TownAnimals.Add(x.ID));
 
-            data.MailboxUnsent = _diMailbox[MailboxEnum.Unsent];
-            data.MailboxSent = _diMailbox[MailboxEnum.Processed];
-            data.MailboxWaiting = _diMailbox[MailboxEnum.Waiting];
+            //Mailbox Data
+            foreach(var letter in _liMailbox)
+            {
+                data.Mailbox.Add(letter.Save());
+            }
 
+            foreach (var letterID in _diAllLetters[LetterTemplateEnum.Sent])
+            {
+                data.MailboxSent.Add(letterID);
+            }
+
+            //Actors Data
             foreach (Villager npc in Villagers.Values)
             {
                 data.VillagerData.Add(npc.SaveData());
@@ -774,21 +824,22 @@ namespace RiverHollow.Game_Managers
             }
 
             saveData.Travelers.ForEach(x => AddTraveler(x));
-            var unsentMessages = new List<string>(_diMailbox[MailboxEnum.Unsent]);
-            foreach(var messageID in unsentMessages)
+            var unsentMessages = new List<int>(_diAllLetters[LetterTemplateEnum.Unsent]);
+            foreach (var letterID in unsentMessages)
             {
-                if (saveData.MailboxSent.Contains(messageID))
+                if (saveData.MailboxSent.Contains(letterID))
                 {
-                    _diMailbox[MailboxEnum.Unsent].Remove(messageID);
-                    _diMailbox[MailboxEnum.Processed].Add(messageID);
-                }
-                else if (saveData.MailboxWaiting.Contains(messageID))
-                {
-                    _diMailbox[MailboxEnum.Unsent].Remove(messageID);
-                    _diMailbox[MailboxEnum.Waiting].Add(messageID);
+                    _diAllLetters[LetterTemplateEnum.Unsent].Remove(letterID);
+                    _diAllLetters[LetterTemplateEnum.Sent].Add(letterID);
                 }
             }
-            RolloverMailbox();
+
+            foreach(var letterData in saveData.Mailbox)
+            {
+                var letter = new Letter(letterData.LetterID);
+                letter.LoadData(letterData);
+                _liMailbox.Add(letter);
+            }
 
             foreach (VillagerData data in saveData.VillagerData)
             {

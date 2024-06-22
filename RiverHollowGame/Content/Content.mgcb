@@ -2349,6 +2349,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Portraits/CombatPortraits/V_07.png
 
+#begin Textures/Actors/Portraits/Faces.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/Portraits/Faces.png
+
 #begin Textures/Actors/Portraits/G_Shipping_Gremlin.png
 /importer:TextureImporter
 /processor:TextureProcessor

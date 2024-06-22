@@ -4,11 +4,13 @@ using RiverHollow.Characters;
 using RiverHollow.GUIComponents.Screens;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-
 using RiverHollow.Misc;
 using RiverHollow.GUIComponents;
-using static RiverHollow.Game_Managers.GameManager;
 using RiverHollow.GUIComponents.Screens.HUDComponents;
+using System.Collections.Generic;
+
+using static RiverHollow.Game_Managers.GameManager;
+using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
 
 namespace RiverHollow.Game_Managers
 {
@@ -23,9 +25,14 @@ namespace RiverHollow.Game_Managers
 
         public static int MAIN_COMPONENT_WIDTH = RiverHollow.ScreenWidth / 3;
         public static int MAIN_COMPONENT_HEIGHT = RiverHollow.ScreenWidth / 3;
+
+        public static GUIConfirmation ConfirmationWindow { get; private set; }
         public static GUIScreen NewScreen { get; private set; }
         public static GUIScreen CurrentScreen { get; private set; }
         public static TextEntry QueuedWindowText { get; private set; }
+
+        public static Rectangle ControlBounds { get; set; }
+        private static List<GUIObject> _liBoundedControls;
 
         private static GUIImage _fadeImg;
         private static float _fFadeVal = 0f;
@@ -35,8 +42,11 @@ namespace RiverHollow.Game_Managers
         public static bool NotFading => _eFade == Fade.None;
         public static bool FullFade => _fFadeVal == 1;
 
+        public static bool DrawingBoundedControls = false;
+
         public static void LoadContent()
         {
+            _liBoundedControls = new List<GUIObject>();
             _fadeImg = new GUIImage(GUIUtils.BLACK_BOX, RiverHollow.ScreenWidth*2, RiverHollow.ScreenHeight*2, DataManager.HUD_COMPONENTS);
             GUICursor.LoadContent();
         }
@@ -66,10 +76,58 @@ namespace RiverHollow.Game_Managers
             }
         }
 
+        public static void DrawBoundedControls(SpriteBatch spriteBatch)
+        {
+            DrawingBoundedControls = true;
+
+            foreach(var obj in _liBoundedControls)
+            {
+                obj.Draw(spriteBatch);
+            }
+
+            DrawingBoundedControls = false;
+        }
+
+        public static void DrawFinalUpper(SpriteBatch spriteBatch)
+        {
+            if (!Fading)
+            {
+                ConfirmationWindow?.Draw(spriteBatch);
+                GUICursor.Draw(spriteBatch);
+            }
+        }
+
+        public static void RegisterScissorsRectangle(Rectangle r)
+        {
+            ControlBounds = r;
+        }
+
+        public static void RegisterBoundedControls(params GUIObject[] objs)
+        {
+            foreach(var obj in objs)
+            {
+                _liBoundedControls.Add(obj);
+                obj.SetBoundedControl();
+            }
+        }
+
+        public static void UnregisterBoundedControls(params GUIObject[] objs)
+        {
+            foreach (var obj in objs)
+            {
+                _liBoundedControls.Remove(obj);
+            }
+        }
+
         public static bool ProcessLeftButtonClick(Point mouse)
         {
             bool rv = false;
-            if (CurrentScreen != null)
+
+            if (ConfirmationWindow != null)
+            {
+                rv = ConfirmationWindow.ProcessLeftButtonClick(mouse);
+            }
+            else if (CurrentScreen != null)
             {
                 rv = CurrentScreen.ProcessLeftButtonClick(mouse);
             }
@@ -80,7 +138,13 @@ namespace RiverHollow.Game_Managers
         public static bool ProcessRightButtonClick(Point mouse)
         {
             bool rv = false;
-            if (CurrentScreen != null)
+
+            if (ConfirmationWindow != null)
+            {
+                rv = true;
+                CloseConfirmationWindow();
+            }
+            else if (CurrentScreen != null)
             {
                 rv = CurrentScreen.ProcessRightButtonClick(mouse);
             }
@@ -171,6 +235,21 @@ namespace RiverHollow.Game_Managers
         {
             CurrentScreen.ClearBackgroundImage();
         }
+
+        #region Confirmation Window
+        public static void OpenConfirmationWindow(string text, EmptyDelegate del)
+        {
+            ConfirmationWindow?.RemoveSelfFromControl();
+            ConfirmationWindow = new GUIConfirmation(text, del);
+            ConfirmationWindow.CenterOnScreen();
+        }
+
+        public static void CloseConfirmationWindow()
+        {
+            ConfirmationWindow?.RemoveSelfFromControl();
+            ConfirmationWindow = null;
+        }
+        #endregion
 
         #region MainObject Control
         public static bool IsMainObjectOpen() { return CurrentScreen.IsMainObjectOpen(); }

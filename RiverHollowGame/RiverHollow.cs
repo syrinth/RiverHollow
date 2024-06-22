@@ -5,7 +5,6 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.Screens;
-using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.Utilities.Enums;
@@ -265,6 +264,17 @@ namespace RiverHollow
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
             GUIManager.Draw(spriteBatch);
             //fps.DrawFps(spriteBatch, DataManager.GetBitMapFont(DataManager.FONT_NEW), new Vector2(10f, 500f), Color.MonoGameOrange);
+            spriteBatch.End();
+
+            RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+            GraphicsDevice.ScissorRectangle = GUIManager.ControlBounds;
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, _rasterizerState, null);
+            GUIManager.DrawBoundedControls(spriteBatch);
+            spriteBatch.End();
+            GraphicsDevice.ScissorRectangle = Rectangle.Empty;
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
+            GUIManager.DrawFinalUpper(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gTime);

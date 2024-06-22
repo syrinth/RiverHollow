@@ -114,12 +114,6 @@ namespace RiverHollow.Misc
                     case TaskTriggerEnum.GameStart:
                         checksum++;
                         break;
-                    case TaskTriggerEnum.Letter:
-                        if (int.TryParse(_diAssignationTriggers[trigger], out int letterID) && TownManager.MailboxMessageRead(letterID))
-                        {
-                            checksum++;
-                        }
-                        break;
                     case TaskTriggerEnum.Task:
                         if (int.TryParse(_diAssignationTriggers[trigger], out int taskID) && TaskManager.TaskCompleted(taskID))
                         {

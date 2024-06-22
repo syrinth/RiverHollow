@@ -103,6 +103,7 @@
     <Compile Include="GUIComponents\Screens\HUDComponents\ItemDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\NPCDisplayWindow.cs" />
     <Compile Include="GUIComponents\Screens\HUDFieldDisplay.cs" />
+    <Compile Include="GUIComponents\Screens\HUDMailbox.cs" />
     <Compile Include="GUIComponents\Screens\HUDPlayerInventory.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCodex.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\HUDCraftRecipes.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Items\WrappedObjectItem.cs" />
     <Compile Include="Misc\EnvironmentalEffect.cs" />
     <Compile Include="Misc\FieldOfVision.cs" />
+    <Compile Include="Misc\Letter.cs" />
     <Compile Include="Misc\PriorityQueue.cs" />
     <Compile Include="Misc\StatusEffect.cs" />
     <Compile Include="Misc\Upgrade.cs" />

@@ -73,6 +73,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         protected Point _pInitVals;       //X = Width, Y = Height
         protected Point _pInitPos;
 
+        protected bool _bBoundedControl = false;
+
         public GUIObject() {
             Controls = new List<GUIObject>();
             ToAdd = new List<GUIObject>();
@@ -116,7 +118,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (Visible)
+            if (Visible && (GUIManager.DrawingBoundedControls == _bBoundedControl))
             {
                 spriteBatch.Draw(_texture, _drawRect, _sourceRect, EnabledColor * _fAlpha);
 
@@ -145,7 +147,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             bool rv = false;
 
-            foreach (GUIObject c in Controls)
+            var controls = new List<GUIObject>(Controls);
+            foreach (GUIObject c in controls)
             {
                 if (c.Contains(mouse))
                 {
@@ -167,7 +170,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             bool rv = false;
 
-            foreach (GUIObject c in Controls)
+            var controls = new List<GUIObject>(Controls);
+            foreach (GUIObject c in controls)
             {
                 if (c.Contains(mouse))
                 {
@@ -442,6 +446,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 o.SnapToGrid(val);
             }
+        }
+
+        public void SetBoundedControl()
+        {
+            _bBoundedControl = true;
         }
 
         #region Alpha

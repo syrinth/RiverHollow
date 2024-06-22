@@ -1160,8 +1160,8 @@ namespace Database_Editor
             SaveXMLDataDictionary(_diNPCDialogue, sWriter);
             SaveXMLDataDictionary(_diCutsceneDialogue, sWriter);
 
+            SaveXMLData(_liMailbox, PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", sWriter);
             //SaveXMLDataDictionary(_diGameText, sWriter);
-            //SaveXMLDataDictionary(_diMailbox, sWriter);
             //SaveXMLData(_diGameText, PATH_TO_TEXT_FILES + @"\GameText.xml", sWriter);
             //SaveXMLData(_diMailbox, PATH_TO_TEXT_FILES + @"\Mailbox_Text.xml", sWriter);
 

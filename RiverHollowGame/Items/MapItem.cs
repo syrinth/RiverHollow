@@ -12,7 +12,7 @@ namespace RiverHollow.Items
     {
         public Point _pInitial;
         public Point Position;
-        public Rectangle CollisionBox { get => new Rectangle(Position, Constants.BasicTileSize); }
+        public Rectangle CollisionBox { get => new Rectangle(Position, Constants.BASIC_TILE); }
         private Vector2 _velocity;
         private bool _bBounced = false;
         private readonly VectorBuffer _vbMovement;

@@ -1,20 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.GUIComponents;
 using RiverHollow.Map_Handling;
 
 using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
+using RiverHollow.GUIComponents.Screens;
 
 namespace RiverHollow.WorldObjects
 {
     public class Mailbox : Buildable
     {
-        private AnimatedSprite _alertSprite;
-        private RHTimer _timer;
+        private readonly AnimatedSprite _alertSprite;
+        private readonly RHTimer _timer;
         private bool _bBounce;
 
         public Mailbox(int id) : base(id)
@@ -51,7 +51,7 @@ namespace RiverHollow.WorldObjects
 
         private bool AlertVisible()
         {
-            return TownManager.MailboxHasMessages() && GameManager.HeldObject != this;
+            return TownManager.MailboxHasUnreadLetters() && GameManager.HeldObject != this;
         }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
@@ -63,11 +63,7 @@ namespace RiverHollow.WorldObjects
 
         public override bool ProcessRightClick()
         {
-            TextEntry entry = TownManager.MailboxTakeMessage();
-            if (entry != null)
-            {
-                GUIManager.OpenTextWindow(entry);
-            }
+            GUIManager.OpenMainObject(new HUDMailbox());
 
             return true;
         }
