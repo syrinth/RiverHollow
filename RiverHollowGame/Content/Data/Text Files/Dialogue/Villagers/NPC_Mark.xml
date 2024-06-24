@@ -18,11 +18,12 @@ I'll keep the visitors entertained as best I can, but you'll have to check in be
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Name:Busy][Text:There's always things to do around here to keep me busy. I doubt you have ti any better though, eh?]</Value>
+      <Value>[Name:Busy][Text:There's always things to do around here to keep me busy. Doubt you have it any better though, eh?]</Value>
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Name:4][Text:Hello $Name$. I hope you're well today.][Default]</Value>
+      <Value>[Name:Scream][Text:I was just putting out the trash last night when I saw this... SHAPE rustling in the bushes.
+I admit it, I screamed. I thought some horrible monster had crept down from the woods. Turns out it was just $Actor_43$ searching for $Item_100$.][Default][Villager:43]</Value>
     </Item>
     <Item>
       <Key>5</Key>

@@ -218,6 +218,7 @@ namespace RiverHollow.GUIComponents
                 {
                     chosenScale = i;
                 }
+                else { break; }
             }
 
             guiObject.SetScale(chosenScale);

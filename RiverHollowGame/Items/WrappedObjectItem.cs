@@ -7,7 +7,7 @@ namespace RiverHollow.Items
 {
     public class WrappedObjectItem : Item
     {
-        int _iObjectID = -1;
+        readonly int _iObjectID = -1;
 
         public override int Value => DataManager.GetIntByIDKey(_iObjectID, "Value", DataType.WorldObject);
 
@@ -73,6 +73,12 @@ namespace RiverHollow.Items
         public override TEnum GetEnumByIDKey<TEnum>(string key)
         {
             return DataManager.GetEnumByIDKey<TEnum>(_iObjectID, key, DataType.WorldObject);
+        }
+
+        public override bool AddToInventoryTrigger()
+        {
+            if (DataManager.GetBoolByIDKey(_iObjectID, "Earth", DataType.WorldObject)) { return true; }
+            else { return base.AddToInventoryTrigger(); }
         }
     }
 }

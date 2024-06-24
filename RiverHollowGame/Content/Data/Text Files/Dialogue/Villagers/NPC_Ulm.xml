@@ -27,7 +27,7 @@ Someone giving you lip? Just imagine they're a stuck door.][Default]</Value>
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Text:Hey.][Selection:VillageTalk][Name:Selection]</Value>
+      <Value>[Name:Selection][Text:Hey.][Selection:VillageTalk]</Value>
     </Item>
     <Item>
       <Key>6</Key>
@@ -73,7 +73,16 @@ Or maybe burn it.]</Value>
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Name:Family][Text:Potions run in my blood, my mother was an Apothecary, as was her mother. Now, great grandma Lotha was an executioner, but HER mother was also an apothecary.]</Value>
+      <Value>[Name:Family][Text:Potions run in my blood, my mother was an Apothecary, as was her mother. Now, great grandma Lotha was an executioner, but HER mother was also an apothecary.][Default]</Value>
+    </Item>
+    <Item>
+      <Key>16</Key>
+      <Value>[Name:Scaredy Cat][Text:That $Actor_20$ is such a big scaredy cat. He caught me searching for $Item_100$ in the evening. I didn't know your people could make noises like that!][Villager:20]</Value>
+    </Item>
+    <Item>
+      <Key>17</Key>
+      <Value>[Name:Fried chicken][Text:I like $Actor_12$, she's very pleasant, brings a certain air to the village.
+Unrelated, I've had such a craving for fried chicken.][Villager:12]</Value>
     </Item>
   </Asset>
 </XnaContent>

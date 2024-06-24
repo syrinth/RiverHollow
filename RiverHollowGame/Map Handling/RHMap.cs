@@ -2257,9 +2257,9 @@ namespace RiverHollow.Map_Handling
             {
                 Item dummyItem;
                 if (HeldObject.Type == ObjectTypeEnum.Plant && HeldObject.GetBoolByIDKey("SeedID")) { dummyItem = DataManager.GetItem(HeldObject.GetIntByIDKey("SeedID")); }
-                else  { dummyItem = DataManager.GetItem((Buildable)HeldObject); }
+                else { dummyItem = DataManager.GetItem((Buildable)HeldObject); }
 
-                if (dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && (HeldObject.Type == ObjectTypeEnum.Plant || !((Buildable)HeldObject).Unique) && !HeldObject.IsDirectBuild())
+                if (!TownModeBuild() && dummyItem != null && InventoryManager.HasSpaceInInventory(dummyItem.ID, 1) && (HeldObject.Type == ObjectTypeEnum.Plant || !((Buildable)HeldObject).Unique))
                 {
                     InventoryManager.AddToInventory(dummyItem.ID, 1, true, true);
                     GameManager.EmptyHeldObject();
@@ -2269,16 +2269,7 @@ namespace RiverHollow.Map_Handling
                     PostBuildingCleanup(true);
                     GameManager.EmptyHeldObject();
                 }
-                else if(TownModeEdit() && HeldObject.IsDirectBuild())
-                {
-                    foreach(var i in ((Buildable)HeldObject).RequiredToMake)
-                    {
-                        InventoryManager.AddToInventory(i.Key, i.Value);
-                    }
-
-                    GameManager.EmptyHeldObject();
-                }
-                else if(dummyItem == null)
+                else if (dummyItem == null)
                 {
                     LogManager.WriteToLog("Dummy item is NULL", LogEnum.Warning);
                 }
@@ -2302,9 +2293,9 @@ namespace RiverHollow.Map_Handling
             else
             {
                 placeObject = (Buildable)DataManager.CreateWorldObjectByID(templateObject.ID);
-                if (templateObject.BuildableType(BuildableEnum.Decor))
+                if (placeObject is Decor decorObject && templateObject is Decor decorTemplate)
                 {
-                    ((Decor)placeObject).RotateToDirection(((Decor)templateObject).Facing);
+                    decorObject.RotateToDirection(decorTemplate.Facing);
                 }
             }
 
@@ -2318,15 +2309,14 @@ namespace RiverHollow.Map_Handling
                     TaskManager.AdvanceTaskProgress(placeObject);
                 }
 
-                if(placeObject.IsDirectBuild())
+                if (placeObject is AdjustableObject adjustable)
                 {
-                    ((AdjustableObject)placeObject).AdjustObject();
+                    adjustable.AdjustObject();
                 }
 
                 Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
-                bool canDirectBuild = TownModeBuild() && placeObject.IsDirectBuild() && InventoryManager.HasSufficientItems(placeObject.RequiredToMake);
-                //Check for if we are done placing the object of that type
-                if (!canDirectBuild)
+                bool directBuild = TownModeBuild() && InventoryManager.HasSufficientItems(placeObject.RequiredToMake);
+                if (!directBuild)
                 {
                     if (dummyItem == null || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                     {
@@ -2334,7 +2324,7 @@ namespace RiverHollow.Map_Handling
 
                         if (TownModeBuild())
                         {
-                            if (placeObject.BuildableType(BuildableEnum.Building))
+                            if (placeObject is Building)
                             {
                                 TownManager.IncreaseTravelerBonus();
                             }

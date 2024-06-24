@@ -311,7 +311,7 @@
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Buildable][Subtype:Floor][Image:12-0][TownScore:1][Amount:5]</Value>
+      <Value>[Type:Buildable][Subtype:Floor][Image:12-0][TownScore:1][Amount:5][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>78</Key>
@@ -407,7 +407,7 @@
     </Item>
     <Item>
       <Key>101</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-3/1-3/0-4/1-4][Size:1-1/1-1/1-1/1-1][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-0-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:76][ItemID:154][BonusItemID:76-1-U][Season:Spring][SpriteOffset:4][TownScore:0.1]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-3/1-3/0-4/1-4][Size:1-1/1-1/1-1/1-1][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-0-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:76][ItemID:154][Season:Spring][SpriteOffset:4][TownScore:0.1]</Value>
     </Item>
     <Item>
       <Key>102</Key>
@@ -423,7 +423,7 @@
     </Item>
     <Item>
       <Key>105</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:14-0/15-0/14-1/15-1][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:80][ItemID:95][BonusItemID:80-1-C][HoneyID:160][Season:Spring][SpriteOffset:4]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:14-0/15-0/14-1/15-1][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:80][ItemID:95][HoneyID:160][Season:Spring][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>106</Key>
@@ -447,7 +447,7 @@
     </Item>
     <Item>
       <Key>111</Key>
-      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-0/1-0/0-1/1-1][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96-3][BonusItemID:87-1-R][HoneyID:142][Season:Spring][Spread:5/1][SpriteOffset:4]</Value>
+      <Value>[Type:Plant][States:4][Time:1/1/2][Image:0-0/1-0/0-1/1-1][Size:1-1/1-1/1-2/1-2][Base:0-0-1-1/0-0-1-1/0-1-1-1/0-1-1-1][Walkable:T/T/T/T][DrawUnder:T/F/F/F][SeedID:87][ItemID:///96-3][HoneyID:142][Season:Spring][Spread:5/1][SpriteOffset:4]</Value>
     </Item>
     <Item>
       <Key>112</Key>

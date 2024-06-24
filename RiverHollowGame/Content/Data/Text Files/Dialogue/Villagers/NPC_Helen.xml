@@ -24,7 +24,7 @@ I hear that you're looking for more people? I'd love to settle down here.]</Valu
     </Item>
     <Item>
       <Key>5</Key>
-      <Value>[Name:Tailor request][Text:Well, if I'm to stay here i suppose I'll need to find a way to earn my keep. I'm not too bad witha needle and thread. I'm sure $Actor_16$ could design a shop for me or something.][Default][Priority:50][Once][ShopTargetID:2][UnlockItemID:139]</Value>
+      <Value>[Name:Ulm][Text:I don't think I like the way $Actor_43$ looks at my chickens. I'm not saying we can't ever eat them, but... she seems overly eager.][Default][Villager:43]</Value>
     </Item>
   </Asset>
 </XnaContent>

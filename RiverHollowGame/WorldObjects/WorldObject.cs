@@ -512,11 +512,6 @@ namespace RiverHollow.WorldObjects
             return _ePlacement == e;
         }
 
-        public bool IsDirectBuild()
-        {
-            return BuildableType(BuildableEnum.Floor) || BuildableType(BuildableEnum.Wall);
-        }
-
         public virtual bool CanPickUp() { return false; }
         public virtual bool HasInteract() { return GetBoolByIDKey("UnlockUpgradeID") || this is Trigger || this is TriggerDoor; }
 

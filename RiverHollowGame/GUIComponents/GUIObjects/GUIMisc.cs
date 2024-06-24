@@ -181,7 +181,9 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             HoverControls = false;
 
-            _bDrawShadow = drawShadow;
+            if (it.ID > Constants.BUILDABLE_ID_OFFSET) { _bDrawShadow = false; }
+            else { _bDrawShadow = drawShadow; }
+
             _pNumOffset = new Point(2, 2);
 
             ItemObject = it;
@@ -195,6 +197,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
             _gImg = new GUIImage(ItemObject.SourceRectangle, ItemObject.Texture);
             GUIUtils.SetObjectScale(_gImg, ItemObject.SourceRectangle.Width, ItemObject.SourceRectangle.Height, 1);
+            _gImg.CenterOnObject(this);
 
             _gText = new GUIText(ItemObject.Number.ToString(), true, DataManager.FONT_NUMBERS);
             _gText.SetColor(Color.White);
@@ -241,7 +244,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         }
         private void SetTextPosition()
         {
-            _gText.AlignToObject(_gImg, SideEnum.BottomRight, GUIUtils.ParentRuleEnum.Skip);
+            _gText.AlignToObject(this, SideEnum.BottomRight, GUIUtils.ParentRuleEnum.Skip);
             _gText.ScaledMoveBy(_pNumOffset);
         }
 

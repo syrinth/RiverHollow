@@ -3,17 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
-using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
     public class GUIItemBox : GUIObject
     {
-        public Item BoxItem => _guiItem?.ItemObject;
+        public Item BoxItem => _gItem?.ItemObject;
         private readonly GUIImage _gBackground;
-        private GUIItem _guiItem;
+        protected GUIItem _gItem;
         private GUIImage _imgIcon;
         public EquipmentEnum EquipmentType { get; private set; } = EquipmentEnum.None;
 
@@ -67,7 +65,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (BoxItem != null && BoxItem.Number == 0) {
                 SetItem(null);
             }
-            _guiItem?.Update(gTime);
+            _gItem?.Update(gTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -113,28 +111,28 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             if (it != null)
             {
-                if (_guiItem == null || (_guiItem != null && _guiItem.ItemObject != it))
+                if (_gItem == null || (_gItem != null && _gItem.ItemObject != it))
                 {
-                    RemoveControl(_guiItem);
-                    _guiItem = new GUIItem(it, e);
-                    _guiItem.CenterOnObject(this);
+                    RemoveControl(_gItem);
+                    _gItem = new GUIItem(it, e);
+                    _gItem.CenterOnObject(this);
                 }
             }
             else
             {
-                RemoveControl(_guiItem);
-                _guiItem = null;
+                RemoveControl(_gItem);
+                _gItem = null;
             }
         }
 
         public override void SetColor(Color c)
         {
-            _guiItem?.SetColor(c);
+            _gItem?.SetColor(c);
         }
 
         public bool CompareNumToInventory()
         {
-            return _guiItem.CompareNumToInventory(null);
+            return _gItem.CompareNumToInventory(null);
         }
 
         public void SetAlpha(float val)
@@ -144,17 +142,17 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public void SetItemAlpha(float val)
         {
-            _guiItem?.Alpha(val);
+            _gItem?.Alpha(val);
         }
 
         public void SetItemColor(Color c)
         {
-            _guiItem?.SetImageColor(c);
+            _gItem?.SetImageColor(c);
         }
 
         public void DrawShadow(bool drawShadow)
         {
-            _guiItem?.DrawShadow(drawShadow);
+            _gItem?.DrawShadow(drawShadow);
         }
     }
 
@@ -167,6 +165,20 @@ namespace RiverHollow.GUIComponents.GUIObjects
         {
             _delAction = action;
             SetItem(it, e);
+        }
+
+        public override bool ProcessHover(Point mouse)
+        {
+            bool rv = false;
+
+            if (Contains(mouse))
+            {
+                rv = true;
+                _gItem?.ProcessHover(mouse);
+                BeginHover();
+            }
+
+            return rv;
         }
 
         protected override void BeginHover()

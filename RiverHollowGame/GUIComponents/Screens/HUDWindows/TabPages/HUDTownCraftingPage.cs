@@ -55,12 +55,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
             _btnRight.Enable(_iIndex + MAX_DISPLAY < _liCraftingRecipes.Count);
 
             SetupCraftingWindows();
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            _gSelection?.Draw(spriteBatch);
+            AddControls(_gSelection, _gName, _gScroll);
         }
 
         protected void ClearWindows()
@@ -97,6 +92,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
                 }
 
                 _liItemDisplay.Add(displayWindow);
+                AddControl(displayWindow);
             }
 
             GUIUtils.CreateSpacedGrid(new List<GUIObject>(_liItemDisplay), _mainWindow, new Point(14, 10), COLUMNS, 3, 3);
@@ -117,7 +113,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
                 bool sufficientItems = GUIUtils.CreateRequiredItemsList(ref _liRequiredItems, building.RequiredToMake);
 
                 _gName.SetText(building.Name);
-                _gName.SetColor(sufficientItems ? Color.Black : Color.Red);
+                _gName.SetTextColors(sufficientItems ? Color.White : Color.Red, GUIUtils.MAIN_DROP_SHADOW);
                 _gName.AnchorAndAlignWithSpacing(_gScroll, SideEnum.Bottom, SideEnum.CenterX, 4);
 
                 GUIUtils.CreateSpacedRowAgainstObject(new List<GUIObject>(_liRequiredItems), _mainWindow, _gScroll, 2, 22);
@@ -126,49 +122,46 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
 
         public override bool ProcessLeftButtonClick(Point mouse)
         {
-            bool rv = base.ProcessLeftButtonClick(mouse);
+            bool rv = false;
 
-            if (!rv)
+            for (int i = 0; i < _liItemDisplay.Count; i++)
             {
-                for (int i = 0; i < _liItemDisplay.Count; i++)
+                if (_liItemDisplay[i].Contains(mouse))
                 {
-                    if (_liItemDisplay[i].Contains(mouse))
+                    rv = true;
+
+                    if (_liItemDisplay[i].BoxItem != null)
                     {
-                        rv = true;
+                        int objID = _liItemDisplay[i].BoxItem.ID;
+                        Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
+                        Dictionary<int, int> requiredToMake = obj.RequiredToMake;
 
-                        if (_liItemDisplay[i].BoxItem != null)
+                        if (!(obj is AdjustableObject))
                         {
-                            int objID = _liItemDisplay[i].BoxItem.ID;
-                            Buildable obj = (Buildable)DataManager.CreateWorldObjectByID(objID);
-                            Dictionary<int, int> requiredToMake = obj.RequiredToMake;
-
-                            if (!obj.IsDirectBuild())
+                            if (!InventoryManager.HasSufficientItems(requiredToMake))
                             {
-                                if (!InventoryManager.HasSufficientItems(requiredToMake))
-                                {
-                                    GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_MISSING);
-                                }
-                                else
-                                {
-                                    if (InventoryManager.HasSpaceInInventory(objID, 1) && InventoryManager.ExpendResources(requiredToMake))
-                                    {
-                                        InventoryManager.AddToInventory(DataManager.GetItem(obj));
-                                        SetupCraftingWindows();
-                                        SoundManager.PlayEffect(SoundEffectEnum.Thump);
-                                    }
-                                    else
-                                    {
-                                        GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
-                                    }
-                                }
+                                GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_MISSING);
                             }
                             else
                             {
-                                GameManager.BuildInTownMode(requiredToMake, obj);
+                                if (InventoryManager.HasSpaceInInventory(objID, 1) && InventoryManager.ExpendResources(requiredToMake))
+                                {
+                                    InventoryManager.AddToInventory(DataManager.GetItem(obj));
+                                    SetupCraftingWindows();
+                                    SoundManager.PlayEffect(SoundEffectEnum.Thump);
+                                }
+                                else
+                                {
+                                    GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_INVENTORY);
+                                }
                             }
                         }
-                        break;
+                        else
+                        {
+                            GameManager.BuildInTownMode(requiredToMake, obj);
+                        }
                     }
+                    break;
                 }
             }
 

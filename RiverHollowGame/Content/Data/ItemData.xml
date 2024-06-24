@@ -403,7 +403,7 @@
     </Item>
     <Item>
       <Key>100</Key>
-      <Value>[Type:Food][Subtype:Food][Image:0-1][Value:5][FoodType:Forage][EnergyRecovery:15][FoodValue:0]</Value>
+      <Value>[Type:Food][Subtype:Food][Image:0-1][Value:5][FoodType:Forage][EnergyRecovery:5][FoodValue:0]</Value>
     </Item>
     <Item>
       <Key>101</Key>

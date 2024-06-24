@@ -86,7 +86,7 @@
   </object>
   <object id="49" name="WorldObject" x="224" y="64" width="64" height="16">
    <properties>
-    <property name="ObjectID" type="int" value="174"/>
+    <property name="ObjectID" type="int" value="142"/>
    </properties>
   </object>
   <object id="52" name="Shop Slate" x="144" y="112" width="16" height="16">
