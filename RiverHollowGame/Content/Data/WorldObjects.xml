@@ -311,7 +311,7 @@
     </Item>
     <Item>
       <Key>77</Key>
-      <Value>[Type:Buildable][Subtype:Floor][Image:12-0][TownScore:1][Amount:5][ReqItems:0-1]</Value>
+      <Value>[Type:Buildable][Subtype:Floor][Image:12-0][TownScore:1][ReqItems:0-1]</Value>
     </Item>
     <Item>
       <Key>78</Key>
@@ -459,7 +459,7 @@
     </Item>
     <Item>
       <Key>114</Key>
-      <Value>[Type:Buildable][Subtype:Wall][Image:0-0][Size:1-2][Base:0-1-1-1][ReqItems:2-2][Amount:5][TownScore:1]</Value>
+      <Value>[Type:Buildable][Subtype:Wall][Image:0-0][Size:1-2][Base:0-1-1-1][ReqItems:2-2][TownScore:1]</Value>
     </Item>
     <Item>
       <Key>115</Key>
@@ -715,7 +715,7 @@
     </Item>
     <Item>
       <Key>178</Key>
-      <Value>[Type:Buildable][Subtype:Floor][Image:8-0][TownScore:0.5][Amount:5]</Value>
+      <Value>[Type:Buildable][Subtype:Floor][Image:8-0][TownScore:0.5]</Value>
     </Item>
     <Item>
       <Key>179</Key>

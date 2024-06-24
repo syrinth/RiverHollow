@@ -184,7 +184,6 @@ namespace RiverHollow.Misc
 
         public int MerchID { get; } = -1;
         public int ItemID => MerchType == MerchTypeEnum.Item ? MerchID : MerchID + Constants.BUILDABLE_ID_OFFSET;
-        public int Amount { get; } = 1;
         public Item MerchItem { get; private set; }
 
         private readonly int _iTaskReq = -1;
@@ -197,8 +196,6 @@ namespace RiverHollow.Misc
             MerchID = int.Parse(data[0]);
             Price = int.Parse(data[1]);
 
-            Amount = DataManager.GetIntByIDKey(MerchID, "Amount", (type == MerchTypeEnum.WorldObject ? DataType.WorldObject : DataType.Item), 1);
-
             if (data.Length > 2)
             {
                 if (data[2].Equals("Unique")) { UniqueData = data[2]; }
@@ -206,7 +203,7 @@ namespace RiverHollow.Misc
             }
         }
 
-        public void GenerateSaleItem() { MerchItem = DataManager.GetItem(ItemID, Amount); }
+        public void GenerateSaleItem() { MerchItem = DataManager.GetItem(ItemID, 1); }
         public void CleanSaleItem() { MerchItem = null; }
 
         /// <summary>

@@ -142,7 +142,7 @@ namespace RiverHollow.GUIComponents.Screens
                 PurchaseBox newBox;
                 if (!PlayerManager.AlreadyBoughtUniqueItem(m.MerchID))
                 {
-                    Item it = DataManager.GetItem(m.MerchType == ShopItem.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID, m.Amount);
+                    Item it = DataManager.GetItem(m.MerchType == ShopItem.MerchTypeEnum.WorldObject ? m.MerchID + Constants.BUILDABLE_ID_OFFSET : m.MerchID);
                     it.ApplyUniqueData(m.UniqueData);
 
                     newBox = new PurchaseBox(it, m.Price);
@@ -248,7 +248,7 @@ namespace RiverHollow.GUIComponents.Screens
 
     internal class PurchaseBox : GUIObject
     {
-        readonly GUIItem _giItem;
+        readonly GUIItem _giItem;        
         readonly GUIMoneyDisplay _gMoney;
 
         public Item ShopItem { get; }
@@ -262,7 +262,7 @@ namespace RiverHollow.GUIComponents.Screens
         {
             Cost = cost;
             ShopItem = i;
-            _giItem = new GUIItem(i, ItemBoxDraw.MoreThanOne, !(i is WrappedObjectItem));
+            _giItem = new GUIItem(i, ItemBoxDraw.Never, !(i is WrappedObjectItem));
             AddControl(_giItem);
 
             _giItem.SetColor(i.ItemColor);

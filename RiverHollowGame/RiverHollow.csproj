@@ -188,7 +188,6 @@
     <Compile Include="Items\Food.cs" />
     <Compile Include="Items\NPCToken.cs" />
     <Compile Include="Items\Tool.cs" />
-    <Compile Include="Map Handling\ShopItemSpot.cs" />
     <Compile Include="Map Handling\SpawnPoint.cs" />
     <Compile Include="Map Handling\TravelPoint.cs" />
     <Compile Include="Misc\AnimationData.cs" />

@@ -1,29 +1,28 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
+using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 
 namespace RiverHollow.GUIComponents.GUIObjects
 {
-    class QuantityWindow : GUIMainObject
+    class QuantityWindow : GUIWindow
     {
         int MAX_VALUE => (GameManager.CurrentMerchandise.MerchItem != null ? PlayerManager.Money / GameManager.CurrentMerchandise.Price : 0);
-        GUIButton _btnUp;
-        GUIButton _btnDown;
+        readonly GUIButton _btnUp;
+        readonly GUIButton _btnDown;
 
-        GUIText _gSellValue;
-        GUIButton _btnBuy;
+        readonly GUIText _gSellValue;
+        readonly GUIButton _btnBuy;
 
-        public QuantityWindow()
+        public QuantityWindow() : base(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(114), GameManager.ScaleIt(73))
         {
-            _winMain = SetMainWindow(GUIUtils.WINDOW_DARKBLUE, GameManager.ScaleIt(114), GameManager.ScaleIt(73));
-
             GUIItemBox box = new GUIItemBox(GameManager.CurrentMerchandise.MerchItem);
-            box.Position(_winMain);
+            box.Position(this);
             box.ScaledMoveBy(47, 20);
-            box.AlignToObject(_winMain, SideEnum.CenterX);
+            box.AlignToObject(this, SideEnum.CenterX);
             AddControl(box);
 
             GUIText text = new GUIText(GameManager.CurrentMerchandise.MerchItem.Name());
-            text.Position(_winMain);
+            text.Position(this);
             text.AlignToObject(box, SideEnum.CenterX);
             text.ScaledMoveBy(0, 7);
             AddControl(text);
@@ -41,7 +40,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
             AddControl(img);
 
             _btnBuy = new GUIButton(GUIUtils.BTN_BUY, ProceedToPurchase);
-            _btnBuy.Position(_winMain);
+            _btnBuy.Position(this);
             _btnBuy.ScaledMoveBy(89, 48);
             AddControl(_btnBuy);
 
