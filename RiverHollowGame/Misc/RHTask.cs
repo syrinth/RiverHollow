@@ -473,7 +473,7 @@ namespace RiverHollow.Misc
                 string[] split = Util.FindArguments(GetStringByIDKey("GoalItem"));
                 if (int.TryParse(split[0], out int id))
                 {
-                    if (!int.TryParse(split[1], out int number))
+                    if (split.Length == 1 || !int.TryParse(split[1], out int number))
                     {
                         number = 1;
                     }

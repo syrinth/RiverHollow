@@ -83,7 +83,7 @@
     </Item>
     <Item>
       <Key>20</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Mushroomery][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:55-40/60-20/54][LightID:3-30-86/3-80-86]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Mushroomery][Size:5-4][Base:0-1-5-3][Entrance:2-2-1-2][ReqItems:55-40/60-20/54][LightID:3-30-86/3-80-86][CraftAmount:4]</Value>
     </Item>
     <Item>
       <Key>21</Key>
@@ -599,7 +599,7 @@
     </Item>
     <Item>
       <Key>149</Key>
-      <Value>[Type:Machine][Image:3-20][Size:1-1][Base:0-0-1-1][Makes:23][ItemOffset:0-11][Daily][HoldItem]</Value>
+      <Value>[Type:Machine][Image:2-20][Size:2-2][Base:0-1-2-1][Makes:23-C/63-C/162-U/227-R][Producer]</Value>
     </Item>
     <Item>
       <Key>150</Key>
@@ -720,6 +720,10 @@
     <Item>
       <Key>179</Key>
       <Value>[Type:WorldObject][Image:10-0][Size:1-3][Base:0-2-1-1][HoverBox:0-10-16-24][ShopSlate][NoAlpha]</Value>
+    </Item>
+    <Item>
+      <Key>180</Key>
+      <Value>[Type:WorldObject][Image:1-44][Size:2-2][Base:0-1-2-1][Texture:Decor][ShopTable:8-7/0/1]</Value>
     </Item>
   </Asset>
 </XnaContent>

@@ -292,6 +292,7 @@ namespace RiverHollow.Buildings
             string[] merchData = Util.FindParams(dataDictionary["Merchandise"]);
             if (merchData.Length > 0)
             {
+                InventoryManager.InitExtraInventory(this.Merchandise);
                 for (int i = 0; i < 5; i++)
                 {
                     for (int j = 0; j < 5; j++)
@@ -303,12 +304,11 @@ namespace RiverHollow.Buildings
                             Item newItem = DataManager.GetItem(int.Parse(itemData[0]), int.Parse(itemData[1]));
                             if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
 
-                            InventoryManager.InitExtraInventory(this.Merchandise);
                             InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
-                            InventoryManager.ClearExtraInventory();
                         }
                     }
                 }
+                InventoryManager.ClearExtraInventory();
             }
         }
     }

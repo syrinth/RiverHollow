@@ -1177,6 +1177,11 @@ namespace RiverHollow.Map_Handling
                     //Assign setting drawing to ShopTables
                     var worldObjects = building.InnerMap.GetObjectsByType<WorldObject>();
                     var displayTables = worldObjects.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
+                    if (displayTables.Count == 0)
+                    {
+                        return;
+                    }
+
                     _liMerchDisplayPoints.Clear();
 
                     int index = 0;
@@ -1184,30 +1189,37 @@ namespace RiverHollow.Map_Handling
                     int maxTableSpots = GetMaxTableSpots(displayTables[index]);
                     foreach (var merch in building.Merchandise)
                     {
-                        if (index < displayTables.Count && merch != null)
+                        bool placed = false;
+                        do
                         {
-                            var table = displayTables[index];
-
-                            var strData = table.GetStringParamsByIDKey("ShopTable");
-                            var point = Util.ParsePoint(strData[0]);
-                            var offset = int.Parse(strData[1]);
-                            var spots = int.Parse(strData[2]);
-
-                            if (tableCount < maxTableSpots)
+                            if (index < displayTables.Count && merch != null)
                             {
-                                if (merch != null)
+                                var table = displayTables[index];
+
+                                var strData = table.GetStringParamsByIDKey("ShopTable");
+                                var point = Util.ParsePoint(strData[0]);
+                                var offset = int.Parse(strData[1]);
+                                var spots = int.Parse(strData[2]);
+
+                                if (tableCount < maxTableSpots)
                                 {
-                                    var merchSpot = point + new Point(offset * tableCount++, 0);
-                                    _liMerchDisplayPoints.Add(new Tuple<Item, Point, float>(merch, table.MapPosition + merchSpot, table.Sprite.LayerDepth + 1));
+                                    if (merch != null)
+                                    {
+                                        placed = true;
+
+                                        var merchSpot = point + new Point(offset * tableCount++, 0);
+                                        _liMerchDisplayPoints.Add(new Tuple<Item, Point, float>(merch, table.MapPosition + merchSpot, table.Sprite.LayerDepth + 1));
+                                    }
+                                }
+                                else
+                                {
+                                    index++;
+                                    tableCount = 0;
+                                    maxTableSpots = GetMaxTableSpots(displayTables[index]);
                                 }
                             }
-                            else
-                            {
-                                index++;
-                                tableCount = 0;
-                                maxTableSpots = GetMaxTableSpots(displayTables[index]);
-                            }
-                        }
+                            else { break; }
+                        } while (!placed);
                     }
                 }
             }
@@ -2289,7 +2301,7 @@ namespace RiverHollow.Map_Handling
 
             //If we're moving the object, set it as the object to be placed. Otherwise, we need
             //to make a new object based off the one we're holding.
-            if (TownModeBuild() && templateObject.Unique) { placeObject = templateObject; }
+            if (templateObject.Unique || TownModeEdit()) { placeObject = templateObject; }
             else
             {
                 placeObject = (Buildable)DataManager.CreateWorldObjectByID(templateObject.ID);

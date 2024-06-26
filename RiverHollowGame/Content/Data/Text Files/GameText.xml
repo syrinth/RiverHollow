@@ -295,7 +295,7 @@
     </Item>
 	<Item>
       <Key>73</Key>
-      <Value>[Name:Upgrade_DailyCrafts][Text:Crafts Per Day.]</Value>
+      <Value>[Name:Upgrade_DailyCrafts][Text:Items Per Day]</Value>
     </Item>
 	<Item>
       <Key>74</Key>

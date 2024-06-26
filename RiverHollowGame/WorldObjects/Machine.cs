@@ -11,15 +11,16 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 using System;
 using RiverHollow.Buildings;
+using static RiverHollow.Game_Managers.SaveManager;
+using System.Collections.Specialized;
 
 namespace RiverHollow.WorldObjects
 {
     public class Machine : WorldObject
     {
         public Recipe CraftingSlot { get; private set; }
-        private bool HoldItem => GetBoolByIDKey("HoldItem");
 
-        private Point ItemOffset => GetPointByIDKey("ItemOffset");
+        public bool Producer => GetBoolByIDKey("Producer");
 
         public Machine(int id) : base(id) { }
 
@@ -52,30 +53,12 @@ namespace RiverHollow.WorldObjects
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (HoldingItem())
-            {
-                Item i = DataManager.CraftItem(CraftingSlot.ID);
-                i.Draw(spriteBatch, new Rectangle((int)(MapPosition.X - ItemOffset.X), (int)(MapPosition.Y - ItemOffset.Y), Constants.TILE_SIZE, Constants.TILE_SIZE), Sprite.LayerDepth + 1);
-            }
-            base.Draw(spriteBatch);
-        }
-
         public override bool ProcessLeftClick() { return ClickProcess(); }
         public override bool ProcessRightClick() { return ClickProcess(); }
 
         private bool ClickProcess()
         {
-            if (HoldingItem())
-            {
-                InventoryManager.AddToInventory(DataManager.CraftItem(CraftingSlot.ID));
-                CraftingSlot = new Recipe(-1, -1);
-            }
-            else
-            {
-                GUIManager.OpenMainObject(new HUDRecipeBook(this));
-            }
+            GUIManager.OpenMainObject(new HUDRecipeBook(this));
 
             return true;
         }
@@ -87,59 +70,95 @@ namespace RiverHollow.WorldObjects
         {
             if (GetObjectBuilding() is Building b)
             {
-                int craftsLeft = b.GetDailyCraftingLimit();
-                var craftingList = GetCurrentCraftingList();
-                var validItems = WhatCanWeCraft(craftingList);
-
-                var merchandiseStock = GetMerchandiseStock();
-                InventoryManager.InitExtraInventory(merchandiseStock);
-
-                bool emptySlotFound = InventoryManager.HasSpaceInInventory(9999999, 1, false);
-                while (craftsLeft > 0)
+                if (Producer)
                 {
-                    if (validItems.Count > 0)
-                    {
-                        var tempItems = validItems;
-                        bool success = false;
-                        //Determine if there are any items missing in stock
-                        var missingItems = tempItems.Where(x => !InventoryManager.HasItemInInventory(x.ID, 1, merchandiseStock)).ToList();
-
-                        //We found at least one missing item and an empty slot so make it
-                        if (missingItems.Count > 0 && emptySlotFound)
-                        {
-                            var item = missingItems[0];
-                            if (TryCraftAtTarget(item, merchandiseStock, craftingList, ref validItems))
-                            {
-                                success = true;
-
-                            }
-                        }
-                        else  //Unable to make a new item, make whichever item we have the fewest of
-                        {
-                            List<Tuple<int, int>> numberList = new List<Tuple<int, int>>();
-                            foreach (var i in merchandiseStock)
-                            {
-                                if (i != null && i.ID > -1)
-                                {
-                                    numberList.Add(new Tuple<int, int>(i.ID, i.Number));
-                                }
-                            }
-
-                            numberList = numberList.OrderBy(x => x.Item2).ToList();
-
-                            var item = DataManager.GetItem(numberList[0].Item1);
-                            if (TryCraftAtTarget(item, GetMerchandiseStock(), craftingList, ref validItems))
-                            {
-                                success = true;
-                            }
-                        }
-
-                        if (!success) { break; }
-                        else { craftsLeft--; }
-                    }
-                    else { break; }
+                    ProduceItem(b);
+                }
+                else
+                {
+                    CraftItem(b);
                 }
             }
+        }
+
+        private void CraftItem(Building b)
+        {
+            int craftsLeft = b.GetDailyCraftingLimit();
+            var craftingList = GetCurrentCraftingList();
+            var validItems = WhatCanWeCraft(craftingList);
+
+            var merchandiseStock = GetMerchandiseStock();
+            InventoryManager.InitExtraInventory(merchandiseStock);
+
+            bool emptySlotFound = InventoryManager.HasSpaceInInventory(9999999, 1, false);
+            while (craftsLeft > 0)
+            {
+                if (validItems.Count > 0)
+                {
+                    var tempItems = validItems;
+                    bool success = false;
+                    //Determine if there are any items missing in stock
+                    var missingItems = tempItems.Where(x => !InventoryManager.HasItemInInventory(x.ID, 1, merchandiseStock)).ToList();
+
+                    //We found at least one missing item and an empty slot so make it
+                    if (missingItems.Count > 0 && emptySlotFound)
+                    {
+                        var item = missingItems[0];
+                        if (TryCraftAtTarget(item, merchandiseStock, craftingList, ref validItems))
+                        {
+                            success = true;
+
+                        }
+                    }
+                    else  //Unable to make a new item, make whichever item we have the fewest of
+                    {
+                        List<Tuple<int, int>> numberList = new List<Tuple<int, int>>();
+                        foreach (var i in merchandiseStock)
+                        {
+                            if (i != null && i.ID > -1)
+                            {
+                                numberList.Add(new Tuple<int, int>(i.ID, i.Number));
+                            }
+                        }
+
+                        numberList = numberList.OrderBy(x => x.Item2).ToList();
+
+                        var item = DataManager.GetItem(numberList[0].Item1);
+                        if (TryCraftAtTarget(item, GetMerchandiseStock(), craftingList, ref validItems))
+                        {
+                            success = true;
+                        }
+                    }
+
+                    if (!success) { break; }
+                    else { craftsLeft--; }
+                }
+                else { break; }
+            }
+        }
+
+        private void ProduceItem(Building b)
+        {
+            int craftsLeft = b.GetDailyCraftingLimit();
+            var merchandiseStock = GetMerchandiseStock();
+            InventoryManager.InitExtraInventory(merchandiseStock);
+
+            var productionDictionary = GetProductionDictionary();
+            while (craftsLeft > 0)
+            {
+                var rolledItem = Util.RollOnRarityTable(productionDictionary);
+                if (InventoryManager.HasSpaceInInventory(rolledItem, 1, false))
+                {
+                    var item = DataManager.CraftItem(rolledItem);
+                    InventoryManager.AddToInventory(item, false, true);
+                    TaskManager.AttemptProgressCraft(item);
+                    TownManager.AddToCodex(item.ID);
+                    craftsLeft--;
+                }
+                else { break; }
+            }
+
+            InventoryManager.ClearExtraInventory();
         }
 
         private List<Item> WhatCanWeCraft(List<int> craftingList)
@@ -246,11 +265,6 @@ namespace RiverHollow.WorldObjects
             return CraftingSlot.ID >= 0;
         }
 
-        private bool HoldingItem()
-        {
-            return HoldItem && CraftingSlot.ID != -1 && CraftingSlot.CraftTime == 0;
-        }
-
         public List<Tuple<int, bool>> GetFullCraftingList()
         {
             var craftingList = new List<Tuple<int, bool>>();
@@ -290,6 +304,28 @@ namespace RiverHollow.WorldObjects
             }
 
             return craftingList;
+        }
+
+        public Dictionary<RarityEnum, List<int>> GetProductionDictionary()
+        {
+            var rv = new Dictionary<RarityEnum, List<int>>();
+
+            string makes = GetStringByIDKey("Makes");
+            if (!string.IsNullOrEmpty(makes))
+            {
+                //Read in what items the machine can make
+                string[] split = Util.FindParams(makes);
+                foreach (string s in split)
+                {
+                    int resourceID = -1;
+                    RarityEnum rarity = RarityEnum.C;
+                    Util.GetRarity(s, ref resourceID, ref rarity);
+
+                    Util.AddToListDictionary(ref rv, rarity, resourceID);
+                }
+            }
+
+            return rv;
         }
 
         public struct Recipe

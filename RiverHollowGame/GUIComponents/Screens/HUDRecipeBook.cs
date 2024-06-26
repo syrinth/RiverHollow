@@ -32,9 +32,22 @@ namespace RiverHollow.GUIComponents.Screens
 
             _liRecipes = new List<RecipeDisplay>();
             _diCraftingList = new Dictionary<int, bool>();
-            foreach (var item in m.GetFullCraftingList())
+            if (m.Producer)
             {
-                _diCraftingList[item.Item1] = item.Item2;
+                foreach (var item in m.GetProductionDictionary())
+                {
+                    foreach (var listItem in item.Value)
+                    {
+                        _diCraftingList[listItem] = true;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in m.GetFullCraftingList())
+                {
+                    _diCraftingList[item.Item1] = item.Item2;
+                }
             }
 
             //_iMaxUsed needs to be an even number or the next page factor will skip early
@@ -164,48 +177,57 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 var item = DataManager.CraftItem(id);
                 GUIItem itemToCraft = new GUIItem(item, ItemBoxDraw.MoreThanOne, false);
-                itemToCraft.ScaledMoveBy(0, 4);
-                itemToCraft.SetNumberOffset(new Point(1, 1));
+                AddControl(itemToCraft);
 
                 bool blackout = !craftingList[item.ID];
                 if (blackout)
                 {
                     itemToCraft.SetImageColor(Color.Black);
-                    AddControl(itemToCraft);
                 }
                 else
                 {
-                    GUIImage dots = new GUIImage(GUIUtils.RECIPE_DOTS);
-                    dots.AnchorAndAlign(itemToCraft, SideEnum.Right, SideEnum.Bottom);
-                    AddControls(itemToCraft, dots);
-
-                    var recipeList = new List<GUIObject>();
                     var reqItems = item.GetRequiredItems();
-                    foreach (var kvp in reqItems)
+                    if (reqItems != null)
                     {
-                        var recipeItem = DataManager.GetItem(kvp.Key, kvp.Value);
-                        var guiRecipeItem = new GUIItem(recipeItem, ItemBoxDraw.MoreThanOne, false);
-                        guiRecipeItem.SetNumberOffset(new Point(1, 5));
+                        itemToCraft.ScaledMoveBy(0, 4);
+                        itemToCraft.SetNumberOffset(new Point(1, 1));
 
-                        if (!guiRecipeItem.CompareNumToInventory(m.GetStash()))
-                        {
-                            itemToCraft.SetImageAlpha(0.3f);
-                            dots.Alpha(0.3f);
-                            guiRecipeItem.SetImageAlpha(0.3f);
-                        }
+                        GUIImage dots = new GUIImage(GUIUtils.RECIPE_DOTS);
+                        dots.AnchorAndAlign(itemToCraft, SideEnum.Right, SideEnum.Bottom);
+                        AddControl(dots);
 
-                        if (recipeList.Count == 0)
+                        var recipeList = new List<GUIObject>();
+                        foreach (var kvp in reqItems)
                         {
-                            guiRecipeItem.AnchorAndAlign(dots, SideEnum.Right, SideEnum.Bottom);
-                            guiRecipeItem.ScaledMoveBy(0, -4);
-                        }
-                        else
-                        {
-                            guiRecipeItem.AnchorAndAlignWithSpacing(recipeList.Last(), SideEnum.Right, SideEnum.Bottom, 8);
-                        }
+                            var recipeItem = DataManager.GetItem(kvp.Key, kvp.Value);
+                            var guiRecipeItem = new GUIItem(recipeItem, ItemBoxDraw.MoreThanOne, false);
+                            guiRecipeItem.SetNumberOffset(new Point(1, 5));
 
-                        recipeList.Add(guiRecipeItem);
-                        AddControl(guiRecipeItem);
+                            if (!guiRecipeItem.CompareNumToInventory(m.GetStash()))
+                            {
+                                itemToCraft.SetImageAlpha(0.3f);
+                                dots.Alpha(0.3f);
+                                guiRecipeItem.SetImageAlpha(0.3f);
+                            }
+
+                            if (recipeList.Count == 0)
+                            {
+                                guiRecipeItem.AnchorAndAlign(dots, SideEnum.Right, SideEnum.Bottom);
+                                guiRecipeItem.ScaledMoveBy(0, -4);
+                            }
+                            else
+                            {
+                                guiRecipeItem.AnchorAndAlignWithSpacing(recipeList.Last(), SideEnum.Right, SideEnum.Bottom, 8);
+                            }
+
+                            recipeList.Add(guiRecipeItem);
+                            AddControl(guiRecipeItem);
+                        }
+                    }
+                    else
+                    {
+                        itemToCraft.ScaledMoveBy(41, 4);
+                        itemToCraft.SetNumberOffset(new Point(1, 1));
                     }
                 }
 

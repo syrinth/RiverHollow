@@ -11,12 +11,16 @@ using RiverHollow.Utilities;
 
 using static RiverHollow.Utilities.Enums;
 using System.Linq;
+using System.Reflection;
 
 namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDShopSlateWindow : GUIMainObject
     {
+        private enum MachineTypeEnum { None, Craft, Produce };
         readonly Point startPoint = new Point(32, 53);
+        private readonly bool _bSellsItems;
+        private readonly MachineTypeEnum _eItemType = MachineTypeEnum.None;
 
         private readonly List<GUIObject> _liItems;
         private readonly List<GUIToggle> _gSlateToggles;
@@ -58,18 +62,42 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gSlateToggles = new List<GUIToggle>();
 
-            if (IsShop())
-            {   
+            _bSellsItems = MapManager.CurrentMap.TheShop != null && MapManager.CurrentMap.TheShop.GetUnlockedMerchandise().Count > 0;
+            if (_bSellsItems)
+            {
                 AddSlateToggle(DisplayShopInfo, GUIUtils.ICON_COIN);
             }
 
-            if (MakesItems())
+            //We go from Produce to Craft because Production has less requirements than Craft.
+            //One instance of a Machine that crafts requires the crafting feature and all machines
+            //will at least produce something.
+            var machines = MapManager.CurrentMap.GetObjectsByType<Machine>();
+            if (machines.Count > 0)
+            {
+                foreach(var machine in machines)
+                {
+                    _eItemType = MachineTypeEnum.Produce;
+                    if (!machine.Producer)
+                    {
+                        _eItemType = MachineTypeEnum.Craft;
+                        break;
+                    }
+                }
+            }
+
+            if (_eItemType == MachineTypeEnum.Craft)
             {   
                 AddSlateToggle(DisplayMerchandiseInfo, GUIUtils.ICON_BAG);
                 AddSlateToggle(DisplaySupplyInfo, GUIUtils.ICON_CHEST);
             }
+            else
+            {
+                AddSlateToggle(DisplayMerchandiseInfo, GUIUtils.ICON_BAG);
+            }
 
-            if (IsShop()) { DisplayShopInfo(); }
+            ArrangeToggles();
+
+            if (_bSellsItems) { DisplayShopInfo(); }
             else { DisplayMerchandiseInfo(); }
 
             _gSlateToggles[0].AssignToggleGroup(false, _gSlateToggles.Where(x => x != _gSlateToggles[0]).ToArray());
@@ -171,7 +199,18 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (obj is Machine m)
                     {
-                        validIDs.AddRange(m.GetCurrentCraftingList());
+                        if (obj.Producer)
+                        {
+                            var dictionary = m.GetProductionDictionary();
+                            foreach (var list in dictionary.Values)
+                            {
+                                validIDs.AddRange(list);
+                            }
+                        }
+                        else
+                        {
+                            validIDs.AddRange(m.GetCurrentCraftingList());
+                        }
                     }
                 }
             }
@@ -203,36 +242,32 @@ namespace RiverHollow.GUIComponents.Screens
             int index = _gSlateToggles.Count;
             var toggle = new GUIToggle(icon, GUIToggle.ToggleTypeEnum.Fade, DataManager.HUD_COMPONENTS, del);
             _gSlateToggles.Add(toggle);
+        }
 
-            if (index == 0)
+        private void ArrangeToggles()
+        {
+            for (int i = 0; i < _gSlateToggles.Count; i++)
             {
-                if (IsShop() && MakesItems())
+                if (i == 0)
                 {
-                    _gSlateToggles[index].PositionAndMove(_gTop, 64, 20);
-                }
-                else if (MakesItems())
-                {
-                    _gSlateToggles[index].PositionAndMove(_gTop, 72, 20);
+                    if (_gSlateToggles.Count == 1)
+                    {
+                        _gSlateToggles[i].PositionAndMove(_gTop, 80, 20);
+                    }
+                    else if (_gSlateToggles.Count == 2)
+                    {
+                        _gSlateToggles[i].PositionAndMove(_gTop, 72, 20);
+                    }
+                    else if (_gSlateToggles.Count == 3)
+                    {
+                        _gSlateToggles[i].PositionAndMove(_gTop, 64, 20);
+                    }
                 }
                 else
                 {
-                    _gSlateToggles[index].PositionAndMove(_gTop, 80, 20);
+                    _gSlateToggles[i].AnchorAndAlign(_gSlateToggles[i - 1], SideEnum.Right, SideEnum.Bottom);
                 }
             }
-            else
-            {
-                _gSlateToggles[index].AnchorAndAlign(_gSlateToggles[index - 1], SideEnum.Right, SideEnum.Bottom);
-            }
-        }
-
-        private bool IsShop()
-        {
-            return MapManager.CurrentMap.TheShop.GetUnlockedMerchandise().Count > 0;
-        }
-
-        private bool MakesItems()
-        {
-            return TownManager.GetCurrentBuilding() != null;
         }
 
         public override void CloseMainWindow()
@@ -264,7 +299,7 @@ namespace RiverHollow.GUIComponents.Screens
             ShopItem = i;
             _giItem = new GUIItem(i, ItemBoxDraw.Never, !(i is WrappedObjectItem));
             AddControl(_giItem);
-
+            
             _giItem.SetColor(i.ItemColor);
 
             _gMoney = new GUIMoneyDisplay(Cost, DirectionEnum.Right, true);

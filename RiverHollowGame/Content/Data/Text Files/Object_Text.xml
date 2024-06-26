@@ -516,7 +516,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_1</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:The Mushroomery]</Value>
     </Item>
     <Item>
       <Key>Shop_2</Key>
@@ -2112,7 +2112,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_149</Key>
-      <Value>[Name:Mushroom Pot]</Value>
+      <Value>[Name:Spore Box]</Value>
     </Item>
     <Item>
       <Key>WorldObject_150</Key>
@@ -2233,6 +2233,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>WorldObject_179</Key>
       <Value>[Name:Shop Slate]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_180</Key>
+      <Value>[Name:Grow Box]</Value>
     </Item>
     <Item>
       <Key>Cutscene_0</Key>
