@@ -509,16 +509,19 @@
  <tile id="176">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+   <property name="Wall" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="177">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+   <property name="Wall" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="178">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+   <property name="Wall" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="182">
@@ -534,16 +537,19 @@
  <tile id="198">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+   <property name="Wall" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="199">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+   <property name="Wall" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="200">
   <properties>
    <property name="Impassable" type="bool" value="true"/>
+   <property name="Wall" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="220">

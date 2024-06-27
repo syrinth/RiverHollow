@@ -260,6 +260,7 @@ namespace RiverHollow.Game_Managers
         {
             _eBuildType = EnumBuildType.BuildMode;
             GUIManager.CloseMainObject();
+            GUICursor.ResetCursor();
         }
         public static void EnterTownModeEdit()
         {
@@ -267,6 +268,7 @@ namespace RiverHollow.Game_Managers
             GUIManager.CloseMainObject();
             GameManager.ClearGMObjects();
             GUIManager.CloseMenu();
+            GUICursor.ResetCursor();
         }
 
         public static void ExitTownMode() {

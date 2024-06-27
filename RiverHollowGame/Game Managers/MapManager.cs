@@ -20,6 +20,7 @@ namespace RiverHollow.Game_Managers
     {
         public static RHMap TownMap => Maps[Constants.TOWN_MAP_NAME];
         public static RHMap InnMap => Maps[Constants.INN_MAP_NAME];
+        public static RHMap HomeMap => Maps[Constants.PLAYER_HOME_NAME];
         const string _sMapFolder = @"Content\Maps";
         const string _sDungeonMapFolder = @"Content\Maps\Dungeons";
         public static Vector2 SpawnTile { get; private set; }

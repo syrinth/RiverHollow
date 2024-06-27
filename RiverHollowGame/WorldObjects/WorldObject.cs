@@ -329,7 +329,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual bool PlayerCanEdit()
         {
-            return CompareType(ObjectTypeEnum.Buildable);
+            return CompareType(ObjectTypeEnum.Buildable) && !Reset;
         }
 
         public virtual void SelectObject(bool val, bool selectParent = true)
@@ -454,6 +454,12 @@ namespace RiverHollow.WorldObjects
             int yOffset = (_rBase.Height > 1) ? (_rBase.Height -1) / 2 : 0;
             PickupOffset = new Point((_rBase.X + xOffset) * Constants.TILE_SIZE, (_rBase.Y + yOffset) * Constants.TILE_SIZE);
             PickupOffset = Util.MultiplyPoint(Util.DividePoint(PickupOffset, Constants.TILE_SIZE),  Constants.TILE_SIZE);
+        }
+
+
+        public void SetReset()
+        {
+            Reset = true;
         }
 
         public void AddToInventory()

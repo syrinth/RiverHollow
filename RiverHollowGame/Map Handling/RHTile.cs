@@ -31,7 +31,7 @@ namespace RiverHollow.Map_Handling
         public WorldObject Flooring { get; private set; }
         public bool IsRoad { get; private set; }
 
-        public bool IsWaterTile => ContainsProperty("Water", out string value) && value.Equals("true");
+        public bool IsWaterTile => ContainsProperty("Water");
 
         public bool IsTilled => Flooring != null && Flooring.GetBoolByIDKey("Earth");
         public bool HasBeenWatered => GetEarth() != null && GetEarth().HasBeenWatered;
@@ -123,7 +123,7 @@ namespace RiverHollow.Map_Handling
                     }
                 }
             }
-            IsRoad = ContainsProperty("Road", out string value) && value.Equals("true");
+            IsRoad = ContainsProperty("Road");
         }
 
         /// <summary>
@@ -235,24 +235,13 @@ namespace RiverHollow.Map_Handling
             bool rv = false;
             foreach (TiledMapTileLayer l in _diProps.Keys)
             {
-                rv = ContainsProperty(l, property, out string value) && value.Equals("True");
+                rv = ContainsProperty(l, property, out string value) && value.Equals("true");
                 if (rv) { break; }
             }
 
             return rv;
         }
-        public bool ContainsProperty(string property, out string value)
-        {
-            bool rv = false;
-            value = string.Empty;
-            foreach (TiledMapTileLayer l in _diProps.Keys)
-            {
-                rv = ContainsProperty(l, property, out value);
-                if (rv) { break; }
-            }
 
-            return rv;
-        }
         public bool ContainsProperty(TiledMapTileLayer l, string property, out string value)
         {
             bool rv = false;

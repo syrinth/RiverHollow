@@ -69,7 +69,7 @@
  </objectgroup>
  <objectgroup id="9" name="MapObject">
   <object id="40" name="Wall" x="16" y="48" width="208" height="48"/>
-  <object id="41" name="WorldObject" x="160" y="48" width="16" height="32">
+  <object id="41" name="Window" x="160" y="48" width="16" height="32">
    <properties>
     <property name="ObjectID" type="int" value="166"/>
    </properties>
@@ -84,7 +84,7 @@
     <property name="ObjectID" type="int" value="166"/>
    </properties>
   </object>
-  <object id="48" name="WorldObject" x="64" y="48" width="16" height="32">
+  <object id="48" name="Window" x="64" y="48" width="16" height="32">
    <properties>
     <property name="ObjectID" type="int" value="166"/>
    </properties>

@@ -932,11 +932,16 @@ namespace RiverHollow.Map_Handling
             }
         }
 
+        private bool IsTownBuilding()
+        {
+            return BuildingID > -1 && this != MapManager.HomeMap;
+        }
+
         public void PopulateMap(bool forceRepop)
         {
             foreach (TiledMapObject tiledObj in _liMapObjects)
             {
-                if (forceRepop || tiledObj.Properties.ContainsKey("Reset"))
+                if (forceRepop || tiledObj.Properties.ContainsKey("Reset") || IsTownBuilding())
                 {
                     int xCount = 0;
                     int yCount = 0;
@@ -964,6 +969,11 @@ namespace RiverHollow.Map_Handling
                                     if (obj is Plant plantObj)
                                     {
                                         plantObj.FinishGrowth();
+                                    }
+
+                                    if (IsTownBuilding())
+                                    {
+                                        obj.SetReset();
                                     }
 
                                     if (obj.PlaceOnMap(new Point(x, y), this))
@@ -2085,7 +2095,7 @@ namespace RiverHollow.Map_Handling
                 GameManager.TestTiles.Clear();
                 TestMapTiles(GameManager.HeldObject, GameManager.TestTiles);
             }
-            else
+            else if (!InTownMode())
             {
                 bool found = false;
 
@@ -2584,7 +2594,14 @@ namespace RiverHollow.Map_Handling
             }
             else if (obj.CheckPlacement(ObjectPlacementEnum.Wall))
             {
-                rv = testTile.WorldObject == null && testTile.IsWallpaperWall;
+                if (obj is Wallpaper)
+                {
+                    rv = testTile.WorldObject == null && testTile.IsWallpaperWall;
+                }
+                else
+                {
+                    rv = testTile.WorldObject == null && testTile.ContainsProperty("Wall");
+                }
             }
             else if (obj.CheckPlacement(ObjectPlacementEnum.Impassable))
             {
