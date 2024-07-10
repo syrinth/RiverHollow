@@ -120,8 +120,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                 {
                     switch (itemGroup)
                     {
-                        case ResourceTypeEnum.Artifact:
-                            typeColor = Color.Gold; break;
                         case ResourceTypeEnum.Gem:
                             typeColor = Color.DeepPink; break;
                         case ResourceTypeEnum.Fish:
@@ -154,6 +152,10 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     }
                     rv = Util.GetEnumString(merchGroup, true);
                 }
+            }
+            else if (it is Relic)
+            {
+                typeColor = Color.Gold;
             }
             else
             {

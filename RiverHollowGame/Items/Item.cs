@@ -415,4 +415,12 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Resources");
         }
     }
+
+    public class Relic : Item
+    {
+        public Relic(int id, int num) : base (id, num)
+        {
+            _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Relics");
+        }
+    }
 }

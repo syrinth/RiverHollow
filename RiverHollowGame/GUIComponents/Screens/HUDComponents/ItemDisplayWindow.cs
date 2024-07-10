@@ -41,16 +41,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             GUIText text = new GUIText(strText);
             text.AnchorToInnerSide(infoWindow, SideEnum.TopLeft);
 
-            if (Found)
-            {
-                string strDescText = DataManager.GetTextData(ID, "Description", DataType.Item);
-                if (!string.IsNullOrEmpty(strDescText))
-                {
-                    GUIText descText = new GUIText(strDescText);
-                    descText.AnchorAndAlignWithSpacing(text, SideEnum.Bottom, SideEnum.Left, 2);
-                }
-            }
-
             infoWindow.Resize(false);
             infoWindow.AnchorAndAlignWithSpacing(this, SideEnum.Bottom, SideEnum.CenterX, -1, GUIUtils.ParentRuleEnum.Skip);
             text.AlignToObject(infoWindow, SideEnum.CenterX);

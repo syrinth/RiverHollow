@@ -62,5 +62,10 @@
       <Key>14</Key>
       <Value>[Name:Gift_Miserable][Text:I can't even imagine anyone would want to buy something like that.]</Value>
     </Item>
+    <Item>
+      <Key>15</Key>
+      <Value>[Name:Ulm][Text:That $Actor_43$ sure is something, isn't she? I heard that someone asked her for a discount once and then...
+Well, let's just say it hasn't happened again.][Villager:43]</Value>
+    </Item>
   </Asset>
 </XnaContent>

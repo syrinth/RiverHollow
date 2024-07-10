@@ -1,15 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.GUIComponents.Screens.HUDComponents;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
@@ -46,6 +41,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
             AddItemToggle(ItemPotionToggle, GUIUtils.TOGGLE_ITEMS_POTIONS_ICON);
             AddItemToggle(ItemToolToggle, GUIUtils.TOGGLE_ITEMS_TOOLS_ICON);
             AddItemToggle(ItemFoodToggle, GUIUtils.TOGGLE_ITEMS_FOOD_ICON);
+            AddItemToggle(ItemRelicToggle, GUIUtils.TOGGLE_ITEMS_RelicS_ICON);
             AddItemToggle(ItemSpecialToggle, GUIUtils.TOGGLE_ITEMS_SPECIAL_ICON);
 
             _btnLeft = new GUIButton(GUIUtils.BTN_LEFT_SMALL, BtnLeft);
@@ -66,7 +62,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
             _gItemToggles.Add(new GUIToggle(GUIUtils.TOGGLE_ITEMS_OFF, GUIUtils.TOGGLE_ITEMS_ON, icon, DataManager.HUD_COMPONENTS, del));
             if (index == 0)
             {
-                _gItemToggles[index].PositionAndMove(_mainWindow, 49, 19);
+                _gItemToggles[index].PositionAndMove(_mainWindow, 40, 19);
             }
             else
             {
@@ -142,6 +138,10 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows.TabPages
         public void ItemResourceToggle()
         {
             SetUpItemWindows(ItemTypeEnum.Resource, true);
+        }
+        public void ItemRelicToggle()
+        {
+            SetUpItemWindows(ItemTypeEnum.Relic, true);
         }
         public void ItemPotionToggle()
         {

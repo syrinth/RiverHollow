@@ -84,6 +84,8 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
 
         static Dictionary<int, Dictionary<string, string>> _diItemData;
+        static Dictionary<RarityEnum, List<int>> _diRelics;
+        public static IReadOnlyDictionary<RarityEnum, List<int>> Relics => _diRelics;
         public static List<int> ItemKeys => _diItemData.Keys.ToList();
 
         static Dictionary<int, Dictionary<string, string>> _diDungeonData;
@@ -106,6 +108,8 @@ namespace RiverHollow.Game_Managers
         {
             //Allocate Dictionaries
             _diTextures = new Dictionary<string, Texture2D>();
+
+            _diRelics = new Dictionary<RarityEnum, List<int>>(); 
 
             _diLetterData = new Dictionary<int, string>();
             var letterTemplates = Content.Load<Dictionary<int, string>>(FOLDER_TEXTFILES + @"Mailbox_Text");
@@ -137,7 +141,7 @@ namespace RiverHollow.Game_Managers
         {
             LoadDictionary(ref Config, @"Data\Config", Content, null);
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
-            LoadDictionary(ref _diItemData, @"Data\ItemData", Content, null);
+            LoadDictionary(ref _diItemData, @"Data\ItemData", Content, LoadItemsDoWork);
             LoadDictionary(ref _diActorData, @"Data\ActorData", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
@@ -169,6 +173,15 @@ namespace RiverHollow.Game_Managers
             if (taggedDictionary.ContainsKey("Unlocked"))
             {
                 PlayerManager.AddToCraftingDictionary(id, false);
+            }
+        }
+
+        private static void LoadItemsDoWork(int id, Dictionary<string, string> taggedDictionary)
+        {
+            if (taggedDictionary["Type"].Equals("Relic"))
+            {
+                var rarity = Util.ParseEnum<RarityEnum>(taggedDictionary["Rarity"]);
+                Util.AddToListDictionary(ref _diRelics, rarity, id);
             }
         }
 
@@ -569,6 +582,8 @@ namespace RiverHollow.Game_Managers
                         return new MonsterFood(id, num);
                     case ItemTypeEnum.NPCToken:
                         return new NPCToken(id);
+                    case ItemTypeEnum.Relic:
+                        return new Relic(id, num);
                     case ItemTypeEnum.Seed:
                         return new Seed(id, num);
                     case ItemTypeEnum.Special:

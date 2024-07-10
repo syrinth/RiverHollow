@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="37" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="93">
  <properties>
+  <property name="RelicID" value="14"/>
   <property name="FillerID" value="60-100"/>
   <property name="FillerPercent" type="float" value="0.2"/>
   <property name="FillerRate" type="float" value="0.2"/>

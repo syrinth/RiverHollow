@@ -109,6 +109,8 @@ namespace RiverHollow.Utilities
 
         public const int FISH_PUDDLE = 68;
 
+        public const int Relic_BASE_CHANCE = 10;
+
         public const int ACTION_DELAY = 10;
         public const string MAPOBJ_CRAFT = "Craft";
         public const string MAPOBJ_HOME = "NPC_";

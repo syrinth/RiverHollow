@@ -6,6 +6,7 @@ using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -20,7 +21,7 @@ namespace RiverHollow.WorldObjects
 
         public ToolEnum NeededTool => GetEnumByIDKey<ToolEnum>("Tool");
 
-        public int NeededToolLevel => GetIntByIDKey("ReqLvl");
+        public int NeededToolLevel => GetIntByIDKey("ReqLvl", 1);
 
         public Destructible(int id) : base(id)
         {
@@ -156,55 +157,71 @@ namespace RiverHollow.WorldObjects
         }
         protected List<Item> GetDroppedItems()
         {
-            var items = Loot();
-            string[] strParams = Util.FindParams(items);
-            var dropList = new List<Tuple<int, int>>();
-            for (int i = 0; i < strParams.Length; i++)
-            {
-                int number = 0;
-                string[] split = Util.FindArguments(strParams[i]);
-
-                if (split.Length == 1) { number = 1; }
-                else if (split.Length == 2) { number = int.Parse(split[1]); }
-                else if (split.Length == 3) { number = RHRandom.Instance().Next(int.Parse(split[1]), int.Parse(split[2])); }
-
-                var tup = new Tuple<int, int>(int.Parse(split[0]), number);
-                dropList.Add(tup);
-            }
-
-            items = GetStringByIDKey("BonusItemID");
-            if (!string.IsNullOrEmpty(items))
-            {
-                var bonusItemDictionary = new Dictionary<RarityEnum, List<Tuple<int, int>>>();
-                Util.AddToListDictionary(ref bonusItemDictionary, RarityEnum.C, new Tuple<int, int>(-1, 0));
-
-                string[] bonusItems = Util.FindParams(items);
-                for (int i = 0; i < bonusItems.Length; i++)
-                {
-                    string[] arguments = Util.FindArguments(bonusItems[i]);
-
-                    RarityEnum rarity = arguments.Length > 2 ? Util.ParseEnum<RarityEnum>(arguments[2]) : RarityEnum.C;
-                    var tuple = new Tuple<int, int>(int.Parse(arguments[0]), int.Parse(arguments[1]));
-
-                    Util.AddToListDictionary(ref bonusItemDictionary, rarity, tuple);
-                }
-
-                var chosenTuple = Util.RollOnRarityTable(bonusItemDictionary);
-                if (chosenTuple.Item1 > -1)
-                {
-                    dropList.Add(chosenTuple);
-                }
-            }
-
             List<Item> itemList = new List<Item>();
-            dropList.ForEach(x => { 
-                for(int i = 0; i < x.Item2; i++)
+
+            if (GetBoolByIDKey("Relic"))
+            {
+                itemList.Add(GetRelic());
+            }
+            else
+            {
+                var items = Loot();
+                string[] strParams = Util.FindParams(items);
+                var dropList = new List<Tuple<int, int>>();
+                for (int i = 0; i < strParams.Length; i++)
                 {
-                    itemList.Add(DataManager.GetItem(x.Item1));
+                    int number = 0;
+                    string[] split = Util.FindArguments(strParams[i]);
+
+                    if (split.Length == 1) { number = 1; }
+                    else if (split.Length == 2) { number = int.Parse(split[1]); }
+                    else if (split.Length == 3) { number = RHRandom.Instance().Next(int.Parse(split[1]), int.Parse(split[2])); }
+
+                    var tup = new Tuple<int, int>(int.Parse(split[0]), number);
+                    dropList.Add(tup);
                 }
-            });
+
+                items = GetStringByIDKey("BonusItemID");
+                if (!string.IsNullOrEmpty(items))
+                {
+                    var bonusItemDictionary = new Dictionary<RarityEnum, List<Tuple<int, int>>>();
+                    Util.AddToListDictionary(ref bonusItemDictionary, RarityEnum.C, new Tuple<int, int>(-1, 0));
+
+                    string[] bonusItems = Util.FindParams(items);
+                    for (int i = 0; i < bonusItems.Length; i++)
+                    {
+                        string[] arguments = Util.FindArguments(bonusItems[i]);
+
+                        RarityEnum rarity = arguments.Length > 2 ? Util.ParseEnum<RarityEnum>(arguments[2]) : RarityEnum.C;
+                        var tuple = new Tuple<int, int>(int.Parse(arguments[0]), int.Parse(arguments[1]));
+
+                        Util.AddToListDictionary(ref bonusItemDictionary, rarity, tuple);
+                    }
+
+                    var chosenTuple = Util.RollOnRarityTable(bonusItemDictionary);
+                    if (chosenTuple.Item1 > -1)
+                    {
+                        dropList.Add(chosenTuple);
+                    }
+                }
+
+
+                dropList.ForEach(x =>
+                {
+                    for (int i = 0; i < x.Item2; i++)
+                    {
+                        itemList.Add(DataManager.GetItem(x.Item1));
+                    }
+                });
+            }
 
             return itemList;
+        }
+
+        private Item GetRelic()
+        {
+            var id = Util.RollOnRarityTable(DataManager.Relics.ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
+            return DataManager.GetItem(id);
         }
 
         public override WorldObjectData SaveData()

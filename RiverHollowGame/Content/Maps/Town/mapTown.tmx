@@ -6,6 +6,7 @@
   <property name="FillerRate" type="float" value="0.05"/>
   <property name="MapType" value="Town"/>
   <property name="Outside" type="bool" value="true"/>
+  <property name="RelicID" value="13/14"/>
   <property name="Town" type="bool" value="true"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>

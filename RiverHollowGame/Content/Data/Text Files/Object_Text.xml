@@ -1515,6 +1515,30 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:WispPet]</Value>
     </Item>
     <Item>
+      <Key>Item_237</Key>
+      <Value>[Name:Silver Coin][Description:A coin originating from the Silver Kingdom]</Value>
+    </Item>
+    <Item>
+      <Key>Item_238</Key>
+      <Value>[Name:Ancient Vial][Description:Wisps of mist still cling to this vial even centuries later.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_239</Key>
+      <Value>[Name:Lustrous Coin][Description:A lustrous coin from the age of Mists]</Value>
+    </Item>
+    <Item>
+      <Key>Item_240</Key>
+      <Value>[Name:Merchant Coin][Description:An old coin used by traveling merchants.]</Value>
+    </Item>
+    <Item>
+      <Key>Item_241</Key>
+      <Value>[Name:Sparkling Coin][Description:An extremely thin coin made of sparkling metal]</Value>
+    </Item>
+    <Item>
+      <Key>Item_242</Key>
+      <Value>[Name:Hammered Coin][Description:An indentation marks the center of this coin]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -1568,11 +1592,11 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_13</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Forest Artifact Point]</Value>
     </Item>
     <Item>
       <Key>WorldObject_14</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Mine Artifact Point]</Value>
     </Item>
     <Item>
       <Key>WorldObject_15</Key>

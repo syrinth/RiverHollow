@@ -3045,6 +3045,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/items.png
 
+#begin Textures/Items/Relics.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Items/Relics.png
+
 #begin Textures/Items/Blueprints.png
 /importer:TextureImporter
 /processor:TextureProcessor

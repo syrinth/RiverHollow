@@ -121,6 +121,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle TOGGLE_ITEMS_POTIONS_ICON = new Rectangle(48, 176, 16, 16);
         internal static Rectangle TOGGLE_ITEMS_TOOLS_ICON = new Rectangle(64, 176, 16, 16);
         internal static Rectangle TOGGLE_ITEMS_FOOD_ICON = new Rectangle(80, 176, 16, 16);
+        internal static Rectangle TOGGLE_ITEMS_RelicS_ICON = new Rectangle(64, 192, 16, 16);
         internal static Rectangle TOGGLE_ITEMS_SPECIAL_ICON = new Rectangle(48, 192, 16, 16);
 
         internal static Rectangle HUD_FILL = new Rectangle(177, 161, 14, 14);

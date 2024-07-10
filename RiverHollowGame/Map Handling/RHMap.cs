@@ -649,7 +649,7 @@ namespace RiverHollow.Map_Handling
                     var tiles = GetTilesFromRectangleExcludeEdgePoints(obj.GetRectangle());
                     var waterTiles = tiles.FindAll(x => x.IsWaterTile);
 
-                    int max = (int)Math.Ceiling(tiles.Count() / 20f);
+                    int max = (int)Math.Ceiling(waterTiles.Count() / 30f);
                     int spawnNum = RHRandom.Instance().Next(1, max);
                     for (int i = 0; i < spawnNum; i++)
                     {
@@ -736,6 +736,25 @@ namespace RiverHollow.Map_Handling
                     WorldObject obj = Util.RollOnRarityTable(rarityTable).GetDataObject();
                     PlaceGeneratedObject(obj, ref possibleTiles, refresh);
                 }
+            }
+
+            if (_map.Properties.ContainsKey("RelicID"))
+            {
+                bool repeat = false;
+                do
+                {
+                    if (RHRandom.RollPercent(Constants.Relic_BASE_CHANCE))
+                    {
+                        var RelicSplit = Util.FindIntParams(_map.Properties["RelicID"]);
+                        if (RelicSplit.Count > 0)
+                        {
+                            var chosenID = Util.GetRandomItem(RelicSplit);
+                            PlaceGeneratedObject(DataManager.CreateWorldObjectByID(chosenID), ref possibleTiles, refresh);
+                        }
+
+                        repeat = RHRandom.RollPercent(Constants.Relic_BASE_CHANCE);
+                    }
+                } while (repeat);
             }
         }
 

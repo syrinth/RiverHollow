@@ -949,5 +949,29 @@
       <Key>236</Key>
       <Value>[Type:NPCToken][Subtype:Pet][Image:0-0][NPC_ID:66]</Value>
     </Item>
+    <Item>
+      <Key>237</Key>
+      <Value>[Type:Relic][Image:0-0][Value:30][Rarity:C]</Value>
+    </Item>
+    <Item>
+      <Key>238</Key>
+      <Value>[Type:Relic][Image:1-0][Value:40][Rarity:R]</Value>
+    </Item>
+    <Item>
+      <Key>239</Key>
+      <Value>[Type:Relic][Image:0-1][Value:30][Rarity:C]</Value>
+    </Item>
+    <Item>
+      <Key>240</Key>
+      <Value>[Type:Relic][Image:0-2][Value:50][Rarity:U]</Value>
+    </Item>
+    <Item>
+      <Key>241</Key>
+      <Value>[Type:Relic][Image:0-3][Value:20][Rarity:U]</Value>
+    </Item>
+    <Item>
+      <Key>242</Key>
+      <Value>[Type:Relic][Image:0-4][Value:10][Rarity:C]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="69">
  <properties>
+  <property name="RelicID" value="13"/>
   <property name="FillerID" value="103-60-Spread-80/51-5/60-5/147-20"/>
   <property name="FillerPercent" type="float" value="0.3"/>
   <property name="MapType" value="Forest"/>
