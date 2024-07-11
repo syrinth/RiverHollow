@@ -18,8 +18,10 @@ namespace RiverHollow.Map_Handling
         public int X { get; }
         public int Y { get; }
         public Point Position => new Point(X * Constants.TILE_SIZE, Y * Constants.TILE_SIZE);
-        public Rectangle CollisionBox => new Rectangle(Position, Constants.BASIC_TILE);
+        public Rectangle CollisionBox => WorldObject == null ? TileBox : WorldObject.GetCollsionBox();
         public Point Center => CollisionBox.Center;
+
+        public Rectangle TileBox => new Rectangle(Position, Constants.BASIC_TILE);
 
         TravelPoint _travelPoint;
 
@@ -76,7 +78,7 @@ namespace RiverHollow.Map_Handling
             else
             {
                 bool playerAdjacent = PlayerManager.InRangeOfPlayer(CollisionBox, ref facing);
-                bool inRangeOfObject = obj != null && PlayerManager.InRangeOfPlayer(obj.CollisionBox, ref facing);
+                bool inRangeOfObject = obj != null && PlayerManager.InRangeOfPlayer(obj.BaseRectangle, ref facing);
                 if (inRangeOfObject)
                 {
                     rv = obj.ProcessRightClick();

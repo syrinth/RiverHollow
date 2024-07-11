@@ -52,10 +52,10 @@ namespace RiverHollow.WorldObjects
             }
             if(_eMoveDir != DirectionEnum.None)
             {
-                RHTile currentTile = CurrentMap.GetTileByPixelPosition(CollisionCenter);
+                RHTile currentTile = CurrentMap.GetTileByPixelPosition(BaseCenter);
                 RHTile nextTile = currentTile.GetTileByDirection(_eMoveDir);
-                float deltaX = Math.Abs((nextTile.Center - CollisionCenter).X);
-                float deltaY = Math.Abs((nextTile.Center - CollisionCenter).Y);
+                float deltaX = Math.Abs((nextTile.Center - BaseCenter).X);
+                float deltaY = Math.Abs((nextTile.Center - BaseCenter).Y);
 
                 if (!nextTile.Passable() && deltaX < Constants.TILE_SIZE + 2 && deltaY < Constants.TILE_SIZE + 2)
                 {
@@ -71,9 +71,9 @@ namespace RiverHollow.WorldObjects
 
             if (Active)
             {
-                if (CollisionBox.Intersects(PlayerManager.PlayerActor.CollisionBox))
+                if (BaseRectangle.Intersects(PlayerManager.PlayerActor.CollisionBox))
                 {
-                    PlayerManager.PlayerActor.DealDamage(Damage, CollisionBox);
+                    PlayerManager.PlayerActor.DealDamage(Damage, BaseRectangle);
                 }
             }
         }

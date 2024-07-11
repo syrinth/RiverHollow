@@ -117,7 +117,7 @@ namespace RiverHollow.WorldObjects
                     {
                         var p = new Plant(id);
                         p.SetTotalDays(_iTimeElapsed);
-                        p.SnapPositionToGrid(new Point(CollisionBox.X + x, CollisionBox.Y + y - (p.Height - Constants.TILE_SIZE)));
+                        p.SnapPositionToGrid(new Point(BaseRectangle.X + x, BaseRectangle.Y + y - (p.Height - Constants.TILE_SIZE)));
                         _liPlants.Add(p);
                     }
                 }
@@ -126,7 +126,7 @@ namespace RiverHollow.WorldObjects
                 _dropDisplay = new MapItem(new Item(DataManager.GetItem(DataManager.GetIntByIDKey(id, "ItemID", Enums.DataType.WorldObject))))
                 {
                     PickupState = Enums.ItemPickupState.None,
-                    Position = new Point(CollisionBox.X + offset[0], CollisionBox.Y + offset[1])
+                    Position = new Point(BaseRectangle.X + offset[0], BaseRectangle.Y + offset[1])
                 };
             }
         }

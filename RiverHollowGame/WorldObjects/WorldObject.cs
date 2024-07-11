@@ -55,9 +55,22 @@ namespace RiverHollow.WorldObjects
         protected Point _pSpriteOffset = new Point(0,0);
 
         //Base is always described in # of Tiles so we must multiply by the Constants.TILE_SIZE
-        public Point CollisionPosition => CollisionBox.Location;
-        public Rectangle CollisionBox => new Rectangle(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE), (_rBase.Width * Constants.TILE_SIZE), (_rBase.Height * Constants.TILE_SIZE));
-        public Point CollisionCenter => CollisionBox.Center;
+        public Point BasePosition => BaseRectangle.Location;
+        public Rectangle BaseRectangle => new Rectangle(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE), (_rBase.Width * Constants.TILE_SIZE), (_rBase.Height * Constants.TILE_SIZE));
+        public Point BaseCenter => BaseRectangle.Center;
+
+        protected Rectangle _rCollision = new Rectangle(0, 0, 1, 1);
+        public Rectangle GetCollsionBox()
+        {
+            if (GetBoolByIDKey("Collision"))
+            {
+                return new Rectangle(BaseRectangle.X + _rCollision.X, BaseRectangle.Y + _rCollision.Y, _rCollision.Width, _rCollision.Height);
+            }
+            else
+            {
+                return new Rectangle(MapPosition.X + (_rBase.X * Constants.TILE_SIZE), MapPosition.Y + (_rBase.Y * Constants.TILE_SIZE), (_rBase.Width * Constants.TILE_SIZE), (_rBase.Height * Constants.TILE_SIZE));
+            }
+        }
 
         public int ID { get; protected set; }
         #endregion
@@ -74,7 +87,7 @@ namespace RiverHollow.WorldObjects
             }
             else
             {
-                return CurrentMap.GetTilesFromRectangleExcludeEdgePoints(CollisionBox);
+                return CurrentMap.GetTilesFromRectangleExcludeEdgePoints(BaseRectangle);
             }
         }
 
@@ -86,7 +99,7 @@ namespace RiverHollow.WorldObjects
             }
             else
             {
-                return CurrentMap.GetTileByPixelPosition(CollisionPosition);
+                return CurrentMap.GetTileByPixelPosition(BasePosition);
             }
         }
 
@@ -115,6 +128,7 @@ namespace RiverHollow.WorldObjects
 
             _pSize = GetPointByIDKey("Size", new Point(1, 1));
             _rBase = GetRectangleByIDKey("Base", new Rectangle(0, 0, 1, 1));
+            _rCollision = GetRectangleByIDKey("Collision", new Rectangle(0, 0, 1, 1));
 
             _ePlacement = GetEnumByIDKey<ObjectPlacementEnum>("Placement");
 
@@ -237,7 +251,7 @@ namespace RiverHollow.WorldObjects
                 float alpha = 1f;
 
                 var spriteRectangle = new Rectangle(Sprite.Position.X, Sprite.Position.Y, Sprite.Width, Sprite.Height);
-                if (!GetBoolByIDKey("NoAlpha") && ((BaseHeight + 1) * Constants.TILE_SIZE < Height) && spriteRectangle.Contains(PlayerManager.PlayerActor.CollisionCenter) && PlayerManager.PlayerActor.CollisionBox.Bottom <= CollisionBox.Top)
+                if (!GetBoolByIDKey("NoAlpha") && ((BaseHeight + 1) * Constants.TILE_SIZE < Height) && spriteRectangle.Contains(PlayerManager.PlayerActor.CollisionCenter) && PlayerManager.PlayerActor.CollisionBox.Bottom <= BaseRectangle.Top)
                 {
                     alpha = 0.9f;
                 }
@@ -246,7 +260,7 @@ namespace RiverHollow.WorldObjects
             }
             if (Constants.DRAW_COLLISION)
             {
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), CollisionBox, GUIUtils.BLACK_BOX, Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth - 1);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), BaseRectangle, GUIUtils.BLACK_BOX, Color.White * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, Sprite.LayerDepth - 1);
             }
         }
         public void DrawItem(SpriteBatch spriteBatch, MapItem i)
@@ -305,22 +319,22 @@ namespace RiverHollow.WorldObjects
                 if (CanPickUp())
                 {
                     rv = true;
-                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, CollisionBox);
+                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, BaseRectangle);
                 }
                 else if (HasInteract())
                 {
                     rv = true;
-                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Interact, CollisionBox);
+                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Interact, BaseRectangle);
                 }
                 else if (GetBoolByIDKey("ShopSlate"))
                 {
                     rv = true;
-                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Shop, CollisionBox);
+                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Shop, BaseRectangle);
                 }
                 else if (GetBoolByIDKey("MerchantScales"))
                 {
                     rv = true;
-                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Shop, CollisionBox);
+                    GUICursor.SetCursor(GUICursor.CursorTypeEnum.Shop, BaseRectangle);
                 }
             }
 
@@ -363,7 +377,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual bool IntersectsWith(Rectangle r)
         {
-            return CollisionBox.Intersects(r);
+            return BaseRectangle.Intersects(r);
         }
 
         public virtual bool WideOnTop()
@@ -373,7 +387,7 @@ namespace RiverHollow.WorldObjects
 
         public virtual bool Contains(Point m)
         {
-            return CollisionBox.Contains(m);
+            return BaseRectangle.Contains(m);
         }
 
         public virtual bool PlaceOnMap(RHMap map, bool ignoreActors = false)
@@ -544,7 +558,7 @@ namespace RiverHollow.WorldObjects
 
                     if (!abort)
                     {
-                        RHTile nextObjectTile = CurrentMap.GetTileByPixelPosition(CollisionPosition);
+                        RHTile nextObjectTile = CurrentMap.GetTileByPixelPosition(BasePosition);
                         RHTile checkTile = nextObjectTile;
                         do
                         {
@@ -642,8 +656,8 @@ namespace RiverHollow.WorldObjects
             WorldObjectData data = new WorldObjectData
             {
                 ID = ID,
-                X = CollisionBox.X,
-                Y = CollisionBox.Y,
+                X = BaseRectangle.X,
+                Y = BaseRectangle.Y,
                 stringData = string.Empty
             };
 

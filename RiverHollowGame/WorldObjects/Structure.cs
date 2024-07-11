@@ -41,7 +41,7 @@ namespace RiverHollow.WorldObjects
 
         private RHTile GetSubObjectTile(SubObjectInfo info)
         {
-            return MapManager.Maps[MapName].GetTileByPixelPosition(new Point(CollisionBox.X + info.Position.X, CollisionBox.Y + info.Position.Y));
+            return MapManager.Maps[MapName].GetTileByPixelPosition(new Point(BaseRectangle.X + info.Position.X, BaseRectangle.Y + info.Position.Y));
         }
 
         public override void SelectObject(bool val, bool selectParent = true)
@@ -82,9 +82,9 @@ namespace RiverHollow.WorldObjects
                     WorldObject obj = new SubObject(this, info.ObjectID);
                     RHTile targetTile = GetSubObjectTile(info);
                     RHTile temp;
-                    for (int x = 0; x < obj.CollisionBox.Width / 16; x++)
+                    for (int x = 0; x < obj.BaseRectangle.Width / 16; x++)
                     {
-                        for (int y = 0; y < obj.CollisionBox.Height / 16; y++)
+                        for (int y = 0; y < obj.BaseRectangle.Height / 16; y++)
                         {
                             temp = CurrentMap.GetTileByGridCoords(targetTile.X + x, targetTile.Y + y);
                             temp.RemoveWorldObject();

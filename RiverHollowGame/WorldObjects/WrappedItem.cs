@@ -25,7 +25,7 @@ namespace RiverHollow.WorldObjects
         {
             if (!DataManager.GetBoolByIDKey(_iItemID, "WrappedImage", DataType.Item))
             {
-                spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), CollisionBox, Constants.ITEM_SHADOW, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
+                spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), BaseRectangle, Constants.ITEM_SHADOW, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0);
             }
             base.Draw(spriteBatch);
         }
@@ -69,8 +69,8 @@ namespace RiverHollow.WorldObjects
             WorldObjectData data = new WorldObjectData
             {
                 ID = ID,
-                X = CollisionBox.X,
-                Y = CollisionBox.Y,
+                X = BaseRectangle.X,
+                Y = BaseRectangle.Y,
                 stringData = _iItemID.ToString()
             };
 

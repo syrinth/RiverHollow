@@ -1634,9 +1634,13 @@ namespace RiverHollow.Map_Handling
 
         private void ChangeDirHelper(Actor actor, KeyValuePair<Rectangle, Actor> collisionKvp, Vector2 dir, Rectangle testRect, bool vertical, ref float dirToCancel, ref float dirToNudge, ref bool impeded)
         {
+            var intersect = Rectangle.Intersect(collisionKvp.Key, testRect);
+            var tile = GetTileByPixelPosition(intersect.Center);
+
             Actor npc = collisionKvp.Value;
-            Rectangle r = collisionKvp.Key;
-            Point coords = Util.GetGridCoords(r.Location);
+            Rectangle r = tile.TileBox;
+            Point coords = Util.GetGridCoords(tile.TileBox.Location);
+
 
             Point location = actor.CollisionBoxLocation;
             Point size = actor.CollisionBox.Size;
@@ -2003,7 +2007,7 @@ namespace RiverHollow.Map_Handling
                     {
                         foreach(var obj in _liHoverObjects)
                         {
-                            if (PlayerManager.InRangeOfPlayer(obj.CollisionBox) && obj.GetHoverBox().Contains(mouseLocation) && obj.ProcessRightClick())
+                            if (PlayerManager.InRangeOfPlayer(obj.BaseRectangle) && obj.GetHoverBox().Contains(mouseLocation) && obj.ProcessRightClick())
                             {
                                 rv = true;
                                 break;
@@ -2129,7 +2133,7 @@ namespace RiverHollow.Map_Handling
                     else if (t.GetWorldObject(false) != null && t.GetWorldObject().CanPickUp())
                     {
                         found = true;
-                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, t.GetWorldObject().CollisionBox);
+                        GUICursor.SetCursor(GUICursor.CursorTypeEnum.Pickup, t.GetWorldObject().BaseRectangle);
                     }
 
                     MapItem hoverItem = _liItems.Find(x => x.CollisionBox.Contains(GUICursor.GetWorldMousePosition()));
@@ -2341,7 +2345,7 @@ namespace RiverHollow.Map_Handling
             }
 
             //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
-            placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
+            placeObject.SnapPositionToGrid(templateObject.BaseRectangle.Location);
 
             if (placeObject.PlaceOnMap(this) && (!TownModeBuild() || InventoryManager.ExpendResources(placeObject.RequiredToMake)))
             {
@@ -2396,7 +2400,7 @@ namespace RiverHollow.Map_Handling
             var placeObject = DataManager.CreateWorldObjectByID(templateObject.ID);
 
             //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
-            placeObject.SnapPositionToGrid(templateObject.CollisionBox.Location);
+            placeObject.SnapPositionToGrid(templateObject.BaseRectangle.Location);
 
             var seedID = placeObject.GetIntByIDKey("SeedID");
             if (placeObject.PlaceOnMap(this) && (!TownModeBuild() || InventoryManager.HasItemInPlayerInventory(seedID, 1)))
@@ -2557,20 +2561,20 @@ namespace RiverHollow.Map_Handling
         {
             bool rv = true;
             collisionTiles.Clear();
-            Vector2 position = obj.CollisionBox.Location.ToVector2();
+            Vector2 position = obj.BaseRectangle.Location.ToVector2();
             position.X = ((int)(position.X / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
             position.Y = ((int)(position.Y / Constants.TILE_SIZE)) * Constants.TILE_SIZE;
 
-            int colColumns = obj.CollisionBox.Width / Constants.TILE_SIZE;
-            int colRows = obj.CollisionBox.Height / Constants.TILE_SIZE;
+            int colColumns = obj.BaseRectangle.Width / Constants.TILE_SIZE;
+            int colRows = obj.BaseRectangle.Height / Constants.TILE_SIZE;
 
             //This is used to get all the tiles based off the collisonbox size
             for (int i = 0; i < colRows; i++)
             {
                 for (int j = 0; j < colColumns; j++)
                 {
-                    int x = Math.Min((obj.CollisionBox.Left + (j * Constants.TILE_SIZE)) / Constants.TILE_SIZE, MapWidthTiles - 1);
-                    int y = Math.Min((obj.CollisionBox.Top + (i * Constants.TILE_SIZE)) / Constants.TILE_SIZE, MapHeightTiles - 1);
+                    int x = Math.Min((obj.BaseRectangle.Left + (j * Constants.TILE_SIZE)) / Constants.TILE_SIZE, MapWidthTiles - 1);
+                    int y = Math.Min((obj.BaseRectangle.Top + (i * Constants.TILE_SIZE)) / Constants.TILE_SIZE, MapHeightTiles - 1);
                     if (x < 0 || x > this.MapWidthTiles || y < 0 || y > this.MapHeightTiles)
                     {
                         rv = false;
@@ -2709,7 +2713,7 @@ namespace RiverHollow.Map_Handling
                 }
             }
 
-            var actors = _liActors.FindAll(x => obj.CollisionBox.Contains(x.CollisionBox) && x.IsActorType(ActorTypeEnum.Critter)).Cast<Critter>().ToList();
+            var actors = _liActors.FindAll(x => obj.BaseRectangle.Contains(x.CollisionBox) && x.IsActorType(ActorTypeEnum.Critter)).Cast<Critter>().ToList();
             actors.ForEach(x => x.Flee());
         }
 

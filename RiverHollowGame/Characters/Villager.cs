@@ -671,7 +671,7 @@ namespace RiverHollow.Characters
                 var targetObjs = MapManager.TownMap.GetObjectsByID(obj.ID);
                 var chosenObj = Util.GetRandomItem(targetObjs);
 
-                var tiles = MapManager.TownMap.GetTilesFromRectangleExcludeEdgePoints(chosenObj.CollisionBox).Where(x => x.Passable()).ToList();
+                var tiles = MapManager.TownMap.GetTilesFromRectangleExcludeEdgePoints(chosenObj.BaseRectangle).Where(x => x.Passable()).ToList();
                 if (tiles.Count > 0)
                 {
                     rv = true;
@@ -1083,7 +1083,7 @@ namespace RiverHollow.Characters
 
                 RHMap houseMap = TownManager.GetTownObjectsByID(houseID)[0].CurrentMap;
                 List<RHTile> validTiles = new List<RHTile>();
-                List<RHTile> houseTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(TownManager.GetTownObjectsByID(houseID)[0].CollisionBox);
+                List<RHTile> houseTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(TownManager.GetTownObjectsByID(houseID)[0].BaseRectangle);
 
                 for (int i = 0; i < houseTiles.Count; i++) {
                     foreach (RHTile t in houseMap.GetAllTilesInRange(houseTiles[i], 10))
@@ -1096,7 +1096,7 @@ namespace RiverHollow.Characters
                 for (int i = 0; i < TownManager.GetTownObjectsByID(ObjectID).Count; i++)
                 {
                     WorldObject obj = TownManager.GetTownObjectsByID(ObjectID)[i];
-                    List<RHTile> objTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(obj.CollisionBox);
+                    List<RHTile> objTiles = houseMap.GetTilesFromRectangleExcludeEdgePoints(obj.BaseRectangle);
 
                     List<RHTile> inRange = objTiles.FindAll(o => validTiles.Contains(o));
                     switch (RequestRange)

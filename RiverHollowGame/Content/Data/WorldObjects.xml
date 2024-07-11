@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_Player][Size:7-8][Base:0-5-7-3][Entrance:3-6-1-2][LightID:3-30-86/3-80-86][Upgrade_1:55-10/60-10][Upgrade_2:55-20/60-20][ReqItems:55-5/60-5][Home][Upgradable:0/0-0][TownScore:25]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:House_Player][Size:7-8][Base:0-5-7-3][Entrance:3-6-1-2][LightID:3-30-86/3-80-86][Upgrade_1:55-10/60-10][Upgrade_2:55-20/60-20][ReqItems:55-5/60-5][Home][Upgradable:0/0-0][TownScore:25][Collision:4-0-104-48]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -203,7 +203,7 @@
     </Item>
     <Item>
       <Key>50</Key>
-      <Value>[Type:Destructible][Image:2-2][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:0-0-2-2]</Value>
+      <Value>[Type:Destructible][Image:2-2][Size:2-2][Height:32][Tool:Pick][Hp:20][ReqLvl:2][ItemID:0-5][Base:0-0-2-2][Collision:2-7-28-20]</Value>
     </Item>
     <Item>
       <Key>51</Key>
@@ -255,7 +255,7 @@
     </Item>
     <Item>
       <Key>63</Key>
-      <Value>[Type:Destructible][Image:11-6][Size:2-2][Tool:Axe][Hp:20][ReqLvl:2][ItemID:2-5][Base:0-0-2-2]</Value>
+      <Value>[Type:Destructible][Image:11-6][Size:2-2][Tool:Axe][Hp:20][ReqLvl:2][ItemID:2-5][Base:0-0-2-2][Collision:1-5-30-24]</Value>
     </Item>
     <Item>
       <Key>64</Key>
@@ -263,7 +263,7 @@
     </Item>
     <Item>
       <Key>65</Key>
-      <Value>[Type:Plant][Texture:Tree_Alden][States:5][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-2/2-10][Tool:Axe][Time:2/2/3/4][Spread:5/5][BonusItemID:206-1-C][SeedID:206][Walkable:T/T/F/F/F][DrawUnder:T/T/F/F/F][NoWater][TownScore:0.1]</Value>
+      <Value>[Type:Plant][Texture:Tree_Alden][States:5][Image:0-4/1-4/1-5/2-4/0-0][Size:1-1/1-1/1-1/1-2/3-4][Base:0-0-1-1/0-0-1-1/0-0-1-1/0-1-1-1/1-3-1-1][Hp:1/1/1/2/8][ReqLvl:1][ItemID:///2-2/2-10][Tool:Axe][Time:2/2/3/4][Spread:5/5][BonusItemID:206-1-C][SeedID:206][Walkable:T/T/F/F/F][DrawUnder:T/T/F/F/F][NoWater][TownScore:0.1][Collision:0-0-0-0/0-0-0-0/5-8-6-4/4-7-8-5/0-2-16-10]</Value>
     </Item>
     <Item>
       <Key>66</Key>
@@ -391,7 +391,7 @@
     </Item>
     <Item>
       <Key>97</Key>
-      <Value>[Type:Buildable][Subtype:Mailbox][Image:0-44][Size:1-2][Mailbox]</Value>
+      <Value>[Type:Buildable][Subtype:Mailbox][Image:0-44][Size:1-2][Mailbox][Collision:3-7-10-8]</Value>
     </Item>
     <Item>
       <Key>98</Key>

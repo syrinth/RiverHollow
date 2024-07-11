@@ -110,7 +110,7 @@ namespace RiverHollow.WorldObjects
             {
                 if (toolUsed.ToolLevel >= NeededToolLevel)
                 {
-                    SoundManager.PlayEffectAtLoc(toolUsed.GetEnumByIDKey<SoundEffectEnum>("SoundEffect"), MapName, CollisionCenter);
+                    SoundManager.PlayEffectAtLoc(toolUsed.GetEnumByIDKey<SoundEffectEnum>("SoundEffect"), MapName, BaseCenter);
 
                     if (HP > 0)
                     {
@@ -125,7 +125,7 @@ namespace RiverHollow.WorldObjects
                                 _spriteKO.PlayAnimation(AnimationEnum.KO);
                             }
 
-                            MapManager.DropItemsOnMap(GetDroppedItems(), CollisionBox.Location);
+                            MapManager.DropItemsOnMap(GetDroppedItems(), BaseRectangle.Location);
                         }
                         else
                         {
@@ -142,12 +142,12 @@ namespace RiverHollow.WorldObjects
         protected void NudgeObject(bool playEffect)
         {
             //Nudge the Object in the direction of the 'attack'
-            Point nudgePoint = Util.GetPointFromDirection(Util.GetDirectionFromPlayer(CollisionCenter));
+            Point nudgePoint = Util.GetPointFromDirection(Util.GetDirectionFromPlayer(BaseCenter));
             Sprite.Position = new Point(Sprite.Position.X + nudgePoint.X, Sprite.Position.Y + nudgePoint.Y);
 
             if (playEffect)
             {
-                SoundManager.PlayEffectAtLoc(SoundEffectEnum.Scythe, CurrentMap.Name, CollisionCenter, this);
+                SoundManager.PlayEffectAtLoc(SoundEffectEnum.Scythe, CurrentMap.Name, BaseCenter, this);
             }
         }
 

@@ -146,7 +146,7 @@ namespace RiverHollow.WorldObjects
                 if (!_bShaken && FinishedGrowing() && HP > 0 && GetBoolByIDKey("SeedID") && RHRandom.RollPercent(30))
                 {
                     rv = true;
-                    MapManager.DropItemOnMap(DataManager.GetItem(GetIntByIDKey("SeedID")), CollisionBox.Location);
+                    MapManager.DropItemOnMap(DataManager.GetItem(GetIntByIDKey("SeedID")), BaseRectangle.Location);
                 }
 
                 if (!Walkable)
@@ -261,6 +261,10 @@ namespace RiverHollow.WorldObjects
                 _bDrawUnder = GetStringParamsByIDKey("DrawUnder", "0")[CurrentState] == "T";
                 _pSize = Util.ParsePoint(GetStringParamsByIDKey("Size")[CurrentState]);
                 _rBase = Util.ParseRectangle(GetStringParamsByIDKey("Base")[CurrentState]);
+                if (GetBoolByIDKey("Collision"))
+                {
+                    _rCollision = Util.ParseRectangle(GetStringParamsByIDKey("Collision")[CurrentState]);
+                }
 
                 var deltaBase = _rBase.Location - initBase;
                 if (deltaBase.Y > 0)

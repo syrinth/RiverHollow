@@ -613,7 +613,7 @@ namespace RiverHollow.Game_Managers
         public static void TryGrab(RHTile t, DirectionEnum facing)
         {
             var pBox = PlayerActor.CollisionBox;
-            var grabBox = t.WorldObject != null ? t.WorldObject.CollisionBox : t.CollisionBox;
+            var grabBox = t.WorldObject != null ? t.WorldObject.BaseRectangle : t.CollisionBox;
 
             if (Math.Abs(pBox.Left - grabBox.Right) <= Constants.GRAB_REACH ||
                 Math.Abs(pBox.Right - grabBox.Left) <= Constants.GRAB_REACH ||

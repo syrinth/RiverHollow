@@ -74,9 +74,9 @@ namespace RiverHollow.WorldObjects.Trigger_Objects
                     _trackedObject = FirstTile().WorldObject;
                 }
             }
-            else if (!CollisionBox.Contains(_trackedObject.CollisionCenter)) { _trackedObject = null; }
+            else if (!BaseRectangle.Contains(_trackedObject.BaseCenter)) { _trackedObject = null; }
 
-            return CollisionBox.Contains(PlayerManager.PlayerActor.CollisionCenter) || (_trackedObject != null && CollisionBox.Contains(_trackedObject.CollisionCenter));
+            return BaseRectangle.Contains(PlayerManager.PlayerActor.CollisionCenter) || (_trackedObject != null && BaseRectangle.Contains(_trackedObject.BaseCenter));
         }
     }
 }

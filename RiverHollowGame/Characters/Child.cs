@@ -96,7 +96,7 @@ namespace RiverHollow.Characters
             else
             {
                 List<RHTile> validTiles = new List<RHTile>();
-                Point objLocation = obj.CollisionBox.Location;
+                Point objLocation = obj.BaseRectangle.Location;
                 foreach (Point p in Util.GetAllPointsInArea(objLocation.X - (3 * Constants.TILE_SIZE), objLocation.Y - (3 * Constants.TILE_SIZE), Constants.TILE_SIZE * 7, Constants.TILE_SIZE * 7, Constants.TILE_SIZE))
                 {
                     RHTile t = obj.CurrentMap.GetTileByPixelPosition(p);
