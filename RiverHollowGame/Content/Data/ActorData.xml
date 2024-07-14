@@ -51,7 +51,7 @@
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDay:Spring-5][TaxValue:2][PetID:44-1][Size:16-31]</Value>
+      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDay:Spring-5][PetID:44-1][Size:16-31]</Value>
     </Item>
     <Item>
       <Key>13</Key>
@@ -59,7 +59,7 @@
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:24][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredObjectID:106-1][ShopData:6][CanMarry][Key:Jase][ArrivalDay:Spring-28]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:24][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ShopData:6][CanMarry][Key:Jase][ArrivalDay:Spring-14][TownScore:200]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -131,7 +131,7 @@
     </Item>
     <Item>
       <Key>32</Key>
-      <Value>[Type:Mob][Subtype:Basic][Group:Rogue][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][ItemID:56-C/222-C/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
+      <Value>[Type:Mob][Subtype:Basic][Key:Batty][Walk:4-.2-F][Idle:4-.2-F][KO:512-0-6-0.2-F][HitBoxOffset:5-12][HitBoxSize:6-8][CollisionOffset:2-11][CollisionSize:12-11][HP:2][Damage:1][ItemID:56-C/222-C/11-R][Speed:1.8][Weight:Light][TracksPlayer][Fly]</Value>
     </Item>
     <Item>
       <Key>33</Key>

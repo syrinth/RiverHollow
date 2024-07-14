@@ -489,19 +489,26 @@ namespace RiverHollow.Map_Handling
         }
         public void DIRemoveObject(WorldObject obj)
         {
-            if (_diWorldObjects[obj.ID].Contains(obj))
+            if (_diWorldObjects.ContainsKey(obj.ID))
             {
-                _diWorldObjects[obj.ID].Remove(obj);
-
-                if (obj.HasHover())
+                if (_diWorldObjects[obj.ID].Contains(obj))
                 {
-                    _liHoverObjects.Remove(obj);
-                }
+                    _diWorldObjects[obj.ID].Remove(obj);
 
-                if (_diWorldObjects[obj.ID].Count == 0)
-                {
-                    _diWorldObjects.Remove(obj.ID);
+                    if (obj.HasHover())
+                    {
+                        _liHoverObjects.Remove(obj);
+                    }
+
+                    if (_diWorldObjects[obj.ID].Count == 0)
+                    {
+                        _diWorldObjects.Remove(obj.ID);
+                    }
                 }
+            }
+            else
+            {
+                LogManager.WriteToLog(string.Format("Cannot remove object ID \"{0}\", it does not exist.", obj.ID));
             }
         }
         public int GetNumberObjects(int objID, bool onlyFinished)
@@ -2325,42 +2332,29 @@ namespace RiverHollow.Map_Handling
         /// Helper method for building one object and allowing the
         /// possibility of building additional ones
         /// </summary>
-        /// <param name="templateObject">The Structure that will act as the template to build offo f</param>
+        /// <param name="objectToPlace">The Structure that will act as the template to build offo f</param>
         /// <returns>True if we successfully build.</returns>
-        private bool TownPlaceObject(Buildable templateObject)
+        private bool TownPlaceObject(Buildable objectToPlace)
         {
             bool rv = false;
-            Buildable placeObject;
-
-            //If we're moving the object, set it as the object to be placed. Otherwise, we need
-            //to make a new object based off the one we're holding.
-            if (templateObject.Unique || TownModeEdit()) { placeObject = templateObject; }
-            else
-            {
-                placeObject = (Buildable)DataManager.CreateWorldObjectByID(templateObject.ID);
-                if (placeObject is Decor decorObject && templateObject is Decor decorTemplate)
-                {
-                    decorObject.RotateToDirection(decorTemplate.Facing);
-                }
-            }
 
             //PlaceOnMap uses the CollisionBox as the base, then calculates backwards
-            placeObject.SnapPositionToGrid(templateObject.BaseRectangle.Location);
+            objectToPlace.SnapPositionToGrid(objectToPlace.BaseRectangle.Location);
 
-            if (placeObject.PlaceOnMap(this) && (!TownModeBuild() || InventoryManager.ExpendResources(placeObject.RequiredToMake)))
+            if (objectToPlace.PlaceOnMap(this) && (!TownModeBuild() || InventoryManager.ExpendResources(objectToPlace.RequiredToMake)))
             {
                 if (this == MapManager.TownMap)
                 {
-                    TaskManager.AdvanceTaskProgress(placeObject);
+                    TaskManager.AdvanceTaskProgress(objectToPlace);
                 }
 
-                if (placeObject is AdjustableObject adjustable)
+                if (objectToPlace is AdjustableObject adjustable)
                 {
                     adjustable.AdjustObject();
                 }
 
                 Item dummyItem = DataManager.GetItem((Buildable)HeldObject);
-                bool directBuild = TownModeBuild() && InventoryManager.HasSufficientItems(placeObject.RequiredToMake);
+                bool directBuild = TownModeBuild() && InventoryManager.HasSufficientItems(objectToPlace.RequiredToMake);
                 if (!directBuild)
                 {
                     if (dummyItem == null || !InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
@@ -2369,7 +2363,7 @@ namespace RiverHollow.Map_Handling
 
                         if (TownModeBuild())
                         {
-                            if (placeObject is Building)
+                            if (objectToPlace is Building)
                             {
                                 TownManager.IncreaseTravelerBonus();
                             }
@@ -2379,6 +2373,14 @@ namespace RiverHollow.Map_Handling
                     else if (InventoryManager.HasItemInPlayerInventory(dummyItem.ID, 1))
                     {
                         InventoryManager.RemoveItemsFromInventory(dummyItem.ID, 1);
+                        var dummyObject = DataManager.CreateWorldObjectByID(dummyItem.ID);
+                        
+                        if (objectToPlace is Decor decorObject && dummyObject is Decor decorDummy)
+                        {
+                            decorDummy.RotateToDirection(decorObject.Facing);
+                        }
+
+                        GameManager.PickUpWorldObject(dummyObject);
                     }
                 }
 

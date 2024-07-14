@@ -71,14 +71,14 @@ I admit it, I screamed. I thought some horrible monster had crept down from the 
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Name:Task_17_Start][Text:Hey! How are things, settling in well? Good, good. Glad to hear it. Look, I was thinking... It might help convince people to move in if we thinned out the monsters a bit. I was going for a little stroll this morning and an $Actor_70$ popped out of the bushes!
+      <Value>[Name:Task_17_Start][Text:Hey! How are things, settling in well? Good, good. Glad to hear it. Look, I was thinking... It might help convince people to move in if we thinned out the monsters a bit. I was going for a little stroll this morning and an $Actor_33$ popped out of the bushes!
 I'm fine, only my dignity is hurt, but since you're the only one with a weapon here, maybe you could go out and encourage them to back off?
 Thanks.]</Value>
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Name:Task_17_End][Text:That'll show 'em. Serves em right for scaring the daylights out of me. I'm sure you'll need the things you got from them anyway.
-It doesn't really matter though, does it? There'll be more back before you know it...]</Value>
+      <Value>[Name:Task_17_End][Text:I can breathe a bit easier now thanks! Although I guess it won't be too long until we've got more of them to deal with...
+Urgh, it makes my hands itch just thinking about it.]</Value>
     </Item>
   </Asset>
 </XnaContent>

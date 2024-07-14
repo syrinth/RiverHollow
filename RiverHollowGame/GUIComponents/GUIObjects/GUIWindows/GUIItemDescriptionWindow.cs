@@ -113,53 +113,59 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
         {
             typeColor = Color.White;
             var rv = Util.GetEnumString(it.ItemType);
-            if (it.ItemType == ItemTypeEnum.Resource)
+            switch (it.ItemType)
             {
-                var itemGroup = it.GetEnumByIDKey<ResourceTypeEnum>("Subtype");
-                if (itemGroup != ResourceTypeEnum.None)
-                {
-                    switch (itemGroup)
+                case ItemTypeEnum.Resource:
+                    var itemGroup = it.GetEnumByIDKey<ResourceTypeEnum>("Subtype");
+                    if (itemGroup != ResourceTypeEnum.None)
                     {
-                        case ResourceTypeEnum.Gem:
-                            typeColor = Color.DeepPink; break;
-                        case ResourceTypeEnum.Fish:
-                            typeColor = Color.Blue; break;
-                        case ResourceTypeEnum.Herb:
-                            typeColor = Color.Green; break;
-                        case ResourceTypeEnum.Ingredient:
-                            typeColor = Color.DarkOrange; break;
-                        case ResourceTypeEnum.MonsterPart:
-                            typeColor = Color.DarkRed; break;
-                        case ResourceTypeEnum.Ore:
-                            typeColor = Color.Silver; break;
+                        switch (itemGroup)
+                        {
+                            case ResourceTypeEnum.Gem:
+                                typeColor = Color.DeepPink; break;
+                            case ResourceTypeEnum.Fish:
+                                typeColor = Color.Blue; break;
+                            case ResourceTypeEnum.Herb:
+                                typeColor = Color.Green; break;
+                            case ResourceTypeEnum.Ingredient:
+                                typeColor = Color.DarkOrange; break;
+                            case ResourceTypeEnum.MonsterPart:
+                                typeColor = Color.DarkRed; break;
+                            case ResourceTypeEnum.Ore:
+                                typeColor = Color.Silver; break;
+                        }
+                        rv = Util.GetEnumString(itemGroup, true);
                     }
-                    rv = Util.GetEnumString(itemGroup, true);
-                }
-            }
-            else if (it is Merchandise merchItem)
-            {
-                var merchGroup = merchItem.MerchType;
-                if (merchGroup != MerchandiseTypeEnum.Generic)
-                {
-                    switch (merchGroup)
+                    break;
+                case ItemTypeEnum.Merchandise:
+                    if (it is Merchandise merchItem)
                     {
-                        case MerchandiseTypeEnum.Magic:
-                            typeColor = Color.Purple; break;
-                        case MerchandiseTypeEnum.Potion:
-                            typeColor = Color.DarkGreen; break;
-                        case MerchandiseTypeEnum.Clothing:
-                            typeColor = Color.DarkBlue; break;
+                        var merchGroup = merchItem.MerchType;
+                        if (merchGroup != MerchandiseTypeEnum.Generic)
+                        {
+                            switch (merchGroup)
+                            {
+                                case MerchandiseTypeEnum.Magic:
+                                    typeColor = Color.Purple; break;
+                                case MerchandiseTypeEnum.Potion:
+                                    typeColor = Color.DarkGreen; break;
+                                case MerchandiseTypeEnum.Clothing:
+                                    typeColor = Color.DarkBlue; break;
+                            }
+                            rv = Util.GetEnumString(merchGroup, true);
+                        }
                     }
-                    rv = Util.GetEnumString(merchGroup, true);
-                }
-            }
-            else if (it is Relic)
-            {
-                typeColor = Color.Gold;
-            }
-            else
-            {
-                rv = Util.GetEnumString(it.GetEnumByIDKey<BuildableEnum>("Subtype"));
+                    break;
+                case ItemTypeEnum.Relic:
+                    typeColor = Color.Gold;
+                    break;
+                case ItemTypeEnum.Buildable:
+                    rv = Util.GetEnumString(it.GetEnumByIDKey<BuildableEnum>("Subtype"));
+                    break;
+                default:
+                    rv = Util.GetEnumString<ItemTypeEnum>(it.ItemType);
+                    break;
+
             }
 
             return rv;

@@ -208,6 +208,44 @@ namespace RiverHollow.Game_Managers
             return rv * Constants.CALENDAR_MINUTES_PER_SECOND;
         }
 
+        public static bool CompareDate(int year, int season, int day)
+        {
+            bool rv = false;
+            if (CalendarDataEquals(CurrentYear, year, ref rv))
+            {
+                if (CalendarDataEquals((int)CurrentSeason, season, ref rv))
+                {
+                    if (CurrentDay >= day)
+                    {
+                        rv = true;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Compares any Calendar integer data against a given comparator. Used to simplify the if statement checks above
+        /// </summary>
+        /// <param name="data">The Calendar data to check</param>
+        /// <param name="valueToCompare">The value to compare against</param>
+        /// <param name="returnValue">The value to return for whether the value is greater or less than</param>
+        /// <returns>True if the two values are equal</returns>
+        private static bool CalendarDataEquals(int data, int valueToCompare, ref bool returnValue)
+        {
+            bool rv = false;
+
+            if (data > valueToCompare) { returnValue = true; }
+            else if (data < valueToCompare) { returnValue = false; }
+            else
+            {
+                rv = true;
+            }
+
+            return rv;
+        }
+
         public static void LoadCalendar(CalendarData d)
         {
             _timer = new RHTimer(1);

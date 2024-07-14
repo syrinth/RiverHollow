@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using RiverHollow.Items;
 using System;
 using static RiverHollow.Utilities.Enums;
+using System.Linq;
 
 namespace RiverHollow.Misc
 {
@@ -74,7 +75,19 @@ namespace RiverHollow.Misc
                 for (int i = 0; i < triggers.Length; i++)
                 {
                     string[] args = Util.FindArguments(triggers[i]);
-                    _diAssignationTriggers[Util.ParseEnum<TaskTriggerEnum>(args[0])] = args.Length == 1 ? string.Empty : args[1];
+                    string value = string.Empty;
+
+                    if (args.Length > 1) {
+                        for (int j = 1; j < args.Length; j++)
+                        {
+                            value += args[j];
+                            if (j + 1 != args.Length)
+                            {
+                                value += "-";
+                            }
+                        }
+                    }
+                    _diAssignationTriggers[Util.ParseEnum<TaskTriggerEnum>(args[0])] = value;
                 }
             }
 
@@ -108,6 +121,13 @@ namespace RiverHollow.Misc
                 switch (trigger)
                 {
                     case TaskTriggerEnum.Building:
+                        break;
+                    case TaskTriggerEnum.Date:
+                        var dateInfo = Util.FindIntArguments(_diAssignationTriggers[trigger]);
+                        if (GameCalendar.CompareDate(dateInfo[0], dateInfo[1], dateInfo[2]))
+                        {
+                            checksum++;
+                        }
                         break;
                     case TaskTriggerEnum.FriendLevel:
                         break;

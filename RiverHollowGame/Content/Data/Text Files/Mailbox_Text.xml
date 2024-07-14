@@ -13,7 +13,7 @@ Yours, Caspian Fortenay, Guild of Merchants][Day:2][Month:1][Year:1][NPCID:69]</
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Name:$World_Object_38$][Text:Now that we're getting settled in, we need a Town Hall. It'll help with organizing the town.][CompletedTaskID:16][AddTaskID:6][AssignTaskID:17]</Value>
+      <Value>[Name:Empty][Text]</Value>
     </Item>
     <Item>
       <Key>2</Key>

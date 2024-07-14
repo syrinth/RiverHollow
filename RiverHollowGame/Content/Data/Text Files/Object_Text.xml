@@ -552,7 +552,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_10</Key>
-      <Value>[Name:Wagren's Curios]</Value>
+      <Value>[Name:Town Supplies]</Value>
     </Item>
     <Item>
       <Key>Shop_11</Key>
@@ -1288,7 +1288,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_180</Key>
-      <Value>[Name:$WorldObject_38$ Blueprint]</Value>
+      <Value>[Name:Town Hall Certificate][Description:Build an official Town Hall. Without this, you're really just a small collection of buildings huddling together for warmth.]</Value>
     </Item>
     <Item>
       <Key>Item_181</Key>
@@ -1600,7 +1600,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_15</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Slime Statue]</Value>
     </Item>
     <Item>
       <Key>WorldObject_16</Key>

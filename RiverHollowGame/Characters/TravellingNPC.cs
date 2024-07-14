@@ -8,7 +8,7 @@ namespace RiverHollow.Characters
 {
     public abstract class TravellingNPC : TalkingActor
     {
-        static readonly string[] ArrivalReqs = { "GoodsSoldValue", "GoodsSold", "MobsDefeated", "PetCount", "PlantsGrown", "RequiredPopulation" , "ArrivalDay", "RequiredVillager", "ItemID", "RequiredObjectID" };
+        static readonly string[] ArrivalReqs = { "GoodsSoldValue", "GoodsSold", "MobsDefeated", "PetCount", "PlantsGrown", "RequiredPopulation" , "ArrivalDay", "RequiredVillager", "ItemID", "RequiredObjectID", "TownScore" };
 
         protected Dictionary<int, int> _diRequiredObjectIDs;
 
@@ -21,6 +21,7 @@ namespace RiverHollow.Characters
         protected int RequiredVillagerID => GetIntByIDKey("RequiredVillager");
         protected int RequiredObjectID => GetIntByIDKey("RequiredObjectID");
         protected int RequiredSpecialItem => GetIntByIDKey("ItemID");
+        protected int TownScore => GetIntByIDKey("TownScore");
         protected string ArrivalDay => GetStringByIDKey("ArrivalDay");
 
         public virtual RelationShipStatusEnum RelationshipState { get; set; }
@@ -105,6 +106,11 @@ namespace RiverHollow.Characters
             }
 
             if (GoodsSoldValue != -1 && GoodsSoldValue > TownManager.ValueGoodsSold)
+            {
+                return false;
+            }
+
+            if (TownScore != -1 && TownScore > TownManager.GetTownScore())
             {
                 return false;
             }

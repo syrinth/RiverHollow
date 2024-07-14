@@ -63,7 +63,7 @@
     </Item>
     <Item>
       <Key>15</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_6][Size:7-8][Base:0-4-7-4][Entrance:4-6-1-2][ReqItems:55-5/60-5]</Value>
+      <Value>[Type:Buildable][Subtype:Basic][Image:19-36][Size:1-2]</Value>
     </Item>
     <Item>
       <Key>16</Key>
@@ -651,7 +651,7 @@
     </Item>
     <Item>
       <Key>162</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:1-36][Size:1-2][Base:0-1-1-1][ReqItems:0-3]</Value>
+      <Value>[Type:Buildable][Subtype:Basic][Size:1-2][Base:0-1-1-1][ReqItems:0-3]</Value>
     </Item>
     <Item>
       <Key>163</Key>

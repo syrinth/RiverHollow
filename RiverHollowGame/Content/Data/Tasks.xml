@@ -71,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:TownState][StartNPC:20][AssignTrigger:Letter-1][MonstersKilled:40][GoalNPC:20]</Value>
+      <Value>[Type:TownState][StartNPC:20][AssignTrigger:Date-1-1-2][MonstersKilled:10][GoalNPC:20][Money:30][ItemRewardID:8015]</Value>
     </Item>
     <Item>
       <Key>18</Key>

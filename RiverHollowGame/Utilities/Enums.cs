@@ -72,7 +72,7 @@
         public enum NPCActionState { Craft, Home, Inn, Market, PetCafe, Shop, Visit };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
-        public enum TaskTriggerEnum { GameStart, FriendLevel, Building, Task };
+        public enum TaskTriggerEnum { None, Date, GameStart, FriendLevel, Building, Task };
         public enum TaskTypeEnum { Build, Fetch, Talk, TownState, Slay, Craft };
 
         public enum VillagerRequestEnum { Close, Far, TownWide };
