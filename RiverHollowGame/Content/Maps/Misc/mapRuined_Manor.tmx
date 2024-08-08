@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="205">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="205">
  <properties>
   <property name="MapType" value="Town"/>
   <property name="ObjectID" value="60-C"/>
   <property name="Outside" type="bool" value="true"/>
   <property name="ResourcesToSpawn" value="30"/>
-  <property name="WorldData" value="120-176"/>
-  <property name="WorldLink" value="mapGrove-10"/>
-  <property name="WorldMapCost" type="int" value="5"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetManorGrounds.tsx"/>
  <tileset firstgid="626" source="../Tilesets/tsBuildings.tsx"/>

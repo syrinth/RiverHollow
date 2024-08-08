@@ -587,7 +587,7 @@
     </Item>
     <Item>
       <Key>146</Key>
-      <Value>[Type:WorldObject]</Value>
+      <Value>[Type:WorldObject][Image:12-0][Size:1-1][Adventure]</Value>
     </Item>
     <Item>
       <Key>147</Key>

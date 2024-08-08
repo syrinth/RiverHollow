@@ -251,6 +251,15 @@ namespace RiverHollow.Game_Managers
             ShowMap();
         }
 
+        public static void CloseWorldMap(bool changeFacing)
+        {
+            GoToHUDScreen();
+            if (changeFacing)
+            {
+                PlayerManager.PlayerActor.SetFacing(Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing));
+            }
+        }
+
         public static bool InTownMode() { return TownModeBuild() || TownModeEdit(); }
         public static bool TownModeBuild() { return _eBuildType == EnumBuildType.BuildMode; }
         public static bool TownModeEdit() { return _eBuildType == EnumBuildType.Edit; }

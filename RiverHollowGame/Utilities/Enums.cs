@@ -4,7 +4,7 @@
     {
         public enum LogEnum { Info, Warning, Error };
         public enum ButtonEnum { Left, Right, Middle };
-        public enum DataType { Actor, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
+        public enum DataType { Actor, Adventure, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
         public enum BuildTypeEnum { Structure, WorldObject };
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Propose, Date, EndDay, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, YesNo, Bed };

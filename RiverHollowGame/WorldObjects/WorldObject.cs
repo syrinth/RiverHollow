@@ -285,6 +285,12 @@ namespace RiverHollow.WorldObjects
                     rv = true;
                     GUIManager.OpenMainObject(new HUDShopSlateWindow());
                 }
+                else if (GetBoolByIDKey("Adventure"))
+                {
+                    rv = true;
+                    GUIManager.SetScreen
+(new WorldMapScreen());
+                }
                 else if (GetBoolByIDKey("MerchantScales") && TownManager.Merchant != null)
                 {
                     rv = true;

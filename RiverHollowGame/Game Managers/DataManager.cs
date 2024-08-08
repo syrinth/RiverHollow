@@ -88,6 +88,7 @@ namespace RiverHollow.Game_Managers
         public static IReadOnlyDictionary<RarityEnum, List<int>> Relics => _diRelics;
         public static List<int> ItemKeys => _diItemData.Keys.ToList();
 
+        static Dictionary<int, Dictionary<string, string>> _diAdventureData;
         static Dictionary<int, Dictionary<string, string>> _diDungeonData;
         static Dictionary<int, Dictionary<string, string>> _diLightData;
         static Dictionary<int, Dictionary<string, string>> _diUpgradeData;
@@ -143,6 +144,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
             LoadDictionary(ref _diItemData, @"Data\ItemData", Content, LoadItemsDoWork);
             LoadDictionary(ref _diActorData, @"Data\ActorData", Content, null);
+            LoadDictionary(ref _diAdventureData, @"Data\AdventureData", Content, null);
             LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
             LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
             LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
@@ -371,6 +373,9 @@ namespace RiverHollow.Game_Managers
                 {
                     case DataType.Actor:
                         if (_diActorData[id].ContainsKey(key)) { return _diActorData[id][key]; }
+                        break;
+                    case DataType.Adventure:
+                        if (_diAdventureData[id].ContainsKey(key)) { return _diAdventureData[id][key]; }
                         break;
                     case DataType.Item:
                         if (_diItemData[id].ContainsKey(key)) { return _diItemData[id][key]; }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="23" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="59">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="23" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="60">
  <properties>
   <property name="BuildingID" type="int" value="28"/>
   <property name="Cutscenes" value="13"/>
@@ -107,6 +107,11 @@
   <object id="55" name="Window" x="288" y="16" width="16" height="32">
    <properties>
     <property name="ObjectID" type="int" value="166"/>
+   </properties>
+  </object>
+  <object id="59" name="Adventure Board" x="112" y="144" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="146"/>
    </properties>
   </object>
  </objectgroup>

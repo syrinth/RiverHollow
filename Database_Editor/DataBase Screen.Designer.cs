@@ -39,6 +39,7 @@
             this.mailboxMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabCtl = new System.Windows.Forms.TabControl();
             this.tabActor = new System.Windows.Forms.TabPage();
+            this.cbActorGroup = new System.Windows.Forms.ComboBox();
             this.tbActorDescription = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.cbActorSubtype = new System.Windows.Forms.ComboBox();
@@ -70,18 +71,18 @@
             this.label16 = new System.Windows.Forms.Label();
             this.dgvCutscenes = new System.Windows.Forms.DataGridView();
             this.colCutscenesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabDungeon = new System.Windows.Forms.TabPage();
-            this.tbDungeonDescription = new System.Windows.Forms.TextBox();
+            this.tabAdventure = new System.Windows.Forms.TabPage();
+            this.tbAdventureDescription = new System.Windows.Forms.TextBox();
             this.label40 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
-            this.tbDungeonID = new System.Windows.Forms.TextBox();
-            this.tbDungeonName = new System.Windows.Forms.TextBox();
+            this.tbAdventureID = new System.Windows.Forms.TextBox();
+            this.tbAdventureName = new System.Windows.Forms.TextBox();
             this.label39 = new System.Windows.Forms.Label();
-            this.btnDungeonCancel = new System.Windows.Forms.Button();
-            this.dgvDungeonTags = new System.Windows.Forms.DataGridView();
-            this.colDungeonsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgvDungeons = new System.Windows.Forms.DataGridView();
-            this.colDungeonsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnAdventureCancel = new System.Windows.Forms.Button();
+            this.dgvAdventureTags = new System.Windows.Forms.DataGridView();
+            this.colAdventuresTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvAdventures = new System.Windows.Forms.DataGridView();
+            this.colAdventuresName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabItem = new System.Windows.Forms.TabPage();
             this.cbItemGroup = new System.Windows.Forms.ComboBox();
             this.cbItemSubtype = new System.Windows.Forms.ComboBox();
@@ -169,7 +170,6 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
-            this.cbActorGroup = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabActor.SuspendLayout();
@@ -178,9 +178,9 @@
             this.tabCutscene.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).BeginInit();
-            this.tabDungeon.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDungeonTags)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDungeons)).BeginInit();
+            this.tabAdventure.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdventureTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdventures)).BeginInit();
             this.tabItem.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItemTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).BeginInit();
@@ -268,8 +268,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabCtl.Controls.Add(this.tabActor);
+            this.tabCtl.Controls.Add(this.tabAdventure);
             this.tabCtl.Controls.Add(this.tabCutscene);
-            this.tabCtl.Controls.Add(this.tabDungeon);
             this.tabCtl.Controls.Add(this.tabItem);
             this.tabCtl.Controls.Add(this.tabLight);
             this.tabCtl.Controls.Add(this.tabShop);
@@ -306,6 +306,16 @@
             this.tabActor.TabIndex = 2;
             this.tabActor.Text = "Actors";
             this.tabActor.UseVisualStyleBackColor = true;
+            // 
+            // cbActorGroup
+            // 
+            this.cbActorGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbActorGroup.FormattingEnabled = true;
+            this.cbActorGroup.Location = new System.Drawing.Point(630, 110);
+            this.cbActorGroup.Name = "cbActorGroup";
+            this.cbActorGroup.Size = new System.Drawing.Size(149, 21);
+            this.cbActorGroup.TabIndex = 60;
+            this.cbActorGroup.Visible = false;
             // 
             // tbActorDescription
             // 
@@ -629,31 +639,31 @@
             this.colCutscenesName.ReadOnly = true;
             this.colCutscenesName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabDungeon
+            // tabAdventure
             // 
-            this.tabDungeon.Controls.Add(this.tbDungeonDescription);
-            this.tabDungeon.Controls.Add(this.label40);
-            this.tabDungeon.Controls.Add(this.label38);
-            this.tabDungeon.Controls.Add(this.tbDungeonID);
-            this.tabDungeon.Controls.Add(this.tbDungeonName);
-            this.tabDungeon.Controls.Add(this.label39);
-            this.tabDungeon.Controls.Add(this.btnDungeonCancel);
-            this.tabDungeon.Controls.Add(this.dgvDungeonTags);
-            this.tabDungeon.Controls.Add(this.dgvDungeons);
-            this.tabDungeon.Location = new System.Drawing.Point(4, 22);
-            this.tabDungeon.Name = "tabDungeon";
-            this.tabDungeon.Size = new System.Drawing.Size(790, 425);
-            this.tabDungeon.TabIndex = 15;
-            this.tabDungeon.Text = "Dungeon";
-            this.tabDungeon.UseVisualStyleBackColor = true;
+            this.tabAdventure.Controls.Add(this.tbAdventureDescription);
+            this.tabAdventure.Controls.Add(this.label40);
+            this.tabAdventure.Controls.Add(this.label38);
+            this.tabAdventure.Controls.Add(this.tbAdventureID);
+            this.tabAdventure.Controls.Add(this.tbAdventureName);
+            this.tabAdventure.Controls.Add(this.label39);
+            this.tabAdventure.Controls.Add(this.btnAdventureCancel);
+            this.tabAdventure.Controls.Add(this.dgvAdventureTags);
+            this.tabAdventure.Controls.Add(this.dgvAdventures);
+            this.tabAdventure.Location = new System.Drawing.Point(4, 22);
+            this.tabAdventure.Name = "tabAdventure";
+            this.tabAdventure.Size = new System.Drawing.Size(790, 425);
+            this.tabAdventure.TabIndex = 15;
+            this.tabAdventure.Text = "Adventure";
+            this.tabAdventure.UseVisualStyleBackColor = true;
             // 
-            // tbDungeonDescription
+            // tbAdventureDescription
             // 
-            this.tbDungeonDescription.Location = new System.Drawing.Point(320, 51);
-            this.tbDungeonDescription.Multiline = true;
-            this.tbDungeonDescription.Name = "tbDungeonDescription";
-            this.tbDungeonDescription.Size = new System.Drawing.Size(464, 53);
-            this.tbDungeonDescription.TabIndex = 70;
+            this.tbAdventureDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbAdventureDescription.Multiline = true;
+            this.tbAdventureDescription.Name = "tbAdventureDescription";
+            this.tbAdventureDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbAdventureDescription.TabIndex = 70;
             // 
             // label40
             // 
@@ -673,19 +683,19 @@
             this.label38.TabIndex = 68;
             this.label38.Text = "ID:";
             // 
-            // tbDungeonID
+            // tbAdventureID
             // 
-            this.tbDungeonID.Location = new System.Drawing.Point(741, 6);
-            this.tbDungeonID.Name = "tbDungeonID";
-            this.tbDungeonID.Size = new System.Drawing.Size(43, 20);
-            this.tbDungeonID.TabIndex = 67;
+            this.tbAdventureID.Location = new System.Drawing.Point(741, 6);
+            this.tbAdventureID.Name = "tbAdventureID";
+            this.tbAdventureID.Size = new System.Drawing.Size(43, 20);
+            this.tbAdventureID.TabIndex = 67;
             // 
-            // tbDungeonName
+            // tbAdventureName
             // 
-            this.tbDungeonName.Location = new System.Drawing.Point(361, 6);
-            this.tbDungeonName.Name = "tbDungeonName";
-            this.tbDungeonName.Size = new System.Drawing.Size(108, 20);
-            this.tbDungeonName.TabIndex = 66;
+            this.tbAdventureName.Location = new System.Drawing.Point(361, 6);
+            this.tbAdventureName.Name = "tbAdventureName";
+            this.tbAdventureName.Size = new System.Drawing.Size(108, 20);
+            this.tbAdventureName.TabIndex = 66;
             // 
             // label39
             // 
@@ -696,70 +706,70 @@
             this.label39.TabIndex = 65;
             this.label39.Text = "Name:";
             // 
-            // btnDungeonCancel
+            // btnAdventureCancel
             // 
-            this.btnDungeonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDungeonCancel.Location = new System.Drawing.Point(709, 394);
-            this.btnDungeonCancel.Name = "btnDungeonCancel";
-            this.btnDungeonCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnDungeonCancel.TabIndex = 64;
-            this.btnDungeonCancel.Text = "Cancel";
-            this.btnDungeonCancel.UseVisualStyleBackColor = true;
-            this.btnDungeonCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
+            this.btnAdventureCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAdventureCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnAdventureCancel.Name = "btnAdventureCancel";
+            this.btnAdventureCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnAdventureCancel.TabIndex = 64;
+            this.btnAdventureCancel.Text = "Cancel";
+            this.btnAdventureCancel.UseVisualStyleBackColor = true;
+            this.btnAdventureCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
             // 
-            // dgvDungeonTags
+            // dgvAdventureTags
             // 
-            this.dgvDungeonTags.AllowUserToResizeColumns = false;
-            this.dgvDungeonTags.AllowUserToResizeRows = false;
-            this.dgvDungeonTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dgvAdventureTags.AllowUserToResizeColumns = false;
+            this.dgvAdventureTags.AllowUserToResizeRows = false;
+            this.dgvAdventureTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.dgvDungeonTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDungeonTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colDungeonsTag});
-            this.dgvDungeonTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvDungeonTags.Location = new System.Drawing.Point(320, 110);
-            this.dgvDungeonTags.Name = "dgvDungeonTags";
-            this.dgvDungeonTags.RowHeadersVisible = false;
-            this.dgvDungeonTags.Size = new System.Drawing.Size(464, 278);
-            this.dgvDungeonTags.TabIndex = 63;
+            this.dgvAdventureTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAdventureTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colAdventuresTag});
+            this.dgvAdventureTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvAdventureTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvAdventureTags.Name = "dgvAdventureTags";
+            this.dgvAdventureTags.RowHeadersVisible = false;
+            this.dgvAdventureTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvAdventureTags.TabIndex = 63;
             // 
-            // colDungeonsTag
+            // colAdventuresTag
             // 
-            this.colDungeonsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colDungeonsTag.HeaderText = "Tags";
-            this.colDungeonsTag.Name = "colDungeonsTag";
-            this.colDungeonsTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colAdventuresTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colAdventuresTag.HeaderText = "Tags";
+            this.colAdventuresTag.Name = "colAdventuresTag";
+            this.colAdventuresTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // dgvDungeons
+            // dgvAdventures
             // 
-            this.dgvDungeons.AllowUserToAddRows = false;
-            this.dgvDungeons.AllowUserToDeleteRows = false;
-            this.dgvDungeons.AllowUserToResizeColumns = false;
-            this.dgvDungeons.AllowUserToResizeRows = false;
-            this.dgvDungeons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dgvAdventures.AllowUserToAddRows = false;
+            this.dgvAdventures.AllowUserToDeleteRows = false;
+            this.dgvAdventures.AllowUserToResizeColumns = false;
+            this.dgvAdventures.AllowUserToResizeRows = false;
+            this.dgvAdventures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.dgvDungeons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDungeons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colDungeonsName});
-            this.dgvDungeons.ContextMenuStrip = this.contextMenu;
-            this.dgvDungeons.Location = new System.Drawing.Point(6, 6);
-            this.dgvDungeons.MultiSelect = false;
-            this.dgvDungeons.Name = "dgvDungeons";
-            this.dgvDungeons.ReadOnly = true;
-            this.dgvDungeons.RowHeadersVisible = false;
-            this.dgvDungeons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDungeons.Size = new System.Drawing.Size(308, 411);
-            this.dgvDungeons.TabIndex = 62;
-            this.dgvDungeons.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
+            this.dgvAdventures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAdventures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colAdventuresName});
+            this.dgvAdventures.ContextMenuStrip = this.contextMenu;
+            this.dgvAdventures.Location = new System.Drawing.Point(6, 6);
+            this.dgvAdventures.MultiSelect = false;
+            this.dgvAdventures.Name = "dgvAdventures";
+            this.dgvAdventures.ReadOnly = true;
+            this.dgvAdventures.RowHeadersVisible = false;
+            this.dgvAdventures.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvAdventures.Size = new System.Drawing.Size(308, 411);
+            this.dgvAdventures.TabIndex = 62;
+            this.dgvAdventures.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
             // 
-            // colDungeonsName
+            // colAdventuresName
             // 
-            this.colDungeonsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colDungeonsName.FillWeight = 90F;
-            this.colDungeonsName.HeaderText = "Name";
-            this.colDungeonsName.Name = "colDungeonsName";
-            this.colDungeonsName.ReadOnly = true;
-            this.colDungeonsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colAdventuresName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colAdventuresName.FillWeight = 90F;
+            this.colAdventuresName.HeaderText = "Name";
+            this.colAdventuresName.Name = "colAdventuresName";
+            this.colAdventuresName.ReadOnly = true;
+            this.colAdventuresName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tabItem
             // 
@@ -1725,16 +1735,6 @@
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
             // 
-            // cbActorGroup
-            // 
-            this.cbActorGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbActorGroup.FormattingEnabled = true;
-            this.cbActorGroup.Location = new System.Drawing.Point(630, 110);
-            this.cbActorGroup.Name = "cbActorGroup";
-            this.cbActorGroup.Size = new System.Drawing.Size(149, 21);
-            this.cbActorGroup.TabIndex = 60;
-            this.cbActorGroup.Visible = false;
-            // 
             // FrmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1762,10 +1762,10 @@
             this.tabCutscene.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).EndInit();
-            this.tabDungeon.ResumeLayout(false);
-            this.tabDungeon.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDungeonTags)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDungeons)).EndInit();
+            this.tabAdventure.ResumeLayout(false);
+            this.tabAdventure.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdventureTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdventures)).EndInit();
             this.tabItem.ResumeLayout(false);
             this.tabItem.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItemTags)).EndInit();
@@ -1888,15 +1888,15 @@
         private System.Windows.Forms.Button btnLightCancel;
         private System.Windows.Forms.DataGridView dgvLightTags;
         private System.Windows.Forms.DataGridView dgvLights;
-        private System.Windows.Forms.TabPage tabDungeon;
+        private System.Windows.Forms.TabPage tabAdventure;
         private System.Windows.Forms.Label label38;
-        private System.Windows.Forms.TextBox tbDungeonID;
-        private System.Windows.Forms.TextBox tbDungeonName;
+        private System.Windows.Forms.TextBox tbAdventureID;
+        private System.Windows.Forms.TextBox tbAdventureName;
         private System.Windows.Forms.Label label39;
-        private System.Windows.Forms.Button btnDungeonCancel;
-        private System.Windows.Forms.DataGridView dgvDungeonTags;
-        private System.Windows.Forms.DataGridView dgvDungeons;
-        private System.Windows.Forms.TextBox tbDungeonDescription;
+        private System.Windows.Forms.Button btnAdventureCancel;
+        private System.Windows.Forms.DataGridView dgvAdventureTags;
+        private System.Windows.Forms.DataGridView dgvAdventures;
+        private System.Windows.Forms.TextBox tbAdventureDescription;
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.DataGridViewTextBoxColumn colItemTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWorldObjectTags;
@@ -1906,12 +1906,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colShopTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsTag;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLightTags;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsTag;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAdventuresTag;
         private System.Windows.Forms.ComboBox cbStatusEffect;
         private System.Windows.Forms.ToolStripMenuItem sortAndSaveToolStripMenuItem1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colActorsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCutscenesName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDungeonsName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAdventuresName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLightsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colShopsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatusEffectsName;

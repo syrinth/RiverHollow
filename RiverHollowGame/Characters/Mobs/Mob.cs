@@ -18,7 +18,7 @@ namespace RiverHollow.Characters
         public int Damage => GetIntByIDKey("Damage");
         protected float Cooldown => GetFloatByIDKey("Cooldown");
         public override float MaxHP => GetIntByIDKey("HP");
-        private string[] LootData => Util.FindParams(GetStringByIDKey("ItemID"));
+        public string[] LootData => Util.FindParams(GetStringByIDKey("ItemID"));
 
         protected bool TracksPlayer => GetBoolByIDKey("TracksPlayer");
         protected bool MaintainDistance => GetBoolByIDKey("MaintainDistance");

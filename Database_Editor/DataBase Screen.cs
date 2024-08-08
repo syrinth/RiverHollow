@@ -63,7 +63,7 @@ namespace Database_Editor
                 { "Buildings", 0 },
                 { "StatusEffects", 0 },
                 { "Lights", 0 },
-                { "Dungeons", 0 },
+                { "Adventures", 0 },
                 { "Upgrades", 0 }
             };
 
@@ -118,7 +118,7 @@ namespace Database_Editor
             LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS, ref _diBasicXML);
             LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS, ref _diBasicXML);
             LoadXMLDictionary(UPGRADES_XML_FILE, "", TAGS_FOR_UPGRADES, ref _diBasicXML);
-            LoadXMLDictionary(DUNGEON_XML_FILE, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS, ref _diBasicXML);
+            LoadXMLDictionary(ADVENTURE_XML_FILE, ADVENTURE_REF_TAGS, TAGS_FOR_ADVENTURES, ref _diBasicXML);
             LoadXMLDictionary(SHOPS_XML_FILE, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA, ref _diBasicXML);
             LoadXMLDictionary(ITEM_DATA_XML_FILE, ITEM_REF_TAGS, TAGS_FOR_ITEMS, ref _diBasicXML);
             LoadXMLDictionary(WORLD_OBJECTS_DATA_XML_FILE, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, ref _diBasicXML);
@@ -140,7 +140,7 @@ namespace Database_Editor
                 [XMLTypeEnum.Task] = new XMLCollection(XMLTypeEnum.Task, TASK_REF_TAGS, TAGS_FOR_TASKS),
                 [XMLTypeEnum.Cutscene] = new XMLCollection(XMLTypeEnum.Cutscene, CUTSCENE_REF_TAGS, ""),
                 [XMLTypeEnum.StatusEffect] = new XMLCollection(XMLTypeEnum.StatusEffect, "", TAGS_FOR_STATUS_EFFECTS),
-                [XMLTypeEnum.Dungeon] = new XMLCollection(XMLTypeEnum.Dungeon, DUNGEON_REF_TAGS, TAGS_FOR_DUNGEONS),
+                [XMLTypeEnum.Adventure] = new XMLCollection(XMLTypeEnum.Adventure, ADVENTURE_REF_TAGS, TAGS_FOR_ADVENTURES),
                 [XMLTypeEnum.Item] = new XMLCollection(XMLTypeEnum.Item, ITEM_REF_TAGS, TAGS_FOR_ITEMS),
                 [XMLTypeEnum.Actor] = new XMLCollection(XMLTypeEnum.Actor, ACTOR_REF_TAGS, ""),
                 [XMLTypeEnum.Shop] = new XMLCollection(XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA),
@@ -642,7 +642,7 @@ namespace Database_Editor
 
             if (tabCtl.SelectedTab == tabCtl.TabPages["tabActor"]) { rv = _diBasicXML[ACTOR_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscene"]) { rv = _diBasicXML[CUTSCENE_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeon"]) { rv = _diBasicXML[DUNGEON_XML_FILE].Count; }
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabAdventure"]) { rv = _diBasicXML[ADVENTURE_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItem"]) { rv = _diBasicXML[ITEM_DATA_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLight"]) { rv = _diBasicXML[LIGHTS_XML_FILE].Count; }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShop"]) { rv = _diBasicXML[SHOPS_XML_FILE].Count; }
@@ -676,7 +676,7 @@ namespace Database_Editor
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
             else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
             else if (fileName == UPGRADES_XML_FILE) { rv = XMLTypeEnum.Upgrade; }
-            else if (fileName == DUNGEON_XML_FILE) { rv = XMLTypeEnum.Dungeon; }
+            else if (fileName == ADVENTURE_XML_FILE) { rv = XMLTypeEnum.Adventure; }
             else if (fileName == SHOPS_XML_FILE) { rv = XMLTypeEnum.Shop; }
             else if (fileName == ITEM_DATA_XML_FILE) { rv = XMLTypeEnum.Item; }
             else if (fileName.Contains("Text Files")) { rv = XMLTypeEnum.TextFile; }
@@ -793,7 +793,7 @@ namespace Database_Editor
             LoadLightDataGrid();
             LoadCutsceneDataGrid();
             LoadShopsDataGrid();
-            LoadDungeonDataGrid();
+            LoadAdventureDataGrid();
             LoadUpgradeDataGrid();
         }
         private void LoadGenericDatagrid(XMLCollection collection, List<XMLData> data, int selectRow, string filter = "All")
@@ -847,9 +847,9 @@ namespace Database_Editor
         {
             LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Upgrade], _diBasicXML[UPGRADES_XML_FILE], _diTabIndices["Upgrades"]);
         }
-        private void LoadDungeonDataGrid()
+        private void LoadAdventureDataGrid()
         {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Dungeon], _diBasicXML[DUNGEON_XML_FILE], _diTabIndices["Dungeons"]);
+            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Adventure], _diBasicXML[ADVENTURE_XML_FILE], _diTabIndices["Adventures"]);
         }
         private void LoadShopsDataGrid()
         {
@@ -1043,10 +1043,10 @@ namespace Database_Editor
                 LoadCutsceneDataGrid();
                 dgvCutscenes.Focus();
             }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabDungeon"])
+            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabAdventure"])
             {
-                LoadDungeonDataGrid();
-                dgvDungeons.Focus();
+                LoadAdventureDataGrid();
+                dgvAdventures.Focus();
             }
             else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItem"])
             {
@@ -1221,7 +1221,7 @@ namespace Database_Editor
 
             if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveActorInfo(); }      
             else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabDungeons"]) { SaveDungeonInfo(); }            
+            else if (prevPage == tabCtl.TabPages["tabAdventures"]) { SaveAdventureInfo(); }            
             else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(); }
             else if (prevPage == tabCtl.TabPages["tabLights"]) { SaveLightInfo(); }
             else if (prevPage == tabCtl.TabPages["tabUpgrade"]) { SaveUpgradeInfo(); }
@@ -1440,7 +1440,7 @@ namespace Database_Editor
             }
             else if (dgv == dgvLights) { AddContextMenuItem("Add New", AddNewLight, false); }
             else if (dgv == dgvUpgrades) { AddContextMenuItem("Add New", AddNewUpgrade, false); }
-            else if (dgv == dgvDungeons) { AddContextMenuItem("Add New", AddNewDungeon, false); }
+            else if (dgv == dgvAdventures) { AddContextMenuItem("Add New", AddNewAdventure, false); }
             else if (dgv == dgvShops) { AddContextMenuItem("Add New", AddNewShop, false); }
         }
 
@@ -1762,10 +1762,10 @@ namespace Database_Editor
             SaveUpgradeInfo();
             AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Upgrade], sender.ToString());
         }
-        private void AddNewDungeon(object sender, EventArgs e)
+        private void AddNewAdventure(object sender, EventArgs e)
         {
-            SaveDungeonInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Dungeon], "");
+            SaveAdventureInfo();
+            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Adventure], "");
         }
         private void AddNewShop(object sender, EventArgs e)
         {
@@ -1786,7 +1786,7 @@ namespace Database_Editor
             LoadStatusEffectInfo();
             LoadLightInfo();
             LoadUpgradeInfo();
-            LoadDungeonInfo();
+            LoadAdventureInfo();
         }
 
         private void LoadGenericDataInfo(XMLData data, XMLCollection collection)
@@ -1891,10 +1891,10 @@ namespace Database_Editor
             XMLData data = _diBasicXML[UPGRADES_XML_FILE][_diTabIndices["Upgrades"]];
             LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Upgrade]);
         }
-        private void LoadDungeonInfo()
+        private void LoadAdventureInfo()
         {
-            XMLData data = _diBasicXML[DUNGEON_XML_FILE][_diTabIndices["Dungeons"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Dungeon]);
+            XMLData data = _diBasicXML[ADVENTURE_XML_FILE][_diTabIndices["Adventures"]];
+            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Adventure]);
         }
         private void LoadShopInfo()
         {
@@ -2017,9 +2017,9 @@ namespace Database_Editor
         {
             SaveXMLDataInfo(_diBasicXML[UPGRADES_XML_FILE], _diTabCollections[XMLTypeEnum.Upgrade]);
         }
-        private void SaveDungeonInfo()
+        private void SaveAdventureInfo()
         {
-            SaveXMLDataInfo(_diBasicXML[DUNGEON_XML_FILE], _diTabCollections[XMLTypeEnum.Dungeon]);
+            SaveXMLDataInfo(_diBasicXML[ADVENTURE_XML_FILE], _diTabCollections[XMLTypeEnum.Adventure]);
         }
         private void SaveShopInfo()
         {
@@ -2064,7 +2064,7 @@ namespace Database_Editor
         {
             if (e.RowIndex > -1)
             {
-                if (sender == dgvDungeons) { GenericCellClick(e, "Dungeons", LoadDungeonInfo, SaveDungeonInfo); }
+                if (sender == dgvAdventures) { GenericCellClick(e, "Adventures", LoadAdventureInfo, SaveAdventureInfo); }
                 else if (sender == dgvLights) { GenericCellClick(e, "Lights", LoadLightInfo, SaveLightInfo); }
                 else if (sender == dgvActors) { GenericCellClick(e, "Actors", LoadActorInfo, SaveActorInfo); }
                 else if (sender == dgvShops) { GenericCellClick(e, "Shops", LoadShopInfo, SaveShopInfo); }
@@ -2095,7 +2095,7 @@ namespace Database_Editor
         #region Cancel Button
         private void ProcessCancel_Click(object sender, EventArgs e)
         {
-            if (sender == btnDungeonCancel) { GenericCancel(_diBasicXML[DUNGEON_XML_FILE], "Dungeon", dgvDungeons, LoadDungeonInfo); }
+            if (sender == btnAdventureCancel) { GenericCancel(_diBasicXML[ADVENTURE_XML_FILE], "Adventure", dgvAdventures, LoadAdventureInfo); }
             else if (sender == btnLightCancel) { GenericCancel(_diBasicXML[LIGHTS_XML_FILE], "Light", dgvLights, LoadLightInfo); }
             else if (sender == btnActorCancel) { GenericCancel(_diBasicXML[ACTOR_XML_FILE], "Actors", dgvActors, LoadActorInfo); }
             else if (sender == btnShopCancel) { GenericCancel(_diBasicXML[SHOPS_XML_FILE], "Shops", dgvShops, LoadShopInfo); }

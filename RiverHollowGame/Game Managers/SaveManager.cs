@@ -63,6 +63,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Environment")]
             public EnvironmentData Environment;
 
+            [XmlElement(ElementName = "Adventures")]
+            public AdventureManagerData Adventures;
+
             [XmlElement(ElementName = "Tools")]
             public ToolData Tools;
 
@@ -480,6 +483,15 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "LanternID")]
             public int lanternID;
         }
+        public struct AdventureManagerData
+        {
+            [XmlArray(ElementName = "UnlockedAdventures")]
+            public List<int> UnlockedAdventures;
+
+            [XmlArray(ElementName = "AssignedAdventures")]
+            public List<string> AssignedAdventures;
+        }
+
         public struct MissionData
         {
             [XmlElement(ElementName = "Name")]
@@ -490,7 +502,7 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "DaysFinished")]
             public int DaysFinished;
-
+             
             [XmlElement(ElementName = "TotalDaysToExpire")]
             public int TotalDaysToExpire;
 
@@ -566,11 +578,10 @@ namespace RiverHollow.Game_Managers
                 saveID = GetSaveID(),
                 Calendar = GameCalendar.SaveCalendar(),
                 Environment = EnvironmentManager.SaveEnvironment(),
+                Adventures = AdventureManager.SaveData(),
                 Tools = PlayerManager.SaveToolData(),
                 MapData = new List<MapData>(),
                 TaskInfo = new List<TaskData>(),
-                CurrentMissions = new List<MissionData>(),
-                AvailableMissions = new List<MissionData>(),
                 ShopData = new List<ShopData>(),
                 CSData = new List<CutsceneData>(),
                 optionData = SaveOptions(),
@@ -705,6 +716,7 @@ namespace RiverHollow.Game_Managers
             TaskManager.LoadTaskData(dataToLoad.TaskInfo);
             GameCalendar.LoadCalendar(dataToLoad.Calendar);
             EnvironmentManager.LoadEnvironment(dataToLoad.Environment);
+            AdventureManager.LoadData(dataToLoad.Adventures);
             PlayerManager.Initialize();
 
             foreach (MapData mapData in dataToLoad.MapData)

@@ -76,6 +76,7 @@ namespace RiverHollow
             _renderMain = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
             _effectLights = Content.Load<Effect>(@"Effects\lighteffect");
 
+            AdventureManager.Initialize();
             PlayerManager.Initialize();
             TownManager.Initialize();
             InventoryManager.InitPlayerInventory();

@@ -507,8 +507,8 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Unseal Darkbottle Cave]</Value>
     </Item>
     <Item>
-      <Key>Dungeon_0</Key>
-      <Value>[Name:Cave]</Value>
+      <Key>Adventure_0</Key>
+      <Value>[Name:Gentle Woods]</Value>
     </Item>
     <Item>
       <Key>Shop_0</Key>
@@ -2124,7 +2124,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_146</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Adventure Board]</Value>
     </Item>
     <Item>
       <Key>WorldObject_147</Key>

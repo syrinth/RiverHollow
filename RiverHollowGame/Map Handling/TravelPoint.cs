@@ -61,7 +61,7 @@ namespace RiverHollow.Map_Handling
             Util.AssignValue(ref _bNoMove, "NoMove", obj.Properties);
             Util.AssignValue(ref _sMapConnector, "MapConnector", obj.Properties);
 
-            if(obj.Properties.ContainsKey("WorldMap") && obj.Properties["WorldMap"].Equals("True"))
+            if(obj.Properties.ContainsKey("WorldMap") && obj.Properties["WorldMap"].Equals("true"))
             {
                 _bWorldMap = true;
             }
