@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.WorldObjects;
-using RiverHollow.Misc;
 using RiverHollow.Items;
+using RiverHollow.Misc;
 using RiverHollow.Utilities;
-
-using static RiverHollow.Utilities.Enums;
+using RiverHollow.WorldObjects;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -24,9 +22,10 @@ namespace RiverHollow.GUIComponents.Screens
 
         private readonly List<GUIObject> _liItems;
         private readonly List<GUIToggle> _gSlateToggles;
-        private readonly GUIImage _gTop;
-        private readonly GUIImage[] _gMiddle;
-        private readonly GUIImage _gBottom;
+
+        private readonly List<GUIImage> _liShelves;
+        private GUIImage TopShelf => _liShelves[0];
+        private GUIImage BottomShelf => _liShelves[0];
         private readonly GUIInventoryWindow _gPlayerInventory;
         private GUIShopInventory _gShopInventory;
 
@@ -38,23 +37,28 @@ namespace RiverHollow.GUIComponents.Screens
             _liItems = new List<GUIObject>();
 
             //HEADER
-            _gTop = new GUIImage(GUIUtils.HUD_SHOP_TOP);
-            _gTop.ScaledMoveBy(48, 32);
-            AddControl(_gTop);
+            _liShelves = new List<GUIImage>
+            {
+                new GUIImage(GUIUtils.HUD_SHOP_TOP)
+            };
+            TopShelf.ScaledMoveBy(48, 32);
+            AddControl(TopShelf);
 
             //MID
-            _gMiddle = new GUIImage[3];
-            var temp = _gTop;
+            var temp = TopShelf;
             for (int i = 0; i < 3; i++)
             {
-                _gMiddle[i] = new GUIImage(GUIUtils.HUD_SHOP_MID);
-                _gMiddle[i].AnchorAndAlign(temp, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
-                temp = _gMiddle[i];
+                var newShelf = new GUIImage(GUIUtils.HUD_SHOP_MID);
+                newShelf.AnchorAndAlign(temp, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
+                temp = newShelf;
+
+                _liShelves.Add(newShelf);
             }
 
             //BOTTOM
-            _gBottom = new GUIImage(GUIUtils.HUD_SHOP_BOT);
-            _gBottom.AnchorAndAlign(_gMiddle.Last(), SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
+            var lastShelf = new GUIImage(GUIUtils.HUD_SHOP_MID);
+            _liShelves.Add(lastShelf);
+            lastShelf.AnchorAndAlign(temp, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
 
             _gPlayerInventory = new GUIInventoryWindow(true);
             _gPlayerInventory.ScaledMoveBy(236, 144);
@@ -90,7 +94,7 @@ namespace RiverHollow.GUIComponents.Screens
                 AddSlateToggle(DisplayMerchandiseInfo, GUIUtils.ICON_BAG);
                 AddSlateToggle(DisplaySupplyInfo, GUIUtils.ICON_CHEST);
             }
-            else
+            else if(TownManager.GetCurrentBuilding() != null)
             {
                 AddSlateToggle(DisplayMerchandiseInfo, GUIUtils.ICON_BAG);
             }
@@ -102,8 +106,8 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gSlateToggles[0].AssignToggleGroup(false, _gSlateToggles.Where(x => x != _gSlateToggles[0]).ToArray());
 
-            Width = _gTop.Width;
-            Height = _gBottom.Bottom - _gTop.Top;
+            Width = TopShelf.Width;
+            Height = BottomShelf.Bottom - TopShelf.Top;
         }
 
         public override bool ProcessLeftButtonClick(Point mouse)
@@ -129,9 +133,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             List<GUIObject> list = new List<GUIObject>() { _gPlayerInventory, _gShopInventory };
             list.AddRange(_gSlateToggles);
-            list.AddRange(_gMiddle);
-            list.Add(_gTop);
-            list.Add(_gBottom);
+            list.AddRange(_liShelves);
 
             foreach (var obj in list)
             {
@@ -177,12 +179,21 @@ namespace RiverHollow.GUIComponents.Screens
                 }
                 else { continue; }
 
-                if (i == 0) { newBox.PositionAndMove(_gTop, startPoint); }
+                if (i == 0) { newBox.PositionAndMove(TopShelf, startPoint); }
                 else if (i % 5 == 0) { newBox.AnchorAndAlignWithSpacing(_liItems[i - 5], SideEnum.Bottom, SideEnum.Left, 16); }
                 else { newBox.AnchorAndAlignWithSpacing(_liItems[i - 1], SideEnum.Right, SideEnum.Top, 8); }
 
+                newBox.RemoveSelfFromControl();
+
                 _liItems.Add(newBox);
-                AddControl(newBox);
+
+                foreach(var x in _liShelves)
+                {
+                    if (x.Contains(newBox))
+                    {
+                        x.AddControl(newBox);
+                    }
+                }
             }
         }
 
@@ -221,7 +232,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gShopInventory = new GUIShopInventory();
             AddControl(_gShopInventory);
-            _gShopInventory.PositionAndMove(_gTop, startPoint);
+            _gShopInventory.PositionAndMove(TopShelf, startPoint);
         }
 
         private void DisplaySupplyInfo()
@@ -234,7 +245,7 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gShopInventory = new GUIShopInventory();
             AddControl(_gShopInventory);
-            _gShopInventory.PositionAndMove(_gTop, startPoint);
+            _gShopInventory.PositionAndMove(TopShelf, startPoint);
         }
 
         private void AddSlateToggle(EmptyDelegate del, Rectangle icon)
@@ -252,15 +263,15 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     if (_gSlateToggles.Count == 1)
                     {
-                        _gSlateToggles[i].PositionAndMove(_gTop, 80, 20);
+                        _gSlateToggles[i].PositionAndMove(TopShelf, 80, 20);
                     }
                     else if (_gSlateToggles.Count == 2)
                     {
-                        _gSlateToggles[i].PositionAndMove(_gTop, 72, 20);
+                        _gSlateToggles[i].PositionAndMove(TopShelf, 72, 20);
                     }
                     else if (_gSlateToggles.Count == 3)
                     {
-                        _gSlateToggles[i].PositionAndMove(_gTop, 64, 20);
+                        _gSlateToggles[i].PositionAndMove(TopShelf, 64, 20);
                     }
                 }
                 else

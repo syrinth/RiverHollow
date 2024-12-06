@@ -292,6 +292,29 @@ namespace RiverHollow.Map_Handling
             return rv;
         }
 
+        public void TillTile()
+        {
+            if (WorldObject == null)
+            {
+                if (IsTilled)
+                {
+                    CurrentMap().RemoveWorldObject(Flooring);
+                }
+                else
+                {
+                    var earth = DataManager.CreateWorldObjectByID(2);
+                    if (earth is Earth tilledEarth)
+                    {
+                        tilledEarth.PlaceOnMap(Position, CurrentMap());
+
+                        if (EnvironmentManager.IsRaining())
+                        {
+                            WaterTile();
+                        }
+                    }
+                }
+            }
+        }
         public void WaterTile()
         {
             if (IsTilled)

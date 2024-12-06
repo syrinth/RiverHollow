@@ -550,7 +550,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            totalScore += buildingScore;
+            //totalScore += buildingScore;
             totalScore += Math.Min(infrastuctureScore, buildingScore * 0.4f);
             totalScore += Math.Min(decorationScore, buildingScore * 0.2f);
             totalScore += miscScore;

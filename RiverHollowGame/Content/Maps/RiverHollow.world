@@ -15,13 +15,6 @@
             "y": 941
         },
         {
-            "fileName": "Misc/mapMountainPath.tmx",
-            "height": 448,
-            "width": 592,
-            "x": 96,
-            "y": -800
-        },
-        {
             "fileName": "Misc/mapDwarfCave_Small.tmx",
             "height": 416,
             "width": 320,

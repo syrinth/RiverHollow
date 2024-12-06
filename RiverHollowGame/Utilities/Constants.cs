@@ -5,7 +5,7 @@ namespace RiverHollow.Utilities
     static class Constants
     {
         public static Point BASIC_TILE = new Point(TILE_SIZE, TILE_SIZE);
-        public const bool AUTO_TOOL = true;
+        public const bool AUTO_TOOL = false;
         public const bool DRAW_COLLISION = false;
         public const bool DRAW_HITBOX = false;
 #if DEBUG
@@ -17,7 +17,7 @@ namespace RiverHollow.Utilities
 
         public const int PLAYER_ADJACENCY_SIZE = TILE_SIZE / 2;
         public const int GRAB_REACH = 1;
-        public const float MOUSE_PRESS_INTERVAL = 0.4f;
+        public const float MOUSE_PRESS_INTERVAL = 0.15f;
 
         public const string TOWN_MAP_NAME = "mapTown";
         public const string INN_MAP_NAME = "mapInn";

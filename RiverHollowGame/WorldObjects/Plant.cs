@@ -32,12 +32,8 @@ namespace RiverHollow.WorldObjects
         public int HoneyID => GetIntByIDKey("HoneyID");
         public bool NeedsWatering => !GetBoolByIDKey("NoWater");
 
-        readonly bool _bPopItem;
-
         public Plant(int id) : base(id)
         {
-            _bPopItem = false;
-
             SetGrowthInfo();
         }
 
@@ -289,7 +285,7 @@ namespace RiverHollow.WorldObjects
                 {
                     var tile = FirstTile();
                     RemoveSelfFromTiles();
-                    PlaceOnMap(tile.Position, CurrentMap);
+                    PlaceOnMap(tile.Position, CurrentMap, true);
                 }
 
                 Sprite.SetRotationOrigin(new Vector2(_pSize.X * Constants.TILE_SIZE / 2, (_pSize.Y * Constants.TILE_SIZE) - 1));    //Subtract one to keep it in the bounds of the rectangle
@@ -332,17 +328,18 @@ namespace RiverHollow.WorldObjects
                     var items = GetDroppedItems();
                     foreach (var it in items)
                     {
-                        if (_bPopItem)
-                        {
-                            MapManager.DropItemOnMap(it, MapPosition);
-                        }
-                        else
-                        {
-                            InventoryManager.AddToInventory(it);
-                        }
+                        MapManager.DropItemOnMap(it, MapPosition);
                     }
 
-                    MapManager.RemoveWorldObject(this);
+                    if (GetBoolByIDKey("Regrow"))
+                    {
+                        SetState(CurrentState -1);
+                        _iDaysToNextState = GetIntByIDKey("Regrow");
+                    }
+                    else
+                    {
+                        MapManager.RemoveWorldObject(this);
+                    }
                 }
             }
         }

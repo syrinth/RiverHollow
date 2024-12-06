@@ -378,12 +378,6 @@
     <property name="Map" value="mapForest_Glade_2"/>
    </properties>
   </object>
-  <object id="261" name="Entrance" x="384" y="160" width="16" height="4">
-   <properties>
-    <property name="EntranceDir" value="Down"/>
-    <property name="Map" value="mapMountainPath"/>
-   </properties>
-  </object>
   <object id="272" name="Entrance" x="176" y="32" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="75" height="75" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="108">
  <properties>
-  <property name="RelicID" value="13"/>
   <property name="FillerID" value="103-60-Spread-80/60-5/147-20"/>
   <property name="FillerPercent" type="float" value="0.1"/>
   <property name="FillerRate" type="float" value="0.25"/>
   <property name="MapType" value="Mountain"/>
   <property name="Mobs" value="2-5"/>
+  <property name="RelicID" value="13"/>
   <property name="ResourceItemID" value="148-C/163-R"/>
   <property name="ResourceObjectID" value="111-C/59-U"/>
   <property name="ResourceRate" type="int" value="1"/>
@@ -253,12 +253,6 @@
 </data>
  </layer>
  <objectgroup id="4" name="Travel">
-  <object id="93" name="Entrance" x="128" y="944" width="16" height="4">
-   <properties>
-    <property name="EntranceDir" value="Down"/>
-    <property name="Map" value="mapMountainPath"/>
-   </properties>
-  </object>
   <object id="104" name="Entrance" x="912" y="880" width="16" height="4">
    <properties>
     <property name="EntranceDir" value="Down"/>

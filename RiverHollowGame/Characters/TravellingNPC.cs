@@ -46,7 +46,7 @@ namespace RiverHollow.Characters
             OnTheMap = !stringData.ContainsKey("Inactive");
         }
 
-        protected bool CheckArrivalTriggers()
+        protected bool CheckValidate()
         {
             //If they have no triggers. Do not pass go
             if (new List<string>(ArrivalReqs).Find(x => GetBoolByIDKey(x)) == null)
@@ -54,10 +54,10 @@ namespace RiverHollow.Characters
                 return false;
             }
 
-            return CheckTriggers();
+            return Validate();
         }
 
-        public bool CheckTriggers()
+        public bool Validate()
         {
             foreach (var kvp in _diRequiredObjectIDs)
             {

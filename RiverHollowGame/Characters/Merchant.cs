@@ -60,7 +60,7 @@ namespace RiverHollow.Characters
         {
             if (TownManager.Merchant == null)
             {
-                if (CheckTriggers() && GameCalendar.DayOfWeek == MerchantDay())
+                if (Validate() && GameCalendar.DayOfWeek == MerchantDay())
                 {
                     if (DefaultMerchant() || MyWeek())
                     {

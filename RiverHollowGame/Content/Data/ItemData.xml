@@ -235,7 +235,7 @@
     </Item>
     <Item>
       <Key>58</Key>
-      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:2-6][Value:60][ReqItems:162-1/63-1/56-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:2-6][Value:60][ReqItems:162-1/63-1/23-1]</Value>
     </Item>
     <Item>
       <Key>59</Key>
@@ -323,7 +323,7 @@
     </Item>
     <Item>
       <Key>80</Key>
-      <Value>[Type:Seed][Image:5-0][Value:15][ObjectID:105][Season:Spring]</Value>
+      <Value>[Type:Seed][Image:5-0][Value:10][ObjectID:105][Season:Spring]</Value>
     </Item>
     <Item>
       <Key>81</Key>
@@ -355,7 +355,7 @@
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Seed][Image:8-10][Value:500][ObjectID:100][Season:Summer]</Value>
+      <Value>[Type:Seed][Image:8-0][Value:500][ObjectID:100][Season:Summer]</Value>
     </Item>
     <Item>
       <Key>89</Key>
@@ -531,15 +531,15 @@
     </Item>
     <Item>
       <Key>132</Key>
-      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Level:1][SoundEffect:Pick][AnimationData:0-0/3-4/5/0.08][EnergyCost:2][HitAt:1]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:0-0][Level:1][SoundEffect:Pick][AnimationData:0-0/3-4/5/0.08][EnergyCost:1][HitAt:1]</Value>
     </Item>
     <Item>
       <Key>133</Key>
-      <Value>[Type:Tool][Subtype:Axe][Image:0-1][Level:1][SoundEffect:Axe][AnimationData:0-64/3-4/5/0.08][EnergyCost:2][HitAt:1]</Value>
+      <Value>[Type:Tool][Subtype:Axe][Image:0-1][Level:1][SoundEffect:Axe][AnimationData:0-64/3-4/5/0.08][EnergyCost:1][HitAt:1]</Value>
     </Item>
     <Item>
       <Key>134</Key>
-      <Value>[Type:Resource][Subtype:None][Image:0-0]</Value>
+      <Value>[Type:Tool][Subtype:Hoe][Image:0-2][Level:1][SoundEffect:Axe][AnimationData:0-64/3-4/5/0.08][EnergyCost:1][HitAt:1]</Value>
     </Item>
     <Item>
       <Key>135</Key>
@@ -659,11 +659,11 @@
     </Item>
     <Item>
       <Key>164</Key>
-      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:3-6][Value:70][ReqItems:162-1/93-1/23-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:3-6][Value:70][ReqItems:162-1/93-1/95-1]</Value>
     </Item>
     <Item>
       <Key>165</Key>
-      <Value>[Type:Merchandise][Subtype:Potion][Group:Mage][Image:7-7][Value:70][ReqItems:162-1/8-1/227-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:Mage][Image:7-7][Value:70][ReqItems:162-1/93-1/227-1]</Value>
     </Item>
     <Item>
       <Key>166</Key>
@@ -771,7 +771,7 @@
     </Item>
     <Item>
       <Key>192</Key>
-      <Value>[Type:Tool][Subtype:CapeOfBlinking][Image:0-10]</Value>
+      <Value>[Type:Tool][Subtype:Hoe][Image:0-10]</Value>
     </Item>
     <Item>
       <Key>193</Key>
@@ -972,6 +972,10 @@
     <Item>
       <Key>242</Key>
       <Value>[Type:Relic][Image:0-4][Value:10][Rarity:C]</Value>
+    </Item>
+    <Item>
+      <Key>243</Key>
+      <Value>[Type:Seed][Image:9-0][ObjectID:107][Season:Spring]</Value>
     </Item>
   </Asset>
 </XnaContent>

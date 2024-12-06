@@ -995,6 +995,12 @@ namespace RiverHollow.Map_Handling
                                     if (obj is Plant plantObj)
                                     {
                                         plantObj.FinishGrowth();
+
+                                        if (tiledObj.Properties.ContainsKey("TillEarth"))
+                                        {
+                                            var targetTile = GetTileByPixelPosition(x, y);
+                                            targetTile.TillTile();
+                                        }
                                     }
 
                                     if (IsTownBuilding())
@@ -2538,6 +2544,7 @@ namespace RiverHollow.Map_Handling
             DIRemoveObject(targetObj);
         }
 
+        //This should only be called by the object during PlaceOnMap
         public bool PlaceWorldObject(WorldObject o, bool ignoreActors = false)
         {
             bool rv = false;

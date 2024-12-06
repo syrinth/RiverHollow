@@ -58,6 +58,11 @@ namespace RiverHollow.WorldObjects
         public bool HasBeenWatered { get; private set; }
         public Earth(int id) : base(id) { }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+        }
+
         protected override void LoadSprite()
         {
             Sprite = LoadAdjustableSprite(DataManager.FILE_FLOORING, WATERED, 64);
@@ -82,7 +87,7 @@ namespace RiverHollow.WorldObjects
 
         public override void Rollover()
         {
-            base.Rollover();
+            base.Rollover(); 
 
             var firstTile = FirstTile();
             if (HasBeenWatered && firstTile.WorldObject != null && firstTile.WorldObject.CompareType(ObjectTypeEnum.Plant))
@@ -92,14 +97,6 @@ namespace RiverHollow.WorldObjects
 
             if (EnvironmentManager.IsRaining() && CurrentMap.IsOutside) { SetWatered(true); }
             else { SetWatered(false); }
-
-            if (firstTile.WorldObject == null)
-            {
-                if (RHRandom.RollPercent(10))
-                {
-                    CurrentMap.RemoveWorldObject(this);
-                }
-            }
         }
 
         public override bool PlaceOnMap(RHMap map, bool ignoreActors = false)

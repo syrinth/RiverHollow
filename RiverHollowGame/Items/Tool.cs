@@ -92,6 +92,9 @@ namespace RiverHollow.Items
                                 PlayerManager.ToolLoseEnergy();
                             }
                             break;
+                        case ToolEnum.Hoe:
+                            target.TillTile();
+                            break;
                         case ToolEnum.WateringCan:
                             PlayerManager.ToolLoseEnergy();
                             target.WaterTile();

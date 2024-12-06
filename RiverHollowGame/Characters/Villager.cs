@@ -174,7 +174,7 @@ namespace RiverHollow.Characters
                 WeeklyGiftGiven = false;
             }
 
-            if (SpawnStatus == SpawnStateEnum.OffMap && CheckArrivalTriggers())
+            if (SpawnStatus == SpawnStateEnum.OffMap && CheckValidate())
             {
                 SpawnStatus = SpawnStateEnum.WaitAtInn;
                 SpawnPets();

@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapDwarfCave_Small][Size:16-22]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapDwarfCave_Small][Size:16-22][GoodsSoldValue:200]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -47,11 +47,11 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][Size:16-33][Town]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][Size:16-33][ArrivalDay:Spring-2]</Value>
     </Item>
     <Item>
       <Key>12</Key>
-      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ArrivalDay:Spring-5][PetID:44-1][Size:16-31]</Value>
+      <Value>[Type:Villager][Key:Helen][PortRow:1][HouseID:5][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][TownScore:50][PetID:44-1][Size:16-31]</Value>
     </Item>
     <Item>
       <Key>13</Key>
@@ -147,7 +147,7 @@
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:MonsterPart][Wants:Artifact]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:MonsterPart][Wants:Artifact]</Value>
     </Item>
     <Item>
       <Key>37</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:169/170/171/98][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][RequestIDs:169/170/171/98][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -175,7 +175,7 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][HouseID:18][Size:16-25][Market:14-00][Craft:16-00][Traits:Late/Chatty][Friends:26/16/10][StartMap:mapForest_Glade_2][Face:8-2]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][HouseID:18][Size:16-25][Market:14-00][Craft:16-00][Traits:Late/Chatty][Friends:26/16/10][Face:8-2][ArrivalDay:Spring-5][Town]</Value>
     </Item>
     <Item>
       <Key>44</Key>

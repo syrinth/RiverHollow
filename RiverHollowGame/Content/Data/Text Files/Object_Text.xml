@@ -1104,7 +1104,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_134</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Wooden Hoe]</Value>
     </Item>
     <Item>
       <Key>Item_135</Key>
@@ -1336,7 +1336,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_192</Key>
-      <Value>[Name:Cape of Blink]</Value>
+      <Value>[Name:Wooden Hoe]</Value>
     </Item>
     <Item>
       <Key>Item_193</Key>
@@ -1539,6 +1539,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Hammered Coin][Description:An indentation marks the center of this coin]</Value>
     </Item>
     <Item>
+      <Key>Item_243</Key>
+      <Value>[Name:Juice Berry Seed]</Value>
+    </Item>
+    <Item>
       <Key>WorldObject_0</Key>
       <Value>[Name:Beehive]</Value>
     </Item>
@@ -1696,7 +1700,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_39</Key>
-      <Value>[Name:Carpenter's]</Value>
+      <Value>[Name:Workshop]</Value>
     </Item>
     <Item>
       <Key>WorldObject_40</Key>
@@ -1968,7 +1972,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_107</Key>
-      <Value>[Name:Silver Leaf Plant]</Value>
+      <Value>[Name:Juicy Bush]</Value>
     </Item>
     <Item>
       <Key>WorldObject_108</Key>

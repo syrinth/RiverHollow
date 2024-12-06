@@ -73,6 +73,9 @@ namespace RiverHollow.Game_Managers
             _currentCutscene = _diCutscenes[id];
             _currentCutscene.Setup(triggerTask);
             Playing = true;
+
+            SkipCutscene();
+            GUIManager.BeginFadeIn();
         }
 
         /// <summary>
@@ -98,7 +101,7 @@ namespace RiverHollow.Game_Managers
 
         public static void SkipCutscene()
         {
-            _currentCutscene.Skip();
+            _currentCutscene?.Skip();
         }
 
         public static void UnsetCurrentCutscene()
@@ -536,8 +539,8 @@ namespace RiverHollow.Game_Managers
                     string mapName = tags.Length == 1 ? PlayerManager.CurrentMap : tags[1];
                     _cutsceneMap = new RHMap(MapManager.Maps[mapName]);
                     MapManager.Maps.Add(_cutsceneMap.Name, _cutsceneMap);
-                    MapManager.CurrentMap = _cutsceneMap;
-                    PlayerManager.CurrentMap = _cutsceneMap.Name;
+                    //MapManager.CurrentMap = _cutsceneMap;
+                    //PlayerManager.CurrentMap = _cutsceneMap.Name;
                 }
 
                 //Set thePlayer to the given position
