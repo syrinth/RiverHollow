@@ -38,18 +38,20 @@ namespace Database_Editor
         public FrmDBEditor()
         {
             InitializeComponent();
+            CreateNewTabs();
             SetupTabCollections();
 
-            InitComboBox<ItemTypeEnum>(cbItemType);
-            InitComboBox<ObjectTypeEnum>(cbWorldObjectType);
-            InitComboBox<TaskTypeEnum>(cbTaskType);
-            InitComboBox<EditableNPCDataEnum>(cbEditableCharData, false);
-            InitComboBox<StatusTypeEnum>(cbStatusEffect);
-            InitComboBox<UpgradeTypeEnum>(cbUpgradeType);
-            InitComboBox<CosmeticSlotEnum>(cbCosmeticType);
+            InitComboBox<ItemTypeEnum>(FindComboBox(XMLTypeEnum.Item, ComponentTypeEnum.ComboBoxType));
+            InitComboBox<ObjectTypeEnum>(FindComboBox(XMLTypeEnum.WorldObject, ComponentTypeEnum.ComboBoxType));
+            InitComboBox<TaskTypeEnum>(FindComboBox(XMLTypeEnum.Task, ComponentTypeEnum.ComboBoxType));
+            InitComboBox<EditableNPCDataEnum>(FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxEditable), false);
+            InitComboBox<StatusTypeEnum>(FindComboBox(XMLTypeEnum.StatusEffect, ComponentTypeEnum.ComboBoxType));
+            InitComboBox<UpgradeTypeEnum>(FindComboBox(XMLTypeEnum.Upgrade, ComponentTypeEnum.ComboBoxType));
+            InitComboBox<CosmeticSlotEnum>(FindComboBox(XMLTypeEnum.Cosmetic, ComponentTypeEnum.ComboBoxType));
 
-            cbActorType.Items.Clear();
-            InitComboBox<ActorTypeEnum>(cbActorType, true);
+            var cbActor = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxType);
+            cbActor.Items.Clear();
+            InitComboBox<ActorTypeEnum>(cbActor, true);
 
             _diTabIndices = new Dictionary<string, int>() { { "PreviousTab", 0 } };
 
@@ -122,6 +124,288 @@ namespace Database_Editor
             LoadDataGrids();
             LoadAllInfoPanels();
         }
+
+        #region Dynamic Forms
+        private void CreateNewTabs()
+        {
+            foreach (XMLTypeEnum en in Enum.GetValues(typeof(XMLTypeEnum)))
+            {
+                if (!IsDataFile(en))
+                {
+                    continue;
+                }
+
+                int counter = 0;
+                bool hasDescription = HasDescription(en);
+                string enumStr = en.ToString();
+
+                var tabPage = new TabPage();
+                this.tabCtl.Controls.Add(tabPage);
+
+                //tabPage Setup
+                tabPage.Location = new System.Drawing.Point(4, 22);
+                tabPage.Name = "tab" + enumStr;
+                tabPage.Size = new System.Drawing.Size(790, 425);
+                tabPage.TabIndex = 2;
+                tabPage.Text = en.ToString() + "s";
+                tabPage.UseVisualStyleBackColor = true;
+
+                var dgv = CreateDataGridView(GetName(en, ComponentTypeEnum.DataGrid), "Name", GetName(en, ComponentTypeEnum.ColumnName), new Point(6, 6), new Size(308, 411), true);
+                dgv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(ProcessCellClick);
+                dgv.ContextMenuStrip = contextMenu;
+                dgv.MultiSelect = false;
+                dgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+                tabPage.Controls.Add(dgv);
+
+                var lblName = CreateLabel("label" + counter++, "Name:", new Point(317, 9), new Size(38, 13), true);
+                var tbName = CreateTextBox(GetName(en, ComponentTypeEnum.TextBoxName), new Point(361, 6), new Size(108, 20));
+                tabPage.Controls.Add(lblName);
+                tabPage.Controls.Add(tbName);
+
+                var lblID = CreateLabel("label" + counter++, "ID:", new Point(714, 9), new Size(21, 13), true);
+                var tbID = CreateTextBox(GetName(en, ComponentTypeEnum.TextBoxID), new Point(741, 6), new Size(43, 20));
+                tabPage.Controls.Add(lblID);
+                tabPage.Controls.Add(tbID);
+
+                if (hasDescription)
+                {
+                    var lblDesc = CreateLabel("label" + counter++, "Description:", new Point(317, 35), new Size(63, 13), true);
+                    var tbDesc = CreateTextBox(GetName(en, ComponentTypeEnum.TextBoxDescription), new Point(320, 51), new Size(464, 53), true);
+                    tabPage.Controls.Add(lblDesc);
+                    tabPage.Controls.Add(tbDesc);
+                }
+
+                Point dgvTagLocation;
+                Size dgvTagSize;
+                if (en == XMLTypeEnum.Cutscene)
+                {
+                    dgvTagLocation = new Point(320, 110);
+                    dgvTagSize = new Size(464, 278);
+
+                    var lblTrigger = CreateLabel("label" + counter++, "Triggers:", new Point(317, 29), new Size(48, 13), true);
+                    var tbTrigger = CreateTextBox(GetName(en, ComponentTypeEnum.TextBoxTriggers), new Point(320, 45), new Size(464, 20));
+                    tabPage.Controls.Add(lblTrigger);
+                    tabPage.Controls.Add(tbTrigger);
+
+                    var lblDetail = CreateLabel("label" + counter++, "Details:", new Point(320, 68), new Size(42, 13), true);
+                    var tbDetail = CreateTextBox(GetName(en, ComponentTypeEnum.TextBoxDetails), new Point(320, 84), new Size(464, 20));
+                    tabPage.Controls.Add(lblDetail);
+                    tabPage.Controls.Add(tbDetail);
+                }
+                else
+                {
+                    int numComboBox = GetNumberComboBoxes(en);
+
+                    for (int i = 0; i < numComboBox; i++)
+                    {
+                        int cbHeight = hasDescription ? 110 : 33;
+
+                        ComponentTypeEnum type = ComponentTypeEnum.ComboBoxType;
+
+                        if (i == 1) { type = ComponentTypeEnum.ComboBoxSubtype; }
+                        else if (i == 2) { type = ComponentTypeEnum.ComboBoxGroup; }
+
+                        var cbType = CreateComboBox(GetName(en, type), new Point(320 + (i * 155), cbHeight), type == ComponentTypeEnum.ComboBoxType);
+
+                        if (i == 0)
+                        {
+                            switch (en)
+                            {
+                                case XMLTypeEnum.Actor:
+                                    cbType.SelectedIndexChanged += new System.EventHandler(cbActorType_SelectedIndexChanged);
+                                    break;
+                                case XMLTypeEnum.Item:
+                                    cbType.SelectedIndexChanged += new System.EventHandler(cbItemType_SelectedIndexChanged);
+                                    break;
+                                case XMLTypeEnum.WorldObject:
+                                    cbType.SelectedIndexChanged += new System.EventHandler(cbWorldObjectType_SelectedIndexChanged);
+                                    break;
+                            }
+                        }
+                        tabPage.Controls.Add(cbType);
+                    }
+
+                    if (hasDescription)
+                    {
+                        if (numComboBox == 0)
+                        {
+                            dgvTagLocation = new Point(320, 110);
+                            dgvTagSize = new Size(464, 278);
+                        }
+                        else
+                        {
+                            dgvTagLocation = new Point(320, 137);
+                            dgvTagSize = new Size(464, 251);
+                        }
+                    }
+                    else
+                    {
+                        if (numComboBox == 0)
+                        {
+                            dgvTagLocation = new Point(320, 33);
+                            dgvTagSize = new Size(464, 355);
+                        }
+                        else
+                        {
+                            dgvTagLocation = new Point(320, 60);
+                            dgvTagSize = new Size(464, 328);
+                        }
+                    }
+                }
+
+                var dgvTags = CreateDataGridView(GetName(en, ComponentTypeEnum.DataGridTags), "Tags", GetName(en, ComponentTypeEnum.ColumnTags), dgvTagLocation, dgvTagSize, false);
+                dgvTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+                tabPage.Controls.Add(dgvTags);
+
+                var cancelBtn = CreateButton(GetName(en, ComponentTypeEnum.ButtonCancel), "Cancel", new Point(709, 394), new Size(75, 23));
+                cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+                cancelBtn.Click += new System.EventHandler(ProcessCancel_Click);
+                tabPage.Controls.Add(cancelBtn);
+
+                if (en == XMLTypeEnum.Actor)
+                {
+                    var cbType = CreateComboBox(GetName(en, ComponentTypeEnum.ComboBoxEditable), new Point(320, 396), true);
+                    tabPage.Controls.Add(cbType);
+
+                    var editBtn = CreateButton(GetName(en, ComponentTypeEnum.ButtonEdit), "Edit", new Point(475, 394), new Size(75, 23));
+                    editBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+                    editBtn.Click += new System.EventHandler(btnDialogue_Click);
+                    tabPage.Controls.Add(cancelBtn);
+                }
+            }
+        }
+        public bool HasDescription(XMLTypeEnum en)
+        {
+            switch(en)
+            {
+                case XMLTypeEnum.Cutscene:
+                case XMLTypeEnum.Light:
+                case XMLTypeEnum.Shop:
+                case XMLTypeEnum.WorldObject:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        private int GetNumberComboBoxes(XMLTypeEnum en)
+        {
+            switch (en)
+            {
+                case XMLTypeEnum.Item:
+                case XMLTypeEnum.Actor:
+                    return 3;
+                case XMLTypeEnum.WorldObject:
+                    return 2;
+                case XMLTypeEnum.Cosmetic:
+                case XMLTypeEnum.StatusEffect:
+                case XMLTypeEnum.Task:
+                case XMLTypeEnum.Upgrade:
+                    return 1;
+                default:
+                    return 0;
+            }
+        }
+
+        private Label CreateLabel(string name, string text, Point location, Size size, bool autosize)
+        {
+            var obj = new Label
+            {
+                AutoSize = autosize,
+                Location = location,
+                Name = name,
+                Size = size,
+                TabIndex = 38,
+                Text = text
+            };
+
+            return obj;
+        }
+
+        private TextBox CreateTextBox(string name, Point location, Size size, bool multiline = false)
+        {
+            var obj = new TextBox
+            {
+                Location = location,
+                Multiline = multiline,
+                Name = name,
+                Size = size,
+                TabIndex = 38,
+            };
+
+            return obj;
+        }
+
+        private ComboBox CreateComboBox(string name, Point location, bool visible)
+        {
+            var obj = new ComboBox
+            {
+                DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList,
+                FormattingEnabled = true,
+                Location = location,
+                Name = name,
+                Size = new Size(149, 21),
+                TabIndex = 60,
+                Visible = visible
+            };
+
+            return obj;
+        }
+
+        private DataGridView CreateDataGridView(string name, string header, string columnName, Point location, Size size, bool readOnly)
+        {
+            var dgv = new DataGridView
+            {
+                AllowUserToAddRows = !readOnly,
+                AllowUserToDeleteRows = !readOnly,
+                AllowUserToResizeColumns = false,
+                AllowUserToResizeRows = false,
+                Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left))),
+                ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+                Location = location,
+                MultiSelect = false,
+                Name = name,
+                ReadOnly = readOnly,
+                RowHeadersVisible = false,
+                SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect,
+                Size = size,
+            };
+
+            var column = new DataGridViewTextBoxColumn
+            {
+                AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill,
+                HeaderText = header,
+                Name = columnName,
+                ReadOnly = readOnly,
+                SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+            };
+
+            if (readOnly)
+            {
+                column.FillWeight = 90F;
+            }
+
+            dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { column });
+
+            return dgv;
+        }
+
+        private Button CreateButton(string name, string text, Point location, Size size)
+        {
+            var obj = new Button
+            {
+                Location = location,
+                Name = name,
+                Size = size,
+                TabIndex = 44,
+                Text = text,
+                UseVisualStyleBackColor = true
+            };
+
+            return obj;
+        }
+        #endregion
 
         private void SetupTabCollections()
         {
@@ -527,6 +811,10 @@ namespace Database_Editor
 
         private void SetItemSubtype()
         {
+            var cbItemType = FindComboBox(XMLTypeEnum.Item, ComponentTypeEnum.ComboBoxType);
+            var cbItemSubtype = FindComboBox(XMLTypeEnum.Item, ComponentTypeEnum.ComboBoxSubtype);
+            var cbItemGroup = FindComboBox(XMLTypeEnum.Item, ComponentTypeEnum.ComboBoxGroup);
+
             cbItemSubtype.Items.Clear();
             cbItemGroup.Items.Clear();
 
@@ -571,6 +859,7 @@ namespace Database_Editor
 
         private void ItemComboBoxHelper<T>(ref ComboBox cb, List<T> skip = null)
         {
+            var cbItemSubtype = FindComboBox(XMLTypeEnum.Item, ComponentTypeEnum.ComboBoxSubtype);
             cb.Visible = true;
             foreach (T en in Enum.GetValues(typeof(T)))
             {
@@ -588,6 +877,10 @@ namespace Database_Editor
 
         private void SetActorSubtype()
         {
+            var cbActorType = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxType);
+            var cbActorSubtype = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxSubtype);
+            var cbActorGroup = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxGroup);
+
             cbActorSubtype.Items.Clear();
             ActorTypeEnum itemType = Util.ParseEnum<ActorTypeEnum>(cbActorType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
@@ -679,72 +972,6 @@ namespace Database_Editor
             if (!_diObjectText.ContainsKey(textID)) { _diObjectText[textID] = new Dictionary<string, string>(); }
             _diObjectText[textID][key] = newValue;
         }
-
-        public string GetName(XMLTypeEnum strType, ComponentTypeEnum e)
-        {
-            return GetName(Util.GetEnumString(strType), e);
-        }
-        public string GetName(string strType, ComponentTypeEnum e)
-        {
-            switch (e)
-            {
-                case ComponentTypeEnum.TextBoxName:
-                    return "tb" + strType + "Name";
-                case ComponentTypeEnum.TextBoxID:
-                    return "tb" + strType + "ID";
-                case ComponentTypeEnum.TextBoxDescription:
-                    return "tb" + strType + "Description";
-                case ComponentTypeEnum.DataGrid:
-                    return "dgv" + strType + "s";
-                case ComponentTypeEnum.DataGridTags:
-                    return "dgv" + strType + "Tags";
-                case ComponentTypeEnum.TabIndex:
-                    return strType + "s";
-                case ComponentTypeEnum.ColumnName:
-                    return "col" + strType + "sName";
-                case ComponentTypeEnum.ColumnId:
-                    return "col" + strType + "sID";
-                case ComponentTypeEnum.ColumnTags:
-                    return "col" + strType + "Tags";
-                case ComponentTypeEnum.ComboBoxType:
-                    return "cb" + strType + "Type";
-                case ComponentTypeEnum.ComboBoxSubtype:
-                    return "cb" + strType + "Subtype";
-                case ComponentTypeEnum.ComboBoxGroup:
-                    return "cb" + strType + "Group";
-            }
-
-            return string.Empty;
-        }
-
-        private TabPage GetPage(string xmlType)
-        {
-            return tabCtl.TabPages["tab" + xmlType];
-        }
-
-        private TextBox FindTextBoxByName(XMLTypeEnum xmlType, ComponentTypeEnum type)
-        {
-            string strXMLType = Util.GetEnumString(xmlType);
-            string name = GetName(strXMLType, type);
-
-            return GetPage(strXMLType).Controls.OfType<TextBox>().FirstOrDefault(val => val.Name == name);
-        }
-
-        private DataGridView FindDGVByName(XMLTypeEnum xmlType, ComponentTypeEnum type)
-        {
-            string strXMLType = Util.GetEnumString(xmlType);
-            string name = GetName(strXMLType, type);
-
-            return GetPage(strXMLType).Controls.OfType<DataGridView>().FirstOrDefault(val => val.Name == name);
-        }
-
-        private ComboBox FindComboBoxByName(XMLTypeEnum xmlType, ComponentTypeEnum type)
-        {
-            string strXMLType = Util.GetEnumString(xmlType);
-            string name = GetName(strXMLType, type);
-
-            return GetPage(strXMLType).Controls.OfType<ComboBox>().FirstOrDefault(val => val.Name == name);
-        }
         #endregion
 
         #region DataGridView Loading
@@ -785,7 +1012,7 @@ namespace Database_Editor
         private void LoadGenericDatagrid(XMLCollection collection, List<XMLData> data, int selectRow, string filter = "All")
         {
             string colName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);
-            DataGridView dgv = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGrid);
+            DataGridView dgv = FindDataGridView(collection.XMLType, ComponentTypeEnum.DataGrid);
 
             dgv.Rows.Clear();
             int index = 0;
@@ -808,18 +1035,19 @@ namespace Database_Editor
 
         private void LoadCutsceneDataGrid()
         {
-            dgvCutscenes.Rows.Clear();
+            var dgv = FindDataGridView(XMLTypeEnum.Cutscene, ComponentTypeEnum.DataGrid);
+            dgv.Rows.Clear();
             foreach (KeyValuePair<int, List<string>> kvp in _diCutscenes)
             {
-                dgvCutscenes.Rows.Add();
+                dgv.Rows.Add();
 
-                DataGridViewRow row = dgvCutscenes.Rows[kvp.Key];
+                DataGridViewRow row = dgv.Rows[kvp.Key];
                 //row.Cells["colCutscenesID"].Value = kvp.Key;
                 row.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, kvp.Key, "Name");
             }
 
-            SelectRow(dgvCutscenes, _diTabIndices["Cutscenes"]);
-            dgvCutscenes.Focus();
+            SelectRow(dgv, _diTabIndices["Cutscenes"]);
+            dgv.Focus();
         }
 
         private void LoadDictionaryListDatagrid(DataGridView dgv, Dictionary<int, List<XMLData>> di, string colID, string colName, string tabIndex, XMLTypeEnum xmlType)
@@ -855,6 +1083,9 @@ namespace Database_Editor
         }
         private void btnDialogue_Click(object sender, EventArgs e)
         {
+            var tbActorID = FindTextBox(XMLTypeEnum.Actor, ComponentTypeEnum.TextBoxID);
+            var cbEditableCharData = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxEditable);
+
             XMLData data = _diBasicXML[ACTOR_XML_FILE][int.Parse(tbActorID.Text)];
             string npcKey = @"\NPC_" + data.GetTagValue("Key") + ".xml";
             FormCharExtraData frm;
@@ -900,7 +1131,8 @@ namespace Database_Editor
 
         private void btnEditCutsceneDialogue_Click(object sender, EventArgs e)
         {
-            string cutSceneFileName = String.Format(@"{0}\Cutscene_{1}.xml", PATH_TO_CUTSCENE_DIALOGUE, dgvCutscenes.CurrentRow.Cells["colCutscenesID"].Value.ToString());
+            var dgv = FindDataGridView(XMLTypeEnum.Cutscene, ComponentTypeEnum.DataGrid);
+            string cutSceneFileName = String.Format(@"{0}\Cutscene_{1}.xml", PATH_TO_CUTSCENE_DIALOGUE, dgv.CurrentRow.Cells["colCutscenesID"].Value.ToString());
 
             if (!_diCutsceneDialogue.ContainsKey(cutSceneFileName))
             {
@@ -925,6 +1157,9 @@ namespace Database_Editor
 
         private void cbWorldObjectType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var cbWorldObjectType = FindComboBox(XMLTypeEnum.WorldObject, ComponentTypeEnum.ComboBoxType);
+            var cbWorldObjectSubtype = FindComboBox(XMLTypeEnum.WorldObject, ComponentTypeEnum.ComboBoxSubtype);
+
             cbWorldObjectSubtype.Items.Clear();
             ObjectTypeEnum itemType = Util.ParseEnum<ObjectTypeEnum>(cbWorldObjectType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
@@ -986,7 +1221,7 @@ namespace Database_Editor
             _subtypeFilter = "All";
             XMLTypeEnum en = CurrentTabXML();
             LoadDataGrid(en);
-            GetDataGridView(en).Focus();
+            FindDataGridView(en, ComponentTypeEnum.DataGrid).Focus();
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1268,81 +1503,83 @@ namespace Database_Editor
             DataGridView dgv = contextMenu.SourceControl as DataGridView;
 
             contextMenu.Items.Clear();
-            if (dgv == dgvItems)
-            {
-                var items = Enum.GetNames(typeof(ItemTypeEnum)).ToList();
-                items.Remove(Util.GetEnumString(ItemTypeEnum.Buildable));
-                AddContextMenuItem("Add New", AddNewEntry, true, items.ToArray());
-                AddContextMenuItem("All", dgvContextMenuClick, false);
 
-                foreach (ItemTypeEnum en in Enum.GetValues(typeof(ItemTypeEnum)))
-                {
-                    var s = Util.GetEnumString(en);
-                    switch (en)
+            var currentTabXML = CurrentTabXML();
+            switch (currentTabXML)
+            {
+                case XMLTypeEnum.Item:
+                    var items = Enum.GetNames(typeof(ItemTypeEnum)).ToList();
+                    items.Remove(Util.GetEnumString(ItemTypeEnum.Buildable));
+                    AddContextMenuItem("Add New", AddNewEntry, true, items.ToArray());
+                    AddContextMenuItem("All", dgvContextMenuClick, false);
+
+                    foreach (ItemTypeEnum en in Enum.GetValues(typeof(ItemTypeEnum)))
                     {
-                        case ItemTypeEnum.Buildable:
-                            continue;
-                        case ItemTypeEnum.Resource:
-                            var resourceNames = Enum.GetNames(typeof(ResourceTypeEnum)).ToList();
-                            resourceNames.Insert(0, "All");
-                            resourceNames.Remove(Util.GetEnumString(ResourceTypeEnum.Food));
-                            resourceNames.Remove(Util.GetEnumString(ResourceTypeEnum.Meal));
-                            AddContextMenuItem(s, dgvContextMenuClick, false, resourceNames.ToArray());
-                            break;
-                        case ItemTypeEnum.Food:
-                            AddContextMenuItem(s, dgvContextMenuClick, false, new string[] { "All", Util.GetEnumString(ResourceTypeEnum.Food), Util.GetEnumString(ResourceTypeEnum.Meal) });
-                            break;
-                        case ItemTypeEnum.Merchandise:
-                            var merchNames = Enum.GetNames(typeof(MerchandiseTypeEnum)).ToList();
-                            merchNames.Insert(0, "All");
-                            AddContextMenuItem(s, dgvContextMenuClick, false, merchNames.ToArray());
-                            break;
-                        default:
+                        var s = Util.GetEnumString(en);
+                        switch (en)
+                        {
+                            case ItemTypeEnum.Buildable:
+                                continue;
+                            case ItemTypeEnum.Resource:
+                                var resourceNames = Enum.GetNames(typeof(ResourceTypeEnum)).ToList();
+                                resourceNames.Insert(0, "All");
+                                resourceNames.Remove(Util.GetEnumString(ResourceTypeEnum.Food));
+                                resourceNames.Remove(Util.GetEnumString(ResourceTypeEnum.Meal));
+                                AddContextMenuItem(s, dgvContextMenuClick, false, resourceNames.ToArray());
+                                break;
+                            case ItemTypeEnum.Food:
+                                AddContextMenuItem(s, dgvContextMenuClick, false, new string[] { "All", Util.GetEnumString(ResourceTypeEnum.Food), Util.GetEnumString(ResourceTypeEnum.Meal) });
+                                break;
+                            case ItemTypeEnum.Merchandise:
+                                var merchNames = Enum.GetNames(typeof(MerchandiseTypeEnum)).ToList();
+                                merchNames.Insert(0, "All");
+                                AddContextMenuItem(s, dgvContextMenuClick, false, merchNames.ToArray());
+                                break;
+                            default:
+                                AddContextMenuItem(s, dgvContextMenuClick, false);
+                                break;
+
+                        }
+                    }
+                    break;
+                case XMLTypeEnum.WorldObject:
+                    AddContextMenuItem("Add New", AddNewEntry, true, Enum.GetNames(typeof(ObjectTypeEnum)));
+                    AddContextMenuItem("All", dgvContextMenuClick, false);
+
+                    foreach (ObjectTypeEnum en in Enum.GetValues(typeof(ObjectTypeEnum)))
+                    {
+                        var s = Util.GetEnumString(en);
+                        switch (en)
+                        {
+                            case ObjectTypeEnum.Buildable:
+                                var names = Enum.GetNames(typeof(BuildableEnum)).ToList();
+                                names.Insert(0, "All");
+                                AddContextMenuItem(s, dgvContextMenuClick, false, names.ToArray());
+                                break;
+                            default:
+                                AddContextMenuItem(s, dgvContextMenuClick, false);
+                                break;
+                        }
+                    }
+                    break;
+                case XMLTypeEnum.Task:
+                    AddContextMenuItem("Add New", AddNewEntry, false, Enum.GetNames(typeof(TaskTypeEnum)));
+                    break;
+                case XMLTypeEnum.Actor:
+                    AddContextMenuItem("Add New", AddNewEntry, true, Enum.GetNames(typeof(ActorTypeEnum)));
+                    AddContextMenuItem("All", dgvContextMenuClick, false);
+                    foreach (string s in Enum.GetNames(typeof(ActorTypeEnum)))
+                    {
+                        if (!s.Equals("Actor"))
+                        {
                             AddContextMenuItem(s, dgvContextMenuClick, false);
-                            break;
-
+                        }
                     }
-                }
+                    break;
+                default:
+                    AddContextMenuItem("Add New", AddNewEntry, false);
+                    break;
             }
-            else if (dgv == dgvWorldObjects)
-            {
-                AddContextMenuItem("Add New", AddNewEntry, true, Enum.GetNames(typeof(ObjectTypeEnum)));
-                AddContextMenuItem("All", dgvContextMenuClick, false);
-
-                foreach (ObjectTypeEnum en in Enum.GetValues(typeof(ObjectTypeEnum)))
-                {
-                    var s = Util.GetEnumString(en);
-                    switch (en)
-                    {
-                        case ObjectTypeEnum.Buildable:
-                            var names = Enum.GetNames(typeof(BuildableEnum)).ToList();
-                            names.Insert(0, "All");
-                            AddContextMenuItem(s, dgvContextMenuClick, false, names.ToArray());
-                            break;
-                        default:
-                            AddContextMenuItem(s, dgvContextMenuClick, false);
-                            break;
-                    }
-                }
-            }
-            else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewEntry, false, Enum.GetNames(typeof(TaskTypeEnum))); }
-            else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewEntry, false); }
-            else if (dgv == dgvActors)
-            {
-                AddContextMenuItem("Add New", AddNewEntry, true, Enum.GetNames(typeof(ActorTypeEnum)));
-                AddContextMenuItem("All", dgvContextMenuClick, false);
-                foreach (string s in Enum.GetNames(typeof(ActorTypeEnum)))
-                {
-                    if (!s.Equals("Actor"))
-                    {
-                        AddContextMenuItem(s, dgvContextMenuClick, false);
-                    }
-                }
-            }
-            else if (dgv == dgvLights) { AddContextMenuItem("Add New", AddNewEntry, false); }
-            else if (dgv == dgvUpgrades) { AddContextMenuItem("Add New", AddNewEntry, false); }
-            else if (dgv == dgvAdventures) { AddContextMenuItem("Add New", AddNewEntry, false); }
-            else if (dgv == dgvShops) { AddContextMenuItem("Add New", AddNewEntry, false); }
         }
 
         private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator, params string[] subEntries)
@@ -1456,28 +1693,19 @@ namespace Database_Editor
         #region Add New
         private void AddNewEntry(object sender, EventArgs e)
         {
-            XMLTypeEnum en = CurrentTabXML();
-
-            if (en == XMLTypeEnum.Cutscene)
-            {
-                SaveCutsceneInfo();
-                tbCutsceneTriggers.Clear();
-                tbCutsceneDetails.Clear();
-            }
-
-            AddNewGenericXMLObject(_diTabCollections[en], sender.ToString());
+            AddNewGenericXMLObject(_diTabCollections[CurrentTabXML()], sender.ToString());
         }
         private void AddNewGenericXMLObject(XMLCollection collection, string chosenType)
         {
             string tabIndex = GetName(collection.XMLType, ComponentTypeEnum.TabIndex);
             string columnName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);
             string columnTags = GetName(collection.XMLType, ComponentTypeEnum.ColumnTags);
-            TextBox tbName = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxName);
-            TextBox tbID = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxID);
-            TextBox tbDescription = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
-            DataGridView dgv = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGrid);
-            DataGridView dgvTags = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGridTags);
-            ComboBox cb = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxType);
+            TextBox tbName = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxName);
+            TextBox tbID = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxID);
+            TextBox tbDescription = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
+            DataGridView dgv = FindDataGridView(collection.XMLType, ComponentTypeEnum.DataGrid);
+            DataGridView dgvTags = FindDataGridView(collection.XMLType, ComponentTypeEnum.DataGridTags);
+            ComboBox cb = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxType);
 
             _diTabIndices[tabIndex] = dgv.Rows.Count;
             dgv.Rows.Add();
@@ -1674,7 +1902,7 @@ namespace Database_Editor
 
         private void LoadInfo(XMLTypeEnum en)
         {
-            var dgv = GetDataGridView(en);
+            var dgv = FindDataGridView(en, ComponentTypeEnum.DataGrid);
             if (dgv.SelectedRows.Count > 0)
             {
                 XMLData data = null;
@@ -1706,13 +1934,13 @@ namespace Database_Editor
 
         private void LoadGenericDataInfo(XMLData data, XMLCollection collection)
         {
-            TextBox tbName = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxName);
-            TextBox tbID = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxID);
-            TextBox tbDescription = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
-            DataGridView dgvTags = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGridTags);
-            ComboBox cb = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxType);
-            ComboBox cbSubtype = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxSubtype);
-            ComboBox cbGrouptype = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxGroup);
+            TextBox tbName = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxName);
+            TextBox tbID = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxID);
+            TextBox tbDescription = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
+            DataGridView dgvTags = FindDataGridView(collection.XMLType, ComponentTypeEnum.DataGridTags);
+            ComboBox cb = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxType);
+            ComboBox cbSubtype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxSubtype);
+            ComboBox cbGrouptype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxGroup);
 
             tbName.Text = data.Name;
             tbID.Text = data.ID.ToString();
@@ -1746,9 +1974,10 @@ namespace Database_Editor
 
         private void LoadActorInfo()
         {
-            if (dgvActors.SelectedRows.Count > 0)
+            var dgv = FindDataGridView(XMLTypeEnum.Actor, ComponentTypeEnum.DataGrid);
+            if (dgv.SelectedRows.Count > 0)
             {
-                DataGridViewRow r = dgvActors.SelectedRows[0];
+                DataGridViewRow r = dgv.SelectedRows[0];
                 XMLData data = null;
                 if (_typeFilter == "All") { data = _diBasicXML[ACTOR_XML_FILE][_diTabIndices["Actors"]]; }
                 else { data = _diBasicXML[ACTOR_XML_FILE].FindAll(x => x.GetTagValue("Type").ToString().Equals(_typeFilter))[r.Index]; }
@@ -1758,9 +1987,10 @@ namespace Database_Editor
 
         private void LoadItemInfo()
         {
-            if (dgvItems.SelectedRows.Count > 0)
+            var dgv = FindDataGridView(XMLTypeEnum.Item, ComponentTypeEnum.DataGrid);
+            if (dgv.SelectedRows.Count > 0)
             {
-                DataGridViewRow r = dgvItems.SelectedRows[0];
+                DataGridViewRow r = dgv.SelectedRows[0];
                 XMLData data = null;
                 if (_typeFilter == "All") { data = _diBasicXML[ITEM_XML_FILE][r.Index]; }
                 else if (_subtypeFilter != "All")
@@ -1774,9 +2004,10 @@ namespace Database_Editor
         }
         private void LoadWorldObjectInfo()
         {
-            if (dgvWorldObjects.SelectedRows.Count > 0)
+            var dgv = FindDataGridView(XMLTypeEnum.WorldObject, ComponentTypeEnum.DataGrid);
+            if (dgv.SelectedRows.Count > 0)
             {
-                DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
+                DataGridViewRow r = dgv.SelectedRows[0];
                 XMLData data = null;
                 if (_typeFilter == "All") { data = _diBasicXML[WORLD_OBJECTS_XML_FILE][r.Index]; }
                 else if (_subtypeFilter != "All")
@@ -1791,20 +2022,26 @@ namespace Database_Editor
 
         private void LoadCutsceneInfo()
         {
+            var dgvTags = FindDataGridView(XMLTypeEnum.Cutscene, ComponentTypeEnum.DataGridTags);
+            var tbName = FindTextBox(XMLTypeEnum.Cutscene, ComponentTypeEnum.TextBoxName);
+            var tbID = FindTextBox(XMLTypeEnum.Cutscene, ComponentTypeEnum.TextBoxID);
+            var tbCutsceneTriggers = FindTextBox(XMLTypeEnum.Cutscene, ComponentTypeEnum.TextBoxTriggers);
+            var tbCutsceneDetails = FindTextBox(XMLTypeEnum.Cutscene, ComponentTypeEnum.TextBoxDetails);
+
             List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
 
-            tbCutsceneName.Text = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
-            tbCutsceneID.Text = _diTabIndices["Cutscenes"].ToString();
+            tbName.Text = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
+            tbID.Text = _diTabIndices["Cutscenes"].ToString();
             tbCutsceneTriggers.Text = listData[0];
             tbCutsceneDetails.Text = listData[1];
 
-            dgvCutsceneTags.Rows.Clear();
+            dgvTags.Rows.Clear();
             string[] tags = listData[2].Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
                 if (!s.StartsWith("Type"))
                 {
-                    dgvCutsceneTags.Rows.Add(s);
+                    dgvTags.Rows.Add(s);
                 }
             }
         }
@@ -1828,6 +2065,11 @@ namespace Database_Editor
 
         private void SaveCutsceneInfo()
         {
+            var dgvTags = FindDataGridView(XMLTypeEnum.Cutscene, ComponentTypeEnum.DataGridTags);
+            var tbName = FindTextBox(XMLTypeEnum.Cutscene, ComponentTypeEnum.TextBoxName);
+            var tbCutsceneTriggers = FindTextBox(XMLTypeEnum.Cutscene, ComponentTypeEnum.TextBoxTriggers);
+            var tbCutsceneDetails = FindTextBox(XMLTypeEnum.Cutscene, ComponentTypeEnum.TextBoxDetails);
+
             UpdateStatus("Saving Cutscenes");
             List<string> listData;
             if (!_diCutscenes.ContainsKey(_diTabIndices["Cutscenes"]))
@@ -1842,7 +2084,7 @@ namespace Database_Editor
             listData.Add(tbCutsceneDetails.Text);
 
             string tags = string.Empty;
-            foreach (DataGridViewRow r in dgvCutsceneTags.Rows)
+            foreach (DataGridViewRow r in dgvTags.Rows)
             {
                 if (r.Cells[0].Value != null)
                 {
@@ -1850,9 +2092,9 @@ namespace Database_Editor
                 }
             }
             listData.Add(tags);
-            UpdateTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name", tbCutsceneName.Text);
+            UpdateTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name", tbName.Text);
 
-            DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
+            DataGridViewRow updatedRow = FindDataGridView(XMLTypeEnum.Cutscene, ComponentTypeEnum.DataGrid).Rows[_diTabIndices["Cutscenes"]];
 
             //updatedRow.Cells["colCutscenesID"].Value = _diTabIndices["Cutscenes"];
             updatedRow.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
@@ -1862,14 +2104,14 @@ namespace Database_Editor
             string tabIndex = GetName(collection.XMLType, ComponentTypeEnum.TabIndex);
             string columnName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);
             string columnTags = GetName(collection.XMLType, ComponentTypeEnum.ColumnTags);
-            TextBox tbName = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxName);
-            TextBox tbID = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxID);
-            TextBox tbDescription = FindTextBoxByName(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
-            DataGridView dgv = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGrid);
-            DataGridView dgvTags = FindDGVByName(collection.XMLType, ComponentTypeEnum.DataGridTags);
-            ComboBox cb = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxType);
-            ComboBox cbSubtype = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxSubtype);
-            ComboBox cbGrouptype = FindComboBoxByName(collection.XMLType, ComponentTypeEnum.ComboBoxGroup);
+            TextBox tbName = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxName);
+            TextBox tbID = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxID);
+            TextBox tbDescription = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
+            DataGridView dgv = FindDataGridView(collection.XMLType, ComponentTypeEnum.DataGrid);
+            DataGridView dgvTags = FindDataGridView(collection.XMLType, ComponentTypeEnum.DataGridTags);
+            ComboBox cb = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxType);
+            ComboBox cbSubtype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxSubtype);
+            ComboBox cbGrouptype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxGroup);
 
             UpdateStatus("Saving " + tabIndex);
 
@@ -1946,7 +2188,7 @@ namespace Database_Editor
 
             if (GetDataList(en).Count == tabIndex)
             {
-                var dgv = GetDataGridView(en);
+                var dgv = FindDataGridView(en, ComponentTypeEnum.DataGrid);
                 dgv.Rows.RemoveAt(tabIndex--);
                 SelectRow(dgv, tabIndex);
             }
@@ -1962,7 +2204,76 @@ namespace Database_Editor
 
         }
 
-        #region Auto-Converters
+        #region Dynamic Code
+        public string GetName(XMLTypeEnum strType, ComponentTypeEnum e)
+        {
+            return GetName(Util.GetEnumString(strType), e);
+        }
+        public string GetName(string strType, ComponentTypeEnum e)
+        {
+            switch (e)
+            {
+                case ComponentTypeEnum.ButtonCancel:
+                    return "btn" + strType + "Cancel";
+                case ComponentTypeEnum.TextBoxName:
+                    return "tb" + strType + "Name";
+                case ComponentTypeEnum.TextBoxID:
+                    return "tb" + strType + "ID";
+                case ComponentTypeEnum.TextBoxDescription:
+                    return "tb" + strType + "Description";
+                case ComponentTypeEnum.DataGrid:
+                    return "dgv" + strType + "s";
+                case ComponentTypeEnum.DataGridTags:
+                    return "dgv" + strType + "Tags";
+                case ComponentTypeEnum.TabIndex:
+                    return strType + "s";
+                case ComponentTypeEnum.ColumnName:
+                    return "col" + strType + "sName";
+                case ComponentTypeEnum.ColumnId:
+                    return "col" + strType + "sID";
+                case ComponentTypeEnum.ColumnTags:
+                    return "col" + strType + "Tags";
+                case ComponentTypeEnum.ComboBoxType:
+                    return "cb" + strType + "Type";
+                case ComponentTypeEnum.ComboBoxSubtype:
+                    return "cb" + strType + "Subtype";
+                case ComponentTypeEnum.ComboBoxGroup:
+                    return "cb" + strType + "Group";
+            }
+
+            return string.Empty;
+        }
+
+        private TabPage GetPage(XMLTypeEnum en)
+        {
+            return tabCtl.TabPages["tab" + en.ToString()];
+        }
+
+        private TextBox FindTextBox(XMLTypeEnum xmlType, ComponentTypeEnum type)
+        {
+            string strXMLType = Util.GetEnumString(xmlType);
+            string name = GetName(strXMLType, type);
+
+            return GetPage(xmlType).Controls.OfType<TextBox>().FirstOrDefault(val => val.Name == name);
+        }
+
+        private DataGridView FindDataGridView(XMLTypeEnum xmlType, ComponentTypeEnum type)
+        {
+            string strXMLType = Util.GetEnumString(xmlType);
+            string name = GetName(strXMLType, type);
+
+            return GetPage(xmlType).Controls.OfType<DataGridView>().FirstOrDefault(val => val.Name == name);
+        }
+
+        private ComboBox FindComboBox(XMLTypeEnum xmlType, ComponentTypeEnum type)
+        {
+            string strXMLType = Util.GetEnumString(xmlType);
+            string name = GetName(strXMLType, type);
+
+            var page = GetPage(xmlType);
+            return page.Controls.OfType<ComboBox>().FirstOrDefault(val => val.Name == name);
+        }
+
         private XMLTypeEnum CurrentTabXML()
         {
             return TabToEnum(tabCtl.SelectedTab);
@@ -2071,37 +2382,6 @@ namespace Database_Editor
             }
 
             return string.Empty;
-        }
-
-        private DataGridView GetDataGridView(XMLTypeEnum en)
-        {
-            switch (en)
-            {
-                case XMLTypeEnum.Actor:
-                    return dgvActors;
-                case XMLTypeEnum.Adventure:
-                    return dgvAdventures;
-                case XMLTypeEnum.Cosmetic:
-                    return dgvCosmetics;
-                case XMLTypeEnum.Cutscene:
-                    return dgvCutscenes;
-                case XMLTypeEnum.Item:
-                    return dgvItems;
-                case XMLTypeEnum.Light:
-                    return dgvLights;
-                case XMLTypeEnum.Shop:
-                    return dgvShops;
-                case XMLTypeEnum.StatusEffect:
-                    return dgvStatusEffects;
-                case XMLTypeEnum.Task:
-                    return dgvTasks;
-                case XMLTypeEnum.Upgrade:
-                    return dgvUpgrades;
-                case XMLTypeEnum.WorldObject:
-                    return dgvWorldObjects;
-            }
-
-            return null;
         }
 
         private XMLTypeEnum TabToEnum(TabPage tab)
