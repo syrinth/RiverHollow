@@ -34,6 +34,11 @@
 /processor:PassThroughProcessor
 /build:Data/Config.xml
 
+#begin Data/Cosmetic.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:Data/Cosmetic.xml
+
 #begin Data/CutScenes.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor

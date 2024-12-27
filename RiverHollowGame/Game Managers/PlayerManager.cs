@@ -86,6 +86,8 @@ namespace RiverHollow.Game_Managers
 
         private static List<int> _liCrafting;
 
+        private static Dictionary<CosmeticSlotEnum, List<KeyValuePair<Cosmetic, bool>>> _diCosmetics;
+
         private static DirectionEnum _eHorizontal = DirectionEnum.None;
         private static DirectionEnum _eVertical = DirectionEnum.None;
 
@@ -161,6 +163,7 @@ namespace RiverHollow.Game_Managers
 
             _liUniqueItemsBought = new List<int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
+            _diCosmetics = new Dictionary<CosmeticSlotEnum, List<KeyValuePair<Cosmetic, bool>>>();
 
             PlayerActor = new PlayerCharacter();
             CurrentEnergy = MaxEnergy();
@@ -320,6 +323,13 @@ namespace RiverHollow.Game_Managers
         {
             PlayerActor.DetermineFacing(MapManager.CurrentMap.GetTileByPixelPosition(GUICursor.GetWorldMousePosition()));
         }
+
+        #region Cosmetics Dictionary
+        public static void InitializeCosmeticDictionary()
+        {
+
+        }
+        #endregion
 
         #region Crafting Dictionary
         public static List<int> GetCraftingList()

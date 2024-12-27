@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+
 using static Database_Editor.Classes.Constants;
 using static RiverHollow.Utilities.Enums;
 
@@ -15,14 +16,14 @@ namespace Database_Editor
 {
     public partial class FrmDBEditor : Form
     {
-        Dictionary<string, int> _diTabIndices;
+        readonly Dictionary<string, int> _diTabIndices;
 
         static Dictionary<int, List<string>> _diCutscenes;
         static Dictionary<string, Dictionary<string, List<string>>> _diNPCSchedules;
         static Dictionary<string, List<XMLData>> _diNPCDialogue;
         static Dictionary<string, List<XMLData>> _diCutsceneDialogue;
         static List<XMLData> _liMailbox;
-        static List<XMLData> _liGameText; 
+        static List<XMLData> _liGameText;
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
         static Dictionary<string, List<XMLData>> _diBasicXML;
         //Dictionary<string, TMXData> _diMapData;
@@ -33,7 +34,6 @@ namespace Database_Editor
         string _subtypeFilter = "All";
 
         delegate void VoidDelegate();
-        delegate void XMLListDataDelegate();
 
         public FrmDBEditor()
         {
@@ -46,26 +46,20 @@ namespace Database_Editor
             InitComboBox<EditableNPCDataEnum>(cbEditableCharData, false);
             InitComboBox<StatusTypeEnum>(cbStatusEffect);
             InitComboBox<UpgradeTypeEnum>(cbUpgradeType);
+            InitComboBox<CosmeticSlotEnum>(cbCosmeticType);
 
             cbActorType.Items.Clear();
             InitComboBox<ActorTypeEnum>(cbActorType, true);
 
-            _diTabIndices = new Dictionary<string, int>()
+            _diTabIndices = new Dictionary<string, int>() { { "PreviousTab", 0 } };
+
+            foreach(XMLTypeEnum e in Enum.GetValues(typeof(XMLTypeEnum)))
             {
-                { "PreviousTab", 0 },
-                { "Items", 0 },
-                { "WorldObjects", 0 },
-                { "Actors", 0 },
-                { "Tasks", 0 },
-                { "Cutscenes", 0},
-                { "Mobs", 0},
-                { "Shops", 0 },
-                { "Buildings", 0 },
-                { "StatusEffects", 0 },
-                { "Lights", 0 },
-                { "Adventures", 0 },
-                { "Upgrades", 0 }
-            };
+                if(IsDataFile(e))
+                {
+                    _diTabIndices[GetTabIndexName(e)] = 0;
+                }
+            }
 
             //_diMapData = new Dictionary<string, TMXData>();
             //foreach (string s in Directory.GetDirectories(PATH_TO_MAPS))
@@ -78,7 +72,7 @@ namespace Database_Editor
             //        }
             //    }
             //}
-            
+
             _diNPCDialogue = new Dictionary<string, List<XMLData>>();
             string[] dialogueFiles = Directory.GetFiles(PATH_TO_VILLAGER_DIALOGUE);
             for (int i = 0; i < dialogueFiles.Length; i++)
@@ -112,18 +106,15 @@ namespace Database_Editor
             _diObjectText = ReadTaggedXMLFile(OBJECT_TEXT_XML_FILE);
 
             _diBasicXML = new Dictionary<string, List<XMLData>>();
-            LoadXMLDictionary(TASK_XML_FILE, TASK_REF_TAGS, "", ref _diBasicXML);
-            LoadXMLDictionary(ACTOR_XML_FILE, ACTOR_REF_TAGS, TAGS_FOR_ACTORS, ref _diBasicXML);
             LoadXMLDictionary(CONFIG_XML_FILE, CONFIG_REF_TAG, "", ref _diBasicXML);
-            LoadXMLDictionary(STATUS_EFFECTS_XML_FILE, "", TAGS_FOR_STATUS_EFFECTS, ref _diBasicXML);
-            LoadXMLDictionary(LIGHTS_XML_FILE, "", TAGS_FOR_LIGHTS, ref _diBasicXML);
-            LoadXMLDictionary(UPGRADES_XML_FILE, "", TAGS_FOR_UPGRADES, ref _diBasicXML);
-            LoadXMLDictionary(ADVENTURE_XML_FILE, ADVENTURE_REF_TAGS, TAGS_FOR_ADVENTURES, ref _diBasicXML);
-            LoadXMLDictionary(SHOPS_XML_FILE, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA, ref _diBasicXML);
-            LoadXMLDictionary(ITEM_DATA_XML_FILE, ITEM_REF_TAGS, TAGS_FOR_ITEMS, ref _diBasicXML);
-            LoadXMLDictionary(WORLD_OBJECTS_DATA_XML_FILE, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS, ref _diBasicXML);
+            foreach (XMLTypeEnum en in Enum.GetValues(typeof(XMLTypeEnum)))
+            {
+                if (IsDataFile(en) && en != XMLTypeEnum.Cutscene)
+                {
+                    LoadXMLDictionary(GetXMLDataFileName(en), GetRefTags(en), GetTagsForRef(en), ref _diBasicXML);
+                }
+            }
 
-            //_diShops = ReadXMLFileToXMLDataListDictionary(SHOPS_XML_FILE, XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA);
             _diCutscenes = ReadXMLFileToIntKeyDictionaryStringList(CUTSCENE_XML_FILE);
 
             FindLinkedXMLObjects();
@@ -134,19 +125,15 @@ namespace Database_Editor
 
         private void SetupTabCollections()
         {
-            _diTabCollections = new Dictionary<XMLTypeEnum, XMLCollection>
+            _diTabCollections = new Dictionary<XMLTypeEnum, XMLCollection>();
+
+            foreach (XMLTypeEnum en in Enum.GetValues(typeof(XMLTypeEnum)))
             {
-                [XMLTypeEnum.WorldObject] = new XMLCollection(XMLTypeEnum.WorldObject, WORLD_OBJECT_REF_TAGS, TAGS_FOR_WORLD_OBJECTS),
-                [XMLTypeEnum.Task] = new XMLCollection(XMLTypeEnum.Task, TASK_REF_TAGS, TAGS_FOR_TASKS),
-                [XMLTypeEnum.Cutscene] = new XMLCollection(XMLTypeEnum.Cutscene, CUTSCENE_REF_TAGS, ""),
-                [XMLTypeEnum.StatusEffect] = new XMLCollection(XMLTypeEnum.StatusEffect, "", TAGS_FOR_STATUS_EFFECTS),
-                [XMLTypeEnum.Adventure] = new XMLCollection(XMLTypeEnum.Adventure, ADVENTURE_REF_TAGS, TAGS_FOR_ADVENTURES),
-                [XMLTypeEnum.Item] = new XMLCollection(XMLTypeEnum.Item, ITEM_REF_TAGS, TAGS_FOR_ITEMS),
-                [XMLTypeEnum.Actor] = new XMLCollection(XMLTypeEnum.Actor, ACTOR_REF_TAGS, ""),
-                [XMLTypeEnum.Shop] = new XMLCollection(XMLTypeEnum.Shop, SHOPDATA_REF_TAGS, TAGS_FOR_SHOPDATA),
-                [XMLTypeEnum.Light] = new XMLCollection(XMLTypeEnum.Light, "", TAGS_FOR_LIGHTS),
-                [XMLTypeEnum.Upgrade] = new XMLCollection(XMLTypeEnum.Upgrade, "", TAGS_FOR_UPGRADES),
-            };
+                if (IsDataFile(en))
+                {
+                    _diTabCollections[en] = new XMLCollection(en, GetRefTags(en), GetTagsForRef(en));
+                }
+            }
         }
 
         //private Dictionary<string, string> ReadXMLFileToDictionary(string fileName)
@@ -364,8 +351,8 @@ namespace Database_Editor
         /// <param name="dataList"></param>
         private void FindLinkedXMLObjects()
         {
-            var items = _diBasicXML[ITEM_DATA_XML_FILE];
-            var worldObjects = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE];
+            var items = _diBasicXML[ITEM_XML_FILE];
+            var worldObjects = _diBasicXML[WORLD_OBJECTS_XML_FILE];
             //Compare item Data against the other Items
             for (int i = 0; i < items.Count; i++)
             {
@@ -458,11 +445,11 @@ namespace Database_Editor
             foreach (KeyValuePair<int, List<string>> kvp in dictionaryData)
             {
                 bool weDone = false;
-                foreach(string s in kvp.Value)
+                foreach (string s in kvp.Value)
                 {
                     foreach (string tag in theData.TagsThatReferToMe)
                     {
-                        if(s.Contains(tag + ":"+ theData.ID + "-") || s.Contains(tag + ":" + theData.ID + "]"))
+                        if (s.Contains(tag + ":" + theData.ID + "-") || s.Contains(tag + ":" + theData.ID + "]"))
                         {
                             theData.AddLinkedCutscene(dictionaryData[kvp.Key]);
                             weDone = true;
@@ -480,7 +467,7 @@ namespace Database_Editor
             //Change all IDs
             int index = 0;
 
-            foreach (XMLData data in _diBasicXML[ITEM_DATA_XML_FILE])
+            foreach (XMLData data in _diBasicXML[ITEM_XML_FILE])
             {
                 if (data != null)
                 {
@@ -490,7 +477,7 @@ namespace Database_Editor
             }
 
             index = 0;
-            foreach (XMLData data in _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE])
+            foreach (XMLData data in _diBasicXML[WORLD_OBJECTS_XML_FILE])
             {
                 data.ChangeID(index++, false);
                 worldObjectDataList.Add(data);
@@ -636,22 +623,9 @@ namespace Database_Editor
         }
 
         #region Helpers
-        private int GetTotalEntries()
+        private bool IsDataFile(XMLTypeEnum en)
         {
-            int rv = 0;
-
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabActor"]) { rv = _diBasicXML[ACTOR_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscene"]) { rv = _diBasicXML[CUTSCENE_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabAdventure"]) { rv = _diBasicXML[ADVENTURE_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItem"]) { rv = _diBasicXML[ITEM_DATA_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLight"]) { rv = _diBasicXML[LIGHTS_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShop"]) { rv = _diBasicXML[SHOPS_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffect"]) { rv = _diBasicXML[STATUS_EFFECTS_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTask"]) { rv = _diBasicXML[TASK_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabUpgrade"]) { rv = _diBasicXML[UPGRADES_XML_FILE].Count; }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObject"]) { rv = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].Count; }
-
-            return rv;
+            return en != XMLTypeEnum.None && en != XMLTypeEnum.TextFile;
         }
         private void InitComboBox<T>(ComboBox cb, bool type = true, List<T> skip = null)
         {
@@ -672,13 +646,13 @@ namespace Database_Editor
 
             if (fileName == TASK_XML_FILE) { rv = XMLTypeEnum.Task; }
             else if (fileName == ACTOR_XML_FILE) { rv = XMLTypeEnum.Actor; }
-            else if (fileName == WORLD_OBJECTS_DATA_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
+            else if (fileName == WORLD_OBJECTS_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
             else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
-            else if (fileName == LIGHTS_XML_FILE) { rv = XMLTypeEnum.Light; }
+            else if (fileName == LIGHT_XML_FILE) { rv = XMLTypeEnum.Light; }
             else if (fileName == UPGRADES_XML_FILE) { rv = XMLTypeEnum.Upgrade; }
             else if (fileName == ADVENTURE_XML_FILE) { rv = XMLTypeEnum.Adventure; }
-            else if (fileName == SHOPS_XML_FILE) { rv = XMLTypeEnum.Shop; }
-            else if (fileName == ITEM_DATA_XML_FILE) { rv = XMLTypeEnum.Item; }
+            else if (fileName == SHOP_XML_FILE) { rv = XMLTypeEnum.Shop; }
+            else if (fileName == ITEM_XML_FILE) { rv = XMLTypeEnum.Item; }
             else if (fileName.Contains("Text Files")) { rv = XMLTypeEnum.TextFile; }
 
             return rv;
@@ -774,7 +748,6 @@ namespace Database_Editor
         #endregion
 
         #region DataGridView Loading
-
         private bool TypeFilterCheck(XMLData data)
         {
             return _typeFilter == "All" || data.GetTagValue("Type").ToString().Equals(_typeFilter);
@@ -785,17 +758,30 @@ namespace Database_Editor
         }
         private void LoadDataGrids()
         {
-            LoadItemDataGrid();
-            LoadWorldObjectDataGrid();
-            LoadActorDataGrid();
-            LoadTaskDataGrid();
-            LoadStatusEffectDataGrid();
-            LoadLightDataGrid();
-            LoadCutsceneDataGrid();
-            LoadShopsDataGrid();
-            LoadAdventureDataGrid();
-            LoadUpgradeDataGrid();
+            foreach (XMLTypeEnum en in Enum.GetValues(typeof(XMLTypeEnum)))
+            {
+                if (IsDataFile(en))
+                {
+                    LoadDataGrid(en, GetTabIndex(en));
+                }
+            }
         }
+
+        private void LoadDataGrid(XMLTypeEnum en, int selectRow = -1, string filter = "All")
+        {
+            switch (en)
+            {
+                case XMLTypeEnum.TextFile:
+                    return;
+                case XMLTypeEnum.Cutscene:
+                    LoadCutsceneDataGrid();
+                    break;
+                default:
+                    LoadGenericDatagrid(_diTabCollections[en], GetDataList(en), selectRow == -1 ? GetTabIndex(en) : selectRow, filter);
+                    break;
+            }
+        }
+
         private void LoadGenericDatagrid(XMLCollection collection, List<XMLData> data, int selectRow, string filter = "All")
         {
             string colName = GetName(collection.XMLType, ComponentTypeEnum.ColumnName);
@@ -819,42 +805,7 @@ namespace Database_Editor
             SelectRow(dgv, selectRow);
             dgv.Focus();
         }
-        private void LoadItemDataGrid(string filter = "All", int selectedIndex = -1)
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Item], _diBasicXML[ITEM_DATA_XML_FILE], selectedIndex == -1 ? _diTabIndices["Items"] : selectedIndex, filter);
-        }
-        private void LoadWorldObjectDataGrid(string filter = "All", int selectedIndex = -1)
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.WorldObject], _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE], selectedIndex == -1 ? _diTabIndices["WorldObjects"] : selectedIndex, filter);
-        }
-        private void LoadActorDataGrid(string filter = "All", int selectedIndex = -1)
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Actor], _diBasicXML[ACTOR_XML_FILE], selectedIndex == -1 ? _diTabIndices["Actors"] : selectedIndex, filter);
-        }
-        private void LoadTaskDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Task], _diBasicXML[TASK_XML_FILE], _diTabIndices["Tasks"]);
-        }
-        private void LoadStatusEffectDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.StatusEffect], _diBasicXML[STATUS_EFFECTS_XML_FILE], _diTabIndices["StatusEffects"]);
-        }
-        private void LoadLightDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Light], _diBasicXML[LIGHTS_XML_FILE], _diTabIndices["Lights"]);
-        }
-        private void LoadUpgradeDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Upgrade], _diBasicXML[UPGRADES_XML_FILE], _diTabIndices["Upgrades"]);
-        }
-        private void LoadAdventureDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Adventure], _diBasicXML[ADVENTURE_XML_FILE], _diTabIndices["Adventures"]);
-        }
-        private void LoadShopsDataGrid()
-        {
-            LoadGenericDatagrid(_diTabCollections[XMLTypeEnum.Shop], _diBasicXML[SHOPS_XML_FILE], _diTabIndices["Shops"]);
-        }
+
         private void LoadCutsceneDataGrid()
         {
             dgvCutscenes.Rows.Clear();
@@ -1033,51 +984,9 @@ namespace Database_Editor
 
             _typeFilter = "All";
             _subtypeFilter = "All";
-            if (tabCtl.SelectedTab == tabCtl.TabPages["tabActor"])
-            {
-                LoadActorDataGrid();
-                dgvActors.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabCutscene"])
-            {
-                LoadCutsceneDataGrid();
-                dgvCutscenes.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabAdventure"])
-            {
-                LoadAdventureDataGrid();
-                dgvAdventures.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabItem"])
-            {
-                LoadItemDataGrid();
-                dgvItems.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabLight"])
-            {
-                LoadLightDataGrid();
-                dgvLights.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabShop"])
-            {
-                LoadShopsDataGrid();
-                dgvShops.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabStatusEffect"])
-            {
-                LoadStatusEffectDataGrid();
-                dgvStatusEffects.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabTask"])
-            {
-                LoadTaskDataGrid();
-                dgvTasks.Focus();
-            }
-            else if (tabCtl.SelectedTab == tabCtl.TabPages["tabWorldObject"])
-            {
-                LoadWorldObjectDataGrid();
-                dgvWorldObjects.Focus();
-            }
+            XMLTypeEnum en = CurrentTabXML();
+            LoadDataGrid(en);
+            GetDataGridView(en).Focus();
 
             _diTabIndices["PreviousTab"] = tabCtl.SelectedIndex;
         }
@@ -1219,16 +1128,7 @@ namespace Database_Editor
         {
             TabPage prevPage = tabCtl.TabPages[_diTabIndices["PreviousTab"]];
 
-            if (prevPage == tabCtl.TabPages["tabNPCs"]) { SaveActorInfo(); }      
-            else if (prevPage == tabCtl.TabPages["tabCutscenes"]) { SaveCutsceneInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabAdventures"]) { SaveAdventureInfo(); }            
-            else if (prevPage == tabCtl.TabPages["tabItems"]) { SaveItemInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabLights"]) { SaveLightInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabUpgrade"]) { SaveUpgradeInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabShops"]) { SaveShopInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabStatusEffects"]) { SaveStatusEffectInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabTasks"]) { SaveTaskInfo(); }
-            else if (prevPage == tabCtl.TabPages["tabWorldObjects"]) { SaveWorldObjectInfo(); }
+            SaveInfo(TabToEnum(prevPage));
         }
         #endregion
 
@@ -1372,8 +1272,8 @@ namespace Database_Editor
             {
                 var items = Enum.GetNames(typeof(ItemTypeEnum)).ToList();
                 items.Remove(Util.GetEnumString(ItemTypeEnum.Buildable));
-                AddContextMenuItem("Add New", AddNewItem, true, items.ToArray());
-                AddContextMenuItem("All", dgvItemsContextMenuClick, false);
+                AddContextMenuItem("Add New", AddNewEntry, true, items.ToArray());
+                AddContextMenuItem("All", dgvContextMenuClick, false);
 
                 foreach (ItemTypeEnum en in Enum.GetValues(typeof(ItemTypeEnum)))
                 {
@@ -1387,18 +1287,18 @@ namespace Database_Editor
                             resourceNames.Insert(0, "All");
                             resourceNames.Remove(Util.GetEnumString(ResourceTypeEnum.Food));
                             resourceNames.Remove(Util.GetEnumString(ResourceTypeEnum.Meal));
-                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, resourceNames.ToArray());
+                            AddContextMenuItem(s, dgvContextMenuClick, false, resourceNames.ToArray());
                             break;
                         case ItemTypeEnum.Food:
-                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, new string[] { "All", Util.GetEnumString(ResourceTypeEnum.Food), Util.GetEnumString(ResourceTypeEnum.Meal) });
+                            AddContextMenuItem(s, dgvContextMenuClick, false, new string[] { "All", Util.GetEnumString(ResourceTypeEnum.Food), Util.GetEnumString(ResourceTypeEnum.Meal) });
                             break;
                         case ItemTypeEnum.Merchandise:
                             var merchNames = Enum.GetNames(typeof(MerchandiseTypeEnum)).ToList();
                             merchNames.Insert(0, "All");
-                            AddContextMenuItem(s, dgvItemsContextMenuClick, false, merchNames.ToArray());
+                            AddContextMenuItem(s, dgvContextMenuClick, false, merchNames.ToArray());
                             break;
                         default:
-                            AddContextMenuItem(s, dgvItemsContextMenuClick, false);
+                            AddContextMenuItem(s, dgvContextMenuClick, false);
                             break;
 
                     }
@@ -1406,8 +1306,8 @@ namespace Database_Editor
             }
             else if (dgv == dgvWorldObjects)
             {
-                AddContextMenuItem("Add New", AddNewWorldObject, true, Enum.GetNames(typeof(ObjectTypeEnum)));
-                AddContextMenuItem("All", dgvWorldObjectsContextMenuClick, false);
+                AddContextMenuItem("Add New", AddNewEntry, true, Enum.GetNames(typeof(ObjectTypeEnum)));
+                AddContextMenuItem("All", dgvContextMenuClick, false);
 
                 foreach (ObjectTypeEnum en in Enum.GetValues(typeof(ObjectTypeEnum)))
                 {
@@ -1417,31 +1317,32 @@ namespace Database_Editor
                         case ObjectTypeEnum.Buildable:
                             var names = Enum.GetNames(typeof(BuildableEnum)).ToList();
                             names.Insert(0, "All");
-                            AddContextMenuItem(s, dgvWorldObjectsContextMenuClick, false, names.ToArray());
+                            AddContextMenuItem(s, dgvContextMenuClick, false, names.ToArray());
                             break;
                         default:
-                            AddContextMenuItem(s, dgvWorldObjectsContextMenuClick, false);
+                            AddContextMenuItem(s, dgvContextMenuClick, false);
                             break;
                     }
                 }
             }
-            else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewTask, false, Enum.GetNames(typeof(TaskTypeEnum))); }
-            else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewCutscene, false); }
-            else if (dgv == dgvActors) {
-                AddContextMenuItem("Add New", AddNewActor, true, Enum.GetNames(typeof(ActorTypeEnum)));
-                AddContextMenuItem("All", dgActorsContextMenuClick, false);
+            else if (dgv == dgvTasks) { AddContextMenuItem("Add New", AddNewEntry, false, Enum.GetNames(typeof(TaskTypeEnum))); }
+            else if (dgv == dgvCutscenes) { AddContextMenuItem("Add New", AddNewEntry, false); }
+            else if (dgv == dgvActors)
+            {
+                AddContextMenuItem("Add New", AddNewEntry, true, Enum.GetNames(typeof(ActorTypeEnum)));
+                AddContextMenuItem("All", dgvContextMenuClick, false);
                 foreach (string s in Enum.GetNames(typeof(ActorTypeEnum)))
                 {
                     if (!s.Equals("Actor"))
                     {
-                        AddContextMenuItem(s, dgActorsContextMenuClick, false);
+                        AddContextMenuItem(s, dgvContextMenuClick, false);
                     }
                 }
             }
-            else if (dgv == dgvLights) { AddContextMenuItem("Add New", AddNewLight, false); }
-            else if (dgv == dgvUpgrades) { AddContextMenuItem("Add New", AddNewUpgrade, false); }
-            else if (dgv == dgvAdventures) { AddContextMenuItem("Add New", AddNewAdventure, false); }
-            else if (dgv == dgvShops) { AddContextMenuItem("Add New", AddNewShop, false); }
+            else if (dgv == dgvLights) { AddContextMenuItem("Add New", AddNewEntry, false); }
+            else if (dgv == dgvUpgrades) { AddContextMenuItem("Add New", AddNewEntry, false); }
+            else if (dgv == dgvAdventures) { AddContextMenuItem("Add New", AddNewEntry, false); }
+            else if (dgv == dgvShops) { AddContextMenuItem("Add New", AddNewEntry, false); }
         }
 
         private void AddContextMenuItem(string text, EventHandler triggeredEvent, bool separator, params string[] subEntries)
@@ -1469,46 +1370,66 @@ namespace Database_Editor
         }
 
         #region Filters
-        private void dgvItemsContextMenuClick(object sender, EventArgs e)
+        private void dgvContextMenuClick(object sender, EventArgs e)
         {
-            _diTabIndices["Items"] = 0;
+            XMLTypeEnum en = CurrentTabXML();
+            _diTabIndices[GetTabIndexName(en)] = 0;
+
             var selection = ((ToolStripMenuItem)sender);
             if (selection.OwnerItem == null)
             {
                 _subtypeFilter = "All";
-                LoadItemDataGrid(selection.Text, 0);
+                LoadDataGrid(en, 0, selection.Text);
             }
             else
             {
                 _subtypeFilter = selection.Text;
-                LoadItemDataGrid(selection.OwnerItem.Text, 0);
+                LoadDataGrid(en, 0, selection.OwnerItem.Text);
             }
-            LoadItemInfo();
+            LoadInfo(en);
         }
 
-        private void dgvWorldObjectsContextMenuClick(object sender, EventArgs e)
-        {
-            _diTabIndices["WorldObjects"] = 0;
-            var selection = ((ToolStripMenuItem)sender);
-            if (selection.OwnerItem == null)
-            {
-                _subtypeFilter = "All";
-                LoadWorldObjectDataGrid(selection.Text, 0);
-            }
-            else
-            {
-                _subtypeFilter = selection.Text;
-                LoadWorldObjectDataGrid(selection.OwnerItem.Text, 0);
-            }
-            LoadWorldObjectInfo();
-        }
+        //private void dgvItemsContextMenuClick(object sender, EventArgs e)
+        //{
+        //    _diTabIndices["Items"] = 0;
+        //    var selection = ((ToolStripMenuItem)sender);
+        //    if (selection.OwnerItem == null)
+        //    {
+        //        _subtypeFilter = "All";
+        //        LoadInfo(selection.Text)
+        //        //LoadItemDataGrid(selection.Text, 0);
+        //    }
+        //    else
+        //    {
+        //        _subtypeFilter = selection.Text;
+        //        //LoadItemDataGrid(selection.OwnerItem.Text, 0);
+        //    }
+        //    LoadItemInfo();
+        //}
 
-        private void dgActorsContextMenuClick(object sender, EventArgs e)
-        {
-            _diTabIndices["Actors"] = 0;
-            LoadActorDataGrid(((ToolStripMenuItem)sender).Text, 0);
-            LoadActorInfo();
-        }
+        //private void dgvWorldObjectsContextMenuClick(object sender, EventArgs e)
+        //{
+        //    _diTabIndices["WorldObjects"] = 0;
+        //    var selection = ((ToolStripMenuItem)sender);
+        //    if (selection.OwnerItem == null)
+        //    {
+        //        _subtypeFilter = "All";
+        //        //LoadWorldObjectDataGrid(selection.Text, 0);
+        //    }
+        //    else
+        //    {
+        //        _subtypeFilter = selection.Text;
+        //        //LoadWorldObjectDataGrid(selection.OwnerItem.Text, 0);
+        //    }
+        //    LoadWorldObjectInfo();
+        //}
+
+        //private void dgActorsContextMenuClick(object sender, EventArgs e)
+        //{
+        //    _diTabIndices["Actors"] = 0;
+        //    //LoadActorDataGrid(((ToolStripMenuItem)sender).Text, 0);
+        //    //LoadActorInfo();
+        //}
         #endregion
 
         private void gameTextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1533,6 +1454,19 @@ namespace Database_Editor
         #endregion
 
         #region Add New
+        private void AddNewEntry(object sender, EventArgs e)
+        {
+            XMLTypeEnum en = CurrentTabXML();
+
+            if (en == XMLTypeEnum.Cutscene)
+            {
+                SaveCutsceneInfo();
+                tbCutsceneTriggers.Clear();
+                tbCutsceneDetails.Clear();
+            }
+
+            AddNewGenericXMLObject(_diTabCollections[en], sender.ToString());
+        }
         private void AddNewGenericXMLObject(XMLCollection collection, string chosenType)
         {
             string tabIndex = GetName(collection.XMLType, ComponentTypeEnum.TabIndex);
@@ -1554,7 +1488,7 @@ namespace Database_Editor
             row.Cells[columnName].Value = "";
 
             tbName.Text = "";
-            tbID.Text = GetTotalEntries().ToString();
+            tbID.Text = GetDataList(CurrentTabXML()).Count.ToString();
             if (tbDescription != null)
             {
                 tbDescription.Text = "";
@@ -1724,69 +1658,50 @@ namespace Database_Editor
                     break;
             }
         }
-
-        private void AddNewItem(object sender, EventArgs e)
-        {
-            SaveItemInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Item], sender.ToString());
-        }
-        private void AddNewWorldObject(object sender, EventArgs e)
-        {
-            SaveWorldObjectInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.WorldObject], sender.ToString());
-        }
-        private void AddNewTask(object sender, EventArgs e)
-        {
-            SaveTaskInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Task], sender.ToString());
-        }
-        private void AddNewCutscene(object sender, EventArgs e)
-        {
-            SaveCutsceneInfo();
-            tbCutsceneTriggers.Clear();
-            tbCutsceneDetails.Clear();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Cutscene], sender.ToString());
-        }
-        private void AddNewActor(object sender, EventArgs e)
-        {
-            SaveActorInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Actor], sender.ToString());
-        }
-        private void AddNewLight(object sender, EventArgs e)
-        {
-            SaveLightInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Light], sender.ToString());
-        }
-        private void AddNewUpgrade(object sender, EventArgs e)
-        {
-            SaveUpgradeInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Upgrade], sender.ToString());
-        }
-        private void AddNewAdventure(object sender, EventArgs e)
-        {
-            SaveAdventureInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Adventure], "");
-        }
-        private void AddNewShop(object sender, EventArgs e)
-        {
-            SaveShopInfo();
-            AddNewGenericXMLObject(_diTabCollections[XMLTypeEnum.Shop], "");
-        }
         #endregion
 
         #region Load Info Panes
         private void LoadAllInfoPanels()
         {
-            LoadItemInfo();
-            LoadWorldObjectInfo();
-            LoadActorInfo();
-            LoadTaskInfo();
-            LoadCutsceneInfo();
-            LoadShopInfo();
-            LoadStatusEffectInfo();
-            LoadLightInfo();
-            LoadUpgradeInfo();
-            LoadAdventureInfo();
+            foreach (XMLTypeEnum en in Enum.GetValues(typeof(XMLTypeEnum)))
+            {
+                if (IsDataFile(en))
+                {
+                    LoadInfo(en);
+                }
+            }
+        }
+
+        private void LoadInfo(XMLTypeEnum en)
+        {
+            var dgv = GetDataGridView(en);
+            if (dgv.SelectedRows.Count > 0)
+            {
+                XMLData data = null;
+
+                string strEnum = en.ToString();
+                string fileName = GetXMLDataFileName(en);
+
+                switch (en)
+                {
+                    case XMLTypeEnum.Actor:
+                        LoadActorInfo();
+                        break;
+                    case XMLTypeEnum.Item:
+                        LoadItemInfo();
+                        break;
+                    case XMLTypeEnum.WorldObject:
+                        LoadWorldObjectInfo();
+                        break;
+                    case XMLTypeEnum.Cutscene:
+                        LoadCutsceneInfo();
+                        break;
+                    default:
+                        data = GetDataList(en)[GetTabIndex(en)];
+                        LoadGenericDataInfo(data, _diTabCollections[en]);
+                        break;
+                }
+            }
         }
 
         private void LoadGenericDataInfo(XMLData data, XMLCollection collection)
@@ -1828,38 +1743,7 @@ namespace Database_Editor
                 cbGrouptype.SelectedItem = "Group:" + data.GetTagValue("Group");
             }
         }
-        private void LoadItemInfo()
-        {
-            if (dgvItems.SelectedRows.Count > 0)
-            {
-                DataGridViewRow r = dgvItems.SelectedRows[0];
-                XMLData data = null;
-                if (_typeFilter == "All") { data = _diBasicXML[ITEM_DATA_XML_FILE][r.Index]; }
-                else if (_subtypeFilter != "All")
-                {
-                    data = _diBasicXML[ITEM_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter) && x.GetTagValue("Subtype").Equals(_subtypeFilter))[r.Index];
-                }
-                else { data = _diBasicXML[ITEM_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
 
-                LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Item]);
-            }
-        }
-        private void LoadWorldObjectInfo()
-        {
-            if (dgvWorldObjects.SelectedRows.Count > 0)
-            {
-                DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
-                XMLData data = null;
-                if (_typeFilter == "All") { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE][r.Index]; }
-                else if (_subtypeFilter != "All")
-                {
-                    data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter) && x.GetTagValue("Subtype").Equals(_subtypeFilter))[r.Index];
-                }
-                else { data = _diBasicXML[WORLD_OBJECTS_DATA_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
-
-                LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.WorldObject]);
-            }
-        }
         private void LoadActorInfo()
         {
             if (dgvActors.SelectedRows.Count > 0)
@@ -1871,36 +1755,40 @@ namespace Database_Editor
                 LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Actor]);
             }
         }
-        private void LoadTaskInfo()
+
+        private void LoadItemInfo()
         {
-            XMLData data = _diBasicXML[TASK_XML_FILE][_diTabIndices["Tasks"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Task]);
+            if (dgvItems.SelectedRows.Count > 0)
+            {
+                DataGridViewRow r = dgvItems.SelectedRows[0];
+                XMLData data = null;
+                if (_typeFilter == "All") { data = _diBasicXML[ITEM_XML_FILE][r.Index]; }
+                else if (_subtypeFilter != "All")
+                {
+                    data = _diBasicXML[ITEM_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter) && x.GetTagValue("Subtype").Equals(_subtypeFilter))[r.Index];
+                }
+                else { data = _diBasicXML[ITEM_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
+
+                LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Item]);
+            }
         }
-        private void LoadStatusEffectInfo()
+        private void LoadWorldObjectInfo()
         {
-            XMLData data = _diBasicXML[STATUS_EFFECTS_XML_FILE][_diTabIndices["StatusEffects"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.StatusEffect]);
+            if (dgvWorldObjects.SelectedRows.Count > 0)
+            {
+                DataGridViewRow r = dgvWorldObjects.SelectedRows[0];
+                XMLData data = null;
+                if (_typeFilter == "All") { data = _diBasicXML[WORLD_OBJECTS_XML_FILE][r.Index]; }
+                else if (_subtypeFilter != "All")
+                {
+                    data = _diBasicXML[WORLD_OBJECTS_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter) && x.GetTagValue("Subtype").Equals(_subtypeFilter))[r.Index];
+                }
+                else { data = _diBasicXML[WORLD_OBJECTS_XML_FILE].FindAll(x => x.GetTagValue("Type").Equals(_typeFilter))[r.Index]; }
+
+                LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.WorldObject]);
+            }
         }
-        private void LoadLightInfo()
-        {
-            XMLData data = _diBasicXML[LIGHTS_XML_FILE][_diTabIndices["Lights"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Light]);
-        }
-        private void LoadUpgradeInfo()
-        {
-            XMLData data = _diBasicXML[UPGRADES_XML_FILE][_diTabIndices["Upgrades"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Upgrade]);
-        }
-        private void LoadAdventureInfo()
-        {
-            XMLData data = _diBasicXML[ADVENTURE_XML_FILE][_diTabIndices["Adventures"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Adventure]);
-        }
-        private void LoadShopInfo()
-        {
-            XMLData data = _diBasicXML[SHOPS_XML_FILE][_diTabIndices["Shops"]];
-            LoadGenericDataInfo(data, _diTabCollections[XMLTypeEnum.Shop]);
-        }
+
         private void LoadCutsceneInfo()
         {
             List<string> listData = _diCutscenes[_diTabIndices["Cutscenes"]];
@@ -1923,6 +1811,52 @@ namespace Database_Editor
         #endregion
 
         #region SaveInfo
+        private void SaveInfo(XMLTypeEnum en)
+        {
+            switch (en)
+            {
+                case XMLTypeEnum.TextFile:
+                    return;
+                case XMLTypeEnum.Cutscene:
+                    SaveCutsceneInfo();
+                    break;
+                default:
+                    SaveXMLDataInfo(GetDataList(en), _diTabCollections[en]);
+                    break;
+            }
+        }
+
+        private void SaveCutsceneInfo()
+        {
+            UpdateStatus("Saving Cutscenes");
+            List<string> listData;
+            if (!_diCutscenes.ContainsKey(_diTabIndices["Cutscenes"]))
+            {
+                _diCutscenes[_diTabIndices["Cutscenes"]] = new List<string>();
+                listData = _diCutscenes[_diTabIndices["Cutscenes"]];
+            }
+            else { listData = _diCutscenes[_diTabIndices["Cutscenes"]]; }
+
+            listData.Clear();
+            listData.Add(tbCutsceneTriggers.Text);
+            listData.Add(tbCutsceneDetails.Text);
+
+            string tags = string.Empty;
+            foreach (DataGridViewRow r in dgvCutsceneTags.Rows)
+            {
+                if (r.Cells[0].Value != null)
+                {
+                    tags += "[" + r.Cells[0].Value + "]";
+                }
+            }
+            listData.Add(tags);
+            UpdateTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name", tbCutsceneName.Text);
+
+            DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
+
+            //updatedRow.Cells["colCutscenesID"].Value = _diTabIndices["Cutscenes"];
+            updatedRow.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
+        }
         private void SaveXMLDataInfo(List<XMLData> liData, XMLCollection collection)
         {
             string tabIndex = GetName(collection.XMLType, ComponentTypeEnum.TabIndex);
@@ -1989,74 +1923,6 @@ namespace Database_Editor
             //updatedRow.Cells[colID].Value = data.ID;
             updatedRow.Cells[columnName].Value = data.Name;
         }
-        private void SaveItemInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[ITEM_DATA_XML_FILE], _diTabCollections[XMLTypeEnum.Item]);
-        }
-        private void SaveWorldObjectInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[WORLD_OBJECTS_DATA_XML_FILE], _diTabCollections[XMLTypeEnum.WorldObject]);
-        }
-        private void SaveActorInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[ACTOR_XML_FILE], _diTabCollections[XMLTypeEnum.Actor]);
-        }
-        private void SaveTaskInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[TASK_XML_FILE], _diTabCollections[XMLTypeEnum.Task]);
-        }
-        private void SaveStatusEffectInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[STATUS_EFFECTS_XML_FILE], _diTabCollections[XMLTypeEnum.StatusEffect]);
-        }
-        private void SaveLightInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[LIGHTS_XML_FILE], _diTabCollections[XMLTypeEnum.Light]);
-        }
-        private void SaveUpgradeInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[UPGRADES_XML_FILE], _diTabCollections[XMLTypeEnum.Upgrade]);
-        }
-        private void SaveAdventureInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[ADVENTURE_XML_FILE], _diTabCollections[XMLTypeEnum.Adventure]);
-        }
-        private void SaveShopInfo()
-        {
-            SaveXMLDataInfo(_diBasicXML[SHOPS_XML_FILE], _diTabCollections[XMLTypeEnum.Shop]);
-        }
-        private void SaveCutsceneInfo()
-        {
-            UpdateStatus("Saving Cutscenes");
-            List<string> listData;
-            if (!_diCutscenes.ContainsKey(_diTabIndices["Cutscenes"]))
-            {
-                _diCutscenes[_diTabIndices["Cutscenes"]] = new List<string>();
-                listData = _diCutscenes[_diTabIndices["Cutscenes"]];
-            }
-            else { listData = _diCutscenes[_diTabIndices["Cutscenes"]]; }
-
-            listData.Clear();
-            listData.Add(tbCutsceneTriggers.Text);
-            listData.Add(tbCutsceneDetails.Text);
-
-            string tags = string.Empty;
-            foreach (DataGridViewRow r in dgvCutsceneTags.Rows)
-            {
-                if (r.Cells[0].Value != null)
-                {
-                    tags += "[" + r.Cells[0].Value + "]";
-                }
-            }
-            listData.Add(tags);
-            UpdateTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name", tbCutsceneName.Text);
-
-            DataGridViewRow updatedRow = dgvCutscenes.Rows[_diTabIndices["Cutscenes"]];
-
-            //updatedRow.Cells["colCutscenesID"].Value = _diTabIndices["Cutscenes"];
-            updatedRow.Cells["colCutscenesName"].Value = GetTextValue(XMLTypeEnum.Cutscene, _diTabIndices["Cutscenes"], "Name");
-        }
-
         #endregion
 
         #region DataGridViewCell_Click
@@ -2064,30 +1930,10 @@ namespace Database_Editor
         {
             if (e.RowIndex > -1)
             {
-                if (sender == dgvAdventures) { GenericCellClick(e, "Adventures", LoadAdventureInfo, SaveAdventureInfo); }
-                else if (sender == dgvLights) { GenericCellClick(e, "Lights", LoadLightInfo, SaveLightInfo); }
-                else if (sender == dgvActors) { GenericCellClick(e, "Actors", LoadActorInfo, SaveActorInfo); }
-                else if (sender == dgvShops) { GenericCellClick(e, "Shops", LoadShopInfo, SaveShopInfo); }
-                else if (sender == dgvStatusEffects) { GenericCellClick(e, "StatusEffects", LoadStatusEffectInfo, SaveStatusEffectInfo); }
-                else if (sender == dgvTasks) { GenericCellClick(e, "Tasks", LoadTaskInfo, SaveTaskInfo); }
-                else if (sender == dgvUpgrades) { GenericCellClick(e, "Upgrades", LoadUpgradeInfo, SaveUpgradeInfo); }
-                else if (sender == dgvWorldObjects) { GenericCellClick(e, "WorldObjects", LoadWorldObjectInfo, SaveWorldObjectInfo); }
-                else if (sender == dgvItems) { GenericCellClick(e, "Items", LoadItemInfo, SaveItemInfo); }
-                else if (sender == dgvCutscenes)
-                {
-                    SaveCutsceneInfo();
-                    _diTabIndices["Cutscenes"] = e.RowIndex;
-                    LoadCutsceneInfo();
-                }
-            }
-        }
-        private void GenericCellClick(DataGridViewCellEventArgs e, string tabIndex, VoidDelegate loadDel, XMLListDataDelegate saveDel)
-        {
-            if (e.RowIndex > -1)
-            {
-                saveDel();
-                _diTabIndices[tabIndex] = e.RowIndex;
-                loadDel();
+                XMLTypeEnum en = CurrentTabXML();
+                SaveInfo(en);
+                _diTabIndices[GetTabIndexName(en)] = e.RowIndex;
+                LoadInfo(en);
             }
         }
         #endregion
@@ -2095,33 +1941,17 @@ namespace Database_Editor
         #region Cancel Button
         private void ProcessCancel_Click(object sender, EventArgs e)
         {
-            if (sender == btnAdventureCancel) { GenericCancel(_diBasicXML[ADVENTURE_XML_FILE], "Adventure", dgvAdventures, LoadAdventureInfo); }
-            else if (sender == btnLightCancel) { GenericCancel(_diBasicXML[LIGHTS_XML_FILE], "Light", dgvLights, LoadLightInfo); }
-            else if (sender == btnActorCancel) { GenericCancel(_diBasicXML[ACTOR_XML_FILE], "Actors", dgvActors, LoadActorInfo); }
-            else if (sender == btnShopCancel) { GenericCancel(_diBasicXML[SHOPS_XML_FILE], "Shops", dgvShops, LoadShopInfo); }
-            else if (sender == btnStatusEffectCancel) { GenericCancel(_diBasicXML[STATUS_EFFECTS_XML_FILE], "StatusEffects", dgvStatusEffects, LoadStatusEffectInfo); }
-            else if (sender == btnTaskCancel) { GenericCancel(_diBasicXML[TASK_XML_FILE], "Tasks", dgvTasks, LoadTaskInfo); }
-            else if (sender == btnUpgradeCancel) { GenericCancel(_diBasicXML[UPGRADES_XML_FILE], "Upgrades", dgvUpgrades, LoadUpgradeInfo); }
-            else if (sender == btnWorldObjectCancel) { GenericCancel(_diBasicXML[WORLD_OBJECTS_DATA_XML_FILE], "WorldObjects", dgvWorldObjects, LoadWorldObjectInfo); }
-            else if (sender == btnItemCancel) { GenericCancel(_diBasicXML[ITEM_DATA_XML_FILE], "Items", dgvItems, LoadItemInfo); }
-            else if (sender == btnCutsceneCancel)
+            XMLTypeEnum en = CurrentTabXML();
+            var tabIndex = GetTabIndex(en);
+
+            if (GetDataList(en).Count == tabIndex)
             {
-                if (_diCutscenes.Count == _diTabIndices["Cutscenes"])
-                {
-                    dgvCutscenes.Rows.RemoveAt(_diTabIndices["Cutscenes"]--);
-                    SelectRow(dgvCutscenes, _diTabIndices["Cutscenes"]);
-                }
-                LoadCutsceneInfo();
+                var dgv = GetDataGridView(en);
+                dgv.Rows.RemoveAt(tabIndex--);
+                SelectRow(dgv, tabIndex);
             }
-        }
-        private void GenericCancel(List<XMLData> liData, string tabIndex, DataGridView dgMain, VoidDelegate del)
-        {
-            if (liData.Count == _diTabIndices[tabIndex])
-            {
-                dgMain.Rows.RemoveAt(_diTabIndices[tabIndex]--);
-                SelectRow(dgMain, _diTabIndices[tabIndex]);
-            }
-            del();
+
+            LoadInfo(en);
         }
         #endregion
 
@@ -2131,5 +1961,179 @@ namespace Database_Editor
             this.MaximumSize = new Size(832, Screen.PrimaryScreen.Bounds.Height);
 
         }
+
+        #region Auto-Converters
+        private XMLTypeEnum CurrentTabXML()
+        {
+            return TabToEnum(tabCtl.SelectedTab);
+        }
+        private int GetTabIndex(XMLTypeEnum en)
+        {
+            return _diTabIndices[GetTabIndexName(en)];
+        }
+        private string GetTabIndexName(XMLTypeEnum en)
+        {
+            string strEnum = en.ToString();
+            return strEnum + "s";
+        }
+        private List<XMLData> GetDataList(XMLTypeEnum en)
+        {
+            return _diBasicXML[GetXMLDataFileName(en)];
+        }
+        private string GetXMLDataFileName(XMLTypeEnum en)
+        {
+            switch (en)
+            {
+                case XMLTypeEnum.Actor:
+                    return ACTOR_XML_FILE;
+                case XMLTypeEnum.Adventure:
+                    return ADVENTURE_XML_FILE;
+                case XMLTypeEnum.Cosmetic:
+                    return COSMETIC_XML_FILE;
+                case XMLTypeEnum.Cutscene:
+                    return CUTSCENE_XML_FILE;
+                case XMLTypeEnum.Item:
+                    return ITEM_XML_FILE;
+                case XMLTypeEnum.Light:
+                    return LIGHT_XML_FILE;
+                case XMLTypeEnum.Shop:
+                    return SHOP_XML_FILE;
+                case XMLTypeEnum.StatusEffect:
+                    return STATUS_EFFECTS_XML_FILE;
+                case XMLTypeEnum.Task:
+                    return TASK_XML_FILE;
+                case XMLTypeEnum.Upgrade:
+                    return UPGRADES_XML_FILE;
+                case XMLTypeEnum.WorldObject:
+                    return WORLD_OBJECTS_XML_FILE;
+            }
+
+            return string.Empty;
+        }
+
+        private string GetRefTags(XMLTypeEnum en)
+        {
+            switch (en)
+            {
+                case XMLTypeEnum.Actor:
+                    return ACTOR_REF_TAGS;
+                case XMLTypeEnum.Adventure:
+                    return ADVENTURE_REF_TAGS;
+                case XMLTypeEnum.Cosmetic:
+                    return COSMETIC_REF_TAGS;
+                case XMLTypeEnum.Cutscene:
+                    return CUTSCENE_REF_TAGS;
+                case XMLTypeEnum.Item:
+                    return ITEM_REF_TAGS;
+                case XMLTypeEnum.Light:
+                    return LIGHT_REF_TAGS;
+                case XMLTypeEnum.Shop:
+                    return SHOPDATA_REF_TAGS;
+                case XMLTypeEnum.StatusEffect:
+                    return STATUS_EFFECTS_REF_TAGS;
+                case XMLTypeEnum.Task:
+                    return TASK_REF_TAGS;
+                case XMLTypeEnum.Upgrade:
+                    return UPGRADES_REF_TAGS;
+                case XMLTypeEnum.WorldObject:
+                    return WORLD_OBJECT_REF_TAGS;
+            }
+
+            return string.Empty;
+        }
+
+        private string GetTagsForRef(XMLTypeEnum en)
+        {
+            switch (en)
+            {
+                case XMLTypeEnum.Actor:
+                    return TAGS_FOR_ACTORS;
+                case XMLTypeEnum.Adventure:
+                    return TAGS_FOR_ADVENTURES;
+                case XMLTypeEnum.Cosmetic:
+                    return TAGS_FOR_COSMETICS;
+                case XMLTypeEnum.Cutscene:
+                    return CUTSCENE_REF_TAGS;
+                case XMLTypeEnum.Item:
+                    return TAGS_FOR_ITEMS;
+                case XMLTypeEnum.Light:
+                    return TAGS_FOR_LIGHTS;
+                case XMLTypeEnum.Shop:
+                    return TAGS_FOR_SHOPDATA;
+                case XMLTypeEnum.StatusEffect:
+                    return TAGS_FOR_STATUS_EFFECTS;
+                case XMLTypeEnum.Task:
+                    return TAGS_FOR_TASKS;
+                case XMLTypeEnum.Upgrade:
+                    return TAGS_FOR_UPGRADES;
+                case XMLTypeEnum.WorldObject:
+                    return TAGS_FOR_WORLD_OBJECTS;
+            }
+
+            return string.Empty;
+        }
+
+        private DataGridView GetDataGridView(XMLTypeEnum en)
+        {
+            switch (en)
+            {
+                case XMLTypeEnum.Actor:
+                    return dgvActors;
+                case XMLTypeEnum.Adventure:
+                    return dgvAdventures;
+                case XMLTypeEnum.Cosmetic:
+                    return dgvCosmetics;
+                case XMLTypeEnum.Cutscene:
+                    return dgvCutscenes;
+                case XMLTypeEnum.Item:
+                    return dgvItems;
+                case XMLTypeEnum.Light:
+                    return dgvLights;
+                case XMLTypeEnum.Shop:
+                    return dgvShops;
+                case XMLTypeEnum.StatusEffect:
+                    return dgvStatusEffects;
+                case XMLTypeEnum.Task:
+                    return dgvTasks;
+                case XMLTypeEnum.Upgrade:
+                    return dgvUpgrades;
+                case XMLTypeEnum.WorldObject:
+                    return dgvWorldObjects;
+            }
+
+            return null;
+        }
+
+        private XMLTypeEnum TabToEnum(TabPage tab)
+        {
+            switch (tab.Name)
+            {
+                case "tabActor":
+                    return XMLTypeEnum.Actor;
+                case "tabAdventure":
+                    return XMLTypeEnum.Adventure;
+                case "tabCosmetic":
+                    return XMLTypeEnum.Cosmetic;
+                case "tabCutscene":
+                    return XMLTypeEnum.Cutscene;
+                case "tabItem":
+                    return XMLTypeEnum.Item;
+                case "tabLight":
+                    return XMLTypeEnum.Light;
+                case "tabShop":
+                    return XMLTypeEnum.Shop;
+                case "tabStatusEffect":
+                    return XMLTypeEnum.StatusEffect;
+                case "tabTask":
+                    return XMLTypeEnum.Task;
+                case "tabUpgrade":
+                    return XMLTypeEnum.Upgrade;
+                case "tabWorldObject":
+                    return XMLTypeEnum.WorldObject;
+            }
+
+            return XMLTypeEnum.None;
+        }
+        #endregion
     }
 }

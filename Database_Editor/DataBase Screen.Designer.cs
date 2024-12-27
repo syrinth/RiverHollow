@@ -56,6 +56,28 @@
             this.dgvActors = new System.Windows.Forms.DataGridView();
             this.colActorsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tabAdventure = new System.Windows.Forms.TabPage();
+            this.tbAdventureDescription = new System.Windows.Forms.TextBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.tbAdventureID = new System.Windows.Forms.TextBox();
+            this.tbAdventureName = new System.Windows.Forms.TextBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.btnAdventureCancel = new System.Windows.Forms.Button();
+            this.dgvAdventureTags = new System.Windows.Forms.DataGridView();
+            this.colAdventuresTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvAdventures = new System.Windows.Forms.DataGridView();
+            this.colAdventuresName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabCosmetic = new System.Windows.Forms.TabPage();
+            this.tbCosmeticDescription = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.tbCosmeticID = new System.Windows.Forms.TextBox();
+            this.tbCosmeticName = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.dgvCosmeticTags = new System.Windows.Forms.DataGridView();
+            this.dgvCosmetics = new System.Windows.Forms.DataGridView();
             this.tabCutscene = new System.Windows.Forms.TabPage();
             this.label26 = new System.Windows.Forms.Label();
             this.tbCutsceneID = new System.Windows.Forms.TextBox();
@@ -71,18 +93,6 @@
             this.label16 = new System.Windows.Forms.Label();
             this.dgvCutscenes = new System.Windows.Forms.DataGridView();
             this.colCutscenesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabAdventure = new System.Windows.Forms.TabPage();
-            this.tbAdventureDescription = new System.Windows.Forms.TextBox();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
-            this.tbAdventureID = new System.Windows.Forms.TextBox();
-            this.tbAdventureName = new System.Windows.Forms.TextBox();
-            this.label39 = new System.Windows.Forms.Label();
-            this.btnAdventureCancel = new System.Windows.Forms.Button();
-            this.dgvAdventureTags = new System.Windows.Forms.DataGridView();
-            this.colAdventuresTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgvAdventures = new System.Windows.Forms.DataGridView();
-            this.colAdventuresName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabItem = new System.Windows.Forms.TabPage();
             this.cbItemGroup = new System.Windows.Forms.ComboBox();
             this.cbItemSubtype = new System.Windows.Forms.ComboBox();
@@ -170,17 +180,23 @@
             this.dgvUpgrades = new System.Windows.Forms.DataGridView();
             this.colUpgradesName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbStatus = new System.Windows.Forms.TextBox();
+            this.colCosmeticsName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCosmeticsTag = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbCosmeticType = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.tabCtl.SuspendLayout();
             this.tabActor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActorTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActors)).BeginInit();
-            this.tabCutscene.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).BeginInit();
             this.tabAdventure.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventureTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventures)).BeginInit();
+            this.tabCosmetic.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCosmeticTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCosmetics)).BeginInit();
+            this.tabCutscene.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).BeginInit();
             this.tabItem.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItemTags)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItems)).BeginInit();
@@ -269,6 +285,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabCtl.Controls.Add(this.tabActor);
             this.tabCtl.Controls.Add(this.tabAdventure);
+            this.tabCtl.Controls.Add(this.tabCosmetic);
             this.tabCtl.Controls.Add(this.tabCutscene);
             this.tabCtl.Controls.Add(this.tabItem);
             this.tabCtl.Controls.Add(this.tabLight);
@@ -478,6 +495,253 @@
             this.contextMenu.Size = new System.Drawing.Size(61, 4);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
+            // tabAdventure
+            // 
+            this.tabAdventure.Controls.Add(this.tbAdventureDescription);
+            this.tabAdventure.Controls.Add(this.label40);
+            this.tabAdventure.Controls.Add(this.label38);
+            this.tabAdventure.Controls.Add(this.tbAdventureID);
+            this.tabAdventure.Controls.Add(this.tbAdventureName);
+            this.tabAdventure.Controls.Add(this.label39);
+            this.tabAdventure.Controls.Add(this.btnAdventureCancel);
+            this.tabAdventure.Controls.Add(this.dgvAdventureTags);
+            this.tabAdventure.Controls.Add(this.dgvAdventures);
+            this.tabAdventure.Location = new System.Drawing.Point(4, 22);
+            this.tabAdventure.Name = "tabAdventure";
+            this.tabAdventure.Size = new System.Drawing.Size(790, 425);
+            this.tabAdventure.TabIndex = 15;
+            this.tabAdventure.Text = "Adventure";
+            this.tabAdventure.UseVisualStyleBackColor = true;
+            // 
+            // tbAdventureDescription
+            // 
+            this.tbAdventureDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbAdventureDescription.Multiline = true;
+            this.tbAdventureDescription.Name = "tbAdventureDescription";
+            this.tbAdventureDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbAdventureDescription.TabIndex = 70;
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(317, 35);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(63, 13);
+            this.label40.TabIndex = 69;
+            this.label40.Text = "Description:";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(714, 9);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(21, 13);
+            this.label38.TabIndex = 68;
+            this.label38.Text = "ID:";
+            // 
+            // tbAdventureID
+            // 
+            this.tbAdventureID.Location = new System.Drawing.Point(741, 6);
+            this.tbAdventureID.Name = "tbAdventureID";
+            this.tbAdventureID.Size = new System.Drawing.Size(43, 20);
+            this.tbAdventureID.TabIndex = 67;
+            // 
+            // tbAdventureName
+            // 
+            this.tbAdventureName.Location = new System.Drawing.Point(361, 6);
+            this.tbAdventureName.Name = "tbAdventureName";
+            this.tbAdventureName.Size = new System.Drawing.Size(108, 20);
+            this.tbAdventureName.TabIndex = 66;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(317, 9);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(38, 13);
+            this.label39.TabIndex = 65;
+            this.label39.Text = "Name:";
+            // 
+            // btnAdventureCancel
+            // 
+            this.btnAdventureCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAdventureCancel.Location = new System.Drawing.Point(709, 394);
+            this.btnAdventureCancel.Name = "btnAdventureCancel";
+            this.btnAdventureCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnAdventureCancel.TabIndex = 64;
+            this.btnAdventureCancel.Text = "Cancel";
+            this.btnAdventureCancel.UseVisualStyleBackColor = true;
+            this.btnAdventureCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
+            // 
+            // dgvAdventureTags
+            // 
+            this.dgvAdventureTags.AllowUserToResizeColumns = false;
+            this.dgvAdventureTags.AllowUserToResizeRows = false;
+            this.dgvAdventureTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvAdventureTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAdventureTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colAdventuresTag});
+            this.dgvAdventureTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvAdventureTags.Location = new System.Drawing.Point(320, 110);
+            this.dgvAdventureTags.Name = "dgvAdventureTags";
+            this.dgvAdventureTags.RowHeadersVisible = false;
+            this.dgvAdventureTags.Size = new System.Drawing.Size(464, 278);
+            this.dgvAdventureTags.TabIndex = 63;
+            // 
+            // colAdventuresTag
+            // 
+            this.colAdventuresTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colAdventuresTag.HeaderText = "Tags";
+            this.colAdventuresTag.Name = "colAdventuresTag";
+            this.colAdventuresTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dgvAdventures
+            // 
+            this.dgvAdventures.AllowUserToAddRows = false;
+            this.dgvAdventures.AllowUserToDeleteRows = false;
+            this.dgvAdventures.AllowUserToResizeColumns = false;
+            this.dgvAdventures.AllowUserToResizeRows = false;
+            this.dgvAdventures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvAdventures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAdventures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colAdventuresName});
+            this.dgvAdventures.ContextMenuStrip = this.contextMenu;
+            this.dgvAdventures.Location = new System.Drawing.Point(6, 6);
+            this.dgvAdventures.MultiSelect = false;
+            this.dgvAdventures.Name = "dgvAdventures";
+            this.dgvAdventures.ReadOnly = true;
+            this.dgvAdventures.RowHeadersVisible = false;
+            this.dgvAdventures.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvAdventures.Size = new System.Drawing.Size(308, 411);
+            this.dgvAdventures.TabIndex = 62;
+            this.dgvAdventures.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
+            // 
+            // colAdventuresName
+            // 
+            this.colAdventuresName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colAdventuresName.FillWeight = 90F;
+            this.colAdventuresName.HeaderText = "Name";
+            this.colAdventuresName.Name = "colAdventuresName";
+            this.colAdventuresName.ReadOnly = true;
+            this.colAdventuresName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tabCosmetic
+            // 
+            this.tabCosmetic.Controls.Add(this.cbCosmeticType);
+            this.tabCosmetic.Controls.Add(this.tbCosmeticDescription);
+            this.tabCosmetic.Controls.Add(this.label15);
+            this.tabCosmetic.Controls.Add(this.label18);
+            this.tabCosmetic.Controls.Add(this.tbCosmeticID);
+            this.tabCosmetic.Controls.Add(this.tbCosmeticName);
+            this.tabCosmetic.Controls.Add(this.label19);
+            this.tabCosmetic.Controls.Add(this.button1);
+            this.tabCosmetic.Controls.Add(this.dgvCosmeticTags);
+            this.tabCosmetic.Controls.Add(this.dgvCosmetics);
+            this.tabCosmetic.Location = new System.Drawing.Point(4, 22);
+            this.tabCosmetic.Name = "tabCosmetic";
+            this.tabCosmetic.Size = new System.Drawing.Size(790, 425);
+            this.tabCosmetic.TabIndex = 18;
+            this.tabCosmetic.Text = "Cosmetic";
+            this.tabCosmetic.UseVisualStyleBackColor = true;
+            // 
+            // tbCosmeticDescription
+            // 
+            this.tbCosmeticDescription.Location = new System.Drawing.Point(320, 51);
+            this.tbCosmeticDescription.Multiline = true;
+            this.tbCosmeticDescription.Name = "tbCosmeticDescription";
+            this.tbCosmeticDescription.Size = new System.Drawing.Size(464, 53);
+            this.tbCosmeticDescription.TabIndex = 79;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(317, 35);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(63, 13);
+            this.label15.TabIndex = 78;
+            this.label15.Text = "Description:";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(714, 9);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(21, 13);
+            this.label18.TabIndex = 77;
+            this.label18.Text = "ID:";
+            // 
+            // tbCosmeticID
+            // 
+            this.tbCosmeticID.Location = new System.Drawing.Point(741, 6);
+            this.tbCosmeticID.Name = "tbCosmeticID";
+            this.tbCosmeticID.Size = new System.Drawing.Size(43, 20);
+            this.tbCosmeticID.TabIndex = 76;
+            // 
+            // tbCosmeticName
+            // 
+            this.tbCosmeticName.Location = new System.Drawing.Point(361, 6);
+            this.tbCosmeticName.Name = "tbCosmeticName";
+            this.tbCosmeticName.Size = new System.Drawing.Size(108, 20);
+            this.tbCosmeticName.TabIndex = 75;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(317, 9);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(38, 13);
+            this.label19.TabIndex = 74;
+            this.label19.Text = "Name:";
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Location = new System.Drawing.Point(709, 394);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 73;
+            this.button1.Text = "Cancel";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // dgvCosmeticTags
+            // 
+            this.dgvCosmeticTags.AllowUserToResizeColumns = false;
+            this.dgvCosmeticTags.AllowUserToResizeRows = false;
+            this.dgvCosmeticTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvCosmeticTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCosmeticTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCosmeticsTag});
+            this.dgvCosmeticTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvCosmeticTags.Location = new System.Drawing.Point(320, 137);
+            this.dgvCosmeticTags.Name = "dgvCosmeticTags";
+            this.dgvCosmeticTags.RowHeadersVisible = false;
+            this.dgvCosmeticTags.Size = new System.Drawing.Size(464, 251);
+            this.dgvCosmeticTags.TabIndex = 72;
+            // 
+            // dgvCosmetics
+            // 
+            this.dgvCosmetics.AllowUserToAddRows = false;
+            this.dgvCosmetics.AllowUserToDeleteRows = false;
+            this.dgvCosmetics.AllowUserToResizeColumns = false;
+            this.dgvCosmetics.AllowUserToResizeRows = false;
+            this.dgvCosmetics.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvCosmetics.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCosmetics.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCosmeticsName});
+            this.dgvCosmetics.ContextMenuStrip = this.contextMenu;
+            this.dgvCosmetics.Location = new System.Drawing.Point(6, 6);
+            this.dgvCosmetics.MultiSelect = false;
+            this.dgvCosmetics.Name = "dgvCosmetics";
+            this.dgvCosmetics.ReadOnly = true;
+            this.dgvCosmetics.RowHeadersVisible = false;
+            this.dgvCosmetics.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvCosmetics.Size = new System.Drawing.Size(308, 411);
+            this.dgvCosmetics.TabIndex = 71;
+            // 
             // tabCutscene
             // 
             this.tabCutscene.Controls.Add(this.label26);
@@ -638,138 +902,6 @@
             this.colCutscenesName.Name = "colCutscenesName";
             this.colCutscenesName.ReadOnly = true;
             this.colCutscenesName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tabAdventure
-            // 
-            this.tabAdventure.Controls.Add(this.tbAdventureDescription);
-            this.tabAdventure.Controls.Add(this.label40);
-            this.tabAdventure.Controls.Add(this.label38);
-            this.tabAdventure.Controls.Add(this.tbAdventureID);
-            this.tabAdventure.Controls.Add(this.tbAdventureName);
-            this.tabAdventure.Controls.Add(this.label39);
-            this.tabAdventure.Controls.Add(this.btnAdventureCancel);
-            this.tabAdventure.Controls.Add(this.dgvAdventureTags);
-            this.tabAdventure.Controls.Add(this.dgvAdventures);
-            this.tabAdventure.Location = new System.Drawing.Point(4, 22);
-            this.tabAdventure.Name = "tabAdventure";
-            this.tabAdventure.Size = new System.Drawing.Size(790, 425);
-            this.tabAdventure.TabIndex = 15;
-            this.tabAdventure.Text = "Adventure";
-            this.tabAdventure.UseVisualStyleBackColor = true;
-            // 
-            // tbAdventureDescription
-            // 
-            this.tbAdventureDescription.Location = new System.Drawing.Point(320, 51);
-            this.tbAdventureDescription.Multiline = true;
-            this.tbAdventureDescription.Name = "tbAdventureDescription";
-            this.tbAdventureDescription.Size = new System.Drawing.Size(464, 53);
-            this.tbAdventureDescription.TabIndex = 70;
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(317, 35);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(63, 13);
-            this.label40.TabIndex = 69;
-            this.label40.Text = "Description:";
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(714, 9);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(21, 13);
-            this.label38.TabIndex = 68;
-            this.label38.Text = "ID:";
-            // 
-            // tbAdventureID
-            // 
-            this.tbAdventureID.Location = new System.Drawing.Point(741, 6);
-            this.tbAdventureID.Name = "tbAdventureID";
-            this.tbAdventureID.Size = new System.Drawing.Size(43, 20);
-            this.tbAdventureID.TabIndex = 67;
-            // 
-            // tbAdventureName
-            // 
-            this.tbAdventureName.Location = new System.Drawing.Point(361, 6);
-            this.tbAdventureName.Name = "tbAdventureName";
-            this.tbAdventureName.Size = new System.Drawing.Size(108, 20);
-            this.tbAdventureName.TabIndex = 66;
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(317, 9);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(38, 13);
-            this.label39.TabIndex = 65;
-            this.label39.Text = "Name:";
-            // 
-            // btnAdventureCancel
-            // 
-            this.btnAdventureCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdventureCancel.Location = new System.Drawing.Point(709, 394);
-            this.btnAdventureCancel.Name = "btnAdventureCancel";
-            this.btnAdventureCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnAdventureCancel.TabIndex = 64;
-            this.btnAdventureCancel.Text = "Cancel";
-            this.btnAdventureCancel.UseVisualStyleBackColor = true;
-            this.btnAdventureCancel.Click += new System.EventHandler(this.ProcessCancel_Click);
-            // 
-            // dgvAdventureTags
-            // 
-            this.dgvAdventureTags.AllowUserToResizeColumns = false;
-            this.dgvAdventureTags.AllowUserToResizeRows = false;
-            this.dgvAdventureTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.dgvAdventureTags.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAdventureTags.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colAdventuresTag});
-            this.dgvAdventureTags.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvAdventureTags.Location = new System.Drawing.Point(320, 110);
-            this.dgvAdventureTags.Name = "dgvAdventureTags";
-            this.dgvAdventureTags.RowHeadersVisible = false;
-            this.dgvAdventureTags.Size = new System.Drawing.Size(464, 278);
-            this.dgvAdventureTags.TabIndex = 63;
-            // 
-            // colAdventuresTag
-            // 
-            this.colAdventuresTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colAdventuresTag.HeaderText = "Tags";
-            this.colAdventuresTag.Name = "colAdventuresTag";
-            this.colAdventuresTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dgvAdventures
-            // 
-            this.dgvAdventures.AllowUserToAddRows = false;
-            this.dgvAdventures.AllowUserToDeleteRows = false;
-            this.dgvAdventures.AllowUserToResizeColumns = false;
-            this.dgvAdventures.AllowUserToResizeRows = false;
-            this.dgvAdventures.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.dgvAdventures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAdventures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colAdventuresName});
-            this.dgvAdventures.ContextMenuStrip = this.contextMenu;
-            this.dgvAdventures.Location = new System.Drawing.Point(6, 6);
-            this.dgvAdventures.MultiSelect = false;
-            this.dgvAdventures.Name = "dgvAdventures";
-            this.dgvAdventures.ReadOnly = true;
-            this.dgvAdventures.RowHeadersVisible = false;
-            this.dgvAdventures.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvAdventures.Size = new System.Drawing.Size(308, 411);
-            this.dgvAdventures.TabIndex = 62;
-            this.dgvAdventures.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ProcessCellClick);
-            // 
-            // colAdventuresName
-            // 
-            this.colAdventuresName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colAdventuresName.FillWeight = 90F;
-            this.colAdventuresName.HeaderText = "Name";
-            this.colAdventuresName.Name = "colAdventuresName";
-            this.colAdventuresName.ReadOnly = true;
-            this.colAdventuresName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tabItem
             // 
@@ -1735,6 +1867,31 @@
             this.tbStatus.Size = new System.Drawing.Size(794, 20);
             this.tbStatus.TabIndex = 13;
             // 
+            // colCosmeticsName
+            // 
+            this.colCosmeticsName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCosmeticsName.FillWeight = 90F;
+            this.colCosmeticsName.HeaderText = "Name";
+            this.colCosmeticsName.Name = "colCosmeticsName";
+            this.colCosmeticsName.ReadOnly = true;
+            this.colCosmeticsName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colCosmeticsTag
+            // 
+            this.colCosmeticsTag.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colCosmeticsTag.HeaderText = "Tags";
+            this.colCosmeticsTag.Name = "colCosmeticsTag";
+            this.colCosmeticsTag.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cbCosmeticType
+            // 
+            this.cbCosmeticType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCosmeticType.FormattingEnabled = true;
+            this.cbCosmeticType.Location = new System.Drawing.Point(320, 110);
+            this.cbCosmeticType.Name = "cbCosmeticType";
+            this.cbCosmeticType.Size = new System.Drawing.Size(149, 21);
+            this.cbCosmeticType.TabIndex = 80;
+            // 
             // FrmDBEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1758,14 +1915,18 @@
             this.tabActor.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActorTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActors)).EndInit();
-            this.tabCutscene.ResumeLayout(false);
-            this.tabCutscene.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).EndInit();
             this.tabAdventure.ResumeLayout(false);
             this.tabAdventure.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventureTags)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAdventures)).EndInit();
+            this.tabCosmetic.ResumeLayout(false);
+            this.tabCosmetic.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCosmeticTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCosmetics)).EndInit();
+            this.tabCutscene.ResumeLayout(false);
+            this.tabCutscene.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCutsceneTags)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCutscenes)).EndInit();
             this.tabItem.ResumeLayout(false);
             this.tabItem.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItemTags)).EndInit();
@@ -1940,6 +2101,19 @@
         private System.Windows.Forms.ComboBox cbUpgradeType;
         private System.Windows.Forms.ComboBox cbItemGroup;
         private System.Windows.Forms.ComboBox cbActorGroup;
+        private System.Windows.Forms.TabPage tabCosmetic;
+        private System.Windows.Forms.TextBox tbCosmeticDescription;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox tbCosmeticID;
+        private System.Windows.Forms.TextBox tbCosmeticName;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridView dgvCosmeticTags;
+        private System.Windows.Forms.DataGridView dgvCosmetics;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCosmeticsName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCosmeticsTag;
+        private System.Windows.Forms.ComboBox cbCosmeticType;
     }
 }
 

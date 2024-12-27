@@ -90,6 +90,7 @@ namespace RiverHollow.Game_Managers
 
         static Dictionary<int, Dictionary<string, string>> _diAdventureData;
         static Dictionary<int, Dictionary<string, string>> _diDungeonData;
+        static Dictionary<int, Dictionary<string, string>> _diCosmeticData;
         static Dictionary<int, Dictionary<string, string>> _diLightData;
         static Dictionary<int, Dictionary<string, string>> _diUpgradeData;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
@@ -150,6 +151,7 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
             LoadDictionary(ref _diUpgradeData, @"Data\Upgrades", Content, null);
             LoadDictionary(ref _diDungeonData, @"Data\DungeonData", Content, null);
+            LoadDictionary(ref _diCosmeticData, @"Data\Cosmetics", Content, null);
             LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content, LoadWorldObjectsDoWork);
         }
         public static void SecondaryLoad(ContentManager Content)
