@@ -455,11 +455,6 @@ Exit:
                         rv = true;
                     }
                 }
-
-                if (inventory == PlayerManager.PlayerActor.PlayerGear && item.CompareType(ItemTypeEnum.Clothing))
-                {
-                    PlayerManager.PlayerActor.SetClothingSprite(item as Clothing);
-                }
             }
             return rv;
         }
@@ -480,11 +475,6 @@ Exit:
             if (inventory == PlayerInventory)
             {
                 TaskManager.CheckItemCount();
-            }
-
-            if (inventory == PlayerManager.PlayerActor.PlayerGear && inventory[row, column].CompareType(ItemTypeEnum.Clothing))
-            {
-                PlayerManager.PlayerActor.RemoveClothing(inventory[row, column] as Clothing);
             }
 
             inventory[row, column] = null;

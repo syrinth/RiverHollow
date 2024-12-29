@@ -2,9 +2,11 @@
 using RiverHollow.GUIComponents.GUIObjects;
 using Microsoft.Xna.Framework;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using static RiverHollow.Utilities.Enums;
 using RiverHollow.Utilities;
 using RiverHollow.Misc;
+
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Utilities.Constants;
 
 namespace RiverHollow.GUIComponents.Screens.HUDComponents
 {

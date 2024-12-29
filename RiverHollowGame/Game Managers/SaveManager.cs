@@ -109,20 +109,20 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "BodyType")]
             public int bodyTypeIndex;
 
-            [XmlElement(ElementName = "HairColor")]
-            public Color hairColor;
+            [XmlElement(ElementName = "Hair")]
+            public CosmeticData hair;
 
-            [XmlElement(ElementName = "HairIndex")]
-            public int hairIndex;
+            [XmlElement(ElementName = "Eyes")]
+            public CosmeticData eyes;
 
             [XmlElement(ElementName = "Hat")]
-            public ItemData hat;
+            public CosmeticData hat;
 
-            [XmlElement(ElementName = "Shirt")]
-            public ItemData shirt;
+            [XmlElement(ElementName = "Body")]
+            public CosmeticData shirt;
 
-            [XmlElement(ElementName = "Pants")]
-            public ItemData pants;
+            [XmlElement(ElementName = "Leg")]
+            public CosmeticData pants;
 
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;
@@ -331,6 +331,14 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "Data")]
             public string strData;
+        }
+        public struct CosmeticData
+        {
+            [XmlElement(ElementName = "ID")]
+            public int id;
+
+            [XmlElement(ElementName = "Color")]
+            public Color cosmeticColor;
         }
         public struct MapData
         {

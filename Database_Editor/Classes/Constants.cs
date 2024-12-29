@@ -1,4 +1,6 @@
-﻿namespace Database_Editor.Classes
+﻿using RiverHollow.Game_Managers;
+
+namespace Database_Editor.Classes
 {
     public static class Constants
     {
@@ -10,14 +12,14 @@
         public static readonly string LOOKUP_CHARACTER = "$";
         public static readonly string PATH_TO_CONTENT = string.Format(@"{0}\..\..\..\..\RiverHollow\RiverHollowGame\Content", System.Environment.CurrentDirectory);
         public static readonly string PATH_TO_MAPS = PATH_TO_CONTENT + @"\Maps";
-        public static readonly string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data";
+        public static readonly string PATH_TO_DATA = PATH_TO_CONTENT + @"\Data\";
         public static readonly string PATH_TO_BACKUP = @"E:\Programming\RiverHollow Backups";
-        public static readonly string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"\Text Files";
+        public static readonly string PATH_TO_TEXT_FILES = PATH_TO_DATA + @"Text Files";
         public static readonly string PATH_TO_DIALOGUE = PATH_TO_TEXT_FILES + @"\Dialogue";
         public static readonly string PATH_TO_VILLAGER_DIALOGUE = PATH_TO_DIALOGUE + @"\Villagers";
         public static readonly string PATH_TO_TRAVELER_DIALOGUE = PATH_TO_DIALOGUE + @"\Travelers";
         public static readonly string PATH_TO_CUTSCENE_DIALOGUE = PATH_TO_DIALOGUE + @"\Cutscenes";
-        public static readonly string PATH_TO_SCHEDULES = PATH_TO_DATA + @"\Schedules";
+        public static readonly string PATH_TO_SCHEDULES = PATH_TO_DATA + @"Schedules";
 
         public static readonly string DEFAULT_ACTOR_TAGS = "Key:,Size:16-32,Idle:0-0-1-0-T,Walk:64-0-3-.2-T";
         public static readonly string DEFAULT_TASK_TAGS = "StartNPC:,AssignTrigger:";
@@ -28,18 +30,20 @@
         public static readonly string DEFAULT_UPGRADE_TAGS = "Icon:,Cost:100,ItemID:";
 
         #region XML Files
-        public static readonly string ACTOR_XML_FILE = PATH_TO_DATA + @"\ActorData.xml";
-        public static readonly string CONFIG_XML_FILE = PATH_TO_DATA + @"\Config.xml";
-        public static readonly string COSMETIC_XML_FILE = PATH_TO_DATA + @"\Cosmetic.xml";
-        public static readonly string CUTSCENE_XML_FILE = PATH_TO_DATA + @"\CutScenes.xml";
-        public static readonly string ADVENTURE_XML_FILE = PATH_TO_DATA + @"\AdventureData.xml";
-        public static readonly string ITEM_XML_FILE = PATH_TO_DATA + @"\ItemData.xml";
-        public static readonly string LIGHT_XML_FILE = PATH_TO_DATA + @"\LightData.xml";
-        public static readonly string UPGRADES_XML_FILE = PATH_TO_DATA + @"\Upgrades.xml";
-        public static readonly string SHOP_XML_FILE = PATH_TO_DATA + @"\Shops.xml";
-        public static readonly string STATUS_EFFECTS_XML_FILE = PATH_TO_DATA + @"\StatusEffects.xml";
-        public static readonly string TASK_XML_FILE = PATH_TO_DATA + @"\Tasks.xml";
-        public static readonly string WORLD_OBJECTS_XML_FILE = PATH_TO_DATA + @"\WorldObjects.xml";
+        private static readonly string FILE_EXTENSION = ".xml";
+
+        public static readonly string ACTOR_XML_FILE = PATH_TO_DATA + DataManager.ACTOR_FILE_NAME + FILE_EXTENSION;
+        public static readonly string CONFIG_XML_FILE = PATH_TO_DATA + DataManager.CONFIG_FILE_NAME + FILE_EXTENSION;
+        public static readonly string COSMETIC_XML_FILE = PATH_TO_DATA + DataManager.COSMETIC_FILE_NAME + FILE_EXTENSION;
+        public static readonly string CUTSCENE_XML_FILE = PATH_TO_DATA + "CutsceneData" + FILE_EXTENSION;
+        public static readonly string ADVENTURE_XML_FILE = PATH_TO_DATA + DataManager.ADVENTURE_FILE_NAME + FILE_EXTENSION;
+        public static readonly string ITEM_XML_FILE = PATH_TO_DATA + DataManager.ITEM_FILE_NAME + FILE_EXTENSION;
+        public static readonly string LIGHT_XML_FILE = PATH_TO_DATA + DataManager.LIGHT_FILE_NAME + FILE_EXTENSION;
+        public static readonly string UPGRADES_XML_FILE = PATH_TO_DATA + DataManager.UPGRADE_FILE_NAME + FILE_EXTENSION;
+        public static readonly string SHOP_XML_FILE = PATH_TO_DATA + DataManager.SHOP_FILE_NAME + FILE_EXTENSION;
+        public static readonly string STATUS_EFFECTS_XML_FILE = PATH_TO_DATA + DataManager.STATUS_EFFECT_FILE_NAME + FILE_EXTENSION;
+        public static readonly string TASK_XML_FILE = PATH_TO_DATA + DataManager.TASK_FILE_NAME + FILE_EXTENSION;
+        public static readonly string WORLD_OBJECTS_XML_FILE = PATH_TO_DATA + DataManager.WORLD_OBJECT_FILE_NAME + FILE_EXTENSION;
 
         public static readonly string OBJECT_TEXT_XML_FILE = PATH_TO_TEXT_FILES + @"\Object_Text.xml";
         #endregion

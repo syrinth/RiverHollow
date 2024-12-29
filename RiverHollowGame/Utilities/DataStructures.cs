@@ -3,6 +3,7 @@ using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Map_Handling;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.WorldObjects;
 using System.Collections.Generic;
@@ -128,19 +129,5 @@ namespace RiverHollow.Utilities
             Time = travel;
             Unlocked = false;
         }
-    }
-
-    public struct Cosmetic
-    {
-        public CosmeticSlotEnum CosmeticSlot;
-        private Point _pIndex;
-
-        //public Cosmetic(int id)
-        //{
-        //    CosmeticSlot = 
-        //    //Image information
-        //    string[] texIndices = FindArgumentsByIDKey("Image");
-        //    _pIndex = new Point(int.Parse(texIndices[0]) * Constants.TILE_SIZE, int.Parse(texIndices[1]) * Constants.TILE_SIZE);
-        //}
     }
 }

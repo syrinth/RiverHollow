@@ -13,7 +13,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
         private readonly GUIImage _gBackground;
         protected GUIItem _gItem;
         private GUIImage _imgIcon;
-        public EquipmentEnum EquipmentType { get; private set; } = EquipmentEnum.None;
 
         public int ColumnID { get; }
         public int RowID { get; }
@@ -75,36 +74,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
                 _imgIcon.Show(BoxItem == null);
                 _imgIcon.Draw(spriteBatch);
             }
-        }
-
-        public void SetEquipmentType(EquipmentEnum e)
-        {
-            EquipmentType = e;
-            Rectangle icon;
-            switch (EquipmentType)
-            {
-                case EquipmentEnum.Hat:
-                    icon = GUIUtils.INVENTORY_ICON_HAT;
-                    break;
-                case EquipmentEnum.Shirt:
-                    icon = GUIUtils.INVENTORY_ICON_SHIRT;
-                    break;
-                case EquipmentEnum.Pants:
-                    icon = GUIUtils.INVENTORY_ICON_PANTS;
-                    break;
-                case EquipmentEnum.Neck:
-                    icon = GUIUtils.INVENTORY_ICON_NECK;
-                    break;
-                case EquipmentEnum.Ring:
-                    icon = GUIUtils.INVENTORY_ICON_RING;
-                    break;
-                default:
-                    icon = Rectangle.Empty;
-                    break;
-            }
-
-            _imgIcon = new GUIImage(icon);
-            _imgIcon.CenterOnObject(this, GUIUtils.ParentRuleEnum.ForceToObject);
         }
 
         public void SetItem(Item it, ItemBoxDraw e = ItemBoxDraw.MoreThanOne)

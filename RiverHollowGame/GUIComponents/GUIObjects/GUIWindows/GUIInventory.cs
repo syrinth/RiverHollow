@@ -135,8 +135,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         return false;
                     }
 
-                    bool canPlaceItem = ItemCanGoThere(itemBox, GameManager.HeldItem);
-
                     var toSwitch = itemBox.BoxItem;
                     if (toSwitch != null)
                     {
@@ -145,7 +143,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             toSwitch.Add(GameManager.HeldItem.Number);
                             GameManager.DropItem();
                         }
-                        else if (canPlaceItem)
+                        else
                         {
                             Item temp = GameManager.HeldItem;
                             GameManager.GrabItem(TakeItem(mouse));
@@ -153,7 +151,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         }
 
                     }
-                    else if (canPlaceItem && GiveItem(GameManager.HeldItem))
+                    else if (GiveItem(GameManager.HeldItem))
                     {
                         GameManager.DropItem();
                     }
@@ -217,7 +215,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 
                     //If the only inventory we are working with is the player's inventory,
                     //pass the handler to the GUIItemBox and have it handle the item click
-                    if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && i.BoxItem.ItemType != ItemTypeEnum.Clothing)
+                    if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory)
                     {
                         rv = i.BoxItem.ItemBeingUsed();
                     }
@@ -238,17 +236,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         }
 
                         bool performSwap = false;
-                        if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory && _bPlayerInventory)
-                        {
-                            Point gearPosition = Point.Zero;
-                            if (i.BoxItem.ItemType == ItemTypeEnum.Clothing && PlayerManager.GetGearSlot(((Clothing)i.BoxItem).ClothingType, ref gearPosition))
-                            {
-                                performSwap = true;
-                                row = gearPosition.X;
-                                col = gearPosition.Y;
-                            }
-                        }
-                        else if (InventoryManager.HasSpaceInInventory(i.BoxItem.ID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory) && (singleItem == null || singleItem.ID != i.BoxItem.ID))
+                        if (InventoryManager.HasSpaceInInventory(i.BoxItem.ID, i.BoxItem.Number, ref row, ref col, !_bPlayerInventory) && (singleItem == null || singleItem.ID != i.BoxItem.ID))
                         {
                             performSwap = true;
                         }
@@ -343,11 +331,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             }
 
             return rv;
-        }
-
-        private bool ItemCanGoThere(GUIItemBox itemBox, Item testItem)
-        {
-            return itemBox.EquipmentType == EquipmentEnum.None || itemBox.EquipmentType == testItem.GetEnumByIDKey<EquipmentEnum>("Subtype");
         }
 
         public GUIItemBox GetItemBox(int x, int y)

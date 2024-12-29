@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Map_Handling;
@@ -12,43 +12,31 @@ using RiverHollow.WorldObjects;
 using RiverHollow.GUIComponents;
 
 using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Utilities.Constants;
+using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Characters
 {
     public class PlayerCharacter : CombatActor
     {
-        public AnimatedSprite EyeSprite { get; private set; }
-        public AnimatedSprite HairSprite { get; private set; }
+        readonly Dictionary<CosmeticSlotEnum, AppliedCosmetic> AppliedCosmetics;
+
         public AnimatedSprite ArmSprite { get; private set; }
-        public Color HairColor { get; private set; } = Color.White;
-        public Color EyeColor { get; private set; } = Color.White;
-        public int HairIndex { get; private set; } = 0;
         public int BodyType { get; private set; } = 1;
         public string BodyTypeStr => BodyType.ToString("00");
 
         public bool CanBecomePregnant { get; set; }
         public bool Pregnant { get; set; }
 
-        public Item[,] PlayerGear;
-
         public override List<AnimatedSprite> GetSprites()
         {
-            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { BodySprite, PantsSprite, ShirtSprite, ArmSprite, EyeSprite, HairSprite, HatSprite };
-            liRv.RemoveAll(x => x == null);
+            List<AnimatedSprite> liRv = new List<AnimatedSprite>() { BodySprite, ArmSprite};
+            liRv.AddRange(CosmeticSprites());
             return liRv;
         }
 
         public override Rectangle CollisionBox => ActiveMount != null ? ActiveMount.CollisionBox : base.CollisionBox;
         public override Rectangle HitBox => new Rectangle(Position.X + 2, Position.Y + 22, 12, 10);
-
-        #region Clothing
-        public Clothing Hat => PlayerGear[0, 0] as Clothing;
-        public AnimatedSprite HatSprite { get; private set; }
-        public Clothing Shirt => PlayerGear[1, 0] as Clothing;
-        public AnimatedSprite ShirtSprite { get; private set; }
-        public Clothing Pants => PlayerGear[2, 0] as Clothing;
-        public AnimatedSprite PantsSprite { get; private set; }
-        #endregion
 
         Light _lightSource;
 
@@ -60,33 +48,16 @@ namespace RiverHollow.Characters
 
         public PlayerCharacter() : base()
         {
-            HairColor = Color.Red;
-            EyeColor = Color.Blue;
+            AppliedCosmetics = new Dictionary<CosmeticSlotEnum, AppliedCosmetic>();
+            AddDefaultCosmetics();
 
             CurrentHP = MaxHP;
 
-            PlayerGear = new Item[Constants.PLAYER_GEAR_ROWS, Constants.PLAYER_GEAR_COLUMNS];
             _liTilePath = new List<RHTile>();
 
 #if DEBUG
             BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17], Point.Zero), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
             ArmSprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17], new Point(0, 35)), string.Format(@"{0}Body_{1}", DataManager.FOLDER_PLAYER, "03"));// BodyTypeStr));
-
-            //Hair type has already been set either by default or by being allocated.
-            SetHairType(HairIndex);
-
-            //Loads the Sprites for the players body for the appropriate class
-            EyeSprite = new AnimatedSprite(string.Format(@"{0}Eyes", DataManager.FOLDER_PLAYER));
-            EyeSprite.AddAnimation(DirectionEnum.Down, 0, 0, new Point(1, 1));
-            EyeSprite.AddAnimation(DirectionEnum.Right, Constants.TILE_SIZE, 0, new Point(1, 1));
-            EyeSprite.AddAnimation(DirectionEnum.Up, Constants.TILE_SIZE * 2, 0, new Point(1, 1));
-            EyeSprite.AddAnimation(DirectionEnum.Left, Constants.TILE_SIZE, 0, new Point(1, 1));
-            EyeSprite.GetFrameAnimation(Util.GetEnumString(DirectionEnum.Left)).Flip = true;
-            EyeSprite.SetLinkedSprite(BodySprite, false);
-
-            BodySprite.SetColor(Color.White);
-            HairSprite.SetColor(HairColor);
-            EyeSprite.SetColor(EyeColor);
 #else
             BodySprite = LoadSpriteAnimations(LoadPlayerAnimations(DataManager.Config[17]), string.Format(@"{0}Body_01", DataManager.FOLDER_PLAYER));// BodyTypeStr));
 #endif
@@ -104,14 +75,15 @@ namespace RiverHollow.Characters
                 _lightSource.Position = Position - new Point((_lightSource.Width - Width) / 2, (_lightSource.Height - Height) / 2);
             }
 
-            SyncSprite(HairSprite, 0);
-            SyncSprite(EyeSprite, 0);
-            SyncSprite(HatSprite, Constants.PLAYER_HAT_OFFSET);
-            SyncSprite(ShirtSprite, Constants.PLAYER_SHIRT_OFFSET);
+            SyncSprite(CosmeticSprite(CosmeticSlotEnum.Hair), 0);
+            SyncSprite(CosmeticSprite(CosmeticSlotEnum.Eyes), 0);
+            SyncSprite(CosmeticSprite(CosmeticSlotEnum.Head), Constants.PLAYER_HAT_OFFSET);
+            SyncSprite(CosmeticSprite(CosmeticSlotEnum.Body), Constants.PLAYER_SHIRT_OFFSET);
 
-            if (PantsSprite != null)
+            var pantsSprite = CosmeticSprite(CosmeticSlotEnum.Legs);
+            if (pantsSprite != null)
             {
-                PantsSprite.Position = BodySprite.Position + new Point(0, Constants.PLAYER_PANTS_OFFSET);
+                pantsSprite.Position = BodySprite.Position + new Point(0, Constants.PLAYER_PANTS_OFFSET);
             }
 
             if (HasKnockbackVelocity())
@@ -120,6 +92,99 @@ namespace RiverHollow.Characters
             }
 
             CheckDamageTimers(gTime);
+        }
+
+        #region Cosmetics
+        private void AddDefaultCosmetics()
+        {
+            foreach (CosmeticSlotEnum e in Enum.GetValues(typeof(CosmeticSlotEnum)))
+            {
+                AppliedCosmetics[e] = new AppliedCosmetic();
+            }
+
+        }
+        public List<Cosmetic> GetCosmetics()
+        {
+            return AppliedCosmetics.Values.Select(x => x.MyCosmetic).ToList();
+        }
+        public Cosmetic GetCosmetic(CosmeticSlotEnum e)
+        {
+            return AppliedCosmetics[e].MyCosmetic;
+        }
+        public Color GetCosmeticColor(CosmeticSlotEnum e)
+        {
+            return AppliedCosmetics[e].CosmeticColor;
+        }
+        public void SetCosmeticColor(CosmeticSlotEnum e, Color c)
+        {
+            AppliedCosmetics[e].SetColor(c);
+        }
+
+        public void SetCosmetic(CosmeticSlotEnum e, int id)
+        {
+            var newCosmetic = DataManager.GetCosmetic(id);
+            if (e == newCosmetic.CosmeticSlot)
+            {
+                AppliedCosmetics[e].SetCosmetic(newCosmetic);
+
+                LinkSprites();
+            }
+        }
+
+        private AnimatedSprite CosmeticSprite(CosmeticSlotEnum e)
+        {
+            return AppliedCosmetics[e].MySprite;
+        }
+        private List<AnimatedSprite> CosmeticSprites()
+        {
+            List<AnimatedSprite> rv = new List<AnimatedSprite>();
+            foreach (var kvp in AppliedCosmetics)
+            {
+                if (kvp.Value.MySprite != null)
+                {
+                    rv.Add(kvp.Value.MySprite);
+                }
+            }
+            return rv;
+        }
+
+        public CosmeticData SaveCosmeticData(CosmeticSlotEnum e)
+        {
+            var cosmetic = AppliedCosmetics[e];
+
+            CosmeticData data = new CosmeticData()
+            {
+                id = cosmetic.MyCosmetic.ID,
+                cosmeticColor = cosmetic.CosmeticColor
+            };
+
+            return data;
+        }
+
+        public void LoadCosmeticData(CosmeticData data)
+        {
+            var cosmetic = DataManager.GetCosmetic(data.id);
+            AppliedCosmetics[cosmetic.CosmeticSlot].SetColor(data.cosmeticColor);
+            AppliedCosmetics[cosmetic.CosmeticSlot].SetCosmetic(cosmetic);
+        }
+        #endregion
+
+        private void LinkSprites()
+        {
+            var head = CosmeticSprite(CosmeticSlotEnum.Head);
+            var hair = CosmeticSprite(CosmeticSlotEnum.Hair);
+            var eyes = CosmeticSprite(CosmeticSlotEnum.Eyes);
+            var top = CosmeticSprite(CosmeticSlotEnum.Body);
+            var legs = CosmeticSprite(CosmeticSlotEnum.Legs);
+            var feet = CosmeticSprite(CosmeticSlotEnum.Feet);
+
+            head.SetLayerDepthMod(1);
+            hair.SetLayerDepthMod(0.9f);
+            eyes.SetLayerDepthMod(0.8f);
+            top.SetLayerDepthMod(0.7f);
+            ArmSprite.SetLayerDepthMod(0.6f);
+            legs.SetLayerDepthMod(0.5f);
+            feet.SetLayerDepthMod(0.4f);
         }
 
         private void SyncSprite(AnimatedSprite spr, int mod)
@@ -201,47 +266,16 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        public void SetColor(AnimatedSprite sprite, Color c)
-        {
-            sprite.SetColor(c);
-        }
-
-        public void SetHairColor(Color c)
-        {
-            HairColor = c;
-            SetColor(HairSprite, c);
-        }
-
-        public void SetEyeColor(Color c)
-        {
-            EyeColor = c;
-            SetColor(EyeSprite, c);
-        }
-        public void SetHairType(int index)
-        { 
-            HairIndex = index;
-            var size = new Point(1, 1);
-
-            int xCrawl = 0;
-            Point pos = Util.GetPointFromIndex(index, Constants.PLAYER_EXTRAS_COLUMNS, 4);
-            HairSprite = new AnimatedSprite(string.Format(@"{0}Hair", DataManager.FOLDER_PLAYER));
-            foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
-            {
-                if (e == DirectionEnum.None) { continue; }
-
-                HairSprite.AddAnimation(e, (pos.X * Constants.TILE_SIZE) + xCrawl, (pos.Y * Constants.TILE_SIZE), size);
-                xCrawl += Constants.TILE_SIZE;
-            }
-
-            HairSprite.SetColor(HairColor);
-            HairSprite.SetLinkedSprite(BodySprite, false);
-        }
+        
 
         public override void PlayAnimation<TEnum>(TEnum anim)
         {
             BodySprite.PlayAnimation(anim);
             ArmSprite.PlayAnimation(anim);
-            PantsSprite?.PlayAnimation(anim);
+            foreach(var spr in CosmeticSprites())
+            {
+                spr.PlayAnimation(anim);
+            }
         }
         public override void PlayAnimation(VerbEnum verb, DirectionEnum dir)
         {
@@ -249,17 +283,20 @@ namespace RiverHollow.Characters
 
             BodySprite.PlayAnimation(verb, dir);
             ArmSprite.PlayAnimation(verb, dir);
-            PantsSprite?.PlayAnimation(verb, dir);
+
+            foreach (var spr in CosmeticSprites())
+            {
+                spr.PlayAnimation(verb, dir);
+            }
         }
 
         public override void SetFacing(DirectionEnum dir)
         {
             base.SetFacing(dir);
-            HairSprite?.PlayAnimation(dir);
-            EyeSprite?.PlayAnimation(dir);
-            HatSprite?.PlayAnimation(dir);
-            ShirtSprite?.PlayAnimation(dir);
-            PantsSprite?.PlayAnimation(dir);
+            foreach (var spr in CosmeticSprites())
+            {
+                spr.PlayAnimation(dir);
+            }
         }
 
         public void SetScale(int scale = 1)
@@ -267,102 +304,9 @@ namespace RiverHollow.Characters
             GetSprites().ForEach(spr => spr.SetScale(scale));
         }
 
-        public void AssignClothing(Clothing c)
-        {
-            if (c != null)
-            {
-                switch (c.ClothingType)
-                {
-                    case EquipmentEnum.Hat:
-                        PlayerGear[0, 0] = c;
-                        break;
-                    case EquipmentEnum.Shirt:
-                        PlayerGear[1, 0] = c;
-                        break;
-                    case EquipmentEnum.Pants:
-                        PlayerGear[2, 0] = c;
-                        break;
-                }
-                SetClothingSprite(c);
-            }
-        }
-        public void SetClothingSprite(Clothing c)
-        {
-            if (c != null)
-            {
-                AnimatedSprite newSprite = c.GetSprite();
-                newSprite.Position = Position;
-                newSprite.PlayAnimation(BodySprite.CurrentAnimation);
-                newSprite.SetLinkedSprite(HairSprite, false);
-
-                //ToDo: Fix the clothing layer syncing.
-                switch (c.ClothingType)
-                {
-                    case EquipmentEnum.Hat:
-                        newSprite.Position += new Point(0, Constants.PLAYER_HAT_OFFSET);
-                        HatSprite = newSprite;
-                        break;
-                    case EquipmentEnum.Shirt:
-                        newSprite.Position += new Point(0, Constants.PLAYER_SHIRT_OFFSET);
-                        ShirtSprite = newSprite;
-                        ArmSprite.SetLinkedSprite(ShirtSprite, false);
-                        break;
-                    case EquipmentEnum.Pants:
-                        PantsSprite = newSprite;
-                        ArmSprite.SetLinkedSprite(PantsSprite, false);
-                        break;
-                }
-
-                SetLinkedSprites();
-            }
-        }
-
-        public void RemoveClothing(Clothing c)
-        {
-            switch (c.ClothingType)
-            {
-                case EquipmentEnum.Hat:
-                    HatSprite = null;
-                    break;
-                case EquipmentEnum.Shirt:
-                    ShirtSprite = null;
-                    break;
-                case EquipmentEnum.Pants:
-                    PantsSprite = null;
-                    break;
-            }
-
-            SetLinkedSprites();
-        }
-
         public void SetBodyType(int val)
         {
             BodyType = val;
-            SetClothingSprite(Hat);
-            SetClothingSprite(Shirt);
-            SetClothingSprite(Pants);
-        }
-
-        private void SetLinkedSprites()
-        {
-            AnimatedSprite temp = BodySprite;
-            LinkedSpriteHelper(PantsSprite, ref temp);
-            LinkedSpriteHelper(ShirtSprite, ref temp);
-
-            LinkedSpriteHelper(ArmSprite, ref temp);
-            LinkedSpriteHelper(EyeSprite, ref temp);
-            LinkedSpriteHelper(HairSprite, ref temp);
-
-            LinkedSpriteHelper(HatSprite, ref temp);
-        }
-
-        private void LinkedSpriteHelper(AnimatedSprite testSprite, ref AnimatedSprite temp)
-        {
-            if (testSprite != null)
-            {
-                testSprite.SetLinkedSprite(temp, false);
-                temp = testSprite;
-            }
         }
 
         public void SetPet(Pet actor)
@@ -416,8 +360,6 @@ namespace RiverHollow.Characters
         {
             base.Flicker(value);
             BodySprite.SetColor(Color.White * (_bFlicker ? 1 : 0));
-            HairSprite?.SetColor(HairColor * (_bFlicker ? 1 : 0));
-            EyeSprite?.SetColor(EyeColor * (_bFlicker ? 1 : 0));
         }
 
         public override void SetMoveTo(Point v, bool update = true)

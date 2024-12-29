@@ -3,6 +3,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
+using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -19,34 +20,12 @@ namespace RiverHollow.GUIComponents.GUIObjects
         Point _pMoveBy;
 
         List<GUISprite> _liSprites;
-        Item[] _arrClothing;
 
         public PlayerDisplayBox(Rectangle pane, Point moveBy) : base (pane)
         {
             _pMoveBy = moveBy;
 
-            _arrClothing = new Item[Constants.PLAYER_GEAR_ROWS];
-            _arrClothing[0] = PlayerManager.PlayerActor.Hat;
-            _arrClothing[1] = PlayerManager.PlayerActor.Shirt;
-            _arrClothing[2] = PlayerManager.PlayerActor.Pants;
-
             SyncSprites();
-        }
-
-        public override void Update(GameTime gTime)
-        {
-            base.Update(gTime);
-
-            if (_arrClothing[0] != PlayerManager.PlayerActor.Hat ||
-            _arrClothing[1] != PlayerManager.PlayerActor.Shirt ||
-            _arrClothing[2] != PlayerManager.PlayerActor.Pants)
-            {
-                SyncSprites();
-
-                _arrClothing[0] = PlayerManager.PlayerActor.Hat;
-                _arrClothing[1] = PlayerManager.PlayerActor.Shirt;
-                _arrClothing[2] = PlayerManager.PlayerActor.Pants;
-            }
         }
 
         public void SyncSprites()
@@ -55,25 +34,34 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
             var actor = PlayerManager.PlayerActor;
             _liSprites = new List<GUISprite>();
-            for (int i = 0; i < actor.GetSprites().Count; i++)
+            foreach (var c in actor.GetCosmetics())
             {
-                AddSprite(actor.GetSprites()[i]);
+                AddCosmetic(c);
             }
 
             PlayAnimation(_eLastVerb, _eLastDir);
         }
 
-        private void AddSprite(AnimatedSprite sprite)
+        private void AddCosmetic(Cosmetic c)
         {
-            if (sprite != null)
+            if (c != null)
             {
-                GUISprite spr = new GUISprite(sprite, true);
+                GUISprite spr = new GUISprite(c.GetSprite(), true);
                 spr.PositionAndMove(this, _pMoveBy);
 
                 int mod = 0;
-                if (sprite == PlayerManager.PlayerActor.HatSprite) { mod = Constants.PLAYER_HAT_OFFSET; }
-                else if (sprite == PlayerManager.PlayerActor.ShirtSprite) { mod = Constants.PLAYER_SHIRT_OFFSET; }
-                else if (sprite == PlayerManager.PlayerActor.PantsSprite) { mod = Constants.PLAYER_PANTS_OFFSET; }
+                switch (c.CosmeticSlot)
+                {
+                    case CosmeticSlotEnum.Head:
+                        mod = Constants.PLAYER_HAT_OFFSET;
+                        break;
+                    case CosmeticSlotEnum.Body:
+                        mod = Constants.PLAYER_SHIRT_OFFSET;
+                        break;
+                    case CosmeticSlotEnum.Legs:
+                        mod = Constants.PLAYER_PANTS_OFFSET;
+                        break;
+                }
 
                 spr.ScaledMoveBy(0, mod);
                 _liSprites.Add(spr);

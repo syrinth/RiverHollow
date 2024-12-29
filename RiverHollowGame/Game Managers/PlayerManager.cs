@@ -86,7 +86,7 @@ namespace RiverHollow.Game_Managers
 
         private static List<int> _liCrafting;
 
-        private static Dictionary<CosmeticSlotEnum, List<KeyValuePair<Cosmetic, bool>>> _diCosmetics;
+        private static Dictionary<CosmeticSlotEnum, List<KeyValuePair<int, bool>>> _diCosmetics;
 
         private static DirectionEnum _eHorizontal = DirectionEnum.None;
         private static DirectionEnum _eVertical = DirectionEnum.None;
@@ -163,7 +163,8 @@ namespace RiverHollow.Game_Managers
 
             _liUniqueItemsBought = new List<int>();
             _diTools = new Dictionary<ToolEnum, Tool>();
-            _diCosmetics = new Dictionary<CosmeticSlotEnum, List<KeyValuePair<Cosmetic, bool>>>();
+            InitializeCosmeticDictionary();
+            
 
             PlayerActor = new PlayerCharacter();
             CurrentEnergy = MaxEnergy();
@@ -327,7 +328,50 @@ namespace RiverHollow.Game_Managers
         #region Cosmetics Dictionary
         public static void InitializeCosmeticDictionary()
         {
+            _diCosmetics = new Dictionary<CosmeticSlotEnum, List<KeyValuePair<int, bool>>>();
 
+            foreach (var kvp in DataManager.Cosmetics)
+            {
+                var enumType = DataManager.GetEnumByIDKey<CosmeticSlotEnum>(kvp.Key, "Type", DataType.Cosmetic);
+                var startUnlocked = DataManager.GetBoolByIDKey(kvp.Key, "Default", DataType.Cosmetic);
+
+                Util.AddToListDictionary(ref _diCosmetics, enumType, new KeyValuePair<int, bool>(kvp.Key, startUnlocked));
+            }
+        }
+        
+        public static void AddToCosmeticDictionary(int[] unlocks)
+        {
+            bool displayAlert = false;
+            for (int i = 0; i < unlocks.Length; i++)
+            {
+                displayAlert = AddToCosmeticDictionary(unlocks[i], false);
+            }
+
+            if (displayAlert)
+            {
+                string str = unlocks.Length == 1 ? Constants.STR_ALERT_BLUEPRINT : Constants.STR_ALERT_BLUEPRINTS;
+                GUIManager.NewInfoAlertIcon(str);
+            }
+        }
+
+        public static bool AddToCosmeticDictionary(int id, bool displayAlert = true)
+        {
+            bool rv = false;
+            var list = _diCosmetics[DataManager.GetEnumByIDKey<CosmeticSlotEnum>(id, "Type", DataType.Cosmetic)];
+
+            if (!list.Any(x => x.Key == id))
+            {
+                rv = true;
+
+                list.Add(new KeyValuePair<int, bool>(id, true));
+
+                if (displayAlert)
+                {
+                    GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_BLUEPRINT);
+                }
+            }
+
+            return rv;
         }
         #endregion
 
@@ -805,34 +849,8 @@ namespace RiverHollow.Game_Managers
             AddTool((Tool)DataManager.GetItem(d.wateringCanID));
             AddTool((Tool)DataManager.GetItem(d.lanternID));
         }
-
         #endregion
 
-        #region Gear Management
-        public static bool GetGearSlot(EquipmentEnum e, ref Point p)
-        {
-            switch (e)
-            {
-                case EquipmentEnum.Hat:
-                    p = new Point(0, 0);
-                    return true;
-                case EquipmentEnum.Shirt:
-                    p = new Point(1, 0);
-                    return true;
-                case EquipmentEnum.Pants:
-                    p = new Point(2, 0);
-                    return true;
-                case EquipmentEnum.Neck:
-                    p = new Point(0, 1);
-                    return true;
-                case EquipmentEnum.Ring:
-                    p = new Point(0, 2);
-                    return true;
-            }
-
-            return false;
-        }
-        #endregion
 
         public static void AddChild(Child actor) { Children.Add(actor); }
         public static void AddPet(Pet actor) {
@@ -857,11 +875,10 @@ namespace RiverHollow.Game_Managers
                 name = Name,
                 money = Money,
                 bodyTypeIndex = PlayerActor.BodyType,
-                hairColor = PlayerActor.HairColor,
-                hairIndex = PlayerActor.HairIndex,
-                hat = Item.SaveData(PlayerActor.Hat),
-                shirt = Item.SaveData(PlayerActor.Shirt),
-                pants = Item.SaveData(PlayerActor.Pants),
+                hair = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Hair),
+                hat = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Head),
+                shirt = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Body),
+                pants = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Legs),
                 weddingCountdown = WeddingCountdown,
                 babyCountdown = BabyCountdown,
                 hpIncreases = HPIncrease,
@@ -928,12 +945,12 @@ namespace RiverHollow.Game_Managers
             NewDayRecovery();
 
 #if DEBUG
-            PlayerActor.SetHairColor(saveData.hairColor);
-            PlayerActor.SetHairType(saveData.hairIndex);
+            PlayerActor.LoadCosmeticData(saveData.hair);
 #endif
-            PlayerActor.AssignClothing(DataManager.GetItem(saveData.hat.itemID) as Clothing);
-            PlayerActor.AssignClothing(DataManager.GetItem(saveData.shirt.itemID) as Clothing);
-            PlayerActor.AssignClothing(DataManager.GetItem(saveData.pants.itemID) as Clothing);
+            PlayerActor.LoadCosmeticData(saveData.hat);
+            PlayerActor.LoadCosmeticData(saveData.shirt);
+            PlayerActor.LoadCosmeticData(saveData.pants);
+
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);
 
             MoveToSpawn();

@@ -4,7 +4,7 @@
     <Item>
       <Key>0</Key>
       <Value>
-        <Item></Item>
+        <Item>[Map:mapMushMush_RitualCave][Player][Actors:22-NPC_22][Deactivate:Player]</Item>
         <Item>[Map:mapMushMush_RitualCave][Player][Actors:22-NPC_22][Deactivate:Player]</Item>
         <Item>[Face:22-Up][Speak:22-0][Speed:Player-0.5/22-0.5][Activate:Player][Move:Player-4-Up][Face:22-Down][Speak:22-1][Rotate:22-1][Speak:22-2][SendToTown:22]</Item>
       </Value>

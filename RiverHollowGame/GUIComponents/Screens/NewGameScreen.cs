@@ -5,12 +5,12 @@ using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Items;
 using RiverHollow.Utilities;
 
+using static RiverHollow.Utilities.Enums;
+using static RiverHollow.Utilities.Constants;
 using static RiverHollow.Game_Managers.GameManager;
 using static RiverHollow.GUIComponents.GUIObjects.GUIObject;
-using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.Screens
 {
@@ -78,10 +78,10 @@ namespace RiverHollow.GUIComponents.Screens
             bodyLabel.AnchorAndAlignThenMove(_nameWindow, SideEnum.Bottom, SideEnum.Left, 5, 4);
             bodyLabel.Show(false);
 
-            OptionLabel hairLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Hair").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, PlayerManager.PlayerActor.HairColor);
+            OptionLabel hairLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Hair").GetFormattedText(), ChangeHairType, ChangeHairColor, AssignColorPicker, Color.Red);
             hairLabel.AnchorAndAlignWithSpacing(bodyLabel, SideEnum.Bottom, SideEnum.Left, 3);
 
-            OptionLabel eyeLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Eyes").GetFormattedText(), null, ChangeEyeColor, AssignColorPicker, PlayerManager.PlayerActor.EyeColor);
+            OptionLabel eyeLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Eyes").GetFormattedText(), null, ChangeEyeColor, AssignColorPicker, Color.Blue);
             eyeLabel.AnchorAndAlignWithSpacing(hairLabel, SideEnum.Bottom, SideEnum.Left, 3);
 
             OptionLabel shirtLabel = new OptionLabel(DataManager.GetGameTextEntry("Label_Shirt").GetFormattedText(), ChangeHairType, null, null, Color.White);
@@ -187,8 +187,8 @@ namespace RiverHollow.GUIComponents.Screens
                 clothesList.Add(int.Parse(s));
             }
 
-            PlayerManager.PlayerActor.AssignClothing(DataManager.GetItem(clothesList[0]) as Clothing);
-            PlayerManager.PlayerActor.AssignClothing(DataManager.GetItem(clothesList[1]) as Clothing);
+            //PlayerManager.PlayerActor.SetCosmetic(DataManager.GetItem(clothesList[0]));
+            //PlayerManager.PlayerActor.SetCosmetic(DataManager.GetItem(clothesList[1]));
         }
         public void SetSelection(GUITextInputWindow g)
         {
@@ -245,12 +245,12 @@ namespace RiverHollow.GUIComponents.Screens
         }
         private void ChangeHairColor(Color c)
         {
-            PlayerManager.PlayerActor.SetHairColor(c);
+            PlayerManager.PlayerActor.SetCosmeticColor(CosmeticSlotEnum.Hair, c);
             _displayBox.SyncSprites();
         }
         private void ChangeEyeColor(Color c)
         {
-            PlayerManager.PlayerActor.SetEyeColor(c);
+            PlayerManager.PlayerActor.SetCosmeticColor(CosmeticSlotEnum.Eyes, c);
             _displayBox.SyncSprites();
         }
         private int ChangeHairType(bool increase)
@@ -258,7 +258,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (_iHairTypeIndex < _iHairTypeCount - 1) { _iHairTypeIndex++; }
             else { _iHairTypeIndex = 0; }
 
-            PlayerManager.PlayerActor.SetHairType(_iHairTypeIndex);
+            PlayerManager.PlayerActor.SetCosmetic(CosmeticSlotEnum.Hair, _iHairTypeIndex);
 
             _displayBox.SyncSprites();
 

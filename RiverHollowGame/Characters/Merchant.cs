@@ -132,7 +132,7 @@ namespace RiverHollow.Characters
         }
         public int EvaluateItem(Item it, ref Color c)
         {
-            if (it == null || it.CompareType(ItemTypeEnum.Tool, ItemTypeEnum.NPCToken, ItemTypeEnum.Blueprint, ItemTypeEnum.Buildable, ItemTypeEnum.Special, ItemTypeEnum.Clothing))
+            if (it == null || it.CompareType(ItemTypeEnum.Tool, ItemTypeEnum.NPCToken, ItemTypeEnum.Blueprint, ItemTypeEnum.Buildable, ItemTypeEnum.Special))
             {
                 return 0;
             }

@@ -4,7 +4,7 @@
     {
         public enum LogEnum { Info, Warning, Error };
         public enum ButtonEnum { Left, Right, Middle };
-        public enum DataType { Actor, Adventure, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
+        public enum DataType { Actor, Adventure, Cosmetic, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
         public enum BuildTypeEnum { Structure, WorldObject };
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Propose, Date, EndDay, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, YesNo, Bed };
@@ -39,9 +39,8 @@
 
         public enum ClassTypeEnum { None, Healer, Mage, Fighter, Rogue };
         public enum ResourceTypeEnum { None, Construction, Fabric, Fish, Flower, Food, Gem, Herb, Ingredient, Meal, Metal, MonsterPart, Ore};
-        public enum ItemTypeEnum { None, Resource, Blueprint, Buildable, Clothing, Consumable, Food, Merchandise, MonsterFood, NPCToken, Relic, Seed, Special, Tool };
+        public enum ItemTypeEnum { None, Resource, Blueprint, Buildable, Consumable, Cosmetic, Food, Merchandise, MonsterFood, NPCToken, Relic, Seed, Special, Tool };
         public enum FoodTypeEnum { Dessert, Fancy, Healthy, Plain, Seafood };
-        public enum EquipmentEnum { None, Hat, Shirt, Pants, Neck, Ring };
         public enum CosmeticSlotEnum { Body, Head, Legs, Feet, Hair, Eyes };
         public enum MerchandiseTypeEnum { Generic, Ceramic, Clothing, Magic, Potion };
         public enum NPCTokenTypeEnum { Mount, Pet };

@@ -19,18 +19,9 @@ namespace RiverHollow.GUIComponents.Screens
             InventoryManager.LockedInventory = false;
 
             InventoryManager.ClearExtraInventory();
-            InventoryManager.InitExtraInventory(PlayerManager.PlayerActor.PlayerGear);
             InventoryManager.CurrentInventoryDisplay = DisplayTypeEnum.PlayerInventory;
 
             _playerInventory = new GUIInventoryWindow(true);
-
-            _altInventory = new GUIPlayerGearInventoryWindow();
-            _altInventory.Inventory.GetItemBox(0, 0).SetEquipmentType(EquipmentEnum.Hat);
-            _altInventory.Inventory.GetItemBox(1, 0).SetEquipmentType(EquipmentEnum.Shirt);
-            _altInventory.Inventory.GetItemBox(2, 0).SetEquipmentType(EquipmentEnum.Pants);
-            _altInventory.Inventory.GetItemBox(0, 1).SetEquipmentType(EquipmentEnum.Neck);
-            _altInventory.Inventory.GetItemBox(1, 1).SetEquipmentType(EquipmentEnum.Ring);
-            _altInventory.Inventory.GetItemBox(2, 1).SetEquipmentType(EquipmentEnum.Ring);
 
             AddControl(_altInventory);
 

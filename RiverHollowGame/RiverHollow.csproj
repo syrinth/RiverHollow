@@ -123,6 +123,7 @@
     <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownHallBuildingUpgradePage.cs" />
     <Compile Include="GUIComponents\Screens\HUDWindows\TabPages\HUDTownStructurePage.cs" />
     <Compile Include="GUIComponents\Screens\WorldMapScreen.cs" />
+    <Compile Include="Items\CosmeticItem.cs" />
     <Compile Include="Items\MapItem.cs" />
     <Compile Include="Items\Tools\CapeOfBlinking.cs" />
     <Compile Include="Items\Tools\FishingRod.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Misc\Adventure.cs" />
     <Compile Include="Misc\EnvironmentalEffect.cs" />
     <Compile Include="Misc\FieldOfVision.cs" />
+    <Compile Include="Misc\Cosmetic.cs" />
     <Compile Include="Misc\Letter.cs" />
     <Compile Include="Misc\PriorityQueue.cs" />
     <Compile Include="Misc\StatusEffect.cs" />
@@ -185,7 +187,6 @@
     <Compile Include="GUIComponents\Screens\HUDShopSlateWindow.cs" />
     <Compile Include="Game Managers\InventoryManager.cs" />
     <Compile Include="Items\Blueprint.cs" />
-    <Compile Include="Items\Clothing.cs" />
     <Compile Include="Items\Consumable.cs" />
     <Compile Include="Items\Food.cs" />
     <Compile Include="Items\NPCToken.cs" />

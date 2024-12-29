@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Dictionary[int, string]">
+    <Item>
+      <Key>0</Key>
+      <Value>[Type:Eyes]</Value>
+    </Item>
+    <Item>
+      <Key>1</Key>
+      <Value>[Type:Eyes][Image:0-0][Default]</Value>
+    </Item>
+    <Item>
+      <Key>2</Key>
+      <Value>[Type:Hair][Image:64-0]</Value>
+    </Item>
+    <Item>
+      <Key>3</Key>
+      <Value>[Type:Head][Image:0-0]</Value>
+    </Item>
+  </Asset>
+</XnaContent>

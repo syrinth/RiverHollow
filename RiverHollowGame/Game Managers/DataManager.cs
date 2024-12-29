@@ -35,6 +35,7 @@ namespace RiverHollow.Game_Managers
         public const string PORTRAIT_FOLDER = FOLDER_ACTOR + @"Portraits\";
 
         public const string FOLDER_ITEMS = TEXTURES + @"Items\";
+        public const string FOLDER_COSMETICS = TEXTURES + @"Items\";
         public const string FOLDER_EFFECTS = TEXTURES + @"ActionEffects\";
         public const string FOLDER_ENVIRONMENT = TEXTURES + @"Environmental\";
         public const string FOLDER_MOBS = TEXTURES + @"Actors\Mobs\";
@@ -63,6 +64,38 @@ namespace RiverHollow.Game_Managers
         public const string PROJECTILE_TEXTURE = TEXTURES + @"Projectiles";
 
         public const string FACES_TEXTURE = PORTRAIT_FOLDER + @"Faces";
+
+        public const string DATA_FOLDER = @"Data\";
+
+        public const string CONFIG_FILE_NAME = "Config";
+        public const string PLAYER_ANIMATION_FILE_NAME = "PlayerClassAnimationConfig";
+        public const string ACTOR_FILE_NAME = "ActorData";
+        public const string ADVENTURE_FILE_NAME = "AdventureData";
+        public const string COSMETIC_FILE_NAME = "CosmeticData";
+        public const string CUTSCENE_FILE_NAME = "CutsceneData";
+        public const string DUNGEON_FILE_NAME = "DungeonData";
+        public const string ITEM_FILE_NAME = "ItemData";
+        public const string LIGHT_FILE_NAME = "LightData";
+        public const string SHOP_FILE_NAME = "ShopData";
+        public const string STATUS_EFFECT_FILE_NAME = "StatusEffectData";
+        public const string TASK_FILE_NAME = "TaskData";
+        public const string UPGRADE_FILE_NAME = "UpgradeData";
+        public const string WORLD_OBJECT_FILE_NAME = "WorldObjectData";
+
+        public const string CONFIG_DATA_FILE = DATA_FOLDER + CONFIG_FILE_NAME;
+        public const string PLAYER_ANIMATION_DATA_FILE = DATA_FOLDER + PLAYER_ANIMATION_FILE_NAME;
+        public const string ACTOR_DATA_FILE = DATA_FOLDER + ACTOR_FILE_NAME;
+        public const string ADVENTURE_DATA_FILE = DATA_FOLDER + ADVENTURE_FILE_NAME;
+        public const string COSMETIC_DATA_FILE = DATA_FOLDER + COSMETIC_FILE_NAME;
+        public const string CUTSCENE_DATA_FILE = DATA_FOLDER + CUTSCENE_FILE_NAME;
+        public const string DUNGEON_DATA_FILE = DATA_FOLDER + DUNGEON_FILE_NAME;
+        public const string ITEM_DATA_FILE = DATA_FOLDER + ITEM_FILE_NAME;
+        public const string LIGHT_DATA_FILE = DATA_FOLDER + LIGHT_FILE_NAME;
+        public const string SHOP_DATA_FILE = DATA_FOLDER + SHOP_FILE_NAME;
+        public const string STATUS_EFFECT_DATA_FILE = DATA_FOLDER + STATUS_EFFECT_FILE_NAME;
+        public const string TASK_DATA_FILE = DATA_FOLDER + TASK_FILE_NAME;
+        public const string UPGRADE_DATA_FILE = DATA_FOLDER + UPGRADE_FILE_NAME;
+        public const string WORLD_OBJECT_DATA_FILE = DATA_FOLDER + WORLD_OBJECT_FILE_NAME;
         #endregion
 
         #region Dictionaries
@@ -84,19 +117,21 @@ namespace RiverHollow.Game_Managers
         static Dictionary<string, Dictionary<string, string>> _diObjectText;
 
         static Dictionary<int, Dictionary<string, string>> _diItemData;
-        static Dictionary<RarityEnum, List<int>> _diRelics;
-        public static IReadOnlyDictionary<RarityEnum, List<int>> Relics => _diRelics;
+
         public static List<int> ItemKeys => _diItemData.Keys.ToList();
 
         static Dictionary<int, Dictionary<string, string>> _diAdventureData;
         static Dictionary<int, Dictionary<string, string>> _diDungeonData;
-        static Dictionary<int, Dictionary<string, string>> _diCosmeticData;
         static Dictionary<int, Dictionary<string, string>> _diLightData;
         static Dictionary<int, Dictionary<string, string>> _diUpgradeData;
         static Dictionary<int, Dictionary<string, string>> _diStatusEffects;
         static Dictionary<int, Dictionary<string, string>> _diWorldObjects;
 
+        static Dictionary<int, Dictionary<string, string>> _diCosmeticData;
+        static Dictionary<RarityEnum, List<int>> _diRelics;
         static Dictionary<int, Dictionary<string, string>> _diTaskData;
+        public static IReadOnlyDictionary<int, Dictionary<string, string>> Cosmetics => _diCosmeticData;
+        public static IReadOnlyDictionary<RarityEnum, List<int>> Relics => _diRelics;
         public static IReadOnlyDictionary<int, Dictionary<string, string>> TaskData => _diTaskData;
 
         static Dictionary<string, Dictionary<string, List<string>>> _diSchedule;
@@ -141,18 +176,19 @@ namespace RiverHollow.Game_Managers
         private delegate void LoadDictionaryWorkDelegate(int id, Dictionary<string, string> taggedDictionary);
         private static void LoadDictionaries(ContentManager Content)
         {
-            LoadDictionary(ref Config, @"Data\Config", Content, null);
-            LoadDictionary(ref _diPlayerAnimationData, @"Data\PlayerClassAnimationConfig", Content, null);
-            LoadDictionary(ref _diItemData, @"Data\ItemData", Content, LoadItemsDoWork);
-            LoadDictionary(ref _diActorData, @"Data\ActorData", Content, null);
-            LoadDictionary(ref _diAdventureData, @"Data\AdventureData", Content, null);
-            LoadDictionary(ref _diStatusEffects, @"Data\StatusEffects", Content, null);
-            LoadDictionary(ref _diTaskData, @"Data\Tasks", Content, null);
-            LoadDictionary(ref _diLightData, @"Data\LightData", Content, null);
-            LoadDictionary(ref _diUpgradeData, @"Data\Upgrades", Content, null);
-            LoadDictionary(ref _diDungeonData, @"Data\DungeonData", Content, null);
-            LoadDictionary(ref _diCosmeticData, @"Data\Cosmetics", Content, null);
-            LoadDictionary(ref _diWorldObjects, @"Data\WorldObjects", Content, LoadWorldObjectsDoWork);
+            LoadDictionary(ref Config, CONFIG_DATA_FILE, Content, null);
+            LoadDictionary(ref _diPlayerAnimationData, PLAYER_ANIMATION_DATA_FILE, Content, null);
+            LoadDictionary(ref _diItemData, ITEM_DATA_FILE, Content, LoadItemsDoWork);
+            LoadDictionary(ref _diActorData, ACTOR_DATA_FILE, Content, null);
+            LoadDictionary(ref _diAdventureData, ADVENTURE_DATA_FILE, Content, null);
+            LoadDictionary(ref _diStatusEffects, STATUS_EFFECT_DATA_FILE, Content, null);
+            LoadDictionary(ref _diTaskData, TASK_DATA_FILE, Content, null);
+            LoadDictionary(ref _diLightData, LIGHT_DATA_FILE, Content, null);
+            LoadDictionary(ref _diUpgradeData, UPGRADE_DATA_FILE, Content, null);
+            LoadDictionary(ref _diDungeonData, DUNGEON_DATA_FILE, Content, null);
+
+            LoadDictionary(ref _diCosmeticData, COSMETIC_DATA_FILE, Content, null);
+            LoadDictionary(ref _diWorldObjects, WORLD_OBJECT_DATA_FILE, Content, null);
         }
         public static void SecondaryLoad(ContentManager Content)
         {
@@ -169,14 +205,6 @@ namespace RiverHollow.Game_Managers
                 dictionaryAddTo[kvp.Key] = taggedDictionary;
 
                 workDelegate?.Invoke(kvp.Key, taggedDictionary);
-            }
-        }
-
-        private static void LoadWorldObjectsDoWork(int id, Dictionary<string, string> taggedDictionary)
-        {
-            if (taggedDictionary.ContainsKey("Unlocked"))
-            {
-                PlayerManager.AddToCraftingDictionary(id, false);
             }
         }
 
@@ -218,7 +246,7 @@ namespace RiverHollow.Game_Managers
                 _diGameText[newKey] = Util.StringFromTaggedDictionary(tags);
             }
 
-            _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\Songs");
+            _diSongs = Content.Load<Dictionary<int, List<string>>>(@"Data\SongData");
             
             _diNPCDialogue = new Dictionary<string, Dictionary<string, string>>();
 
@@ -259,8 +287,8 @@ namespace RiverHollow.Game_Managers
         }
         private static void LoadGUIs(ContentManager Content)
         {
-            AddTexture(DataManager.PROJECTILE_TEXTURE, Content);
-            AddTexture(DataManager.FILE_MISC_SPRITES, Content);
+            AddTexture(PROJECTILE_TEXTURE, Content);
+            AddTexture(FILE_MISC_SPRITES, Content);
         }
         private static void LoadIcons(ContentManager Content)
         {
@@ -304,7 +332,7 @@ namespace RiverHollow.Game_Managers
 
         private static void LoadShopFile(ContentManager Content)
         {
-            Dictionary<int, string> shopFile = Content.Load<Dictionary<int, string>>(@"Data\Shops");
+            Dictionary<int, string> shopFile = Content.Load<Dictionary<int, string>>(SHOP_DATA_FILE);
 
             _diShops = new Dictionary<int, Shop>();
 
@@ -379,6 +407,9 @@ namespace RiverHollow.Game_Managers
                     case DataType.Adventure:
                         if (_diAdventureData[id].ContainsKey(key)) { return _diAdventureData[id][key]; }
                         break;
+                    case DataType.Cosmetic:
+                        if (_diCosmeticData[id].ContainsKey(key)) { return _diCosmeticData[id][key]; }
+                        break;
                     case DataType.Item:
                         if (_diItemData[id].ContainsKey(key)) { return _diItemData[id][key]; }
                         break;
@@ -439,6 +470,9 @@ namespace RiverHollow.Game_Managers
             {
                 case DataType.Actor:
                     if (_diActorData.ContainsKey(id) && _diActorData[id].ContainsKey(key)) { return _diActorData[id].ContainsKey(key); }
+                    break;
+                case DataType.Cosmetic:
+                    if (_diCosmeticData.ContainsKey(id) && _diCosmeticData[id].ContainsKey(key)) { return _diCosmeticData[id].ContainsKey(key); }
                     break;
                 case DataType.Item:
                     if (_diItemData.ContainsKey(id) && _diItemData[id].ContainsKey(key)) { return _diItemData[id].ContainsKey(key); }
@@ -522,6 +556,14 @@ namespace RiverHollow.Game_Managers
             }
             return null;
         }
+        public static Cosmetic GetCosmetic(int id)
+        {
+            if (_diCosmeticData.ContainsKey(id))
+            {
+                return new Cosmetic(id);
+            }
+            return null;
+        }
 
         public static Dictionary<string, string> GetDungeonInfo(int id)
         {
@@ -576,11 +618,11 @@ namespace RiverHollow.Game_Managers
                 switch (Util.ParseEnum<ItemTypeEnum>(_diItemData[id]["Type"]))
                 {
                     case ItemTypeEnum.Blueprint:
-                        return new Blueprint(id);
-                    case ItemTypeEnum.Clothing:
-                        return new Clothing(id); 
+                        return new Blueprint(id); 
                     case ItemTypeEnum.Consumable:
                         return new Consumable(id, num);
+                    case ItemTypeEnum.Cosmetic:
+                        return new CosmeticItem(id);
                     case ItemTypeEnum.Food:
                         return new Food(id, num);
                     case ItemTypeEnum.Merchandise:

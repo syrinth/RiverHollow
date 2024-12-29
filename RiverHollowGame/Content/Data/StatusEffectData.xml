@@ -3,11 +3,11 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Light:0][Duration:120]</Value>
+      <Value>[Type:Buff][Light:0][Duration:120]</Value>
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Modify:Agility-Minor/Magic-Minor/Strength-Minor][Duration:3]</Value>
+      <Value>[Type:Buff][Modify:Agility-Minor/Magic-Minor/Strength-Minor][Duration:3]</Value>
     </Item>
     <Item>
       <Key>2</Key>

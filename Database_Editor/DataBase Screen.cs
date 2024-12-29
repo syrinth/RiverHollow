@@ -824,9 +824,6 @@ namespace Database_Editor
             ItemTypeEnum itemType = Util.ParseEnum<ItemTypeEnum>(cbItemType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
             {
-                case ItemTypeEnum.Clothing:
-                    ItemComboBoxHelper<EquipmentEnum>(ref cbItemSubtype);
-                    break;
                 case ItemTypeEnum.Merchandise:
                     ItemComboBoxHelper<MerchandiseTypeEnum>(ref cbItemSubtype);
                     ItemComboBoxHelper<ClassTypeEnum>(ref cbItemGroup);
@@ -935,18 +932,18 @@ namespace Database_Editor
 
         private XMLTypeEnum FileNameToXMLType(string fileName)
         {
-            XMLTypeEnum rv = XMLTypeEnum.None;
+            XMLTypeEnum rv;
 
-            if (fileName == TASK_XML_FILE) { rv = XMLTypeEnum.Task; }
-            else if (fileName == ACTOR_XML_FILE) { rv = XMLTypeEnum.Actor; }
-            else if (fileName == WORLD_OBJECTS_XML_FILE) { rv = XMLTypeEnum.WorldObject; }
-            else if (fileName == STATUS_EFFECTS_XML_FILE) { rv = XMLTypeEnum.StatusEffect; }
-            else if (fileName == LIGHT_XML_FILE) { rv = XMLTypeEnum.Light; }
-            else if (fileName == UPGRADES_XML_FILE) { rv = XMLTypeEnum.Upgrade; }
-            else if (fileName == ADVENTURE_XML_FILE) { rv = XMLTypeEnum.Adventure; }
-            else if (fileName == SHOP_XML_FILE) { rv = XMLTypeEnum.Shop; }
-            else if (fileName == ITEM_XML_FILE) { rv = XMLTypeEnum.Item; }
-            else if (fileName.Contains("Text Files")) { rv = XMLTypeEnum.TextFile; }
+            if (fileName.Contains("Text Files"))
+            {
+                rv = XMLTypeEnum.TextFile;
+            }
+            else
+            {
+                var strippedFile = Path.GetFileNameWithoutExtension(fileName);
+                strippedFile = strippedFile.Replace("Data", "");
+                rv = Util.ParseEnum<XMLTypeEnum>(strippedFile);
+            }
 
             return rv;
         }
@@ -1464,6 +1461,7 @@ namespace Database_Editor
 
                 WriteXMLEntry(dataFile, string.Format("      <Key>{0}</Key>", data.ID), string.Format("      <Value>{0}</Value>", data.GetTagsString()));
 
+                //This is where we save Name/Desc to the Object_Text file
                 if (!fileName.Contains("Config") && type != XMLTypeEnum.TextFile)
                 {
                     string value = string.Format("[Name:{0}]", data.Name);

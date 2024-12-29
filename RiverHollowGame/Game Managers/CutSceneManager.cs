@@ -47,7 +47,7 @@ namespace RiverHollow.Game_Managers
                 _diAllCutsceneDialogue[fileID] = entryDictionary;
             }
 
-            Dictionary<int, List<string>> rawData = Content.Load<Dictionary<int, List<string>>>(@"Data\CutScenes");
+            Dictionary<int, List<string>> rawData = Content.Load<Dictionary<int, List<string>>>(DataManager.CUTSCENE_FILE_NAME);
             foreach (KeyValuePair<int, List<string>> kvp in rawData)
             {
                 _diCutscenes.Add(kvp.Key, new Cutscene(kvp.Key, kvp.Value));

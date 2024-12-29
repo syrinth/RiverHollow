@@ -259,7 +259,6 @@ namespace RiverHollow.Items
                     if (type == BuildableEnum.Floor || type == BuildableEnum.Wall) { return true; }
                     else { return false; }
                 case ItemTypeEnum.Blueprint:
-                case ItemTypeEnum.Clothing:
                     return false;
                 case ItemTypeEnum.NPCToken:
                 case ItemTypeEnum.Special:
