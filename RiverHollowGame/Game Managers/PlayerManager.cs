@@ -329,6 +329,10 @@ namespace RiverHollow.Game_Managers
         public static void InitializeCosmeticDictionary()
         {
             _diCosmetics = new Dictionary<CosmeticSlotEnum, List<KeyValuePair<int, bool>>>();
+            foreach (CosmeticSlotEnum e in Enum.GetValues(typeof(CosmeticSlotEnum)))
+            {
+                _diCosmetics[e] = new List<KeyValuePair<int, bool>>();
+            }
 
             foreach (var kvp in DataManager.Cosmetics)
             {
@@ -372,6 +376,12 @@ namespace RiverHollow.Game_Managers
             }
 
             return rv;
+        }
+
+        public static int RandomCosmetic(CosmeticSlotEnum e)
+        {
+            var cosmetics = _diCosmetics[e];
+            return Util.GetRandomItem(cosmetics.Where(x => x.Value).Select(x => x.Key).ToList());
         }
         #endregion
 

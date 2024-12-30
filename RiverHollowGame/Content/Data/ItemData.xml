@@ -491,7 +491,7 @@
     </Item>
     <Item>
       <Key>122</Key>
-      <Value>[Type:Clothing][Subtype:Shirt][Image:0-0][ReqItems:2-10/0-5][Key:Blue_Tunic][Row:1]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:0-0][ReqItems:2-10/0-5][Key:Blue_Tunic][Row:1]</Value>
     </Item>
     <Item>
       <Key>123</Key>
@@ -499,7 +499,7 @@
     </Item>
     <Item>
       <Key>124</Key>
-      <Value>[Type:Clothing][Subtype:Hat][Image:0-2][Value:1000][ESub:Heavy][ASlot:Armor][Tier:1][Def:Major][Str:Moderate]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:0-2][Value:1000][ESub:Heavy][ASlot:Armor][Tier:1][Def:Major][Str:Moderate]</Value>
     </Item>
     <Item>
       <Key>125</Key>
@@ -511,7 +511,7 @@
     </Item>
     <Item>
       <Key>127</Key>
-      <Value>[Type:Clothing][Subtype:Hat][Image:1-0][Value:1000][ESub:Heavy][ASlot:Head][Tier:1][Def:Major][Str:Moderate]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:1-0][Value:1000][ESub:Heavy][ASlot:Head][Tier:1][Def:Major][Str:Moderate]</Value>
     </Item>
     <Item>
       <Key>128</Key>
@@ -695,11 +695,11 @@
     </Item>
     <Item>
       <Key>173</Key>
-      <Value>[Type:Clothing][Subtype:Shirt][Image:1-4][Value:0][Row:1][TexName:401][Key:Blue_Tunic]</Value>
+      <Value>[Type:Tool][Subtype:Pick][Image:1-4][Value:0][Row:1][TexName:401][Key:Blue_Tunic]</Value>
     </Item>
     <Item>
       <Key>174</Key>
-      <Value>[Type:Clothing][Subtype:Pants][Image:0-0]</Value>
+      <Value>[Type:MonsterFood][Image:0-0]</Value>
     </Item>
     <Item>
       <Key>175</Key>

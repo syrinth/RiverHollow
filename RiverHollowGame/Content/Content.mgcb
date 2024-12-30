@@ -2786,7 +2786,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/Summons/WaterElemental.png
 
-#begin Textures/Cosmetics/Chest/Blue_Tunic_01.png
+#begin Textures/Cosmetics/Eyes.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2796,7 +2796,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Chest/Blue_Tunic_01.png
+/build:Textures/Cosmetics/Eyes.png
 
 #begin Textures/Cosmetics/Eyes.png
 /importer:TextureImporter
@@ -2810,6 +2810,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Cosmetics/Eyes.png
 
+#begin Textures/Cosmetics/Feet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Cosmetics/Feet.png
+
 #begin Textures/Cosmetics/Hair.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2822,7 +2834,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Cosmetics/Hair.png
 
-#begin Textures/Cosmetics/Hairstyles/Hair_0.png
+#begin Textures/Cosmetics/Hair.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2832,9 +2844,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Hairstyles/Hair_0.png
+/build:Textures/Cosmetics/Hair.png
 
-#begin Textures/Cosmetics/Hairstyles/Hair_1.png
+#begin Textures/Cosmetics/Hats.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2844,19 +2856,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Hairstyles/Hair_1.png
-
-#begin Textures/Cosmetics/Hairstyles/Hair_2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Hairstyles/Hair_2.png
+/build:Textures/Cosmetics/Hats.png
 
 #begin Textures/Cosmetics/Hats.png
 /importer:TextureImporter
@@ -2881,6 +2881,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Cosmetics/Pants.png
+
+#begin Textures/Cosmetics/Pants.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Cosmetics/Pants.png
+
+#begin Textures/Cosmetics/Shirts.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Cosmetics/Shirts.png
 
 #begin Textures/Cosmetics/Shirts.png
 /importer:TextureImporter

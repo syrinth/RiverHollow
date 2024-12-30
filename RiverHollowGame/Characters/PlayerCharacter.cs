@@ -12,7 +12,6 @@ using RiverHollow.WorldObjects;
 using RiverHollow.GUIComponents;
 
 using static RiverHollow.Utilities.Enums;
-using static RiverHollow.Utilities.Constants;
 using static RiverHollow.Game_Managers.SaveManager;
 
 namespace RiverHollow.Characters
@@ -79,6 +78,7 @@ namespace RiverHollow.Characters
             SyncSprite(CosmeticSprite(CosmeticSlotEnum.Eyes), 0);
             SyncSprite(CosmeticSprite(CosmeticSlotEnum.Head), Constants.PLAYER_HAT_OFFSET);
             SyncSprite(CosmeticSprite(CosmeticSlotEnum.Body), Constants.PLAYER_SHIRT_OFFSET);
+            SyncSprite(CosmeticSprite(CosmeticSlotEnum.Feet), Constants.PLAYER_FEET_OFFSET);
 
             var pantsSprite = CosmeticSprite(CosmeticSlotEnum.Legs);
             if (pantsSprite != null)
@@ -95,17 +95,40 @@ namespace RiverHollow.Characters
         }
 
         #region Cosmetics
+        public void RandomizeCosmetics()
+        {
+            var allCosmetics = GetCosmetics();
+            foreach (var c in allCosmetics)
+            {
+                c.SetCosmetic(null);
+            }
+
+            foreach (CosmeticSlotEnum e in Enum.GetValues(typeof(CosmeticSlotEnum)))
+            {
+                if (e == CosmeticSlotEnum.Head && RHRandom.RollPercent(80))
+                {
+                    continue;
+                }
+                SetCosmetic(e, PlayerManager.RandomCosmetic(e));
+            }
+        }
+
         private void AddDefaultCosmetics()
         {
             foreach (CosmeticSlotEnum e in Enum.GetValues(typeof(CosmeticSlotEnum)))
             {
                 AppliedCosmetics[e] = new AppliedCosmetic();
             }
-
+            AppliedCosmetics[CosmeticSlotEnum.Hair].SetColor(Color.Red);
+            AppliedCosmetics[CosmeticSlotEnum.Eyes].SetColor(Color.Blue);
         }
-        public List<Cosmetic> GetCosmetics()
+        public List<AppliedCosmetic> GetCosmetics()
         {
-            return AppliedCosmetics.Values.Select(x => x.MyCosmetic).ToList();
+            return AppliedCosmetics.Values.ToList();
+        }
+        public AppliedCosmetic GetAppliedCosmetic(CosmeticSlotEnum e)
+        {
+            return AppliedCosmetics[e];
         }
         public Cosmetic GetCosmetic(CosmeticSlotEnum e)
         {
@@ -123,7 +146,7 @@ namespace RiverHollow.Characters
         public void SetCosmetic(CosmeticSlotEnum e, int id)
         {
             var newCosmetic = DataManager.GetCosmetic(id);
-            if (e == newCosmetic.CosmeticSlot)
+            if (newCosmetic == null || e == newCosmetic.CosmeticSlot)
             {
                 AppliedCosmetics[e].SetCosmetic(newCosmetic);
 
@@ -171,20 +194,37 @@ namespace RiverHollow.Characters
 
         private void LinkSprites()
         {
-            var head = CosmeticSprite(CosmeticSlotEnum.Head);
-            var hair = CosmeticSprite(CosmeticSlotEnum.Hair);
-            var eyes = CosmeticSprite(CosmeticSlotEnum.Eyes);
-            var top = CosmeticSprite(CosmeticSlotEnum.Body);
-            var legs = CosmeticSprite(CosmeticSlotEnum.Legs);
-            var feet = CosmeticSprite(CosmeticSlotEnum.Feet);
+            ArmSprite.SetLinkedSprite(BodySprite, false);
 
-            head.SetLayerDepthMod(1);
-            hair.SetLayerDepthMod(0.9f);
-            eyes.SetLayerDepthMod(0.8f);
-            top.SetLayerDepthMod(0.7f);
-            ArmSprite.SetLayerDepthMod(0.6f);
-            legs.SetLayerDepthMod(0.5f);
-            feet.SetLayerDepthMod(0.4f);
+            LinkCosmeticSprite(CosmeticSlotEnum.Hair);
+            LinkCosmeticSprite(CosmeticSlotEnum.Eyes);
+
+            LinkCosmeticSprite(CosmeticSlotEnum.Head, CosmeticSlotEnum.Hair);
+            LinkCosmeticSprite(CosmeticSlotEnum.Body);
+            LinkCosmeticSprite(CosmeticSlotEnum.Legs, CosmeticSlotEnum.Body);
+            LinkCosmeticSprite(CosmeticSlotEnum.Feet, CosmeticSlotEnum.Legs);
+        }
+
+        private void LinkCosmeticSprite(CosmeticSlotEnum e, params CosmeticSlotEnum[] list)
+        {
+            var cosmetic = GetCosmetic(e);
+            var sprite = CosmeticSprite(e);
+
+            if(sprite != null)
+            {
+                foreach (var c in list)
+                {
+                    var linkTarget = CosmeticSprite(c);
+                    if(linkTarget != null)
+                    {
+                        var above = cosmetic.DrawAbove;
+                        sprite.SetLinkedSprite(linkTarget, !above);
+                        return;
+                    }
+                }
+
+                sprite.SetLinkedSprite(BodySprite, false);
+            }
         }
 
         private void SyncSprite(AnimatedSprite spr, int mod)

@@ -35,7 +35,7 @@ namespace RiverHollow.Game_Managers
         public const string PORTRAIT_FOLDER = FOLDER_ACTOR + @"Portraits\";
 
         public const string FOLDER_ITEMS = TEXTURES + @"Items\";
-        public const string FOLDER_COSMETICS = TEXTURES + @"Items\";
+        public const string FOLDER_COSMETICS = TEXTURES + @"Cosmetics\";
         public const string FOLDER_EFFECTS = TEXTURES + @"ActionEffects\";
         public const string FOLDER_ENVIRONMENT = TEXTURES + @"Environmental\";
         public const string FOLDER_MOBS = TEXTURES + @"Actors\Mobs\";
@@ -73,7 +73,6 @@ namespace RiverHollow.Game_Managers
         public const string ADVENTURE_FILE_NAME = "AdventureData";
         public const string COSMETIC_FILE_NAME = "CosmeticData";
         public const string CUTSCENE_FILE_NAME = "CutsceneData";
-        public const string DUNGEON_FILE_NAME = "DungeonData";
         public const string ITEM_FILE_NAME = "ItemData";
         public const string LIGHT_FILE_NAME = "LightData";
         public const string SHOP_FILE_NAME = "ShopData";
@@ -88,7 +87,6 @@ namespace RiverHollow.Game_Managers
         public const string ADVENTURE_DATA_FILE = DATA_FOLDER + ADVENTURE_FILE_NAME;
         public const string COSMETIC_DATA_FILE = DATA_FOLDER + COSMETIC_FILE_NAME;
         public const string CUTSCENE_DATA_FILE = DATA_FOLDER + CUTSCENE_FILE_NAME;
-        public const string DUNGEON_DATA_FILE = DATA_FOLDER + DUNGEON_FILE_NAME;
         public const string ITEM_DATA_FILE = DATA_FOLDER + ITEM_FILE_NAME;
         public const string LIGHT_DATA_FILE = DATA_FOLDER + LIGHT_FILE_NAME;
         public const string SHOP_DATA_FILE = DATA_FOLDER + SHOP_FILE_NAME;
@@ -165,6 +163,7 @@ namespace RiverHollow.Game_Managers
 
             AddDirectoryTextures(GUI_COMPONENTS, Content);
             AddDirectoryTextures(FOLDER_ITEMS, Content);
+            AddDirectoryTextures(FOLDER_COSMETICS, Content);
             AddDirectoryTextures(FOLDER_WORLDOBJECTS, Content);
             AddDirectoryTextures(FOLDER_BUILDINGS, Content);
             AddDirectoryTextures(FOLDER_ENVIRONMENT, Content);
@@ -185,7 +184,6 @@ namespace RiverHollow.Game_Managers
             LoadDictionary(ref _diTaskData, TASK_DATA_FILE, Content, null);
             LoadDictionary(ref _diLightData, LIGHT_DATA_FILE, Content, null);
             LoadDictionary(ref _diUpgradeData, UPGRADE_DATA_FILE, Content, null);
-            LoadDictionary(ref _diDungeonData, DUNGEON_DATA_FILE, Content, null);
 
             LoadDictionary(ref _diCosmeticData, COSMETIC_DATA_FILE, Content, null);
             LoadDictionary(ref _diWorldObjects, WORLD_OBJECT_DATA_FILE, Content, null);

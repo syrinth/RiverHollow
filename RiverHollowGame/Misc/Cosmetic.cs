@@ -12,6 +12,7 @@ namespace RiverHollow.Misc
     {
         public int ID { get; private set; }
         public CosmeticSlotEnum CosmeticSlot { get; private set; }
+        public bool DrawAbove => DataManager.GetBoolByIDKey(ID, "Above", DataType.Cosmetic);
 
         public Cosmetic(int id)
         {
@@ -25,6 +26,12 @@ namespace RiverHollow.Misc
 
             switch (CosmeticSlot)
             {
+                case CosmeticSlotEnum.Hair:
+                    rv += "Hair";
+                    break;
+                case CosmeticSlotEnum.Eyes:
+                    rv += "Eyes";
+                    break;
                 case CosmeticSlotEnum.Head:
                     rv += "Hats";
                     break;
@@ -33,6 +40,9 @@ namespace RiverHollow.Misc
                     break;
                 case CosmeticSlotEnum.Legs:
                     rv += "Pants";
+                    break;
+                case CosmeticSlotEnum.Feet:
+                    rv += "Feet";
                     break;
             }
 
@@ -57,14 +67,14 @@ namespace RiverHollow.Misc
                     foreach (AnimationData d in dataList)
                     {
                         xCrawl = 0;
-                        d.ChangeLocation(new Point(Constants.TILE_SIZE, sourcePoint.Y * Constants.TILE_SIZE));
+                        d.ChangeLocation(new Point(Constants.TILE_SIZE, sourcePoint.Y));
 
                         if (d.Directional)
                         {
                             foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
                             {
                                 if (e == DirectionEnum.None) { continue; }
-                                sprite.AddAnimation(d.Verb, e, d.XLocation + xCrawl, d.YLocation * Constants.TILE_SIZE, Constants.TILE_SIZE, Constants.TILE_SIZE, d.Frames, d.FrameSpeed, false, d.Verb == VerbEnum.Action1);
+                                sprite.AddAnimation(d.Verb, e, d.XLocation + xCrawl, d.YLocation, Constants.TILE_SIZE, Constants.TILE_SIZE, d.Frames, d.FrameSpeed, false, d.Verb == VerbEnum.Action1);
                                 xCrawl += (d.Frames * Constants.TILE_SIZE);
                             }
 
@@ -88,7 +98,7 @@ namespace RiverHollow.Misc
                     {
                         if (e == DirectionEnum.None) { continue; }
 
-                        sprite.AddAnimation(e, (sourcePoint.X * Constants.TILE_SIZE) + xCrawl, (sourcePoint.Y * Constants.TILE_SIZE), size);
+                        sprite.AddAnimation(e, (sourcePoint.X) + xCrawl, (sourcePoint.Y), size);
                         xCrawl += Constants.TILE_SIZE;
                     }
                     break;
@@ -100,11 +110,13 @@ namespace RiverHollow.Misc
                     sprite.GetFrameAnimation(Util.GetEnumString(DirectionEnum.Left)).Flip = true;
                     break;
                 default:
+                    //Offset for the item icon
+                    xCrawl += Constants.TILE_SIZE;
                     foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
                     {
                         if (e == DirectionEnum.None) { continue; }
 
-                        sprite.AddAnimation(e, ((sourcePoint.X + 1) * Constants.TILE_SIZE) + xCrawl, (sourcePoint.Y * Constants.TILE_SIZE), size);
+                        sprite.AddAnimation(e, sourcePoint.X + xCrawl, sourcePoint.Y, size);
                         xCrawl += Constants.TILE_SIZE;
                     }
                     break;
@@ -125,7 +137,7 @@ namespace RiverHollow.Misc
         public void SetCosmetic(Cosmetic c)
         {
             MyCosmetic = c;
-            MySprite = c.GetSprite();
+            MySprite = c?.GetSprite();
 
             SetColor(CosmeticColor);
         }

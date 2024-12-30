@@ -303,6 +303,26 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Witch's Hat]</Value>
     </Item>
     <Item>
+      <Key>Cosmetic_4</Key>
+      <Value>[Name:Blue Shirt]</Value>
+    </Item>
+    <Item>
+      <Key>Cosmetic_5</Key>
+      <Value>[Name:Black Shoes]</Value>
+    </Item>
+    <Item>
+      <Key>Cosmetic_6</Key>
+      <Value>[Name:Fancy Boots]</Value>
+    </Item>
+    <Item>
+      <Key>Cosmetic_7</Key>
+      <Value>[Name:Dark Pants]</Value>
+    </Item>
+    <Item>
+      <Key>Cosmetic_8</Key>
+      <Value>[Name:Blue Skirt]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>
@@ -1052,7 +1072,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_187</Key>
-      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River hollow to proess their love to one another.]</Value>
+      <Value>[Name:Mask of Marriage][Description:A mask used by the people of River Hollow to profess their love to one another.]</Value>
     </Item>
     <Item>
       <Key>Item_188</Key>

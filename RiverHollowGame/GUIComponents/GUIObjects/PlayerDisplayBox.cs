@@ -33,8 +33,30 @@ namespace RiverHollow.GUIComponents.GUIObjects
             CleanControls();
 
             var actor = PlayerManager.PlayerActor;
-            _liSprites = new List<GUISprite>();
-            foreach (var c in actor.GetCosmetics())
+            _liSprites = new List<GUISprite>
+            {
+                new GUISprite(actor.BodySprite),
+                new GUISprite(actor.ArmSprite)
+            };
+            _liSprites.ForEach(x => x.PositionAndMove(this, _pMoveBy));
+
+            var feetCosmetic = actor.GetAppliedCosmetic(CosmeticSlotEnum.Feet);
+            var legCosmetic = actor.GetAppliedCosmetic(CosmeticSlotEnum.Legs);
+            var bodyCosmetic = actor.GetAppliedCosmetic(CosmeticSlotEnum.Body);
+            var cosmetics = new List<AppliedCosmetic>
+            {
+                actor.GetAppliedCosmetic(CosmeticSlotEnum.Eyes),
+                actor.GetAppliedCosmetic(CosmeticSlotEnum.Hair),
+                actor.GetAppliedCosmetic(CosmeticSlotEnum.Head),
+                feetCosmetic,
+                legCosmetic,
+                bodyCosmetic
+            };
+
+            CheckLayering(ref cosmetics, feetCosmetic, legCosmetic);
+            CheckLayering(ref cosmetics, legCosmetic, bodyCosmetic);
+
+            foreach (var c in cosmetics)
             {
                 AddCosmetic(c);
             }
@@ -42,15 +64,28 @@ namespace RiverHollow.GUIComponents.GUIObjects
             PlayAnimation(_eLastVerb, _eLastDir);
         }
 
-        private void AddCosmetic(Cosmetic c)
+        private void CheckLayering(ref List<AppliedCosmetic> cosmetics, AppliedCosmetic lower, AppliedCosmetic top)
         {
-            if (c != null)
+            if (lower.MyCosmetic.DrawAbove && !top.MyCosmetic.DrawAbove)
             {
-                GUISprite spr = new GUISprite(c.GetSprite(), true);
+                var lowerIndex = cosmetics.FindIndex(x => x == lower);
+                var upperIndex = cosmetics.FindIndex(x => x == top);
+
+                var temp = cosmetics[upperIndex];
+                cosmetics[upperIndex] = lower;
+                cosmetics[lowerIndex] = temp;
+            }
+        }
+
+        private void AddCosmetic(AppliedCosmetic c)
+        {
+            if (c.MyCosmetic != null)
+            {
+                GUISprite spr = new GUISprite(c.MySprite, true);
                 spr.PositionAndMove(this, _pMoveBy);
 
                 int mod = 0;
-                switch (c.CosmeticSlot)
+                switch (c.MyCosmetic.CosmeticSlot)
                 {
                     case CosmeticSlotEnum.Head:
                         mod = Constants.PLAYER_HAT_OFFSET;
@@ -60,6 +95,9 @@ namespace RiverHollow.GUIComponents.GUIObjects
                         break;
                     case CosmeticSlotEnum.Legs:
                         mod = Constants.PLAYER_PANTS_OFFSET;
+                        break;
+                    case CosmeticSlotEnum.Feet:
+                        mod = Constants.PLAYER_FEET_OFFSET;
                         break;
                 }
 
@@ -72,11 +110,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             _eLastVerb = verb;
             _eLastDir = dir;
 
-            for (int i = 0; i < _liSprites.Count; i++)
+            _liSprites.ForEach(x =>
             {
-                _liSprites[i].PlayAnimation(_eLastVerb, _eLastDir);
-                _liSprites[i].PlayAnimation(dir);
-            }
+                x.PlayAnimation(_eLastVerb, _eLastDir);
+                x.PlayAnimation(dir);
+            });
         }
     }
 }

@@ -14,7 +14,7 @@ namespace RiverHollow.SpriteAnimations
         AnimatedSprite _sprLinkedSprite;
         bool _bLinkBelow = false;
         public int FakeHeight = 0;
-        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth + (_bLinkBelow ? -Constants.SPRITE_LINKED_MOD : Constants.SPRITE_LINKED_MOD)) : Util.DetermineLayerDepth(Position, LayerHeight);
+        public float LayerDepth => _sprLinkedSprite != null ? (_sprLinkedSprite.LayerDepth + (_bLinkBelow ? -Constants.SPRITE_LINKED_BELOW_MOD : Constants.SPRITE_LINKED_ABOVE_MOD)) : Util.DetermineLayerDepth(Position, LayerHeight);
 
         readonly Texture2D _texture; // The texture that holds the images for this sprite
 

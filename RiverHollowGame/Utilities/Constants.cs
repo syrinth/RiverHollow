@@ -33,6 +33,7 @@ namespace RiverHollow.Utilities
         public const int PLAYER_HAT_OFFSET = -4;
         public const int PLAYER_SHIRT_OFFSET = 9;
         public const int PLAYER_PANTS_OFFSET = 16;
+        public const int PLAYER_FEET_OFFSET = 16;
         public const int MERCHANT_BASE_CAPACITY = 5;
 
         public const float PLAYER_GRACE_PERIOD = 0.75f;
@@ -91,7 +92,8 @@ namespace RiverHollow.Utilities
         public const int FISH_MISSES = 3;
 
         public const int HUMAN_HEIGHT = (TILE_SIZE * 2) + 2;
-        public const float SPRITE_LINKED_MOD = 0.0001f;
+        public const float SPRITE_LINKED_BELOW_MOD = 0.0001f;
+        public const float SPRITE_LINKED_ABOVE_MOD = 0.0002f;
 
         public const int MAX_RECIPE_DISPLAY = 5;
 

@@ -42,9 +42,7 @@ namespace RiverHollow.GUIComponents.Screens
         public NewGameScreen()
         {
             GameManager.CurrentScreen = GameScreenEnum.Info;
-
-            //AssignClothes(ref _liHats, Util.FindParams(DataManager.Config[4]["ItemID"]));
-            AssignClothes(ref _liShirts, Util.FindParams(DataManager.Config[5]["ItemID"]));
+            PlayerManager.PlayerActor.RandomizeCosmetics();
 
             int startX = ((RiverHollow.ScreenWidth - RiverHollow.ScreenHeight) / 2) - GUIUtils.WINDOW_DARKBLUE.WidthEdges();
 
@@ -178,17 +176,6 @@ namespace RiverHollow.GUIComponents.Screens
                 SoundManager.MuteAllSound();
                 //_gMuteButton.ChangeImage(new Rectangle(96, 96, 16, 16), ScaledTileSize, ScaledTileSize, DataManager.DIALOGUE_TEXTURE);
             }
-        }
-        public void AssignClothes(ref List<int> clothesList, string[] clothingIDs)
-        {
-            clothesList = new List<int>();
-            foreach (string s in clothingIDs)
-            {
-                clothesList.Add(int.Parse(s));
-            }
-
-            //PlayerManager.PlayerActor.SetCosmetic(DataManager.GetItem(clothesList[0]));
-            //PlayerManager.PlayerActor.SetCosmetic(DataManager.GetItem(clothesList[1]));
         }
         public void SetSelection(GUITextInputWindow g)
         {

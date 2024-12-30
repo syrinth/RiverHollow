@@ -3,19 +3,39 @@
   <Asset Type="Dictionary[int, string]">
     <Item>
       <Key>0</Key>
-      <Value>[Type:Eyes]</Value>
-    </Item>
-    <Item>
-      <Key>1</Key>
       <Value>[Type:Eyes][Image:0-0][Default]</Value>
     </Item>
     <Item>
+      <Key>1</Key>
+      <Value>[Type:Hair][Image:0-0][Default]</Value>
+    </Item>
+    <Item>
       <Key>2</Key>
-      <Value>[Type:Hair][Image:64-0]</Value>
+      <Value>[Type:Hair][Image:4-0][Default]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Head][Image:0-0]</Value>
+      <Value>[Type:Head][Image:0-0][Default]</Value>
+    </Item>
+    <Item>
+      <Key>4</Key>
+      <Value>[Type:Body][Image:0-0][Default]</Value>
+    </Item>
+    <Item>
+      <Key>5</Key>
+      <Value>[Type:Feet][Image:0-0][Default]</Value>
+    </Item>
+    <Item>
+      <Key>6</Key>
+      <Value>[Type:Feet][Image:0-1][Default][Above]</Value>
+    </Item>
+    <Item>
+      <Key>7</Key>
+      <Value>[Type:Legs][Image:0-0][Default]</Value>
+    </Item>
+    <Item>
+      <Key>8</Key>
+      <Value>[Type:Legs][Image:0-1][Default][Above]</Value>
     </Item>
   </Asset>
 </XnaContent>
