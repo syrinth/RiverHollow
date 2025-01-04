@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
+using RiverHollow.GUIComponents.MainObjects;
 using RiverHollow.GUIComponents.Screens.HUDWindows;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
             _liButtons.ForEach(x => RemoveControl(x));
             _liButtons.Clear();
 
+            _liButtons.Add(new GUIButton("Cosmetics", BtnCosmetics));
             _liButtons.Add(new GUIButton("Inventory", BtnInventory));
             _liButtons.Add(new GUIButton("Build", BtnBuild));
             _liButtons.Add(new GUIButton("Edit Town", BtnEdit));
@@ -79,6 +81,11 @@ namespace RiverHollow.GUIComponents.Screens.HUDComponents
         public void BtnExitGame()
         {
             var _gMenuObject = new HUDExit();
+            GUIManager.OpenMainObject(_gMenuObject);
+        }
+        public void BtnCosmetics()
+        {
+            var _gMenuObject = new HUDCosmetics();
             GUIManager.OpenMainObject(_gMenuObject);
         }
         public void BtnInventory()

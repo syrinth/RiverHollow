@@ -172,7 +172,7 @@ namespace RiverHollow.Characters
 
         public virtual void RollOver() { }
 
-        public string Name => DataManager.GetTextData(ID, "Name", DataType.Actor);
+        public virtual string Name => DataManager.GetTextData(ID, "Name", DataType.Actor);
 
         protected virtual string SpriteName()
         {

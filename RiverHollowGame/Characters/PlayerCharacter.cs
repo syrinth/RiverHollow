@@ -20,6 +20,7 @@ namespace RiverHollow.Characters
     {
         readonly Dictionary<CosmeticSlotEnum, AppliedCosmetic> AppliedCosmetics;
 
+        public override string Name => PlayerManager.Name;
         public AnimatedSprite ArmSprite { get; private set; }
         public int BodyType { get; private set; } = 1;
         public string BodyTypeStr => BodyType.ToString("00");
@@ -74,6 +75,18 @@ namespace RiverHollow.Characters
                 _lightSource.Position = Position - new Point((_lightSource.Width - Width) / 2, (_lightSource.Height - Height) / 2);
             }
 
+            SyncSpriteLocations();
+
+            if (HasKnockbackVelocity())
+            {
+                ApplyKnockbackVelocity();
+            }
+
+            CheckDamageTimers(gTime);
+        }
+
+        public void SyncSpriteLocations()
+        {
             SyncSprite(CosmeticSprite(CosmeticSlotEnum.Hair), 0);
             SyncSprite(CosmeticSprite(CosmeticSlotEnum.Eyes), 0);
             SyncSprite(CosmeticSprite(CosmeticSlotEnum.Head), Constants.PLAYER_HAT_OFFSET);
@@ -85,13 +98,6 @@ namespace RiverHollow.Characters
             {
                 pantsSprite.Position = BodySprite.Position + new Point(0, Constants.PLAYER_PANTS_OFFSET);
             }
-
-            if (HasKnockbackVelocity())
-            {
-                ApplyKnockbackVelocity();
-            }
-
-            CheckDamageTimers(gTime);
         }
 
         #region Cosmetics
@@ -148,8 +154,11 @@ namespace RiverHollow.Characters
             if (cosmetic == null || e == cosmetic.CosmeticSlot)
             {
                 AppliedCosmetics[e].SetCosmetic(cosmetic);
+                if (e == CosmeticSlotEnum.Legs) { AppliedCosmetics[e].MySprite?.PlayAnimation(BodySprite.CurrentAnimation); }
+                else { AppliedCosmetics[e].MySprite?.PlayAnimation(Facing); }
 
                 LinkSprites();
+                SyncSpriteLocations();
             }
         }
 
@@ -214,12 +223,13 @@ namespace RiverHollow.Characters
 
             if(sprite != null)
             {
-                foreach (var c in list)
+                foreach (var target in list)
                 {
-                    var linkTarget = CosmeticSprite(c);
+                    var linkCosmetic = GetCosmetic(target);
+                    var linkTarget = CosmeticSprite(target);
                     if(linkTarget != null)
                     {
-                        var above = cosmetic.DrawAbove;
+                        var above = cosmetic.DrawAbove && !linkCosmetic.DrawAbove;
                         sprite.SetLinkedSprite(linkTarget, !above);
                         return;
                     }

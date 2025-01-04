@@ -11,8 +11,6 @@ namespace RiverHollow.GUIComponents.Screens
     public class HUDPlayerInventory : GUIMainObject
     {
         readonly GUIInventoryWindow _playerInventory;
-        readonly GUIInventoryWindow _altInventory;
-        readonly PlayerDisplayBox _playerDisplay;
 
         public HUDPlayerInventory() : base()
         {
@@ -22,13 +20,7 @@ namespace RiverHollow.GUIComponents.Screens
             InventoryManager.CurrentInventoryDisplay = DisplayTypeEnum.PlayerInventory;
 
             _playerInventory = new GUIInventoryWindow(true);
-
-            AddControl(_altInventory);
-
-            _playerDisplay = new PlayerDisplayBox(GUIUtils.PLAYER_INVENTORY_PANE, new Point(6, 1));
-            _playerDisplay.PositionAndMove(_altInventory, new Point(31, 17));
-
-            _playerInventory.AnchorAndAlignWithSpacing(_altInventory, SideEnum.Bottom, SideEnum.Left, 2, GUIUtils.ParentRuleEnum.ForceToParent);
+            AddControl(_playerInventory);
 
             var toolboxWindow = new GUIWindow(GUIUtils.WINDOW_DARKBLUE);
             List<GUIItemBox> _liToolbox = new List<GUIItemBox>();
@@ -65,14 +57,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 rv = _playerInventory.ProcessLeftButtonClick(mouse);
             }
-            else if (_altInventory != null && _altInventory.Contains(mouse))
-            {
-                if (!InventoryManager.LockedInventory)
-                {
-                    _altInventory.ProcessLeftButtonClick(mouse);
-                }
-                rv = true;
-            }
             else if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory)
             {
                 if (GameManager.HeldItem != null && GameManager.HeldItem.CanBeDropped())
@@ -96,10 +80,6 @@ namespace RiverHollow.GUIComponents.Screens
                 {
                     InventoryManager.CleanupInventoryDisplay();
                 }
-            }
-            else if (_altInventory.Contains(mouse))
-            {
-                rv = _altInventory.ProcessRightButtonClick(mouse);
             }
             else
             {

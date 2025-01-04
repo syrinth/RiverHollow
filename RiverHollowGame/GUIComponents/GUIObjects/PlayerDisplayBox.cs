@@ -32,8 +32,8 @@ namespace RiverHollow.GUIComponents.GUIObjects
             var actor = PlayerManager.PlayerActor;
             _liSprites = new List<GUISprite>
             {
-                new GUISprite(actor.BodySprite),
-                new GUISprite(actor.ArmSprite)
+                new GUISprite(actor.BodySprite, true),
+                new GUISprite(actor.ArmSprite, true)
             };
             _liSprites.ForEach(x => x.PositionAndMove(this, _pMoveBy));
 
