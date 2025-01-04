@@ -12,7 +12,7 @@ namespace RiverHollow.Misc
     {
         public int ID { get; private set; }
         public CosmeticSlotEnum CosmeticSlot { get; private set; }
-        public bool DrawAbove => DataManager.GetBoolByIDKey(ID, "Above", DataType.Cosmetic);
+        public bool DrawAbove => DataManager.GetBoolByIDKey(ID, "Above", DataType.Cosmetic) || CosmeticSlot == CosmeticSlotEnum.Head;
 
         public Cosmetic(int id)
         {
@@ -57,6 +57,7 @@ namespace RiverHollow.Misc
             var size = new Point(1, 1);
             int xCrawl = 0;
             AnimatedSprite sprite = new AnimatedSprite(GetTextureName());
+            sprite.AddAnimation(AnimationEnum.ObjectIdle, sourcePoint.X, sourcePoint.Y, new Point(1, 1));
 
             switch (CosmeticSlot)
             {

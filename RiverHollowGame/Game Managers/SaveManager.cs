@@ -124,6 +124,9 @@ namespace RiverHollow.Game_Managers
             [XmlElement(ElementName = "Leg")]
             public CosmeticData pants;
 
+            [XmlElement(ElementName = "Feet")]
+            public CosmeticData feet;
+
             [XmlArray(ElementName = "Items")]
             public List<ItemData> Items;
 

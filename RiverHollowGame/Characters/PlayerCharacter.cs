@@ -143,12 +143,11 @@ namespace RiverHollow.Characters
             AppliedCosmetics[e].SetColor(c);
         }
 
-        public void SetCosmetic(CosmeticSlotEnum e, int id)
+        public void SetCosmetic(CosmeticSlotEnum e, Cosmetic cosmetic)
         {
-            var newCosmetic = DataManager.GetCosmetic(id);
-            if (newCosmetic == null || e == newCosmetic.CosmeticSlot)
+            if (cosmetic == null || e == cosmetic.CosmeticSlot)
             {
-                AppliedCosmetics[e].SetCosmetic(newCosmetic);
+                AppliedCosmetics[e].SetCosmetic(cosmetic);
 
                 LinkSprites();
             }
@@ -177,7 +176,7 @@ namespace RiverHollow.Characters
 
             CosmeticData data = new CosmeticData()
             {
-                id = cosmetic.MyCosmetic.ID,
+                id = cosmetic.MyCosmetic == null ? -1 : cosmetic.MyCosmetic.ID,
                 cosmeticColor = cosmetic.CosmeticColor
             };
 
@@ -187,12 +186,15 @@ namespace RiverHollow.Characters
         public void LoadCosmeticData(CosmeticData data)
         {
             var cosmetic = DataManager.GetCosmetic(data.id);
-            AppliedCosmetics[cosmetic.CosmeticSlot].SetColor(data.cosmeticColor);
-            AppliedCosmetics[cosmetic.CosmeticSlot].SetCosmetic(cosmetic);
+            if (cosmetic != null)
+            {
+                AppliedCosmetics[cosmetic.CosmeticSlot].SetColor(data.cosmeticColor);
+                AppliedCosmetics[cosmetic.CosmeticSlot].SetCosmetic(cosmetic);
+            }
         }
         #endregion
 
-        private void LinkSprites()
+        public void LinkSprites()
         {
             ArmSprite.SetLinkedSprite(BodySprite, false);
 

@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Items;
 using RiverHollow.Misc;
-using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 
@@ -60,12 +57,19 @@ namespace RiverHollow.GUIComponents.GUIObjects
             {
                 AddCosmetic(c);
             }
+            
+            _liSprites.ForEach(x => x.SetScale(GameManager.CurrentScale * 2));
 
             PlayAnimation(_eLastVerb, _eLastDir);
         }
 
         private void CheckLayering(ref List<AppliedCosmetic> cosmetics, AppliedCosmetic lower, AppliedCosmetic top)
         {
+            if (lower.MyCosmetic == null || top.MyCosmetic == null)
+            {
+                return;
+            }
+
             if (lower.MyCosmetic.DrawAbove && !top.MyCosmetic.DrawAbove)
             {
                 var lowerIndex = cosmetics.FindIndex(x => x == lower);
@@ -101,7 +105,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
                         break;
                 }
 
-                spr.ScaledMoveBy(0, mod);
+                spr.ScaledMoveBy(0, mod * 2);
                 _liSprites.Add(spr);
             }
         }

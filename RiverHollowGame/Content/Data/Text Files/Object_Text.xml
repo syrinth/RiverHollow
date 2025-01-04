@@ -323,6 +323,10 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Blue Skirt]</Value>
     </Item>
     <Item>
+      <Key>Cosmetic_9</Key>
+      <Value>[Name:Dark Skirt]</Value>
+    </Item>
+    <Item>
       <Key>Item_0</Key>
       <Value>[Name:Stone][Description:Stone, for building things]</Value>
     </Item>

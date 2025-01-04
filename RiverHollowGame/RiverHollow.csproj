@@ -95,9 +95,11 @@
     <Compile Include="Game Managers\LogManager.cs" />
     <Compile Include="Game Managers\FishingManager.cs" />
     <Compile Include="Game Managers\TownManager.cs" />
+    <Compile Include="GUIComponents\GUIObjects\GUICosmeticBox.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIToggle.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUITabWindow.cs" />
     <Compile Include="GUIComponents\GUIUtils.cs" />
+    <Compile Include="GUIComponents\MainObjects\HUDCosmetics.cs" />
     <Compile Include="GUIComponents\Screens\DefeatedScreen.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\DisplayUpgradeIcon.cs" />
     <Compile Include="GUIComponents\Screens\HUDComponents\HUDMenu.cs" />

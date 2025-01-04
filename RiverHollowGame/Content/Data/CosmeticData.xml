@@ -15,7 +15,7 @@
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Head][Image:0-0][Default]</Value>
+      <Value>[Type:Head][Image:0-0]</Value>
     </Item>
     <Item>
       <Key>4</Key>
@@ -36,6 +36,10 @@
     <Item>
       <Key>8</Key>
       <Value>[Type:Legs][Image:0-1][Default][Above]</Value>
+    </Item>
+    <Item>
+      <Key>9</Key>
+      <Value>[Type:Legs][Image:0-2]</Value>
     </Item>
   </Asset>
 </XnaContent>

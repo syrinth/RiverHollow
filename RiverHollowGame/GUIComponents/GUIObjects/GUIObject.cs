@@ -17,6 +17,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public delegate void EmptyDelegate();
         public delegate void IntDelegate(int i);
+        public delegate void ObjectDelegate(GUIObject o);
 
         public GUIObject Parent { get; private set; }
 
@@ -65,6 +66,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
         public bool Active => _bEnabled && Visible;
         protected bool _bSnapToGrid = true;
 
+        private bool _bIgnoreMe = false;
         public bool Visible { get; protected set; } = true;
 
         public bool HoverControls = true;
@@ -92,11 +94,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public virtual bool Contains(Point mouse)
         {
-            return Visible && DrawRectangle.Contains(mouse);
+            return !_bIgnoreMe && Visible && DrawRectangle.Contains(mouse);
         }
         public virtual bool Contains(GUIObject obj)
         {
-            return DrawRectangle.Contains(obj.DrawRectangle);
+            return !_bIgnoreMe && DrawRectangle.Contains(obj.DrawRectangle);
         }
         public virtual void Update(GameTime gTime) {
             foreach (GUIObject g in ToRemove)
@@ -845,6 +847,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
         internal bool Show()
         {
             return Visible;
+        }
+
+        internal void IgnoreMe(bool val)
+        {
+            _bIgnoreMe = val;
         }
 
         #endregion

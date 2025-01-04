@@ -378,10 +378,15 @@ namespace RiverHollow.Game_Managers
             return rv;
         }
 
-        public static int RandomCosmetic(CosmeticSlotEnum e)
+        public static Cosmetic RandomCosmetic(CosmeticSlotEnum e)
         {
             var cosmetics = _diCosmetics[e];
-            return Util.GetRandomItem(cosmetics.Where(x => x.Value).Select(x => x.Key).ToList());
+            return DataManager.GetCosmetic(Util.GetRandomItem(cosmetics.Where(x => x.Value).Select(x => x.Key).ToList()));
+        }
+
+        public static List<KeyValuePair<int, bool>> GetCosmetics(CosmeticSlotEnum e)
+        {
+            return new List<KeyValuePair<int, bool>>(_diCosmetics[e]);
         }
         #endregion
 
@@ -886,9 +891,11 @@ namespace RiverHollow.Game_Managers
                 money = Money,
                 bodyTypeIndex = PlayerActor.BodyType,
                 hair = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Hair),
+                eyes = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Eyes),
                 hat = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Head),
                 shirt = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Body),
                 pants = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Legs),
+                feet = PlayerActor.SaveCosmeticData(CosmeticSlotEnum.Feet),
                 weddingCountdown = WeddingCountdown,
                 babyCountdown = BabyCountdown,
                 hpIncreases = HPIncrease,
@@ -954,12 +961,13 @@ namespace RiverHollow.Game_Managers
 
             NewDayRecovery();
 
-#if DEBUG
             PlayerActor.LoadCosmeticData(saveData.hair);
-#endif
+            PlayerActor.LoadCosmeticData(saveData.eyes);
             PlayerActor.LoadCosmeticData(saveData.hat);
             PlayerActor.LoadCosmeticData(saveData.shirt);
             PlayerActor.LoadCosmeticData(saveData.pants);
+            PlayerActor.LoadCosmeticData(saveData.feet);
+            PlayerActor.LinkSprites();
 
             PlayerActor.SetBodyType(saveData.bodyTypeIndex);
 

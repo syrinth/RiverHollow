@@ -19,7 +19,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle SELECT_CORNER = new Rectangle(144, 128, 24, 24);
         internal static Rectangle SELECT_HIGHLIGHT = new Rectangle(163, 20, 20, 20);
         internal static Rectangle WORLDMAP = new Rectangle(0, 0, 480, 270);
-        internal static Rectangle NEW_DISPLAY = new Rectangle(112, 208, 50, 49);
+        internal static Rectangle NEW_DISPLAY = new Rectangle(112, 208, 34, 76);
         internal static Rectangle ITEM_BOX = new Rectangle(176, 128, 20, 20);
         internal static Rectangle MAIL_ITEM_BOX = new Rectangle(144, 160, 20, 20);
         internal static Rectangle STRUCTURE_BOX = new Rectangle(284, 204, 68, 68);
@@ -94,6 +94,7 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle BTN_OK_TINY = new Rectangle(194, 103, 11, 9);
         internal static Rectangle BTN_BUY = new Rectangle(164, 0, 18, 19);
         internal static Rectangle BTN_GIVE = new Rectangle(164, 58, 18, 19);
+        internal static Rectangle BTN_RANDOMIZE = new Rectangle(144, 96, 16, 16);
 
         internal static Rectangle TOGGLE_MUTE = new Rectangle(320, 128, 16, 16);
         internal static Rectangle TOGGLE_UNMUTE = new Rectangle(336, 128, 16, 16);
@@ -150,8 +151,9 @@ namespace RiverHollow.GUIComponents
         internal static Rectangle INVENTORY_ICON_HAT = new Rectangle(208, 144, 16, 16);
         internal static Rectangle INVENTORY_ICON_SHIRT = new Rectangle(224, 144, 16, 16);
         internal static Rectangle INVENTORY_ICON_PANTS = new Rectangle(240, 144, 16, 16);
-        internal static Rectangle INVENTORY_ICON_NECK = new Rectangle(208, 160, 16, 16);
-        internal static Rectangle INVENTORY_ICON_RING = new Rectangle(224, 160, 16, 16);
+        internal static Rectangle INVENTORY_ICON_FEET = new Rectangle(208, 160, 16, 16);
+        internal static Rectangle INVENTORY_ICON_HAIR = new Rectangle(224, 160, 16, 16);
+        internal static Rectangle INVENTORY_ICON_CANCEL = new Rectangle(240, 160, 16, 16);
         internal static Rectangle INVENTORY_ICON_LANTERN = new Rectangle(256, 144, 16, 16);
 
         internal static WindowData WINDOW_BROWN = new WindowData(0, 240, 5, 5, 6, 6, 4);
