@@ -872,6 +872,12 @@
 /processorParam:Quality=Best
 /build:Sound/Original/Effects/ButtonPress.wav
 
+#begin Sound/Original/Effects/Item.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound/Original/Effects/Item.wav
+
 #begin Sound/Original/Effects/Sample.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -1442,6 +1448,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Merchants/Magda.png
 
+#begin Textures/Actors/NPCs/Merchants/Paige.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Merchants/Paige.png
+
 #begin Textures/Actors/NPCs/Merchants/Sybil.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1921,18 +1939,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Villagers/Octavia.png
-
-#begin Textures/Actors/NPCs/Villagers/Paige.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/Villagers/Paige.png
 
 #begin Textures/Actors/NPCs/Villagers/Penelope.png
 /importer:TextureImporter
@@ -2798,18 +2804,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Cosmetics/Eyes.png
 
-#begin Textures/Cosmetics/Eyes.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Eyes.png
-
 #begin Textures/Cosmetics/Feet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2834,30 +2828,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Cosmetics/Hair.png
 
-#begin Textures/Cosmetics/Hair.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Hair.png
-
-#begin Textures/Cosmetics/Hats.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Hats.png
-
 #begin Textures/Cosmetics/Hats.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2881,30 +2851,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Cosmetics/Pants.png
-
-#begin Textures/Cosmetics/Pants.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Pants.png
-
-#begin Textures/Cosmetics/Shirts.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/Cosmetics/Shirts.png
 
 #begin Textures/Cosmetics/Shirts.png
 /importer:TextureImporter

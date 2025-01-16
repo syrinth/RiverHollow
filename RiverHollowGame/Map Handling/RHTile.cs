@@ -267,8 +267,7 @@ namespace RiverHollow.Map_Handling
             bool rv = false;
             if (WorldObject != null && WorldObject.IsDestructible())
             {
-                rv = true;
-                ((Destructible)WorldObject).DealDamage(toolUsed);
+                rv = ((Destructible)WorldObject).DealDamage(toolUsed);
             }
 
             return rv;

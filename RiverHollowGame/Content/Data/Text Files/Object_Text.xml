@@ -220,7 +220,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Actor_54</Key>
-      <Value>[Name:Paige]</Value>
+      <Value>[Name:Blank]</Value>
     </Item>
     <Item>
       <Key>Actor_55</Key>
@@ -281,6 +281,10 @@ of... mostly gold. Master apothecary.]</Value>
     <Item>
       <Key>Actor_69</Key>
       <Value>[Name:Caspian]</Value>
+    </Item>
+    <Item>
+      <Key>Actor_70</Key>
+      <Value>[Name:Paige]</Value>
     </Item>
     <Item>
       <Key>Adventure_0</Key>
@@ -1052,15 +1056,15 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_181</Key>
-      <Value>[Name:$Building_20$ Blueprint]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>Item_182</Key>
-      <Value>[Name:$Building_22$ Blueprint]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>Item_183</Key>
-      <Value>[Name:$Building_21$ Blueprint]</Value>
+      <Value>[Name:]</Value>
     </Item>
     <Item>
       <Key>Item_184</Key>

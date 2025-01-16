@@ -344,6 +344,8 @@ namespace RiverHollow.Game_Managers
                     return "close_door_1";
                 case SoundEffectEnum.GrindStone:
                     return "grinding_stone";
+                case SoundEffectEnum.Item:
+                    return "Item";
                 case SoundEffectEnum.Kitchen:
                     return "stove_fire";
                 case SoundEffectEnum.Rainfall:

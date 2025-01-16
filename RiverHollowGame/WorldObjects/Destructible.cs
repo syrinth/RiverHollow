@@ -104,8 +104,9 @@ namespace RiverHollow.WorldObjects
             return rv;
         }
 
-        public void DealDamage(Tool toolUsed)
+        public bool DealDamage(Tool toolUsed)
         {
+            bool rv = false;
             if (NeededTool == toolUsed.ToolType)
             {
                 if (toolUsed.ToolLevel >= NeededToolLevel)
@@ -114,6 +115,7 @@ namespace RiverHollow.WorldObjects
 
                     if (HP > 0)
                     {
+                        rv = true;
                         HP -= toolUsed.ToolLevel;
 
                         if (HP <= 0)
@@ -127,10 +129,6 @@ namespace RiverHollow.WorldObjects
 
                             MapManager.DropItemsOnMap(GetDroppedItems(), BaseRectangle.Location);
                         }
-                        else
-                        {
-                            NudgeObject(false);
-                        }
                     }
                 }
                 else
@@ -138,6 +136,10 @@ namespace RiverHollow.WorldObjects
                     GUIManager.OpenTextWindow("Weak_Tool");
                 }
             }
+
+            NudgeObject(false);
+
+            return rv;
         }
         protected void NudgeObject(bool playEffect)
         {

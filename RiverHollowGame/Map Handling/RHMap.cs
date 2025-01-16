@@ -1924,6 +1924,8 @@ namespace RiverHollow.Map_Handling
 
                         RHTile playerTile = GetTileByPixelPosition(PlayerManager.PlayerActor.CollisionCenter);
                         TargetTile = playerTile.GetTileByDirection(PlayerManager.PlayerActor.Facing);
+
+                        i.UseItem();
                     }
                     else
                     {

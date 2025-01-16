@@ -147,7 +147,7 @@
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:MonsterPart][Wants:Artifact]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:MonsterPart]</Value>
     </Item>
     <Item>
       <Key>37</Key>
@@ -219,7 +219,7 @@
     </Item>
     <Item>
       <Key>54</Key>
-      <Value>[Type:Villager][Key:Paige][PortRow:1][HouseID:153][Collection:7/167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredPopulation:99][Size:16-29]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:153][Collection:7/167][Idle:0-0-1-0-T][Walk:0-0-1-0-T][RequiredPopulation:99][Size:16-29][Key:Paige]</Value>
     </Item>
     <Item>
       <Key>55</Key>
@@ -275,11 +275,15 @@
     </Item>
     <Item>
       <Key>68</Key>
-      <Value>[Type:Fish][Group:None][Key:Fish_Pond][Size:16-16][Idle:3-.2-T]</Value>
+      <Value>[Type:Fish][Key:Fish_Pond][Size:16-16][Idle:3-.2-T]</Value>
     </Item>
     <Item>
       <Key>69</Key>
       <Value>[Type:Traveler][Subtype:None][Group:None][Key:Caspian][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Plain][Disliked:Seafood][Building:101][Face:0-4]</Value>
+    </Item>
+    <Item>
+      <Key>70</Key>
+      <Value>[Type:Merchant][Key:Paige][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][ShopData:12][Day:Saturday][Wants:Artifact][RequestIDs:237/238]</Value>
     </Item>
   </Asset>
 </XnaContent>

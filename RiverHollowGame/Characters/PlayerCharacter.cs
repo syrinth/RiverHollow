@@ -497,6 +497,7 @@ namespace RiverHollow.Characters
                     }
                     else
                     {
+                        SoundManager.PlayEffect(SoundEffectEnum.Item);
                         _arrGates[_iCount] = true;
                         _iCount++;
                         _rhTimer.Reset();
