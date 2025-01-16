@@ -12,7 +12,7 @@ namespace RiverHollow.Items
         }
 
         public override bool HasUse() { return true; }
-        public override bool ItemBeingUsed()
+        public override void UseItem()
         {
             GameManager.EnterTownModeEdit();
 
@@ -22,11 +22,7 @@ namespace RiverHollow.Items
                 else { InventoryManager.RemoveItemFromInventory(this); }
 
                 GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(PlantID));
-
-                return true;
             }
-
-            return false;
         }
 
         public bool InSeason() {

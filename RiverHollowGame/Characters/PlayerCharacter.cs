@@ -13,6 +13,8 @@ using RiverHollow.GUIComponents;
 
 using static RiverHollow.Utilities.Enums;
 using static RiverHollow.Game_Managers.SaveManager;
+using RiverHollow.Items;
+using MonoGame.Extended.Sprites;
 
 namespace RiverHollow.Characters
 {
@@ -27,6 +29,8 @@ namespace RiverHollow.Characters
 
         public bool CanBecomePregnant { get; set; }
         public bool Pregnant { get; set; }
+
+        private ActiveItem _activeItem;
 
         public override List<AnimatedSprite> GetSprites()
         {
@@ -83,6 +87,8 @@ namespace RiverHollow.Characters
             }
 
             CheckDamageTimers(gTime);
+
+            _activeItem?.Update(gTime);
         }
 
         public void SyncSpriteLocations()
@@ -275,6 +281,8 @@ namespace RiverHollow.Characters
                     spriteBatch.Draw(DataManager.GetTexture(DataManager.HUD_COMPONENTS), r, GUIUtils.BLACK_BOX, Color.Red * 0.5f, 0f, Vector2.Zero, SpriteEffects.None, GetSprites()[0].LayerDepth - 1);
                 }
             }
+
+            _activeItem?.Draw(spriteBatch);
         }
         protected override void HandleMove()
         {
@@ -417,6 +425,84 @@ namespace RiverHollow.Characters
         public override void SetMoveTo(Point v, bool update = true)
         {
             base.SetMoveTo(v, State != ActorStateEnum.Grab);
+        }
+
+        public bool HasActiveItem()
+        {
+            return _activeItem != null;
+        }
+
+        public void SetActiveItem(Item i)
+        {
+            if(i == null)
+            {
+                _activeItem = null;
+            }
+            else if (_activeItem == null && i.Usable)
+            {
+                _activeItem = new ActiveItem(i);
+            }
+        }
+
+        public class ActiveItem
+        {
+            readonly RHTimer _rhTimer;
+            readonly Item _iConsumable;
+            readonly bool[] _arrGates;
+            int _iCount;
+
+            public ActiveItem(Item i)
+            {
+                _arrGates = new bool[3];
+                _arrGates[0] = false;
+                _arrGates[1] = false;
+                _arrGates[2] = false;
+
+                _iCount = 0;
+                _iConsumable = i;
+                _rhTimer = new RHTimer(i is WrappedObjectItem ? Constants.USE_DECOR_TIMER : Constants.USE_CONSUMABLE_TIMER);
+            }
+
+            internal void Draw(SpriteBatch spriteBatch)
+            {
+                var location = PlayerManager.PlayerActor.Position + new Point(0, -Constants.TILE_SIZE/2);
+                _iConsumable.Draw(spriteBatch, new Rectangle(location.X, location.Y, Constants.TILE_SIZE, Constants.TILE_SIZE));
+
+                int xCrawl = 0;
+                for (int i = 0; i < _arrGates.Length; i++)
+                {
+                    var targetBox = _arrGates[i] ? Constants.USE_ITEM_BUBBLE_FULL : Constants.USE_ITEM_BUBBLE_EMPTY;
+
+                    var drawBox = new Rectangle(location.X + xCrawl, location.Y + Constants.TILE_SIZE - targetBox.Height, targetBox.Width, targetBox.Height);
+                    spriteBatch.Draw(DataManager.GetTexture(DataManager.FILE_MISC_SPRITES), drawBox, targetBox, Color.White,0 ,Vector2.Zero, SpriteEffects.None, Constants.MAX_LAYER_DEPTH +1);
+                    xCrawl += 6;
+                }
+            }
+
+            internal void Update(GameTime gTime)
+            {
+                if (!InputManager.ButtonDown(ButtonEnum.Right)){
+                    PlayerManager.SetActiveItem(null);
+                }
+                else if (_rhTimer.TickDown(gTime))
+                {
+                    if (_iCount == 3)
+                    {
+                        _iConsumable.UseItem();
+                        PlayerManager.SetActiveItem(null);
+                        if(_iConsumable.Number == 0)
+                        {
+                            GameManager.SetSelectedItem(null);
+                        }
+                    }
+                    else
+                    {
+                        _arrGates[_iCount] = true;
+                        _iCount++;
+                        _rhTimer.Reset();
+                    }
+                }
+            }
         }
     }
 }

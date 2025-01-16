@@ -8,7 +8,7 @@
         public enum BuildTypeEnum { Structure, WorldObject };
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Propose, Date, EndDay, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, YesNo, Bed };
-        public enum TextEntryTriggerEnum { None, UseItem, ConfirmPurchase, Donate, PetFollow, PetUnfollow, GetBaby }
+        public enum TextEntryTriggerEnum { None, ConfirmPurchase, Donate, PetFollow, PetUnfollow, GetBaby }
 
         public enum SpawnTypeEnum { Item, Object, Mob };
         public enum RarityEnum { C, U, R, M };

@@ -15,7 +15,7 @@ namespace RiverHollow.Items
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Tokens");
         }
 
-        public override bool ItemBeingUsed()
+        public override void UseItem()
         {
             if (TokenType == NPCTokenTypeEnum.Mount)
             {
@@ -49,8 +49,6 @@ namespace RiverHollow.Items
                     GUIManager.NewWarningAlertIcon(Constants.STR_ALERT_PET_CAFE);
                 }
             }
-
-            return true;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
-using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
@@ -41,6 +40,8 @@ namespace RiverHollow.Items
         protected Dictionary<int, int> _diReqToMake;
 
         private bool _bDrawShadow = false;
+
+        public virtual bool Usable => false;
 
         #endregion
         public Item(int id)
@@ -209,14 +210,6 @@ namespace RiverHollow.Items
             return false;
         }
 
-        protected void ConfirmItemUse(TextEntry entry)
-        {
-            if (entry != null)
-            {
-                GUIManager.OpenTextWindow(entry, false);
-            }
-        }
-        public virtual bool ItemBeingUsed() { return false; }
         public virtual bool HasUse() { return false; }
         public virtual void UseItem() { }
 
@@ -386,15 +379,6 @@ namespace RiverHollow.Items
 
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }
-
-        public override bool ItemBeingUsed()
-        {
-            GameManager.SetSelectedItem(this);
-            ConfirmItemUse(DataManager.GetGameTextEntry("MonsterFood_False"));
-
-            return true;
-        }
-
         public override void UseItem()
         {
             MapManager.CurrentMap.PrimeMonsterSpawns(this);

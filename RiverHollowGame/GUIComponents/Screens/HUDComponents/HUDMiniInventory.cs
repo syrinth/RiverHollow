@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
 using RiverHollow.Utilities;
 using System;
 
@@ -137,8 +138,11 @@ namespace RiverHollow.GUIComponents.Screens
                 }
 
                 int wheelValue = InputManager.ScrollWheelChanged();
-                int index = Util.GetLoopingValue(GameManager.HUDItemCol, 0, _liItems.Length - 1, (wheelValue * -1));
-                SelectGuiItemBox(_liItems[index]);
+                if (wheelValue != 0)
+                {
+                    int index = Util.GetLoopingValue(GameManager.HUDItemCol, 0, _liItems.Length - 1, (wheelValue * -1));
+                    SelectGuiItemBox(_liItems[index]);
+                }
             }
         }
 
@@ -219,35 +223,12 @@ namespace RiverHollow.GUIComponents.Screens
                         SelectGuiItemBox(gib);
                         if (gib.BoxItem != null && gib.BoxItem.CompareType(Enums.ItemTypeEnum.Buildable))
                         {
-                            rv = gib.BoxItem.ItemBeingUsed();
                         }
                         break;
                     }
                 }
 
                 _btnChangeRow.ProcessLeftButtonClick(mouse);
-            }
-
-            return rv;
-        }
-
-        public override bool ProcessRightButtonClick(Point mouse)
-        {
-            bool rv = false;
-
-            if (Functional() && Contains(mouse))
-            {
-                rv = true;
-
-                foreach (GUIItemBox gib in _liItems)
-                {
-                    if (gib.Contains(mouse) && gib.BoxItem != null)
-                    {
-                        SelectGuiItemBox(gib);
-                        rv = gib.BoxItem.ItemBeingUsed();
-                        break;
-                    }
-                }
             }
 
             return rv;
@@ -282,8 +263,15 @@ namespace RiverHollow.GUIComponents.Screens
 
         private void SelectGuiItemBox(GUIItemBox box)
         {
-            GameManager.HUDItemCol = Array.FindIndex(_liItems, x => x == box);
-            MoveSelector(GameManager.HUDItemCol);
+            for(int i = 0; i < _liItems.Length; i++)
+            {
+                if (_liItems[i] == box)
+                {
+                    GameManager.HUDItemCol = i;
+                    MoveSelector(GameManager.HUDItemCol);
+
+                }
+            }        
         }
 
         public void RowUp()
@@ -303,13 +291,24 @@ namespace RiverHollow.GUIComponents.Screens
             for (int i = 0; i < _liItems.Length; i++)
             {
                 GUIItemBox ib = _liItems[i];
+                var init = ib.BoxItem;
                 ib.SetItem(InventoryManager.PlayerInventory[GameManager.HUDItemRow, i]);
+
+                if(i == GameManager.HUDItemCol && init != ib.BoxItem)
+                {
+                    GameManager.SetSelectedItem(ib.BoxItem);
+                }
             }
         }
 
         private void MoveSelector(int val)
         {
             _gSelected.CenterOnObject(_liItems[val]);
+            GameManager.SetSelectedItem(_liItems[val].BoxItem);
+            if (GameManager.InTownMode() && _liItems[val].BoxItem is WrappedObjectItem)
+            {
+                _liItems[val].BoxItem.UseItem();
+            }
         }
 
         public void Snap(SideEnum snapPosition)

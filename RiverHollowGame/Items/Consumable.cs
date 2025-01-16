@@ -11,19 +11,14 @@ namespace RiverHollow.Items
         public int Health => GetIntByIDKey("Hp");
         public int Mana => GetIntByIDKey("Mana");
 
+        public override bool Usable => true;
+
         public Consumable(int id, int num) : base(id, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Consumables");
         }
 
         public override bool HasUse() { return true; }
-        public override bool ItemBeingUsed()
-        {
-            GameManager.SetSelectedItem(this);
-            ConfirmItemUse(DataManager.GetGameTextEntry("Item_Confirm", Name()));
-
-            return true;
-        }
 
         public override void UseItem()
         {

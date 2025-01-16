@@ -311,6 +311,7 @@ namespace RiverHollow.Game_Managers
                 string[] splitString = Util.FindArguments(s);
                 InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
             }
+            InventoryManager.AddToInventory(178);
         }
 
         public static void SetPath(List<RHTile> list)
@@ -1023,6 +1024,14 @@ namespace RiverHollow.Game_Managers
                     _liUniqueItemsBought.Add(int.Parse(uniqueSplit[i]));
                 }
             }
+        }
+        internal static bool HasActiveItem()
+        {
+            return PlayerActor.HasActiveItem();
+        }
+        internal static void SetActiveItem(Item i)
+        {
+            PlayerActor.SetActiveItem(i);
         }
     }
 }

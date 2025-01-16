@@ -10,7 +10,7 @@ namespace RiverHollow.Items
         WorldObject _objSummoned;
         public IceStaff(int id) : base(id) { }
 
-        public override bool ItemBeingUsed()
+        public override void UseItem()
         {
             if (_objSummoned == null)
             {
@@ -25,8 +25,6 @@ namespace RiverHollow.Items
                 MapManager.CurrentMap.RemoveWorldObject(_objSummoned);
                 _objSummoned = null;
             }
-
-            return true;
         }
     }
 }

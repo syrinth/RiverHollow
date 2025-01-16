@@ -10,19 +10,14 @@ namespace RiverHollow.Items
         public int FoodValue => GetIntByIDKey("FoodValue");
         public FoodTypeEnum FoodType => GetEnumByIDKey<FoodTypeEnum>("FoodType");
 
+        public override bool Usable => true;
+
         public Food(int id, int num) : base(id, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Food");
         }
 
         public override bool HasUse() { return true; }
-        public override bool ItemBeingUsed()
-        {
-            GameManager.SetSelectedItem(this);
-            ConfirmItemUse(DataManager.GetGameTextEntry("FoodConfirm", Name()));
-
-            return true;
-        }
 
         public override void UseItem()
         {

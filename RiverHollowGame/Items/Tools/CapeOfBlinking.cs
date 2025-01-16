@@ -10,7 +10,7 @@ namespace RiverHollow.Items
     {
         public CapeOfBlinking(int id) : base(id) { }
 
-        public override bool ItemBeingUsed()
+        public override void UseItem()
         {
             Point initialPosition = PlayerManager.PlayerActor.CollisionBoxLocation;
             PlayerManager.PlayerActor.MoveActor(Util.MultiplyPoint(Util.GetPointFromDirection(PlayerManager.PlayerActor.Facing), Constants.TILE_SIZE * 2));
@@ -22,8 +22,6 @@ namespace RiverHollow.Items
                 PlayerManager.PlayerActor.MoveActor(Util.GetPointFromDirection(Util.GetOppositeDirection(PlayerManager.PlayerActor.Facing)));
                 tiles = PlayerManager.GetTiles();
             }
-
-            return true;
         }
     }
 }

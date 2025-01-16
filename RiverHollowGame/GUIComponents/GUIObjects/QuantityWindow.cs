@@ -53,7 +53,6 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public override bool ProcessRightButtonClick(Point mouse)
         {
-            GameManager.SetSelectedItem(null);
             return base.ProcessRightButtonClick(mouse);
         }
 

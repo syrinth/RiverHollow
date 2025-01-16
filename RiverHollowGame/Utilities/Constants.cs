@@ -154,6 +154,12 @@ namespace RiverHollow.Utilities
         public static Rectangle RECTANGLE_EMOJI_HEART = new Rectangle(64, 48, 16, 16);
         public static Rectangle RECTANGLE_EMOJI_SLEEPY = new Rectangle(0, 64, 16, 16);
 
+        public static Rectangle USE_ITEM_BUBBLE_EMPTY = new Rectangle(16, 64, 4, 4);
+        public static Rectangle USE_ITEM_BUBBLE_FULL = new Rectangle(21, 64, 4, 4);
+
+        public const float USE_CONSUMABLE_TIMER = 0.4f;
+        public const float USE_DECOR_TIMER = 0.2f;
+
         public const int WALK_TO_FRIEND_PERCENT = 60;
 
         public const int EMOJI_CHAT_DEFAULT_RATE = 25;

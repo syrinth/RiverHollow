@@ -7,20 +7,14 @@ namespace RiverHollow.Items
 {
     internal class CosmeticItem : Item
     {
+        public override bool Usable => true;
+
         public CosmeticItem(int id) : base(id, 1)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Cosmetics");
         }
 
         public override bool HasUse() { return true; }
-        public override bool ItemBeingUsed()
-        {
-            StrikeAPose();
-            GameManager.SetSelectedItem(this);
-            ConfirmItemUse(DataManager.GetGameTextEntry("Item_Confirm", Name()));
-
-            return true;
-        }
         
         public override void UseItem()
         {

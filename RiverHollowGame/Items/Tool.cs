@@ -157,9 +157,8 @@ namespace RiverHollow.Items
         }
 
         public override bool HasUse() { return !Constants.AUTO_TOOL || !IsAutomatic; }
-        public override bool ItemBeingUsed()
+        public override void UseItem()
         {
-            GameManager.SetSelectedItem(this);
             if (ToolType == ToolEnum.Harp)
             {
                 Spirit s = MapManager.CurrentMap.FindSpirit();
@@ -180,27 +179,10 @@ namespace RiverHollow.Items
                 {
                     entry.FormatText(DataManager.GetGameTextEntry("Rune_of_Return_No_Dungeon"), Name());
                 }
-                ConfirmItemUse(entry);
             }
             else
             {
                 PlayerManager.SetTool(this);
-            }
-
-            return true;
-        }
-
-        public override void UseItem()
-        {
-            if (ToolType == ToolEnum.Return)
-            {
-                DungeonManager.GoToEntrance();
-                _iCharges--;
-            }
-
-            if (ToolType == ToolEnum.Scythe)
-            {
-
             }
         }
 

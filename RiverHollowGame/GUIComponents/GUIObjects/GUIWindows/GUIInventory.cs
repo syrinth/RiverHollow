@@ -213,13 +213,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                         return false;
                     }
 
-                    //If the only inventory we are working with is the player's inventory,
-                    //pass the handler to the GUIItemBox and have it handle the item click
-                    if (InventoryManager.CurrentInventoryDisplay == DisplayTypeEnum.PlayerInventory)
-                    {
-                        rv = i.BoxItem.ItemBeingUsed();
-                    }
-                    else if(!DungeonHandling(i.BoxItem))  //We are managing an additional Inventory
+                    if(!DungeonHandling(i.BoxItem))  //We are managing an additional Inventory
                     {
                         int row = 0;
                         int col = 0;

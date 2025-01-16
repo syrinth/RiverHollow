@@ -75,6 +75,20 @@ namespace RiverHollow.Game_Managers
             return false;
         }
 
+        public static bool ButtonDown(ButtonEnum e) {
+            MouseState ms = Mouse.GetState();
+            switch (e) { 
+                case ButtonEnum.Left:
+                        return ms.LeftButton == ButtonState.Pressed;
+                case ButtonEnum.Right:
+                    return ms.RightButton == ButtonState.Pressed;
+                case ButtonEnum.Middle:
+                    return ms.MiddleButton == ButtonState.Pressed;
+                default:
+                        return false;
+            }
+        }
+        
         public static int ScrollWheelChanged()
         {
             int rv = 0;

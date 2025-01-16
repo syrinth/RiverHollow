@@ -8,6 +8,7 @@ namespace RiverHollow.Items
     public class WrappedObjectItem : Item
     {
         readonly int _iObjectID = -1;
+        public override bool Usable => true;
 
         public override int Value => DataManager.GetIntByIDKey(_iObjectID, "Value", DataType.WorldObject);
 
@@ -53,7 +54,7 @@ namespace RiverHollow.Items
             return DataManager.GetTextData(_iObjectID, "Description", DataType.WorldObject);
         }
 
-        public override bool ItemBeingUsed()
+        public override void UseItem()
         {
             GameManager.EnterTownModeEdit();
 
@@ -61,8 +62,6 @@ namespace RiverHollow.Items
             else { InventoryManager.RemoveItemFromInventory(this); }
 
             GameManager.PickUpWorldObject(DataManager.CreateWorldObjectByID(_iObjectID));
-
-            return true;
         }
 
         public override int GetIntByIDKey(string key, int defaultValue = -1)

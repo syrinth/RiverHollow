@@ -218,8 +218,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 1000;
                             break;
                         case TextEntryTriggerEnum.ConfirmPurchase:
-                        case TextEntryTriggerEnum.UseItem:
-                            GameManager.SetSelectedItem(null);
                             break;
                     }
                     break;
@@ -256,10 +254,6 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             break;
                         case TextEntryTriggerEnum.PetUnfollow:
                             PlayerManager.PlayerActor.SetPet(null);
-                            break;
-                        case TextEntryTriggerEnum.UseItem:
-                            GameManager.CurrentItem.UseItem();
-                            GameManager.SetSelectedItem(null);
                             break;
 
                     }
