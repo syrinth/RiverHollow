@@ -19,7 +19,7 @@ namespace RiverHollow.Misc
 
         public int FormulaLevel => DataManager.GetIntByIDKey(ID, "Formula", DataType.Upgrade, 0);
         public int Profit => DataManager.GetIntByIDKey(ID, "Profit", DataType.Upgrade, 0);
-        public int Chance => DataManager.GetIntByIDKey(ID, "Chance", DataType.Upgrade, 0);
+        public int TownScore => DataManager.GetIntByIDKey(ID, "TownScore", DataType.Upgrade, 0);
         public int CraftAmount => DataManager.GetIntByIDKey(ID, "CraftAmount", DataType.Upgrade, 0);
         public int Cost => DataManager.GetIntByIDKey(ID, "Cost", DataType.Upgrade, 0);
         public int Priority => DataManager.GetIntByIDKey(ID, "Priority", DataType.Upgrade, 0);

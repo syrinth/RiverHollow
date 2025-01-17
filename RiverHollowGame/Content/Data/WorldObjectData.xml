@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:2-30/0-15][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][Traveller:10][TownScore:35][Shop]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:2-30/0-15][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][Traveller:10][TownScore:20][Shop]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -107,7 +107,7 @@
     </Item>
     <Item>
       <Key>26</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:House_Player][Size:7-8][Base:0-5-7-3][Entrance:3-6-1-2][LightID:3-30-86/3-80-86][Upgrade_1:55-10/60-10][Upgrade_2:55-20/60-20][ReqItems:55-5/60-5][Home][Upgradable:0/0-0][TownScore:25][Collision:4-0-104-48]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:House_Player][Size:7-8][Base:0-5-7-3][Entrance:3-6-1-2][LightID:3-30-86/3-80-86][Upgrade_1:55-10/60-10][Upgrade_2:55-20/60-20][ReqItems:55-5/60-5][Home][Upgradable:0/0-0][TownScore:10][Collision:4-0-104-48]</Value>
     </Item>
     <Item>
       <Key>27</Key>
@@ -115,7 +115,7 @@
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/2-0][CraftAmount:3][TownScore:40]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/2-0][CraftAmount:3][TownScore:20]</Value>
     </Item>
     <Item>
       <Key>29</Key>
@@ -724,6 +724,22 @@
     <Item>
       <Key>180</Key>
       <Value>[Type:WorldObject][Image:1-44][Size:2-2][Base:0-1-2-1][Texture:Decor][ShopTable:8-7/0/1]</Value>
+    </Item>
+    <Item>
+      <Key>181</Key>
+      <Value>[Type:Buildable][Subtype:Decor][Image:9-33][Size:1-2][Base:0-1-1-1][ReqItems][Affinity:Arcane][TownScore:10]</Value>
+    </Item>
+    <Item>
+      <Key>182</Key>
+      <Value>[Type:Buildable][Subtype:Decor][Image:10-33][Size:1-2][Base:0-1-1-1][ReqItems][Affinity:Battle][TownScore:10]</Value>
+    </Item>
+    <Item>
+      <Key>183</Key>
+      <Value>[Type:Buildable][Subtype:Decor][Image:11-33][Size:1-2][Base:0-1-1-1][ReqItems][Affinity:Mercantile][TownScore:10]</Value>
+    </Item>
+    <Item>
+      <Key>184</Key>
+      <Value>[Type:Buildable][Subtype:Decor][Image:12-33][Size:1-2][Base:0-1-1-1][ReqItems][Affinity:Nature][TownScore:10]</Value>
     </Item>
   </Asset>
 </XnaContent>

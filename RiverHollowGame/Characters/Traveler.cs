@@ -4,16 +4,15 @@ using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
     public class Traveler : TalkingActor
     {
+        public AffinityEnum Affinity => GetEnumByIDKey<AffinityEnum>("SubGroup");
         public ClassTypeEnum ClassType => GetEnumByIDKey<ClassTypeEnum>("Group");
         public int FoodID { get; private set;} = -1;
         public int ItemID { get; private set;} = -1;
@@ -21,39 +20,22 @@ namespace RiverHollow.Characters
 
         private int _iMerchBuildingID = -1;
 
-        public int BuildingID()
-        {
-            return GetIntByIDKey("Building");
-        }
+        public int BuildingID => GetIntByIDKey("Building");
 
-        private int NPC()
-        {
-            return GetIntByIDKey("NPC");
-        }
+        private int NPC => GetIntByIDKey("NPC");
+        private int TownScore => GetIntByIDKey("TownScore");
 
-        public bool Rare()
-        {
-            return GetBoolByIDKey("Rare");
-        }
+        public bool Rare => GetBoolByIDKey("Rare");
+
+        public TravelerGroupEnum TravelerGroup => GetEnumByIDKey<TravelerGroupEnum>("Subtype");
+
+        public FoodTypeEnum FavoriteFood => GetEnumByIDKey<FoodTypeEnum>("FavFood");
+
+        public FoodTypeEnum DislikedFood => GetEnumByIDKey<FoodTypeEnum>("Disliked");
 
         protected override string SpriteName()
         {
             return DataManager.TRAVELER_FOLDER + GetStringByIDKey("Key");
-        }
-
-        public TravelerGroupEnum Group()
-        {
-            return GetEnumByIDKey<TravelerGroupEnum>("Subtype");
-        }
-
-        public FoodTypeEnum FavoriteFood()
-        {
-            return GetEnumByIDKey<FoodTypeEnum>("FavFood");
-        }
-
-        public FoodTypeEnum DislikedFood()
-        {
-            return GetEnumByIDKey<FoodTypeEnum>("Disliked");
         }
 
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)
@@ -93,10 +75,26 @@ namespace RiverHollow.Characters
             return GetDailyDialogue();
         }
 
-        public bool Validate()
+        public bool Validate(int townScore)
         {
-            return (BuildingID() == -1 || TownManager.TownObjectBuilt(BuildingID())) &&
-                        (NPC() == -1 || TownManager.Villagers[NPC()].LivesInTown);
+            bool rv = true;
+
+            if (BuildingID != -1 && !TownManager.TownObjectBuilt(BuildingID))
+            {
+                return false;
+            }
+
+            if (NPC != -1 && !TownManager.Villagers[NPC].LivesInTown)
+            {
+                return false;
+            }
+
+            if(TownScore != -1 && TownScore > townScore)
+            {
+                return false;
+            }
+
+            return rv;
         }
 
         public bool HasEaten()
@@ -143,7 +141,7 @@ namespace RiverHollow.Characters
 
         public bool NeutralFood(FoodTypeEnum e)
         {
-            bool rv = (e != FavoriteFood() && e != DislikedFood());
+            bool rv = (e != FavoriteFood && e != DislikedFood);
             return rv;
         }
 

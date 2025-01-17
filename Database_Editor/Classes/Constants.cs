@@ -6,7 +6,7 @@ namespace Database_Editor.Classes
     {
         public enum EditableNPCDataEnum { Dialogue, Schedule };
         public enum XMLTypeEnum { None, Actor, Adventure, Cosmetic, Cutscene, Item, Light, Shop, StatusEffect, Task, WorldObject, Upgrade, TextFile };
-        public enum ComponentTypeEnum { ButtonCancel, ButtonEdit, TextBoxName, TextBoxID, TextBoxDescription, TextBoxTriggers, TextBoxDetails, DataGrid, DataGridTags, TabIndex, ColumnId, ColumnName, ColumnTags, ComboBoxType, ComboBoxSubtype, ComboBoxGroup, ComboBoxEditable };
+        public enum ComponentTypeEnum { ButtonCancel, ButtonEdit, TextBoxName, TextBoxID, TextBoxDescription, TextBoxTriggers, TextBoxDetails, DataGrid, DataGridTags, TabIndex, ColumnId, ColumnName, ColumnTags, ComboBoxType, ComboBoxSubtype, ComboBoxGroup, ComboBoxSubGroup, ComboBoxEditable };
 
         public static readonly string SPECIAL_CHARACTER = "^";
         public static readonly string LOOKUP_CHARACTER = "$";

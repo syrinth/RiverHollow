@@ -86,12 +86,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                         drawRect = GUIUtils.ICON_COIN;
                         bonusValue = _upgrade.Profit.ToString();
                     }
-                    else if (_upgrade.Chance > 0)
-                    {
-                        icon = GameIconEnum.Traveler;
-                        drawRect = GUIUtils.ICON_TRAVELER;
-                        bonusValue = _upgrade.Chance.ToString();
-                    }
                     else if (_upgrade.CraftAmount > 0)
                     {
                         icon = GameIconEnum.Hammer;

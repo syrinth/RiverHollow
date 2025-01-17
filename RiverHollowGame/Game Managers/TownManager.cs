@@ -195,7 +195,7 @@ namespace RiverHollow.Game_Managers
 
                 foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
                 {
-                    TryToEat(sortedFood, t, t.FavoriteFood());
+                    TryToEat(sortedFood, t, t.FavoriteFood);
                 }
                 foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
                 {
@@ -203,7 +203,7 @@ namespace RiverHollow.Game_Managers
                 }
                 foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
                 {
-                    TryToEat(sortedFood, t, t.DislikedFood());
+                    TryToEat(sortedFood, t, t.DislikedFood);
                 }
 
                 InventoryManager.ClearExtraInventory();
@@ -274,21 +274,11 @@ namespace RiverHollow.Game_Managers
         {
             _iTravelerBonus += Constants.BUILDING_TRAVELER_BOOST;
         }
-        private static int BuildingTravelerChance()
-        {
-            int rv = 0;
-            foreach (var kvp in MapManager.TownMap.GetObjects())
-            {
-                Building b = GetBuildingByID(kvp.Key);
-                if (b != null)
-                {
-                    rv += b.GetTravelerChance();
-                }
-            }
-            return rv;
-        }
+        
         private static void SpawnTravelers()
         {
+            GetTownScoreInfo(out int townScore, out AffinityEnum affinity);
+
             for (int i = 0; i < Travelers.Count; i++)
             {
                 Travelers[i].CurrentMap.RemoveCharacterImmediately(Travelers[i]);
@@ -300,76 +290,80 @@ namespace RiverHollow.Game_Managers
             foreach (int value in DITravelerInfo.Keys)
             {
                 Traveler npc = DataManager.CreateActor<Traveler>(value);
-                if (npc.Validate()) 
+                if (npc.Validate(townScore)) 
                 {
                     travelerList.Add(npc);
                 }
             }
 
-            int successChance = Constants.BASE_TRAVELER_RATE + BuildingTravelerChance() + _iTravelerBonus;
-            do {
-                //Guaranteed at least one set of Travelers/week
-                if ((GameCalendar.DayOfWeek == DayEnum.Sunday && !_bTravelersCame) ||  RHRandom.RollPercent(successChance))
+            int travelerNumber = Constants.BASE_TRAVELER_RATE + ((townScore - Constants.BASE_SCORE_TRAVELER_PENALTY)/ Constants.POINTS_PER_TRAVELER) ;
+            for (int i = 0; i < travelerNumber; i++)
+            {
+                _bTravelersCame = true;
+
+                if (travelerList.Count == 0)
                 {
-                    _bTravelersCame = true;
+                    break;
+                }
 
-                    if (travelerList.Count == 0)
-                    {
-                        break;
-                    }
+                var options = travelerList;
+                CheckForRareTraveler(ref options);
 
-                    var options = travelerList;
-                    CheckForRareTraveler(ref options);
+                Traveler npc = null;
+                //If the town has an affinity, there is a 50% chance that we will attempt to get an NPC from that affinity list
+                if (affinity != AffinityEnum.None && RHRandom.RollPercent(Constants.AFFINITY_CHANCE))
+                {
+                    npc = Util.GetRandomItem(options.FindAll(x => x.Affinity == affinity));
+                }
 
-                    Traveler npc = Util.GetRandomItem(options);
-                    if (npc != null)
-                    {
-                        AddTraveler(npc);
-                        travelerList.Remove(npc);
+                //If we couldn't find a traveler with an affinity, just get any traveler
+                if (npc == null)
+                {
+                    npc = Util.GetRandomItem(options);
+                }
 
-                        MakeGroup(ref travelerList, successChance, npc.Group());
-                        successChance /= Constants.GROUP_DIVISOR;
-                    }
-                    else { break; }
+                if (npc != null)
+                {
+                    AddTraveler(npc);
+                    travelerList.Remove(npc);
+
+                    MakeGroup(ref travelerList, ref i, travelerNumber, npc.TravelerGroup);
                 }
                 else { break; }
-            } while (successChance > Constants.EXTRA_TRAVELER_THRESHOLD);
+            }
 
             _iTravelerBonus = 0;
         }
 
-        private static void MakeGroup(ref List<Traveler> travelerList, int successChance, TravelerGroupEnum group)
+        private static void MakeGroup(ref List<Traveler> travelerList, ref int index, int max, TravelerGroupEnum group)
         {
-            int chainSuccess = successChance;
-            do
+            int groupChance = Constants.BASE_GROUP_CHANCE;
+            while (index < max && RHRandom.RollPercent(groupChance))
             {
-                if (RHRandom.RollPercent(chainSuccess))
+                List<Traveler> options;
+                var noneList = travelerList.FindAll(x => x.TravelerGroup == TravelerGroupEnum.None);
+                var groupList = travelerList.FindAll(x => x.TravelerGroup == group);
+
+                Traveler npc = null;
+                if (noneList.Count == 0 || groupList.Count == 0)
                 {
-                    List<Traveler> options;
-                    var noneList = travelerList.FindAll(x => x.Group() == TravelerGroupEnum.None);
-                    var groupList = travelerList.FindAll(x => x.Group() == group);
+                    options = new List<Traveler>();
+                    options.AddRange(groupList);
+                    options.AddRange(noneList);
+                }
+                else if (group == TravelerGroupEnum.None) { options = travelerList; }
+                else
+                {
+                    if (RHRandom.RollPercent(80)) { options = groupList; }
+                    else { options = noneList; }
+                }
 
-                    Traveler npc = null;
-                    if (noneList.Count == 0 || groupList.Count == 0)
-                    {
-                        options = new List<Traveler>();
-                        options.AddRange(groupList);
-                        options.AddRange(noneList);
-                    }
-                    else if (group == TravelerGroupEnum.None) { options = travelerList; }
-                    else
-                    {
-                        if (RHRandom.RollPercent(80)) { options = groupList; }
-                        else { options = noneList; }
-                    }
+                CheckForRareTraveler(ref options);
 
-                    CheckForRareTraveler(ref options);
-
-                    npc = Util.GetRandomItem(options);
-                    if (npc == null)
-                    {
-                        break;
-                    }
+                npc = Util.GetRandomItem(options);
+                if (npc != null)
+                {
+                    index++;
 
                     AddTraveler(npc);
                     travelerList.Remove(npc);
@@ -377,22 +371,21 @@ namespace RiverHollow.Game_Managers
                     //If we're making a group off of a None group, need to transition to any actual group we roll on
                     if (group == TravelerGroupEnum.None)
                     {
-                        group = npc.Group();
+                        group = npc.TravelerGroup;
                     }
 
-                    chainSuccess /= Constants.MEMBER_DIVISOR;
+                    groupChance -= Constants.MEMBER_REDUCER;
                 }
                 else { break; }
-
-            } while (chainSuccess > Constants.EXTRA_TRAVELER_THRESHOLD);
+            }
         }
         private static void CheckForRareTraveler(ref List<Traveler> options)
         {
             //Check for a rare traveller
-            if (options.Any(x => x.Rare()))
+            if (options.Any(x => x.Rare))
             {
                 bool getRare = RHRandom.Instance().Next(1, 10) == 10;
-                options = options.FindAll(x => x.Rare() == getRare);
+                options = options.FindAll(x => x.Rare == getRare);
             }
         }
 
@@ -418,9 +411,9 @@ namespace RiverHollow.Game_Managers
                     map = MapManager.Maps[Inn.InnerMapName];
                     break;
                 case 2:
-                    if (npc.BuildingID() != -1 && TownObjectBuilt(npc.BuildingID()))
+                    if (npc.BuildingID != -1 && TownObjectBuilt(npc.BuildingID))
                     {
-                        map = MapManager.Maps[GetBuildingByID(npc.BuildingID()).InnerMapName];
+                        map = MapManager.Maps[GetBuildingByID(npc.BuildingID).InnerMapName];
                     }
                     else { goto case 0; }
                     break;
@@ -516,7 +509,7 @@ namespace RiverHollow.Game_Managers
         {
             return Villagers.Count(x => x.Value.LivesInTown);
         }
-        public static int GetTownScore()
+        public static void GetTownScoreInfo(out int townScore, out AffinityEnum affinity)
         {
             float totalScore = 0;
             float buildingScore = 0;
@@ -524,38 +517,69 @@ namespace RiverHollow.Game_Managers
             float decorationScore = 0;
             float miscScore = 0;
 
-            var TownObjects = MapManager.TownMap.GetObjects();
-            foreach (var key in TownObjects.Keys)
+            Dictionary<AffinityEnum, float> dictionaryAffinity = new Dictionary<AffinityEnum, float>();
+            foreach (AffinityEnum e in Enum.GetValues(typeof(AffinityEnum)))
             {
-                var list = TownObjects[key];
-                foreach(var obj in list)
+                if (e == AffinityEnum.None)
                 {
-                    var objScore = obj.GetTownScore();
-                    if (obj.BuildableType(BuildableEnum.Building))
-                    {
-                        buildingScore += objScore;
-                    }
-                    else if (obj.BuildableType(BuildableEnum.Wall) || obj.BuildableType(BuildableEnum.Floor))
-                    {
-                        infrastuctureScore += objScore;
-                    }
-                    else if (obj.GetBoolByIDKey("Decoration"))
-                    {
-                        decorationScore += objScore;
-                    }
-                    else
-                    {
-                        miscScore += objScore;
-                    }
+                    continue;
+                }
+                else
+                {
+                    dictionaryAffinity[e] = 0;
                 }
             }
 
-            //totalScore += buildingScore;
+            var TownObjects = MapManager.TownMap.GetObjects();
+            foreach (var key in TownObjects.Keys)
+            {
+                var obj = TownObjects[key][0];
+                int count = TownObjects[key].Count;
+                var list = TownObjects[key];
+
+                var objScore = Math.Max(obj.GetTownScore() * count, -30);
+                if (obj.BuildableType(BuildableEnum.Building))
+                {
+                    buildingScore += objScore;
+                }
+                else if (obj.BuildableType(BuildableEnum.Wall) || obj.BuildableType(BuildableEnum.Floor))
+                {
+                    infrastuctureScore += objScore;
+                }
+                else if (obj.GetBoolByIDKey("Decoration"))
+                {
+                    decorationScore += objScore;
+                }
+                else
+                {
+                    miscScore += objScore;
+                }
+
+                if (obj.Affinity != AffinityEnum.None)
+                {
+                    dictionaryAffinity[obj.Affinity] += objScore;
+                }
+            }
+
+            totalScore += buildingScore;
             totalScore += Math.Min(infrastuctureScore, buildingScore * 0.4f);
             totalScore += Math.Min(decorationScore, buildingScore * 0.2f);
             totalScore += miscScore;
 
-            return (int)totalScore;
+            townScore = Math.Max((int)totalScore, 0);
+
+            affinity = AffinityEnum.None;
+            var scoreList = dictionaryAffinity.ToList();
+            scoreList.Sort((x, y) => y.Value.CompareTo(x.Value));
+
+            if (scoreList[0].Value > Constants.AFFINITY_THRESHOLD && scoreList[0].Value > (scoreList[1].Value + Constants.AFFINITY_BUFFER))
+            {
+                affinity = scoreList[0].Key;
+            }
+            else
+            {
+                affinity = AffinityEnum.None;
+            }
         }
         public static void TrackDefeatedMob(Mob m)
         {

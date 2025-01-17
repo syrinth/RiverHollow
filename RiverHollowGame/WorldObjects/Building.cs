@@ -134,16 +134,6 @@ namespace RiverHollow.Buildings
             return rv;
         }
 
-        public int GetTravelerChance()
-        {
-            int rv = GetIntByIDKey("Traveller", 0);
-            foreach (var upgrade in GetUnlockedUpgrades())
-            {
-                rv += upgrade.Chance;
-            }
-            return rv;
-        }
-
         public float GetShopProfitModifier()
         {
             float rv = GetFloatByIDKey("Profit", 0);
@@ -179,8 +169,13 @@ namespace RiverHollow.Buildings
 
         public override float GetTownScore()
         {
-            float value = base.GetTownScore();
-            return value + (value * Level - 1 * Constants.BUILDING_SCORE_MULTIPLIER);
+            float rv = base.GetTownScore();
+
+            foreach (var upgrade in GetUnlockedUpgrades())
+            {
+                rv += upgrade.TownScore;
+            }
+            return rv;
         }
 
         #region Upgrade Handlers

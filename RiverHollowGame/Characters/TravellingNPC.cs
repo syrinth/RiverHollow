@@ -110,7 +110,9 @@ namespace RiverHollow.Characters
                 return false;
             }
 
-            if (TownScore != -1 && TownScore > TownManager.GetTownScore())
+            int score = 0;
+            AffinityEnum affinity = AffinityEnum.None;
+            if (TownScore != -1 && TownScore > score)
             {
                 return false;
             }

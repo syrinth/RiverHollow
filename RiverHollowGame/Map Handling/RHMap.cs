@@ -750,7 +750,7 @@ namespace RiverHollow.Map_Handling
                 bool repeat = false;
                 do
                 {
-                    if (RHRandom.RollPercent(Constants.Relic_BASE_CHANCE))
+                    if (RHRandom.RollPercent(Constants.RELIC_BASE_CHANCE))
                     {
                         var RelicSplit = Util.FindIntParams(_map.Properties["RelicID"]);
                         if (RelicSplit.Count > 0)
@@ -759,7 +759,7 @@ namespace RiverHollow.Map_Handling
                             PlaceGeneratedObject(DataManager.CreateWorldObjectByID(chosenID), ref possibleTiles, refresh);
                         }
 
-                        repeat = RHRandom.RollPercent(Constants.Relic_BASE_CHANCE);
+                        repeat = RHRandom.RollPercent(Constants.RELIC_BASE_CHANCE);
                     }
                 } while (repeat);
             }

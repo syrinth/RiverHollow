@@ -8,6 +8,7 @@ using RiverHollow.Items;
 using System;
 using static RiverHollow.Utilities.Enums;
 using System.Linq;
+using RiverHollow.Items.Tools;
 
 namespace RiverHollow.Misc
 {
@@ -275,7 +276,8 @@ namespace RiverHollow.Misc
                 if (GetBoolByIDKey("TownScore"))
                 {
                     var count = GetIntByIDKey("TownScore");
-                    SetReadyForHandIn(TownManager.GetTownScore() >= count);
+                    TownManager.GetTownScoreInfo(out int townScore, out AffinityEnum affinity);
+                    SetReadyForHandIn(townScore >= count);
                 }
             }
 
@@ -617,8 +619,9 @@ namespace RiverHollow.Misc
                         }
                         else if (DataManager.GetBoolByIDKey(ID, "TownScore", DataType.Task))
                         {
+                            TownManager.GetTownScoreInfo(out int townScore, out AffinityEnum affinity);
                             var count = DataManager.GetIntByIDKey(ID, "TownScore", DataType.Task);
-                            rv = " Town Score: " + TownManager.GetTownScore() + "/" + count;
+                            rv = " Town Score: " + townScore + "/" + count;
                         }
                         else if (DataManager.GetBoolByIDKey(ID, "MonstersKilled", DataType.Task))
                         {

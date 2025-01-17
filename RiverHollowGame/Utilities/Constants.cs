@@ -65,7 +65,6 @@ namespace RiverHollow.Utilities
         public const int MAX_STACK_SIZE = 999;
         public const int MAX_STACK_COMPARE = 99;
         public const float ITEM_BOUNCE_SPEED = 0.2f;
-        public const float BUILDING_SCORE_MULTIPLIER = 0.1f;
 
         public const int SOUND_MAX_SAME_SOUND = 3;
 
@@ -104,14 +103,21 @@ namespace RiverHollow.Utilities
 
         public const float HUNGER_MOD = -0.5f;
 
-        public const int BASE_TRAVELER_RATE = 30;
-        public const int EXTRA_TRAVELER_THRESHOLD = 10;
-        public const int GROUP_DIVISOR = 3;
-        public const int MEMBER_DIVISOR = 2;
+        public const int BASE_TRAVELER_RATE = 1;
+        public const int BASE_SCORE_TRAVELER_PENALTY = 50;
+        public const int POINTS_PER_TRAVELER = 20;
+        public const int BASE_GROUP_CHANCE = 50;
+        public const int AFFINITY_CHANCE = 50;
+        public const int AFFINITY_BUFFER = 5;
+        public const int MEMBER_REDUCER = 15;
+
+        public const int MAX_PENALTY = 30;
+
+        public const float AFFINITY_THRESHOLD = 50;
 
         public const int FISH_PUDDLE = 68;
 
-        public const int Relic_BASE_CHANCE = 10;
+        public const int RELIC_BASE_CHANCE = 10;
 
         public const int ACTION_DELAY = 10;
         public const string MAPOBJ_CRAFT = "Craft";

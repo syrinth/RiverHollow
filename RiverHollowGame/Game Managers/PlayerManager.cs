@@ -309,9 +309,11 @@ namespace RiverHollow.Game_Managers
             foreach (string s in splitItemValues)
             {
                 string[] splitString = Util.FindArguments(s);
-                InventoryManager.AddToInventory(int.Parse(splitString[0]), (splitString.Length > 1 ? int.Parse(splitString[1]) : 1), true, true);
+                for (int i = 0; i < (splitString.Length > 1 ? int.Parse(splitString[1]) : 1); i++)
+                {
+                    InventoryManager.AddToInventory(int.Parse(splitString[0]), 1, true, true);
+                }
             }
-            InventoryManager.AddToInventory(178);
         }
 
         public static void SetPath(List<RHTile> list)

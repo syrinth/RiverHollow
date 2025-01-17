@@ -16,6 +16,7 @@ namespace Database_Editor
 {
     public partial class FrmDBEditor : Form
     {
+        const int ComboBoxWidth = 111;
         readonly Dictionary<string, int> _diTabIndices;
 
         static Dictionary<int, List<string>> _diCutscenes;
@@ -204,8 +205,9 @@ namespace Database_Editor
 
                         if (i == 1) { type = ComponentTypeEnum.ComboBoxSubtype; }
                         else if (i == 2) { type = ComponentTypeEnum.ComboBoxGroup; }
+                        else if (i == 3) { type = ComponentTypeEnum.ComboBoxSubGroup; }
 
-                        var cbType = CreateComboBox(GetName(en, type), new Point(320 + (i * 155), cbHeight), type == ComponentTypeEnum.ComboBoxType);
+                        var cbType = CreateComboBox(GetName(en, type), new Point(320 + (i * (ComboBoxWidth + 6)), cbHeight), type == ComponentTypeEnum.ComboBoxType);
 
                         if (i == 0)
                         {
@@ -293,8 +295,9 @@ namespace Database_Editor
             switch (en)
             {
                 case XMLTypeEnum.Item:
-                case XMLTypeEnum.Actor:
                     return 3;
+                case XMLTypeEnum.Actor:
+                    return 4;
                 case XMLTypeEnum.WorldObject:
                     return 2;
                 case XMLTypeEnum.Cosmetic:
@@ -344,7 +347,7 @@ namespace Database_Editor
                 FormattingEnabled = true,
                 Location = location,
                 Name = name,
-                Size = new Size(149, 21),
+                Size = new Size(ComboBoxWidth, 21),
                 TabIndex = 60,
                 Visible = visible
             };
@@ -877,8 +880,16 @@ namespace Database_Editor
             var cbActorType = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxType);
             var cbActorSubtype = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxSubtype);
             var cbActorGroup = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxGroup);
+            var cbActorSubGroup = FindComboBox(XMLTypeEnum.Actor, ComponentTypeEnum.ComboBoxSubGroup);
 
             cbActorSubtype.Items.Clear();
+            cbActorGroup.Items.Clear();
+            cbActorSubGroup.Items.Clear();
+
+            cbActorSubtype.Visible = false;
+            cbActorGroup.Visible = false;
+            cbActorSubGroup.Visible = false;
+
             ActorTypeEnum itemType = Util.ParseEnum<ActorTypeEnum>(cbActorType.SelectedItem.ToString().Split(':')[1]);
             switch (itemType)
             {
@@ -900,16 +911,18 @@ namespace Database_Editor
                     {
                         cbActorGroup.Items.Add("Group:" + e.ToString());
                     }
-                    break;
-                default:
-                    cbActorSubtype.Visible = false;
+                    cbActorSubGroup.Visible = true;
+                    foreach (AffinityEnum e in Enum.GetValues(typeof(AffinityEnum)))
+                    {
+                        cbActorSubGroup.Items.Add("SubGroup:" + e.ToString());
+                    }
                     break;
             }
 
-            if (cbActorSubtype.Visible)
-            {
-                cbActorSubtype.SelectedIndex = 0;
-            }
+            //if (cbActorSubtype.Visible) { cbActorSubtype.SelectedIndex = 0; }
+           // if (cbActorGroup.Visible) { cbActorGroup.SelectedIndex = 0; }
+            //if (cbActorSubGroup.Visible) { cbActorSubGroup.SelectedIndex = 0; }
+
         }
 
         #region Helpers
@@ -1936,9 +1949,10 @@ namespace Database_Editor
             TextBox tbID = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxID);
             TextBox tbDescription = FindTextBox(collection.XMLType, ComponentTypeEnum.TextBoxDescription);
             DataGridView dgvTags = FindDataGridView(collection.XMLType, ComponentTypeEnum.DataGridTags);
-            ComboBox cb = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxType);
+            ComboBox cbType = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxType);
             ComboBox cbSubtype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxSubtype);
             ComboBox cbGrouptype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxGroup);
+            ComboBox cbSubGrouptype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxSubGroup);
 
             tbName.Text = data.Name;
             tbID.Text = data.ID.ToString();
@@ -1951,22 +1965,23 @@ namespace Database_Editor
             string[] tags = data.GetTagsString().Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in tags)
             {
-                if (!s.StartsWith("Type") && !s.StartsWith("Subtype") && !s.StartsWith("Group"))
+                if (!s.StartsWith("Type") && !s.StartsWith("Subtype") && !s.StartsWith("Group") && !s.StartsWith("SubGroup"))
                 {
                     dgvTags.Rows.Add(s);
                 }
             }
-            if (cb != null && data.HasTag("Type"))
+
+            LoadSelected(cbType, data, "Type");
+            LoadSelected(cbSubtype, data, "Subtype");
+            LoadSelected(cbGrouptype, data, "Group");
+            LoadSelected(cbSubGrouptype, data, "SubGroup");
+        }
+
+        private void LoadSelected(ComboBox cb, XMLData data, string tag)
+        {
+            if (cb != null && data.HasTag(tag))
             {
-                cb.SelectedItem = "Type:" + data.GetTagValue("Type");
-            }
-            if (cbSubtype != null && data.HasTag("Subtype"))
-            {
-                cbSubtype.SelectedItem = "Subtype:" + data.GetTagValue("Subtype");
-            }
-            if (cbGrouptype != null && data.HasTag("Group"))
-            {
-                cbGrouptype.SelectedItem = "Group:" + data.GetTagValue("Group");
+                cb.SelectedItem = tag + ":" + data.GetTagValue(tag);
             }
         }
 
@@ -2110,6 +2125,7 @@ namespace Database_Editor
             ComboBox cb = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxType);
             ComboBox cbSubtype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxSubtype);
             ComboBox cbGrouptype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxGroup);
+            ComboBox cbSubGrouptype = FindComboBox(collection.XMLType, ComponentTypeEnum.ComboBoxSubGroup);
 
             UpdateStatus("Saving " + tabIndex);
 
@@ -2141,6 +2157,12 @@ namespace Database_Editor
             if (cbGrouptype != null && cbGrouptype.SelectedItem != null)
             {
                 string[] typeTag = cbGrouptype.SelectedItem.ToString().Split(':');
+                data.SetTagInfo(typeTag[0], typeTag[1]);
+            }
+
+            if (cbSubGrouptype != null && cbSubGrouptype.SelectedItem != null)
+            {
+                string[] typeTag = cbSubGrouptype.SelectedItem.ToString().Split(':');
                 data.SetTagInfo(typeTag[0], typeTag[1]);
             }
 
@@ -2237,6 +2259,8 @@ namespace Database_Editor
                     return "cb" + strType + "Subtype";
                 case ComponentTypeEnum.ComboBoxGroup:
                     return "cb" + strType + "Group";
+                case ComponentTypeEnum.ComboBoxSubGroup:
+                    return "cb" + strType + "SubGroup";
             }
 
             return string.Empty;

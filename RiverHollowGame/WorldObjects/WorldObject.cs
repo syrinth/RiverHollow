@@ -78,6 +78,7 @@ namespace RiverHollow.WorldObjects
         public virtual string Name => GetTextData("Name");
 
         public virtual string Description => GetTextData("Description");
+        public virtual AffinityEnum Affinity => GetEnumByIDKey<AffinityEnum>("Affinity");
 
         public List<RHTile> Tiles()
         {

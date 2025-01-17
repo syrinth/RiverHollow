@@ -37,6 +37,7 @@
         public enum PlantEnum { Seeds, Seedling, Adult, Ripe };
         public enum FishingStateEnum { None, Cast, Waiting, Reeling, Finish, Get };
 
+        public enum AffinityEnum { None, Arcane, Battle, Mercantile, Natural };
         public enum ClassTypeEnum { None, Healer, Mage, Fighter, Rogue };
         public enum ResourceTypeEnum { None, Construction, Fabric, Fish, Flower, Food, Gem, Herb, Ingredient, Meal, Metal, MonsterPart, Ore};
         public enum ItemTypeEnum { None, Resource, Blueprint, Buildable, Consumable, Cosmetic, Food, Merchandise, MonsterFood, NPCToken, Relic, Seed, Special, Tool };

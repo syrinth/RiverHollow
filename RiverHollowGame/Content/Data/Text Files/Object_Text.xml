@@ -2295,6 +2295,22 @@ of... mostly gold. Master apothecary.]</Value>
       <Value>[Name:Grow Box]</Value>
     </Item>
     <Item>
+      <Key>WorldObject_181</Key>
+      <Value>[Name:Mystic Orb]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_182</Key>
+      <Value>[Name:Battle Slate]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_183</Key>
+      <Value>[Name:Chest]</Value>
+    </Item>
+    <Item>
+      <Key>WorldObject_184</Key>
+      <Value>[Name:Rose]</Value>
+    </Item>
+    <Item>
       <Key>Upgrade_0</Key>
       <Value>[Name:Basic Sales]</Value>
     </Item>

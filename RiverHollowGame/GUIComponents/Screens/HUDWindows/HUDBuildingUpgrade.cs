@@ -49,12 +49,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             lvl.AnchorToObjectInnerSide(_winMain, SideEnum.Top, GameManager.ScaledPixel * 18);
             _winMain.AddControl(lvl);
 
-            //Traveler Display
-            var travelerStr = string.Format("+{0}", _building.GetTravelerChance());
-            var travelers = new GUIIconText(travelerStr, 3, GUIUtils.ICON_TRAVELER, GameIconEnum.Traveler, SideEnum.Bottom, SideEnum.CenterX);
-            travelers.PositionAndMove(_winMain, new Point(37, 36));
-            _winMain.AddControl(travelers);
-
             //Profit Display
             int profit = (int)(_building.GetShopProfitModifier() * 100);
             var profitStr = string.Format("+{0}", profit);
@@ -64,7 +58,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
             var scroll = new GUIImage(GUIUtils.HUD_SCROLL_L);
             scroll.PositionAndMove(_winMain, new Point(10, 65));
 
-            _liIcons.Add(travelers);
             _liIcons.Add(profits);
 
             if (_building.UpgradeQueued)
@@ -96,10 +89,6 @@ namespace RiverHollow.GUIComponents.Screens.HUDWindows
                     }
 
                     var upgradeList = new List<GUIIconText>();
-                    if (nextUpgrade.Chance > 0)
-                    {
-                        AddNewUpgrade(ref upgradeList, GameIconEnum.Traveler, GUIUtils.ICON_TRAVELER, nextUpgrade.Chance.ToString());
-                    }
                     if (nextUpgrade.Profit > 0)
                     {
                         AddNewUpgrade(ref upgradeList, GameIconEnum.Coin, GUIUtils.ICON_COIN, nextUpgrade.Profit.ToString());
