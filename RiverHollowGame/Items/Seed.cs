@@ -6,6 +6,8 @@ namespace RiverHollow.Items
     public class Seed : Item
     {
         public int PlantID => GetIntByIDKey("ObjectID");
+
+        public override bool Usable => true;
         public Seed(int id, int num) : base(id, num)
         {
             _texTexture = DataManager.GetTexture(DataManager.FOLDER_ITEMS + "Seeds");

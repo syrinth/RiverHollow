@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="23" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="60">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="23" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="61">
  <properties>
   <property name="BuildingID" type="int" value="28"/>
   <property name="Cutscenes" value="13"/>
@@ -122,5 +122,6 @@
   <object id="37" name="Craft" x="304" y="80" width="16" height="16"/>
   <object id="39" name="C_1" x="320" y="80" width="16" height="16"/>
   <object id="43" name="NPC_20" x="160" y="64" width="16" height="16"/>
+  <object id="60" name="NPC_43" x="288" y="192" width="16" height="16"/>
  </objectgroup>
 </map>

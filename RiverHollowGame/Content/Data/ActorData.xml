@@ -139,15 +139,15 @@
     </Item>
     <Item>
       <Key>34</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Tuesday-0][RequiredObjectID:24-1][Wants:Herb][Needs:Flower][Key:Abeline][ShopData:4][RequestIDs:147/158/168]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][ShopData:4][RequestIDs:147/158/168][Wants:Herb][Needs:Flower][Key:Abeline]</Value>
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Monday][RequestIDs:194][ShopData:7][Key:Erron][Size:16-31][Needs:Metal][Wants:Ore]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:194][ShopData:7][Key:Erron][Needs:Metal][Wants:Ore]</Value>
     </Item>
     <Item>
       <Key>36</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Friday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:MonsterPart]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Tuesday][RequestIDs:5/11/16/14/59][ShopData:5][Key:Magda][Size:16-34][Needs:MonsterPart][GoodsSoldValue:5000]</Value>
     </Item>
     <Item>
       <Key>37</Key>
@@ -155,7 +155,7 @@
     </Item>
     <Item>
       <Key>38</Key>
-      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Wednesday][RequestIDs:169/170/171/98][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
+      <Value>[Type:Merchant][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Day:Monday][RequestIDs:169/170/171/98][ShopData:10][Key:Wagren][Needs:Medicine][Wants:Herb]</Value>
     </Item>
     <Item>
       <Key>39</Key>
@@ -175,7 +175,7 @@
     </Item>
     <Item>
       <Key>43</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][HouseID:18][Size:16-25][Market:14-00][Craft:16-00][Traits:Late/Chatty][Friends:26/16/10][Face:8-2][ArrivalDay:Spring-5][Town]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:0-0-1-0-T][Key:Ulm][HouseID:18][Size:16-25][Market:14-00][Craft:16-00][Traits:Late/Chatty][Friends:26/16/10][Face:8-2][ArrivalDay:Spring-5][StartMap:mapInn]</Value>
     </Item>
     <Item>
       <Key>44</Key>
@@ -283,7 +283,7 @@
     </Item>
     <Item>
       <Key>70</Key>
-      <Value>[Type:Merchant][Key:Paige][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][ShopData:12][Day:Saturday][Wants:Artifact][RequestIDs:237/238]</Value>
+      <Value>[Type:Merchant][Key:Paige][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][ShopData:12][Day:Sunday][Wants:Relic][RequestIDs:237/238]</Value>
     </Item>
   </Asset>
 </XnaContent>

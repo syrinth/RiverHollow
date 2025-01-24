@@ -231,7 +231,7 @@
     </Item>
     <Item>
       <Key>57</Key>
-      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:1-6][Value:70][ReqItems:162-1/95-1/23-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:1-6][Value:70][ReqItems:162-1/96-1]</Value>
     </Item>
     <Item>
       <Key>58</Key>
@@ -659,7 +659,7 @@
     </Item>
     <Item>
       <Key>164</Key>
-      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:3-6][Value:70][ReqItems:162-1/93-1/95-1]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:Rogue][Image:2-6][Value:70][ReqItems:162-1/93-1]</Value>
     </Item>
     <Item>
       <Key>165</Key>
@@ -671,11 +671,11 @@
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Consumable][Subtype:Potion][Image:1-0][ItemGroups:Potion][Value:40][ReqItems:162-2][CombatType:Helpful][Hp:10]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:None][Image:8-9][Value:40][ReqItems:162-2]</Value>
     </Item>
     <Item>
       <Key>168</Key>
-      <Value>[Type:Consumable][Subtype:Potion][Image:1-1][ItemGroups:Potion][Value:50][ReqItems:8-1/9-1/162-1][CombatType:Helpful][Mana:20]</Value>
+      <Value>[Type:Merchandise][Subtype:Potion][Group:Mage][Image:8-10][Value:50][ReqItems:162-1/95-1]</Value>
     </Item>
     <Item>
       <Key>169</Key>
@@ -927,7 +927,7 @@
     </Item>
     <Item>
       <Key>231</Key>
-      <Value>[Type:Consumable][Subtype:None][Image:0-3][StatusEffect:0]</Value>
+      <Value>[Type:Consumable][Image:0-3][StatusEffect:0]</Value>
     </Item>
     <Item>
       <Key>232</Key>

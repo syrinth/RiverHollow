@@ -560,7 +560,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_57</Key>
-      <Value>[Name:Calming Draught][Description:Use this instead of flipping that table.]</Value>
+      <Value>[Name:Unguent of Might][Description:Just a few drops and you'll be lifting rocks in no time]</Value>
     </Item>
     <Item>
       <Key>Item_58</Key>
@@ -988,7 +988,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_164</Key>
-      <Value>[Name:Potion of Laughter][Description:Tickles your funny bone from the inside.]</Value>
+      <Value>[Name:Oil of Silence][Description:Tickles your funny bone from the inside.]</Value>
     </Item>
     <Item>
       <Key>Item_165</Key>
@@ -1004,7 +1004,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Item_168</Key>
-      <Value>[Name:Lesser Mana Potion][Description:This energy drink will get you casting in no time.]</Value>
+      <Value>[Name:Minor Mana Potion][Description:This energy drink will get you casting in no time.]</Value>
     </Item>
     <Item>
       <Key>Item_169</Key>
@@ -1376,7 +1376,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_4</Key>
-      <Value>[Name:Abeline's Apiary]</Value>
+      <Value>[Name:Abeline's Plants]</Value>
     </Item>
     <Item>
       <Key>Shop_5</Key>
@@ -1388,7 +1388,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Shop_7</Key>
-      <Value>[Name:Erron's Shop]</Value>
+      <Value>[Name:Erron's Town Supplies]</Value>
     </Item>
     <Item>
       <Key>Shop_8</Key>
@@ -1636,7 +1636,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_16</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Well]</Value>
     </Item>
     <Item>
       <Key>WorldObject_17</Key>
