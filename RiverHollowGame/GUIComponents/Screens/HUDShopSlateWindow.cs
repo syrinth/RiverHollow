@@ -56,7 +56,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             //BOTTOM
-            var lastShelf = new GUIImage(GUIUtils.HUD_SHOP_MID);
+            var lastShelf = new GUIImage(GUIUtils.HUD_SHOP_BOT);
             _liShelves.Add(lastShelf);
             lastShelf.AnchorAndAlign(temp, SideEnum.Bottom, SideEnum.Left, GUIUtils.ParentRuleEnum.ForceToParent);
 
@@ -368,7 +368,6 @@ namespace RiverHollow.GUIComponents.Screens
             {
                 PlayerManager.AddUniqueItemToList(ID);
                 GUIManager.CloseMainObject();
-                purchaseItem.StrikeAPose();
             }
             InventoryManager.AddToInventory(purchaseItem);
         }

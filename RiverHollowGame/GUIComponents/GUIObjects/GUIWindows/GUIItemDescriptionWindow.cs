@@ -141,19 +141,20 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                     if (it is Merchandise merchItem)
                     {
                         var merchGroup = merchItem.MerchType;
-                        if (merchGroup != MerchandiseTypeEnum.Generic)
+                        switch (merchGroup)
                         {
-                            switch (merchGroup)
-                            {
-                                case MerchandiseTypeEnum.Magic:
-                                    typeColor = Color.Purple; break;
-                                case MerchandiseTypeEnum.Potion:
-                                    typeColor = Color.DarkGreen; break;
-                                case MerchandiseTypeEnum.Clothing:
-                                    typeColor = Color.DarkBlue; break;
-                            }
-                            rv = Util.GetEnumString(merchGroup, true);
+                            case MerchandiseTypeEnum.Accessory:
+                                typeColor = Color.Gold; break;
+                            case MerchandiseTypeEnum.Equipment:
+                                typeColor = Color.DarkBlue; break;
+                            case MerchandiseTypeEnum.Recovery:
+                                typeColor = Color.DarkGreen; break;
+                            case MerchandiseTypeEnum.Utility:
+                                typeColor = Color.Purple; break;
+                            case MerchandiseTypeEnum.Weapon:
+                                typeColor = Color.DarkRed; break;
                         }
+                        rv = Util.GetEnumString(merchGroup, true);
                     }
                     break;
                 case ItemTypeEnum.Relic:

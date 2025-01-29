@@ -309,12 +309,13 @@ namespace RiverHollow
         /// <param name="playIntro"></param>
         public void NewGame(bool playIntro)
         {
+            GameCalendar.NewCalendar();
+
             TownManager.NewGame();
             PlayerManager.NewPlayer();
             MapManager.PopulateMaps(true);
 
             GoToHUDScreen();
-            GameCalendar.NewCalendar();
 
             CutsceneManager.TriggerCutscene(1);
             if (!playIntro)

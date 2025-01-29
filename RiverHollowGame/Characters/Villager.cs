@@ -944,14 +944,6 @@ namespace RiverHollow.Characters
                     return MoodEnum.Sad;
                 }
             }
-            else if(it is Merchandise merchItem){
-                if (merchItem.MerchType == MerchandiseTypeEnum.Magic)
-                {
-                    return MoodEnum.Pleased;
-                }
-            }
-
-
 
             return MoodEnum.Neutral;
         }

@@ -134,7 +134,7 @@ namespace RiverHollow.Game_Managers
 
         public static void NewGame()
         {
-
+            RolloverMailbox();
         }
 
         public static void SetTownName(string x)

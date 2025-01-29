@@ -284,7 +284,10 @@ namespace RiverHollow.WorldObjects
                 else if (GetBoolByIDKey("ShopSlate"))
                 {
                     rv = true;
-                    GUIManager.OpenMainObject(new HUDShopSlateWindow());
+                    if (MapManager.CurrentMap.TheShop != null)
+                    {
+                        GUIManager.OpenMainObject(new HUDShopSlateWindow());
+                    }
                 }
                 else if (GetBoolByIDKey("Adventure"))
                 {

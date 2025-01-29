@@ -267,12 +267,13 @@ namespace Database_Editor
                 if (en == XMLTypeEnum.Actor)
                 {
                     var cbType = CreateComboBox(GetName(en, ComponentTypeEnum.ComboBoxEditable), new Point(320, 396), true);
+                    cbType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
                     tabPage.Controls.Add(cbType);
 
-                    var editBtn = CreateButton(GetName(en, ComponentTypeEnum.ButtonEdit), "Edit", new Point(475, 394), new Size(75, 23));
+                    var editBtn = CreateButton(GetName(en, ComponentTypeEnum.ButtonEdit), "Edit", new Point(434, 395), new Size(75, 23));
                     editBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
                     editBtn.Click += new System.EventHandler(btnDialogue_Click);
-                    tabPage.Controls.Add(cancelBtn);
+                    tabPage.Controls.Add(editBtn);
                 }
             }
         }

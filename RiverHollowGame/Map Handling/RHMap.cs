@@ -995,12 +995,12 @@ namespace RiverHollow.Map_Handling
                                     if (obj is Plant plantObj)
                                     {
                                         plantObj.FinishGrowth();
+                                    }
 
-                                        if (tiledObj.Properties.ContainsKey("TillEarth"))
-                                        {
-                                            var targetTile = GetTileByPixelPosition(x, y);
-                                            targetTile.TillTile();
-                                        }
+                                    if (tiledObj.Properties.ContainsKey("TillEarth"))
+                                    {
+                                        var targetTile = GetTileByPixelPosition(x, y);
+                                        targetTile.TillTile();
                                     }
 
                                     if (IsTownBuilding())
@@ -1022,6 +1022,18 @@ namespace RiverHollow.Map_Handling
                             else if (tiledObj.Properties.ContainsKey("ItemID"))
                             {
                                 new WrappedItem(int.Parse(tiledObj.Properties["ItemID"])).PlaceOnMap(tiledObj.Position.ToPoint(), this);
+                            }
+                            else
+                            {
+                                int placeEvery = 1;
+                                if (xCount % placeEvery == 0 && yCount % placeEvery == 0)
+                                {
+                                    if (tiledObj.Properties.ContainsKey("TillEarth"))
+                                    {
+                                        var targetTile = GetTileByPixelPosition(x, y);
+                                        targetTile.TillTile();
+                                    }
+                                }
                             }
                             xCount++;
                         }
@@ -1231,6 +1243,11 @@ namespace RiverHollow.Map_Handling
                     int maxTableSpots = GetMaxTableSpots(displayTables[index]);
                     foreach (var merch in building.Merchandise)
                     {
+                        if (merch == null)
+                        {
+                            continue;
+                        }
+
                         bool placed = false;
                         do
                         {
@@ -1256,8 +1273,11 @@ namespace RiverHollow.Map_Handling
                                 else
                                 {
                                     index++;
-                                    tableCount = 0;
-                                    maxTableSpots = GetMaxTableSpots(displayTables[index]);
+                                    if (index < displayTables.Count)
+                                    {
+                                        tableCount = 0;
+                                        maxTableSpots = GetMaxTableSpots(displayTables[index]);
+                                    }
                                 }
                             }
                             else { break; }

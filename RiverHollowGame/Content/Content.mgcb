@@ -733,6 +733,11 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapCarpenter.tmx
 
+#begin Maps/Town/mapClothier.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Town/mapClothier.tmx
+
 #begin Maps/Town/mapCoop.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -748,10 +753,10 @@
 /processor:TiledMapProcessor
 /build:Maps/Town/mapFlower_Shop.tmx
 
-#begin Maps/Town/mapGeneralStore.tmx
+#begin Maps/Town/mapFurnace.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:Maps/Town/mapGeneralStore.tmx
+/build:Maps/Town/mapFurnace.tmx
 
 #begin Maps/Town/mapGuildhouse.tmx
 /importer:TiledMapImporter
@@ -3356,6 +3361,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Carpenter.png
 
+#begin Textures/WorldObjects/Buildings/Clothier.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/WorldObjects/Buildings/Clothier.png
+
 #begin Textures/WorldObjects/Buildings/Coop.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3392,7 +3409,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Flower_Shop.png
 
-#begin Textures/WorldObjects/Buildings/GeneralStore.png
+#begin Textures/WorldObjects/Buildings/Furnace.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3402,7 +3419,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/WorldObjects/Buildings/GeneralStore.png
+/build:Textures/WorldObjects/Buildings/Furnace.png
 
 #begin Textures/WorldObjects/Buildings/House_12.png
 /importer:TextureImporter
@@ -3536,7 +3553,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/WorldObjects/Buildings/Pottery.png
 
-#begin Textures/WorldObjects/Buildings/Smelter.png
+#begin Textures/WorldObjects/Buildings/Smithy.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3546,7 +3563,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/WorldObjects/Buildings/Smelter.png
+/build:Textures/WorldObjects/Buildings/Smithy.png
 
 #begin Textures/WorldObjects/Buildings/Stables.png
 /importer:TextureImporter

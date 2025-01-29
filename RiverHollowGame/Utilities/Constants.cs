@@ -163,8 +163,8 @@ namespace RiverHollow.Utilities
         public static Rectangle USE_ITEM_BUBBLE_EMPTY = new Rectangle(16, 64, 4, 4);
         public static Rectangle USE_ITEM_BUBBLE_FULL = new Rectangle(21, 64, 4, 4);
 
-        public const float USE_CONSUMABLE_TIMER = 0.4f;
-        public const float USE_DECOR_TIMER = 0.2f;
+        public const float USE_CONSUMABLE_TIMER = 0.3f;
+        public const float USE_DECOR_TIMER = 0.15f;
 
         public const int WALK_TO_FRIEND_PERCENT = 60;
 

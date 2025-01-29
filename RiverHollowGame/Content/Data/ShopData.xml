@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[ItemID:76-10/80-15/82-15/87-15/243-10][Shopkeeper:34]</Value>
+      <Value>[ItemID:76-10/80-15/82-15/87-15/243-10/107-10][Shopkeeper:34]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -27,11 +27,11 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[ItemID:80-10/81-10/82-10/83-10/85-10/88-10][Shopkeeper:14]</Value>
+      <Value>[ItemID:76-5/80-10/82-10/87-10/243-5][Shopkeeper:14]</Value>
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[ItemID:0-10/2-10/8016-90][Shopkeeper:35]</Value>
+      <Value>[ItemID:0-10/2-10/8016-90/180-500/181-500/182-100/183-100/244-1000/245-500/246-500/247-500/106-100][Shopkeeper:35]</Value>
     </Item>
     <Item>
       <Key>8</Key>
@@ -43,7 +43,7 @@
     </Item>
     <Item>
       <Key>10</Key>
-      <Value>[ItemID:16-1000][Shopkeeper:38]</Value>
+      <Value></Value>
     </Item>
     <Item>
       <Key>11</Key>

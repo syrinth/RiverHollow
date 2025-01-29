@@ -19,7 +19,7 @@
     </Item>
     <Item>
       <Key>4</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][StartMap:mapDwarfCave_Small][Size:16-22][GoodsSoldValue:200]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:35][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-8-.12-F][Key:Dwarf][Size:16-22][RequiredObjectID:35]</Value>
     </Item>
     <Item>
       <Key>5</Key>
@@ -27,7 +27,7 @@
     </Item>
     <Item>
       <Key>6</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:41][Collection:0/1/2][Class:2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][RequiredVillager:8][Key:Emmanuel]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:25][Collection:0/1/2][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][CanMarry][Key:Emmanuel][Size:16-34][RequiredObjectID:25]</Value>
     </Item>
     <Item>
       <Key>7</Key>
@@ -35,11 +35,11 @@
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][Key:Fran][HouseID:22][Size:16-25][Market:14-00][Craft:16-00][Traits:Late/Chatty][MobsDefeated:40][GoodsSoldValue:150][Collection:0/1/2][Friends:26/16/10]</Value>
+      <Value>[Type:Villager][PortRow:1][Idle:0-0-1-0-T][Walk:192-0-3-.15-T][Key:Fran][HouseID:22][Size:16-32][Market:14-00][Craft:16-00][Traits:Late/Chatty][Collection:0/1/2][Friends:26/16/10][RequiredObjectID:22]</Value>
     </Item>
     <Item>
       <Key>9</Key>
-      <Value>[Type:Villager][PortRow:3][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Gale][HouseID:8][Size:16-35][Collection:7/188][Market:14-00][Craft:16-00][Traits:Precise/Chatty][Friends:26/16/10][StartMap:mapWindspire_Peaks][Face:0-1]</Value>
+      <Value>[Type:Villager][PortRow:3][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][Key:Gale][HouseID:8][Size:16-35][Collection:7/188][Market:14-00][Craft:16-00][Traits:Precise/Chatty][Friends:26/16/10][Face:0-1][RequiredObjectID:8]</Value>
     </Item>
     <Item>
       <Key>10</Key>
@@ -47,7 +47,7 @@
     </Item>
     <Item>
       <Key>11</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:25][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][Size:16-33][ArrivalDay:Spring-2]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:999][Collection:7/188][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][ShopData:3][Key:Harrison][Size:16-33][ArrivalDay:Spring-2]</Value>
     </Item>
     <Item>
       <Key>12</Key>
@@ -55,11 +55,11 @@
     </Item>
     <Item>
       <Key>13</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][Key:Isabelle][Face:64-16]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:-1][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredVillagerNumber:9][Key:Isabelle][Face:64-16]</Value>
     </Item>
     <Item>
       <Key>14</Key>
-      <Value>[Type:Villager][PortRow:1][HouseID:24][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ShopData:6][CanMarry][Key:Jase][ArrivalDay:Spring-14][TownScore:200]</Value>
+      <Value>[Type:Villager][PortRow:1][HouseID:24][Collection:7/188][Idle:0-0-1-0-T][Walk:0-0-1-0-T][ShopData:6][CanMarry][Key:Jase][RequiredObjectID:24]</Value>
     </Item>
     <Item>
       <Key>15</Key>
@@ -71,7 +71,7 @@
     </Item>
     <Item>
       <Key>17</Key>
-      <Value>[Type:Villager][PortRow:3][HouseID:0][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredBuildingID:56][Key:Leanne]</Value>
+      <Value>[Type:Villager][PortRow:3][HouseID:7][Collection:7/167][Idle:0-0-1-0-T][Walk:64-0-3-.15-T][RequiredObjectID:7][Key:Leanne]</Value>
     </Item>
     <Item>
       <Key>18</Key>
@@ -279,7 +279,7 @@
     </Item>
     <Item>
       <Key>69</Key>
-      <Value>[Type:Traveler][Subtype:None][Group:None][SubGroup:Mercantile][Key:Caspian][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Plain][Disliked:Seafood][Building:101][Face:0-4]</Value>
+      <Value>[Type:Traveler][Subtype:None][Group:None][SubGroup:Mercantile][Key:Caspian][Size:16-32][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Plain][Disliked:Seafood][Face:0-4]</Value>
     </Item>
     <Item>
       <Key>70</Key>

@@ -43,7 +43,7 @@
         public enum ItemTypeEnum { None, Resource, Blueprint, Buildable, Consumable, Cosmetic, Food, Merchandise, MonsterFood, NPCToken, Relic, Seed, Special, Tool };
         public enum FoodTypeEnum { Dessert, Fancy, Healthy, Plain, Seafood };
         public enum CosmeticSlotEnum { Eyes, Hair, Head, Body, Legs, Feet, };
-        public enum MerchandiseTypeEnum { Generic, Ceramic, Clothing, Magic, Potion };
+        public enum MerchandiseTypeEnum { Accessory, Equipment, Recovery, Utility, Weapon };
         public enum NPCTokenTypeEnum { Mount, Pet };
         public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Hoe, StaffOfIce, Sword, WateringCan };
         public enum UpgradeTypeEnum { Building, Global };

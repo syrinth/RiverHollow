@@ -481,25 +481,27 @@ namespace RiverHollow.Characters
 
             internal void Update(GameTime gTime)
             {
-                if (!InputManager.ButtonDown(ButtonEnum.Right)){
+                if (!InputManager.ButtonDown(ButtonEnum.Right))
+                {
                     PlayerManager.SetActiveItem(null);
                 }
                 else if (_rhTimer.TickDown(gTime))
                 {
+                    SoundManager.PlayEffect(SoundEffectEnum.Item);
+                    _arrGates[_iCount] = true;
+                    _iCount++;
+
                     if (_iCount == 3)
                     {
                         _iConsumable.UseItem();
                         PlayerManager.SetActiveItem(null);
-                        if(_iConsumable.Number == 0)
+                        if (_iConsumable.Number == 0)
                         {
                             GameManager.SetSelectedItem(null);
                         }
                     }
                     else
                     {
-                        SoundManager.PlayEffect(SoundEffectEnum.Item);
-                        _arrGates[_iCount] = true;
-                        _iCount++;
                         _rhTimer.Reset();
                     }
                 }
