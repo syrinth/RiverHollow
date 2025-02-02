@@ -18,7 +18,7 @@ namespace RiverHollow.Items.Tools
             float frameSpeed = float.Parse(par[3]);
 
             int xCrawl = 0;
-            foreach (DirectionEnum dir in Enum.GetValues(typeof(DirectionEnum)))
+            foreach (DirectionEnum dir in GetEnumArray<DirectionEnum>())
             {
                 if (dir == DirectionEnum.None) { continue; }
 

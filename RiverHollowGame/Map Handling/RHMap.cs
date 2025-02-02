@@ -2394,10 +2394,6 @@ namespace RiverHollow.Map_Handling
 
                         if (TownModeBuild())
                         {
-                            if (objectToPlace is Building)
-                            {
-                                TownManager.IncreaseTravelerBonus();
-                            }
                             PostBuildingCleanup(false);
                         }
                     }

@@ -390,6 +390,7 @@ namespace RiverHollow.Items
 
     public class Merchandise : Item
     {
+        public int Tier => GetIntByIDKey("Tier");
         public ClassTypeEnum ClassType => GetEnumByIDKey<ClassTypeEnum>("Group");
         public MerchandiseTypeEnum MerchType => GetEnumByIDKey<MerchandiseTypeEnum>("Subtype");
 

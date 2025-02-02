@@ -749,7 +749,7 @@ namespace RiverHollow.Characters
         protected int AddDirectionalAnimations(ref AnimatedSprite sprite, AnimationData data, int width, int height, bool pingpong, bool backToIdle)
         {
             int xCrawl = 0;
-            foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+            foreach (DirectionEnum e in GetEnumArray<DirectionEnum>())
             {
                 if (e == DirectionEnum.None) { continue; }
                 AddSpriteAnimation(ref sprite, ref xCrawl, e, data, width, height, pingpong);
@@ -757,7 +757,7 @@ namespace RiverHollow.Characters
 
             if (backToIdle)
             {
-                foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                foreach (DirectionEnum e in GetEnumArray<DirectionEnum>())
                 {
                     if (e == DirectionEnum.None) { continue; }
                     SetNextAnimationToIdle(ref sprite, data.Verb, e);

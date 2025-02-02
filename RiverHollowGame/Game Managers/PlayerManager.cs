@@ -332,7 +332,7 @@ namespace RiverHollow.Game_Managers
         public static void InitializeCosmeticDictionary()
         {
             _diCosmetics = new Dictionary<CosmeticSlotEnum, List<KeyValuePair<int, bool>>>();
-            foreach (CosmeticSlotEnum e in Enum.GetValues(typeof(CosmeticSlotEnum)))
+            foreach (CosmeticSlotEnum e in GetEnumArray<CosmeticSlotEnum>())
             {
                 _diCosmetics[e] = new List<KeyValuePair<int, bool>>();
             }

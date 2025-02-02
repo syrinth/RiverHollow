@@ -299,16 +299,16 @@ namespace RiverHollow.GUIComponents.Screens
 
         bool _bPopped = false;
         readonly int _iFoodID = -1;
-        readonly int _iItemID = -1;
+        readonly List<int> _iItemIDs;
 
         readonly GUIImage _gCoin;
 
         public GUIActor(Villager v) : base(v.BodySprite, true) { }
         public GUIActor(Traveler t) : base(t.BodySprite, true)
         {
-            Income = t.Income;
+            Income = t.GeneratedIncome;
             _iFoodID = t.FoodID;
-            _iItemID = t.ItemID;
+            _iItemIDs = t.PurchasedItemList;
 
             if (Income > 0)
             {
@@ -341,7 +341,7 @@ namespace RiverHollow.GUIComponents.Screens
             if (Income > -1)
             {
                 _gCoin?.Show(false);
-                var status = new TravelerStatus(_iFoodID, _iItemID);
+                var status = new TravelerStatus(_iFoodID, _iItemIDs[0]);
                 status.AnchorAndAlign(this, SideEnum.Top, SideEnum.CenterX);
                 GUIManager.OpenHoverObject(status, DrawRectangle, true);
             }

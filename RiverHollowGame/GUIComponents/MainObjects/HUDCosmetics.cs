@@ -68,7 +68,7 @@ namespace RiverHollow.GUIComponents.MainObjects
             //Create Player Applied Cosmetic Boxes
             int index = 0;
             _liAppliedCosmetics = new List<GUICosmeticBox>();
-            foreach (CosmeticSlotEnum e in Enum.GetValues(typeof(CosmeticSlotEnum)))
+            foreach (CosmeticSlotEnum e in GetEnumArray<CosmeticSlotEnum>())
             {
                 var box = new GUICosmeticBox(e, PlayerManager.PlayerActor.GetCosmetic(e), OpenCosmetics, true);
                 AddControl(box);

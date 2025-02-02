@@ -2,6 +2,7 @@
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.Items;
 using RiverHollow.Map_Handling;
 using RiverHollow.Misc;
 using RiverHollow.SpriteAnimations;
@@ -39,6 +40,52 @@ namespace RiverHollow.Utilities
                     rv = DataManager.CreateWorldObjectByID(ID);
                     break;
 
+            }
+
+            return rv;
+        }
+    }
+
+    public class TravelerNeed
+    {
+        public MerchandiseTypeEnum MerchType;
+        public int MerchID { get; } = -1;
+
+        public int Tier { get; private set; } = 0;
+
+        public TravelerNeed(int merchID)
+        {
+            MerchID = merchID;
+            MerchType = MerchandiseTypeEnum.None;
+        }
+
+        public TravelerNeed(MerchandiseTypeEnum merchType)
+        {
+            MerchID = -1;
+            MerchType = merchType;
+        }
+
+        public void SetTier(int tier)
+        {
+            Tier = tier;
+        }
+
+        public bool Validate(Merchandise m)
+        {
+            bool rv = true;
+
+            if (MerchType != MerchandiseTypeEnum.None && m.MerchType != MerchType)
+            {
+                rv = false;
+            }
+            else if (MerchID > -1 && m.ID != MerchID)
+            {
+                rv = false;
+            }
+
+            if (Tier > 0 && m.Tier != Tier)
+            {
+                rv = false;
             }
 
             return rv;

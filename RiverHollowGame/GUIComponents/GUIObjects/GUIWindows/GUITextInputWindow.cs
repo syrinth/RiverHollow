@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RiverHollow.Game_Managers;
 using RiverHollow.Utilities;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
 {
@@ -43,7 +44,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             {
                 _gMarker.Update(gTime);
 
-                foreach (Keys k in Enum.GetValues(typeof(Keys)))
+                foreach (Keys k in GetEnumArray<Keys>())
                 {
                     if (InputManager.CheckForInitialKeyDown(k))
                     {

@@ -115,7 +115,7 @@ namespace RiverHollow.Characters
                 c.SetCosmetic(null);
             }
 
-            foreach (CosmeticSlotEnum e in Enum.GetValues(typeof(CosmeticSlotEnum)))
+            foreach (CosmeticSlotEnum e in GetEnumArray<CosmeticSlotEnum>())
             {
                 if (e == CosmeticSlotEnum.Head && RHRandom.RollPercent(80))
                 {
@@ -127,7 +127,7 @@ namespace RiverHollow.Characters
 
         private void AddDefaultCosmetics()
         {
-            foreach (CosmeticSlotEnum e in Enum.GetValues(typeof(CosmeticSlotEnum)))
+            foreach (CosmeticSlotEnum e in GetEnumArray<CosmeticSlotEnum>())
             {
                 AppliedCosmetics[e] = new AppliedCosmetic();
             }

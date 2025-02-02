@@ -17,9 +17,6 @@ namespace RiverHollow.Game_Managers
     {
         public static string TownName { get; private set; }
 
-        private static bool _bTravelersCame = false;
-        private static int _iTravelerBonus = 0;
-
         public static int Income { get; private set; }
 
         #region Key Buildings
@@ -60,7 +57,7 @@ namespace RiverHollow.Game_Managers
             PlantsGrown = 0;
             ValueGoodsSold = 0;
             _diGoodsSold = new Dictionary<ResourceTypeEnum, int>();
-            foreach (ResourceTypeEnum e in Enum.GetValues(typeof(ResourceTypeEnum)))
+            foreach (ResourceTypeEnum e in GetEnumArray<ResourceTypeEnum>())
             {
                 _diGoodsSold[e] = 0;
             }
@@ -146,11 +143,6 @@ namespace RiverHollow.Game_Managers
         {
             TaskManager.TaskLog.ForEach(x => x.AttemptProgress());
 
-            if (GameCalendar.DayOfWeek == 0)
-            {
-                _bTravelersCame = false;
-            }
-
             foreach (Villager v in Villagers.Values)
             {
                 v.RollOver();
@@ -180,19 +172,22 @@ namespace RiverHollow.Game_Managers
             if (Travelers.Count > 0)
             {
 
-                var merchantTables = new Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Building>>>();
+                var merchantTables = new Dictionary<ClassTypeEnum, List<KeyValuePair<Merchandise, Building>>>();
                 GatherMerch(ref merchantTables);
 
+                //First, the Traveler attempts to fill their Need
                 foreach (var traveler in Travelers)
                 {
-                    traveler.PurchaseItem(merchantTables);
+                    traveler.PurchaseNeedItem(merchantTables);
                 }
 
+                //After shopping for their Need, they will eat
                 InventoryManager.InitExtraInventory(Pantry);
 
                 List<Food> sortedFood = Util.MultiArrayToList(Pantry).FindAll(x => x.CompareType(ItemTypeEnum.Food)).ConvertAll(x => (Food)x);
                 sortedFood = sortedFood.OrderBy(x => x.FoodType).ThenByDescending(x => x.Value).ToList();
 
+                //Eat in waves to ensure everyone gets the best possible meal
                 foreach (Traveler t in Travelers.FindAll(x => !x.HasEaten()))
                 {
                     TryToEat(sortedFood, t, t.FavoriteFood);
@@ -207,6 +202,15 @@ namespace RiverHollow.Game_Managers
                 }
 
                 InventoryManager.ClearExtraInventory();
+
+                //Finally, after eating the Traveler will do some additional shopping as long as they have no unmet Needs
+                foreach (var traveler in Travelers)
+                {
+                    if (!traveler.HasNeed)
+                    {
+                        traveler.PurchaseExtraItems(merchantTables);
+                    }
+                }
 
                 Travelers.ForEach(npc => Income += npc.CalculateIncome());
             }
@@ -223,11 +227,11 @@ namespace RiverHollow.Game_Managers
                 }
             }
         }
-        private static void GatherMerch(ref Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Building>>> townMerchData)
+        private static void GatherMerch(ref Dictionary<ClassTypeEnum, List<KeyValuePair<Merchandise, Building>>> townMerchData)
         {
-            foreach (ClassTypeEnum e in Enum.GetValues(typeof(ClassTypeEnum)))
+            foreach (ClassTypeEnum e in GetEnumArray<ClassTypeEnum>())
             {
-                townMerchData[e] = new List<KeyValuePair<Item, Building>>();
+                townMerchData[e] = new List<KeyValuePair<Merchandise, Building>>();
             }
 
             var allBuildings = MapManager.TownMap.GetObjectsByType<Building>();
@@ -237,7 +241,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (i is Merchandise merchItem)
                     {
-                        var itemData = new KeyValuePair<Item, Building>(i, building);
+                        var itemData = new KeyValuePair<Merchandise, Building>(merchItem, building);
                         townMerchData[merchItem.ClassType].Add(itemData);
                     }
                 }
@@ -269,15 +273,10 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        #region Traveler Code
-        public static void IncreaseTravelerBonus()
-        {
-            _iTravelerBonus += Constants.BUILDING_TRAVELER_BOOST;
-        }
-        
+        #region Traveler Code        
         private static void SpawnTravelers()
         {
-            GetTownScoreInfo(out int townScore, out AffinityEnum affinity);
+            TownManager.GetTownScoreInfo(out int townScore, out AffinityEnum affinity);
 
             for (int i = 0; i < Travelers.Count; i++)
             {
@@ -299,8 +298,6 @@ namespace RiverHollow.Game_Managers
             int travelerNumber = Constants.BASE_TRAVELER_RATE + ((townScore - Constants.BASE_SCORE_TRAVELER_PENALTY)/ Constants.POINTS_PER_TRAVELER) ;
             for (int i = 0; i < travelerNumber; i++)
             {
-                _bTravelersCame = true;
-
                 if (travelerList.Count == 0)
                 {
                     break;
@@ -324,18 +321,16 @@ namespace RiverHollow.Game_Managers
 
                 if (npc != null)
                 {
-                    AddTraveler(npc);
+                    AddTraveler(npc, townScore);
                     travelerList.Remove(npc);
 
-                    MakeGroup(ref travelerList, ref i, travelerNumber, npc.TravelerGroup);
+                    MakeGroup(ref travelerList, ref i, travelerNumber, npc.TravelerGroup, townScore);
                 }
                 else { break; }
             }
-
-            _iTravelerBonus = 0;
         }
 
-        private static void MakeGroup(ref List<Traveler> travelerList, ref int index, int max, TravelerGroupEnum group)
+        private static void MakeGroup(ref List<Traveler> travelerList, ref int index, int max, TravelerGroupEnum group, int townScore)
         {
             int groupChance = Constants.BASE_GROUP_CHANCE;
             while (index < max && RHRandom.RollPercent(groupChance))
@@ -365,7 +360,7 @@ namespace RiverHollow.Game_Managers
                 {
                     index++;
 
-                    AddTraveler(npc);
+                    AddTraveler(npc, townScore);
                     travelerList.Remove(npc);
 
                     //If we're making a group off of a None group, need to transition to any actual group we roll on
@@ -381,7 +376,7 @@ namespace RiverHollow.Game_Managers
         }
         private static void CheckForRareTraveler(ref List<Traveler> options)
         {
-            //Check for a rare traveller
+            //Check for a rare traveler
             if (options.Any(x => x.Rare))
             {
                 bool getRare = RHRandom.Instance().Next(1, 10) == 10;
@@ -389,13 +384,48 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void AddTraveler(int id)
-        {
-            AddTraveler(DataManager.CreateActor<Traveler>(id));
-        }
-        public static void AddTraveler(Traveler npc)
+        public static void AddTraveler(Traveler npc, int townScore)
         {
             Travelers.Add(npc);
+
+            //TravelerNeed
+            if (townScore > 0 && RHRandom.RollPercent(Constants.BASE_TRAVELER_NEED + (townScore / 100)))
+            {
+                TravelerNeed n;
+
+                if (RHRandom.RollPercent(50))
+                {
+                    var enumArray = GetEnumArray<MerchandiseTypeEnum>();
+                    n = new TravelerNeed(Util.GetRandomItem(enumArray));
+                }
+                else
+                {
+                    List<int> possibleItems = new List<int>();
+                    //Need to determine which specific Item
+                    var buildings = MapManager.TownMap.GetObjectsByType<Building>();
+                    foreach (var b in buildings)
+                    {
+                        if (b is Building bldg)
+                        {
+                            var machines = bldg.InnerMap.GetObjectsByType<Machine>();
+                            if (machines.Count > 0)
+                            {
+                                foreach(var m in machines)
+                                {
+                                    possibleItems.AddRange(m.GetCurrentCraftingList());
+                                }
+                            }
+                        }
+                    }
+
+                    n = new TravelerNeed(Util.GetRandomItem(possibleItems));
+                }
+
+                //ToDo: Assign a Tier requirement occasionally.
+
+
+                npc.AssignNeed(n);
+            }
 
             RHMap map = MapManager.TownMap;
             int roll = RHRandom.Instance().Next(0, 2);
@@ -518,7 +548,7 @@ namespace RiverHollow.Game_Managers
             float miscScore = 0;
 
             Dictionary<AffinityEnum, float> dictionaryAffinity = new Dictionary<AffinityEnum, float>();
-            foreach (AffinityEnum e in Enum.GetValues(typeof(AffinityEnum)))
+            foreach (AffinityEnum e in GetEnumArray<AffinityEnum>())
             {
                 if (e == AffinityEnum.None)
                 {
@@ -747,7 +777,7 @@ namespace RiverHollow.Game_Managers
                 plantsGrown = PlantsGrown,
                 goodsSoldValue = ValueGoodsSold,
                 TownAnimals = new List<int>(),
-                Travelers = new List<int>(),
+                Travelers = new List<TravelerData>(),
                 VillagerData = new List<VillagerData>(),
                 MerchantData = new List<MerchantData>(),
                 TravelerData = new List<TravelerData>(),
@@ -760,7 +790,7 @@ namespace RiverHollow.Game_Managers
                 MerchantID = Merchant != null ? Merchant.ID : -1
             };
 
-            Travelers.ForEach(x => data.Travelers.Add(x.ID));
+            Travelers.ForEach(x => data.Travelers.Add(x.SaveData()));
             TownAnimals.ForEach(x => data.TownAnimals.Add(x.ID));
 
             //Mailbox Data
@@ -783,17 +813,6 @@ namespace RiverHollow.Game_Managers
             foreach (Merchant npc in DIMerchants.Values)
             {
                 data.MerchantData.Add(npc.SaveData());
-            }
-
-            foreach (var kvp in DITravelerInfo)
-            {
-                TravelerData travelerData = new TravelerData()
-                {
-                    npcID = kvp.Key,
-                    introduced = kvp.Value.Item1,
-                    numVisits = kvp.Value.Item2
-                };
-                data.TravelerData.Add(travelerData);
             }
 
             foreach (var kvp in DIArchive)
@@ -825,8 +844,6 @@ namespace RiverHollow.Game_Managers
                 data.GoodsSold.Add(new ValueTuple<int, int>((int)e, _diGoodsSold[e]));
             }
 
-            data.travelersCame = _bTravelersCame;
-
             return data;
         }
         public static void LoadData(TownData saveData)
@@ -847,7 +864,13 @@ namespace RiverHollow.Game_Managers
                 _diGoodsSold[(ResourceTypeEnum)tpl.Item1] = tpl.Item2;
             }
 
-            saveData.Travelers.ForEach(x => AddTraveler(x));
+            foreach(var tData in saveData.Travelers)
+            {
+                Traveler newTraveler = DataManager.CreateActor<Traveler>(tData.id);
+                newTraveler.LoadData(tData);
+                AddTraveler(newTraveler, 0);
+            }
+
             var unsentMessages = new List<int>(_diAllLetters[LetterTemplateEnum.Unsent]);
             foreach (var letterID in unsentMessages)
             {
@@ -878,16 +901,6 @@ namespace RiverHollow.Game_Managers
                 npc.LoadData(data);
             }
 
-            foreach (TravelerData data in saveData.TravelerData)
-            {
-                DITravelerInfo[data.npcID] = new ValueTuple<bool, int>(data.introduced, data.numVisits);
-            }
-
-            foreach (TravelerData data in saveData.TravelerData)
-            {
-                DITravelerInfo[data.npcID] = new ValueTuple<bool, int>(data.introduced, data.numVisits);
-            }
-
             foreach (CodexEntryData data in saveData.CodexEntries)
             { 
                 if (data.id < 8000)
@@ -914,8 +927,6 @@ namespace RiverHollow.Game_Managers
             {
                 GetGlobalUpgrade(tpl.Item1).ChangeStatus((UpgradeStatusEnum)tpl.Item2);
             }
-
-            _bTravelersCame = saveData.travelersCame;
 
             if (saveData.MerchantID != -1)
             {

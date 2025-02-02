@@ -60,7 +60,7 @@ namespace RiverHollow.Items
                 float frameSpeed = float.Parse(par[3]);
 
                 int xCrawl = 0;
-                foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                foreach (DirectionEnum e in GetEnumArray<DirectionEnum>())
                 {
                     if(e == DirectionEnum.None) { continue; }
 

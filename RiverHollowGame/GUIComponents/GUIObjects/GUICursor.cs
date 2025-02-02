@@ -45,6 +45,11 @@ namespace RiverHollow.GUIComponents.GUIObjects
             if (_eCursorType == CursorTypeEnum.Normal) { Alpha = 1; }
             else { Alpha = PlayerManager.InRangeOfPlayer(_rCollisionRectangle) ? 1 : 0.5f; }
 
+            if (_eCursorType == CursorTypeEnum.Shop && MapManager.CurrentMap.TheShop == null && TownManager.GetCurrentBuilding() == null)
+            {
+                Alpha = 0.5f;
+            }
+
             spriteBatch.Draw(_texture, drawRectangle, _rSource, Color.White * Alpha);
             _guiItem?.Draw(spriteBatch);
         }

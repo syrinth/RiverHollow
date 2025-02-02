@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="13" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="32">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="13" height="12" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="34">
  <properties>
-  <property name="Building" type="bool" value="true"/>
+  <property name="BuildingID" type="int" value="8"/>
   <property name="MapType" value="Town"/>
  </properties>
  <tileset firstgid="1" source="../Tilesets/tilesetHouses.tsx"/>
@@ -30,7 +30,7 @@
 611,0,2110,2111,524,525,526,0,0,0,2158,2159,633,
 611,588,588,588,546,547,548,588,588,588,588,588,633,
 611,1867,0,0,0,0,0,0,0,0,0,0,633,
-611,444,445,446,0,0,0,0,0,0,2106,0,633,
+611,0,445,446,0,0,0,0,0,0,2106,0,633,
 611,1603,0,0,0,0,0,0,0,0,0,0,633,
 611,0,0,0,0,0,0,0,0,0,0,0,632,
 611,0,0,0,0,0,633,0,0,0,0,0,0,
@@ -45,7 +45,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,1844,0,0,0,0,0,0,0,0,0,0,0,
-0,418,419,472,0,0,0,0,0,0,0,0,0,
+0,0,419,472,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,521,522,522,522,522,522,0,
@@ -67,6 +67,11 @@
   <object id="30" name="WorldObject" x="144" y="64" width="48" height="16">
    <properties>
     <property name="ObjectID" type="int" value="91"/>
+   </properties>
+  </object>
+  <object id="33" name="Shop Slate" x="16" y="80" width="16" height="16">
+   <properties>
+    <property name="ObjectID" type="int" value="179"/>
    </properties>
   </object>
  </objectgroup>

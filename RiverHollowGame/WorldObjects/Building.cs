@@ -212,7 +212,6 @@ namespace RiverHollow.Buildings
 
         public void QueueUpgrade()
         {
-            TownManager.IncreaseTravelerBonus();
             UpgradeQueued = true;
         }
         private void Upgrade()

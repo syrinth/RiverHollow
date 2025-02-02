@@ -1,7 +1,15 @@
-﻿namespace RiverHollow.Utilities
+﻿using System;
+using System.Linq;
+
+namespace RiverHollow.Utilities
 {
     public static class Enums
     {
+        public static T[] GetEnumArray<T>()
+        {
+            return Enum.GetValues(typeof(T)).Cast<T>().ToArray();
+        }
+
         public enum LogEnum { Info, Warning, Error };
         public enum ButtonEnum { Left, Right, Middle };
         public enum DataType { Actor, Adventure, Cosmetic, Item, Light, StatusEffect, Task, WorldObject, Upgrade };
@@ -43,7 +51,7 @@
         public enum ItemTypeEnum { None, Resource, Blueprint, Buildable, Consumable, Cosmetic, Food, Merchandise, MonsterFood, NPCToken, Relic, Seed, Special, Tool };
         public enum FoodTypeEnum { Dessert, Fancy, Healthy, Plain, Seafood };
         public enum CosmeticSlotEnum { Eyes, Hair, Head, Body, Legs, Feet, };
-        public enum MerchandiseTypeEnum { Accessory, Equipment, Recovery, Utility, Weapon };
+        public enum MerchandiseTypeEnum { None, Accessory, Equipment, Recovery, Utility, Weapon };
         public enum NPCTokenTypeEnum { Mount, Pet };
         public enum ToolEnum { None, Axe, Backpack, CapeOfBlinking, FishingRod, Harp, Lantern, Pick, Return, Scythe, Hoe, StaffOfIce, Sword, WateringCan };
         public enum UpgradeTypeEnum { Building, Global };

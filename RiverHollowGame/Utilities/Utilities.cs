@@ -163,7 +163,7 @@ namespace RiverHollow.Utilities
         {
             bool rv = false;
 
-            foreach(TEnum e in Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToList())
+            foreach(TEnum e in GetEnumArray<TEnum>())
             {
                 if (val.Equals(GetEnumString(e)))
                 {

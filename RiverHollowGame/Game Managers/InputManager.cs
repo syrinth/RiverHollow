@@ -18,7 +18,7 @@ namespace RiverHollow.Game_Managers
         public static void Load()
         {
             _diKeysDown = new Dictionary<Keys, bool>();
-            foreach (Keys k in Enum.GetValues(typeof(Keys)))
+            foreach (Keys k in GetEnumArray<Keys>())
             {
                 _diKeysDown.Add(k, false);
             }

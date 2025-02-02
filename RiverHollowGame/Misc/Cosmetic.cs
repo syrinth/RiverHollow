@@ -72,7 +72,7 @@ namespace RiverHollow.Misc
 
                         if (d.Directional)
                         {
-                            foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                            foreach (DirectionEnum e in GetEnumArray<DirectionEnum>())
                             {
                                 if (e == DirectionEnum.None) { continue; }
                                 sprite.AddAnimation(d.Verb, e, d.XLocation + xCrawl, d.YLocation, Constants.TILE_SIZE, Constants.TILE_SIZE, d.Frames, d.FrameSpeed, false, d.Verb == VerbEnum.Action1);
@@ -81,7 +81,7 @@ namespace RiverHollow.Misc
 
                             if (d.BackToIdle)
                             {
-                                foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                                foreach (DirectionEnum e in GetEnumArray<DirectionEnum>())
                                 {
                                     if (e == DirectionEnum.None) { continue; }
                                     sprite.SetNextAnimation(Util.GetActorString(d.Verb, e), Util.GetActorString(VerbEnum.Idle, e));
@@ -95,7 +95,7 @@ namespace RiverHollow.Misc
                     }
                     break;
                 case CosmeticSlotEnum.Hair:
-                    foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                    foreach (DirectionEnum e in GetEnumArray<DirectionEnum>())
                     {
                         if (e == DirectionEnum.None) { continue; }
 
@@ -113,7 +113,7 @@ namespace RiverHollow.Misc
                 default:
                     //Offset for the item icon
                     xCrawl += Constants.TILE_SIZE;
-                    foreach (DirectionEnum e in Enum.GetValues(typeof(DirectionEnum)))
+                    foreach (DirectionEnum e in GetEnumArray<DirectionEnum>())
                     {
                         if (e == DirectionEnum.None) { continue; }
 

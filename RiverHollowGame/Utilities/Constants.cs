@@ -28,7 +28,6 @@ namespace RiverHollow.Utilities
         public const int PLAYER_GEAR_ROWS = 3;
         public const int PLAYER_GEAR_COLUMNS = 2;
         public const int ENERGY_NAP_RECOVERY = 20;
-        public const int BUILDING_TRAVELER_BOOST = 70;
         public const int PLAYER_EXTRAS_COLUMNS = 5;
         public const int PLAYER_HAT_OFFSET = -4;
         public const int PLAYER_SHIRT_OFFSET = 9;
@@ -103,6 +102,8 @@ namespace RiverHollow.Utilities
 
         public const float HUNGER_MOD = -0.5f;
 
+        public const int TRAVELER_ITEM_PURCHASE_CAP = 3;
+        public const int BASE_TRAVELER_NEED = 25;
         public const int BASE_TRAVELER_RATE = 1;
         public const int BASE_SCORE_TRAVELER_PENALTY = 50;
         public const int POINTS_PER_TRAVELER = 20;

@@ -234,15 +234,15 @@
 /processor:PassThroughProcessor
 /build:Data/Text Files/Dialogue/Travelers/NPC_Neutral1.xml
 
-#begin Data/Text Files/Dialogue/Travelers/NPC_Traveller1.xml
+#begin Data/Text Files/Dialogue/Travelers/NPC_Traveler1.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/Travelers/NPC_Traveller1.xml
+/build:Data/Text Files/Dialogue/Travelers/NPC_Traveler1.xml
 
-#begin Data/Text Files/Dialogue/Travelers/NPC_Traveller2.xml
+#begin Data/Text Files/Dialogue/Travelers/NPC_Traveler2.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
-/build:Data/Text Files/Dialogue/Travelers/NPC_Traveller2.xml
+/build:Data/Text Files/Dialogue/Travelers/NPC_Traveler2.xml
 
 #begin Data/Text Files/Dialogue/Villagers/NPC_Abeline.xml
 /importer:XmlImporter
@@ -1609,7 +1609,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Travelers/Neutral1.png
 
-#begin Textures/Actors/NPCs/Travelers/Traveller1.png
+#begin Textures/Actors/NPCs/Travelers/Traveler1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1619,9 +1619,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/Travelers/Traveller1.png
+/build:Textures/Actors/NPCs/Travelers/Traveler1.png
 
-#begin Textures/Actors/NPCs/Travelers/Traveller2.png
+#begin Textures/Actors/NPCs/Travelers/Traveler2.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1631,7 +1631,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/Actors/NPCs/Travelers/Traveller2.png
+/build:Textures/Actors/NPCs/Travelers/Traveler2.png
 
 #begin Textures/Actors/NPCs/Travelers/Villain.png
 /importer:TextureImporter

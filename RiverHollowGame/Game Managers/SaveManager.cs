@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 using static RiverHollow.Misc.RHTask;
+using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Game_Managers
 {
@@ -208,10 +209,7 @@ namespace RiverHollow.Game_Managers
             public List<int> TownAnimals;
 
             [XmlArray(ElementName = "Visitors")]
-            public List<int> Travelers;
-
-            [XmlElement(ElementName = "TravelersCame")]
-            public bool travelersCame;
+            public List<TravelerData> Travelers;
 
             [XmlArray(ElementName = "MailboxSent")]
             public List<int> MailboxSent;
@@ -386,6 +384,17 @@ namespace RiverHollow.Game_Managers
             [XmlArray(ElementName = "HeldItems")]
             public List<string> heldItems;
         }
+        public struct TravelerData
+        {
+            [XmlElement(ElementName = "ID")]
+            public int id;
+
+            [XmlElement(ElementName = "NeedID")]
+            public int needID;
+
+            [XmlElement(ElementName = "NeedType")]
+            public MerchandiseTypeEnum needType;
+        }
         public struct ChildData
         {
             [XmlElement(ElementName = "childID")]
@@ -410,17 +419,6 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "ReqIndex")]
             public int reqIndex;
-        }
-        public struct TravelerData
-        {
-            [XmlElement(ElementName = "NPCID")]
-            public int npcID;
-
-            [XmlElement(ElementName = "Introduced")]
-            public bool introduced;
-
-            [XmlElement(ElementName = "NumberOfVists")]
-            public int numVisits;
         }
         public struct CodexEntryData
         {

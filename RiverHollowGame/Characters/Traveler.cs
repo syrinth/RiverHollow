@@ -6,17 +6,23 @@ using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
+    using MerchKVP = KeyValuePair<Merchandise, Building>;
+    using MerchDataDictionary = Dictionary<ClassTypeEnum, List<KeyValuePair<Merchandise, Building>>>;
+
     public class Traveler : TalkingActor
     {
+        private TravelerNeed _TravelerNeed;
+        public bool HasNeed => _TravelerNeed != null;
         public AffinityEnum Affinity => GetEnumByIDKey<AffinityEnum>("SubGroup");
         public ClassTypeEnum ClassType => GetEnumByIDKey<ClassTypeEnum>("Group");
         public int FoodID { get; private set;} = -1;
-        public int ItemID { get; private set;} = -1;
-        public int Income { get; private set; } = 0;
+        public List<int> PurchasedItemList { get; private set;}
+        public int GeneratedIncome { get; private set; } = 0;
 
         private int _iMerchBuildingID = -1;
 
@@ -24,6 +30,8 @@ namespace RiverHollow.Characters
 
         private int NPC => GetIntByIDKey("NPC");
         private int TownScore => GetIntByIDKey("TownScore");
+
+        private int Money = 0;
 
         public bool Rare => GetBoolByIDKey("Rare");
 
@@ -40,6 +48,10 @@ namespace RiverHollow.Characters
 
         public Traveler(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
+            Money = GetIntByIDKey("Value");
+
+            PurchasedItemList = new List<int>();
+
             _fWanderSpeed = Constants.NPC_WALK_SPEED;
             Wandering = true;
             _eCollisionState = ActorCollisionState.Slow;
@@ -89,7 +101,7 @@ namespace RiverHollow.Characters
                 return false;
             }
 
-            if(TownScore != -1 && TownScore > townScore)
+            if (TownScore != -1 && TownScore > townScore)
             {
                 return false;
             }
@@ -97,6 +109,7 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        #region Food
         public bool HasEaten()
         {
             return FoodID != -1;
@@ -106,36 +119,7 @@ namespace RiverHollow.Characters
             if (!HasEaten() && f.Remove(1, false))
             {
                 FoodID = f.ID;
-            }
-        }
-
-        public void PurchaseItem(Dictionary<ClassTypeEnum, List<KeyValuePair<Item, Building>>> merchData)
-        {
-            if (merchData.Count > 0)
-            {
-                ClassTypeEnum itemType = ClassTypeEnum.None;
-                if (merchData[ClassType].Count > 0)
-                {
-                    itemType = ClassType;
-                }
-
-                if (merchData[itemType].Count > 0)
-                {
-                    var randomKvp = Util.GetRandomItem(merchData[itemType]);
-                    var building = randomKvp.Value;
-                    var item = randomKvp.Key;
-
-                    InventoryManager.InitExtraInventory(building.Merchandise);
-                    item.Remove(1, false);
-                    InventoryManager.ClearExtraInventory();
-                    ItemID = item.ID;
-                    _iMerchBuildingID = building.ID;
-
-                    if (item.Number == 0)
-                    {
-                        merchData[itemType].Remove(randomKvp);
-                    }
-                }
+                Money -= f.Value;
             }
         }
 
@@ -144,15 +128,97 @@ namespace RiverHollow.Characters
             bool rv = (e != FavoriteFood && e != DislikedFood);
             return rv;
         }
+        #endregion
+
+        #region Merchandise
+        public void AssignNeed(TravelerNeed need)
+        {
+            _TravelerNeed = need;
+        }
+
+        private ClassTypeEnum DetermineClassType(MerchDataDictionary merchData)
+        {
+            ClassTypeEnum rv = ClassTypeEnum.None;
+            if (merchData[ClassType].Count > 0)
+            {
+                rv = ClassType;
+            }
+
+            return rv;
+        }
+
+        public void PurchaseNeedItem(MerchDataDictionary merchData)
+        {
+            if (Money > 0 && merchData.Count > 0 && _TravelerNeed != null)
+            {
+                var classtype = DetermineClassType(merchData);
+
+                if (_TravelerNeed.MerchType != MerchandiseTypeEnum.None)
+                {
+                    List<MerchKVP> allMerch = merchData[classtype].FindAll(x => _TravelerNeed.Validate(x.Key) && x.Key.Value <= Money);
+                    if (allMerch.Count > 0)
+                    {
+                        var randomKvp = Util.GetRandomItem(allMerch);
+
+                        BuyFromBuilding(merchData, randomKvp.Value, randomKvp.Key, classtype, randomKvp);
+                        _TravelerNeed = null;
+                    }
+                }
+                else if (_TravelerNeed.MerchID > -1)
+                {
+                    var merchItem = merchData[classtype].Find(x => x.Key.ID == _TravelerNeed.MerchID);
+                    BuyFromBuilding(merchData, merchItem.Value, merchItem.Key, classtype, merchItem);
+                }
+            }
+        }
+        public void PurchaseExtraItems(MerchDataDictionary merchData)
+        {
+            if (merchData.Count > 0)
+            {
+                var classtype = DetermineClassType(merchData);
+
+                if (merchData[classtype].Count > 0)
+                {
+                    List<MerchKVP> canPurchase;
+                    do
+                    {
+                        canPurchase = merchData[classtype].FindAll(x => x.Key.Value <= Money);
+                        if (canPurchase.Count > 0)
+                        {
+                            var randomKvp = Util.GetRandomItem(canPurchase);
+                            BuyFromBuilding(merchData, randomKvp.Value, randomKvp.Key, classtype, randomKvp);
+                        }
+                    } while (canPurchase.Count > 0 && PurchasedItemList.Count < Constants.TRAVELER_ITEM_PURCHASE_CAP);
+                }
+            }
+        }
+
+        private void BuyFromBuilding(MerchDataDictionary merchData, Building building, Item item, ClassTypeEnum classType, MerchKVP randomKvp)
+        {
+            InventoryManager.InitExtraInventory(building.Merchandise);
+            Money -= item.Value;
+            item.Remove(1, false);
+            InventoryManager.ClearExtraInventory();
+            PurchasedItemList.Add(item.ID);
+            _iMerchBuildingID = building.ID;
+
+            if (item.Number == 0)
+            {
+                merchData[classType].Remove(randomKvp);
+            }
+        }
+        #endregion
 
         public int CalculateIncome()
         {
-            CalculateProfit(ItemID, TownManager.GetBuildingByID(_iMerchBuildingID));
+            foreach (var i in PurchasedItemList)
+            {
+                CalculateProfit(i, TownManager.GetBuildingByID(_iMerchBuildingID));
+            }
             CalculateProfit(FoodID, TownManager.Inn);
 
-            return Income;
+            return GeneratedIncome;
         }
-
         private void CalculateProfit(int itemID, Building b)
         {
             if (itemID > -1 && b != null)
@@ -160,9 +226,32 @@ namespace RiverHollow.Characters
                 int value = (DataManager.GetIntByIDKey(itemID, "Value", DataType.Item));
                 float profitMod = (1 + b.GetShopProfitModifier());
                 int profit = (int)(value * profitMod);
-                Income += profit;
+                GeneratedIncome += profit;
 
                 TownManager.AddToSoldGoods(itemID, profit);
+            }
+        }
+
+        public TravelerData SaveData()
+        {
+            TravelerData npcData = new TravelerData()
+            {
+                id = ID,
+                needID = _TravelerNeed != null ? _TravelerNeed.MerchID : -1,
+                needType = _TravelerNeed != null ? _TravelerNeed.MerchType : MerchandiseTypeEnum.None,
+            };
+
+            return npcData;
+        }
+        public void LoadData(TravelerData data)
+        {
+            if (data.needID > -1)
+            {
+                _TravelerNeed = new TravelerNeed(data.needID);
+            }
+            else if (data.needType != MerchandiseTypeEnum.None)
+            {
+                _TravelerNeed = new TravelerNeed(data.needType);
             }
         }
     }

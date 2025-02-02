@@ -115,7 +115,7 @@ namespace RiverHollow.Misc
             if (_diAssignationTriggers.Count == 0) { return false; }
 
             int checksum = 0;
-            foreach (TaskTriggerEnum trigger in Enum.GetValues(typeof(TaskTriggerEnum)))
+            foreach (TaskTriggerEnum trigger in GetEnumArray<TaskTriggerEnum>())
             {
                 if (!_diAssignationTriggers.ContainsKey(trigger)) { continue; }
 

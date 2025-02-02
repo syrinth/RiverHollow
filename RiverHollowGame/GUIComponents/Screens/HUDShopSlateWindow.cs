@@ -66,7 +66,8 @@ namespace RiverHollow.GUIComponents.Screens
 
             _gSlateToggles = new List<GUIToggle>();
 
-            _bSellsItems = MapManager.CurrentMap.TheShop != null && MapManager.CurrentMap.TheShop.GetUnlockedMerchandise().Count > 0;
+            var shop = MapManager.CurrentMap.TheShop;
+            _bSellsItems = shop != null && shop.GetUnlockedMerchandise().Count > 0;
             if (_bSellsItems)
             {
                 AddSlateToggle(DisplayShopInfo, GUIUtils.ICON_COIN);

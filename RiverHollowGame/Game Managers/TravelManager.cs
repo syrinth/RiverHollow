@@ -17,7 +17,7 @@ namespace RiverHollow.Game_Managers
         private static StreamWriter _swWriter;
         private static int _iSize = 1;
         private static int _iMaxPath = -1;
-        private static Actor _actTraveller;
+        private static Actor _actTraveler;
 
         #region Threading
         static Thread _thread;
@@ -699,7 +699,7 @@ namespace RiverHollow.Game_Managers
                     }
 
                     //If we are testing for ending on this tile, we need to check to ensure that the tile does not
-                    //contain any other CombatActor that is not the traveller
+                    //contain any other CombatActor that is not the traveler
                     if (testForEnding)
                     {
                         return false;
@@ -757,13 +757,13 @@ namespace RiverHollow.Game_Managers
         {
             _iSize = size;
             _iMaxPath = maxPath;
-            _actTraveller = act;
+            _actTraveler = act;
         }
 
         public static void ClearParams()
         {
             _iSize = 1;
-            _actTraveller = null;
+            _actTraveler = null;
         }
 
         public class TravelMap : Dictionary<RHTile, TravelData>
