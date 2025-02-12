@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
@@ -6,7 +7,6 @@ using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
-using RiverHollow.WorldObjects;
 using System.Collections.Generic;
 using System.Linq;
 using static RiverHollow.Utilities.Enums;
@@ -15,10 +15,10 @@ namespace RiverHollow.GUIComponents.Screens
 {
     public class HUDShopSlateWindow : GUIMainObject
     {
-        private enum MachineTypeEnum { None, Craft, Produce };
+        private enum BuildingTypeEnum { None, Craft, Produce };
         readonly Point startPoint = new Point(32, 53);
         private readonly bool _bSellsItems;
-        private readonly MachineTypeEnum _eItemType = MachineTypeEnum.None;
+        private readonly BuildingTypeEnum _eItemType = BuildingTypeEnum.None;
 
         private readonly List<GUIObject> _liItems;
         private readonly List<GUIToggle> _gSlateToggles;
@@ -28,6 +28,7 @@ namespace RiverHollow.GUIComponents.Screens
         private GUIImage BottomShelf => _liShelves[0];
         private readonly GUIInventoryWindow _gPlayerInventory;
         private GUIShopInventory _gShopInventory;
+        private RecipeBook _recipeBook;
 
         public HUDShopSlateWindow()
         {
@@ -74,26 +75,25 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             //We go from Produce to Craft because Production has less requirements than Craft.
-            //One instance of a Machine that crafts requires the crafting feature and all machines
-            //will at least produce something.
-            var machines = MapManager.CurrentMap.GetObjectsByType<Machine>();
-            if (machines.Count > 0)
+
+            if (MapManager.CurrentMap.Building() is Building b)
             {
-                foreach(var machine in machines)
+                _eItemType = BuildingTypeEnum.Produce;
+                if (!b.Producer)
                 {
-                    _eItemType = MachineTypeEnum.Produce;
-                    if (!machine.Producer)
-                    {
-                        _eItemType = MachineTypeEnum.Craft;
-                        break;
-                    }
+                    _eItemType = BuildingTypeEnum.Craft;
                 }
             }
 
-            if (_eItemType == MachineTypeEnum.Craft)
+            if (_eItemType == BuildingTypeEnum.Craft)
             {   
                 AddSlateToggle(DisplayMerchandiseInfo, GUIUtils.ICON_BAG);
                 AddSlateToggle(DisplaySupplyInfo, GUIUtils.ICON_CHEST);
+
+                _recipeBook = new RecipeBook(MapManager.CurrentMap.Building());
+                _recipeBook.AnchorAndAlignWithSpacing(_gPlayerInventory, SideEnum.Top, SideEnum.CenterX, 22);
+                _recipeBook.Show(false);
+                AddControl(_recipeBook);
             }
             else if(TownManager.GetCurrentBuilding() != null)
             {
@@ -101,6 +101,14 @@ namespace RiverHollow.GUIComponents.Screens
             }
 
             ArrangeToggles();
+
+            //Add Recipe Book toggle
+            if (_eItemType == BuildingTypeEnum.Craft)
+            {
+                var btnRecipeBook = new GUIButton(GUIUtils.ICON_BOOK, OpenRecipeBook);
+                btnRecipeBook.AnchorAndAlignWithSpacing(_gSlateToggles[_gSlateToggles.Count - 1], SideEnum.Right, SideEnum.Top, 8);
+                AddControl(btnRecipeBook);
+            }
 
             if (_bSellsItems) { DisplayShopInfo(); }
             else { DisplayMerchandiseInfo(); }
@@ -125,6 +133,8 @@ namespace RiverHollow.GUIComponents.Screens
                 rv = base.ProcessLeftButtonClick(mouse);
             }
 
+            _recipeBook.SetupRecipes();
+
             return rv;
         }
 
@@ -144,6 +154,8 @@ namespace RiverHollow.GUIComponents.Screens
                     if (rv) { break; }
                 }
             }
+
+            _recipeBook.SetupRecipes();
 
             return rv;
         }
@@ -202,28 +214,20 @@ namespace RiverHollow.GUIComponents.Screens
         {
             ClearShelves();
 
-            List<int> validIDs = null;
-            var machines = MapManager.CurrentMap.GetObjectsByType<Machine>();
-            if (machines.Count > 0)
+            List<int> validIDs = new List<int>();
+            if (MapManager.CurrentMap.Building() is Building b)
             {
-                validIDs = new List<int>();
-                foreach (var obj in machines)
+                if (b.Producer)
                 {
-                    if (obj is Machine m)
+                    var dictionary = b.GetProductionDictionary();
+                    foreach (var list in dictionary.Values)
                     {
-                        if (obj.Producer)
-                        {
-                            var dictionary = m.GetProductionDictionary();
-                            foreach (var list in dictionary.Values)
-                            {
-                                validIDs.AddRange(list);
-                            }
-                        }
-                        else
-                        {
-                            validIDs.AddRange(m.GetCurrentCraftingList());
-                        }
+                        validIDs.AddRange(list);
                     }
+                }
+                else
+                {
+                    validIDs.AddRange(b.GetCurrentCraftingList());
                 }
             }
 
@@ -280,6 +284,12 @@ namespace RiverHollow.GUIComponents.Screens
                     _gSlateToggles[i].AnchorAndAlign(_gSlateToggles[i - 1], SideEnum.Right, SideEnum.Bottom);
                 }
             }
+        }
+
+        private void OpenRecipeBook()
+        {
+            _recipeBook.Show(!_recipeBook.Visible);
+            _recipeBook.SetupRecipes();
         }
 
         public override void CloseMainWindow()

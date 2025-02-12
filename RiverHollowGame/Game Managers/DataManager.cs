@@ -55,7 +55,6 @@ namespace RiverHollow.Game_Managers
         public const string FILE_PLANTS = FOLDER_WORLDOBJECTS + @"Plants";
         public const string FILE_FLOORING = FOLDER_WORLDOBJECTS + @"texFlooring";
         public const string FILE_WALLS = FOLDER_WORLDOBJECTS + @"Walls";
-        public const string FILE_MACHINES = FOLDER_WORLDOBJECTS + @"texMachines";
 
         public const string UPGRADE_ICONS = GUI_COMPONENTS + @"\GUI_Upgrade_Icons";
         public const string GUI_COMPONENTS = TEXTURES + @"GUI Components";
@@ -743,8 +742,6 @@ namespace RiverHollow.Game_Managers
 
                     case ObjectTypeEnum.Gatherable:
                         return new WrappedItem(id);
-                    case ObjectTypeEnum.Machine:
-                        return new Machine(id);
                     case ObjectTypeEnum.Plant:
                         return new Plant(id);
                     case ObjectTypeEnum.WarpPoint:

@@ -390,6 +390,10 @@ namespace RiverHollow.GUIComponents.GUIObjects
         }
         public virtual void AddControl(GUIObject g)
         {
+            if(this is HUDShopSlateWindow)
+            {
+                int i = 0;
+            }
             if (g != null && g.Parent == null && !Controls.Contains(g))
             {
                 Controls.Add(g);

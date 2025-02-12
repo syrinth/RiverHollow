@@ -131,7 +131,7 @@ namespace RiverHollow.Game_Managers
 
         public static void NewGame()
         {
-            RolloverMailbox();
+            RolloverMailbox(true);
         }
 
         public static void SetTownName(string x)
@@ -217,7 +217,7 @@ namespace RiverHollow.Game_Managers
 
             SpawnTravelers();
 
-            RolloverMailbox();
+            RolloverMailbox(false);
 
             foreach(var upgrade in _diGlobalUpgrades.Values)
             {
@@ -407,14 +407,7 @@ namespace RiverHollow.Game_Managers
                     {
                         if (b is Building bldg)
                         {
-                            var machines = bldg.InnerMap.GetObjectsByType<Machine>();
-                            if (machines.Count > 0)
-                            {
-                                foreach(var m in machines)
-                                {
-                                    possibleItems.AddRange(m.GetCurrentCraftingList());
-                                }
-                            }
+                            possibleItems.AddRange(b.GetCurrentCraftingList());
                         }
                     }
 
@@ -690,7 +683,7 @@ namespace RiverHollow.Game_Managers
             return _liMailbox;
         }
 
-        private static void RolloverMailbox()
+        private static void RolloverMailbox(bool gameStart)
         {
             var allLetters = new List<int>(_diAllLetters[LetterTemplateEnum.Unsent]);
 
@@ -706,7 +699,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            if (RHRandom.RollPercent(Constants.MAIL_PERCENT))
+            if (!gameStart && RHRandom.RollPercent(Constants.MAIL_PERCENT))
             {
                 var inTown = new List<Villager>();
                 foreach (var item in Villagers.Values)

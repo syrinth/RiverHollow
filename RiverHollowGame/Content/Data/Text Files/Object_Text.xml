@@ -1972,7 +1972,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_96</Key>
-      <Value>[Name:Sewing Machine]</Value>
+      <Value>[Name:~]</Value>
     </Item>
     <Item>
       <Key>WorldObject_97</Key>
@@ -2120,7 +2120,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_133</Key>
-      <Value>[Name:Class Changer]</Value>
+      <Value>[Name:~]</Value>
     </Item>
     <Item>
       <Key>WorldObject_134</Key>
@@ -2180,7 +2180,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_148</Key>
-      <Value>[Name:Kitchen]</Value>
+      <Value>[Name:Stove]</Value>
     </Item>
     <Item>
       <Key>WorldObject_149</Key>
@@ -2284,7 +2284,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>WorldObject_174</Key>
-      <Value>[Name:Kitchen Pantry]</Value>
+      <Value>[Name:~]</Value>
     </Item>
     <Item>
       <Key>WorldObject_175</Key>

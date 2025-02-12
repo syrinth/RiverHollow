@@ -1216,73 +1216,66 @@ namespace RiverHollow.Map_Handling
             PopulateMap(Randomize);
             CheckSpirits();
             _liItems.Clear();
-
-            AssignMerchandise();
         }
 
         public void AssignMerchandise()
         {
-            if (GetMapProperties().ContainsKey("BuildingID") && int.TryParse(GetMapProperties()["BuildingID"], out int buildingID))
+            if (Building() is Building building)
             {
-                var building = TownManager.GetBuildingByID(buildingID);
-
-                if (building != null)
+                //Assign setting drawing to ShopTables
+                var worldObjects = GetObjectsByType<WorldObject>();
+                var displayTables = worldObjects.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
+                if (displayTables.Count == 0)
                 {
-                    //Assign setting drawing to ShopTables
-                    var worldObjects = building.InnerMap.GetObjectsByType<WorldObject>();
-                    var displayTables = worldObjects.Where(x => x.GetBoolByIDKey("ShopTable")).ToList();
-                    if (displayTables.Count == 0)
+                    return;
+                }
+
+                _liMerchDisplayPoints.Clear();
+
+                int index = 0;
+                int tableCount = 0;
+                int maxTableSpots = GetMaxTableSpots(displayTables[index]);
+                foreach (var merch in building.Merchandise)
+                {
+                    if (merch == null)
                     {
-                        return;
+                        continue;
                     }
 
-                    _liMerchDisplayPoints.Clear();
-
-                    int index = 0;
-                    int tableCount = 0;
-                    int maxTableSpots = GetMaxTableSpots(displayTables[index]);
-                    foreach (var merch in building.Merchandise)
+                    bool placed = false;
+                    do
                     {
-                        if (merch == null)
+                        if (index < displayTables.Count && merch != null)
                         {
-                            continue;
-                        }
+                            var table = displayTables[index];
 
-                        bool placed = false;
-                        do
-                        {
-                            if (index < displayTables.Count && merch != null)
+                            var strData = table.GetStringParamsByIDKey("ShopTable");
+                            var point = Util.ParsePoint(strData[0]);
+                            var offset = int.Parse(strData[1]);
+                            var spots = int.Parse(strData[2]);
+
+                            if (tableCount < maxTableSpots)
                             {
-                                var table = displayTables[index];
-
-                                var strData = table.GetStringParamsByIDKey("ShopTable");
-                                var point = Util.ParsePoint(strData[0]);
-                                var offset = int.Parse(strData[1]);
-                                var spots = int.Parse(strData[2]);
-
-                                if (tableCount < maxTableSpots)
+                                if (merch != null)
                                 {
-                                    if (merch != null)
-                                    {
-                                        placed = true;
+                                    placed = true;
 
-                                        var merchSpot = point + new Point(offset * tableCount++, 0);
-                                        _liMerchDisplayPoints.Add(new Tuple<Item, Point, float>(merch, table.MapPosition + merchSpot, table.Sprite.LayerDepth + 1));
-                                    }
-                                }
-                                else
-                                {
-                                    index++;
-                                    if (index < displayTables.Count)
-                                    {
-                                        tableCount = 0;
-                                        maxTableSpots = GetMaxTableSpots(displayTables[index]);
-                                    }
+                                    var merchSpot = point + new Point(offset * tableCount++, 0);
+                                    _liMerchDisplayPoints.Add(new Tuple<Item, Point, float>(merch, table.MapPosition + merchSpot, table.Sprite.LayerDepth + 1));
                                 }
                             }
-                            else { break; }
-                        } while (!placed);
-                    }
+                            else
+                            {
+                                index++;
+                                if (index < displayTables.Count)
+                                {
+                                    tableCount = 0;
+                                    maxTableSpots = GetMaxTableSpots(displayTables[index]);
+                                }
+                            }
+                        }
+                        else { break; }
+                    } while (!placed);
                 }
             }
         }
@@ -2820,6 +2813,12 @@ namespace RiverHollow.Map_Handling
             _liMobs.Add(m);
         }
         #endregion
+
+        public Building Building()
+        {
+            return TownManager.GetBuildingByID(BuildingID);
+        }
+
         public List<TiledMapObject> GetMapObjectsByName(string name)
         {
             return _liMapObjects.FindAll(x => x.Name.Equals(name));

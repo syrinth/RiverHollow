@@ -1887,9 +1887,6 @@ namespace Database_Editor
                 case ObjectTypeEnum.Hazard:
                     defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Damage:";
                     break;
-                case ObjectTypeEnum.Machine:
-                    defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",Daily,Makes:";
-                    break;
                 case ObjectTypeEnum.Plant:
                     defaultTags = DEFAULT_WORLD_OBJECT_TAGS + ",TrNum:,TrTime:,Season:,SeedID:,ItemID:";
                     break;

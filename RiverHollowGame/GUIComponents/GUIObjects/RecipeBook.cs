@@ -5,36 +5,37 @@ using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.WorldObjects;
 using RiverHollow.Buildings;
 
 using static RiverHollow.Utilities.Enums;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.GUIComponents.Screens
 {
-    class HUDRecipeBook : GUIMainObject
+    class RecipeBook : GUIObject
     {
         const int MAX_DISPLAY = 10;
         int _iIndex = 0;
         readonly int _iMaxUsed = MAX_DISPLAY;
 
-        private readonly Machine _objMachine;
+        private readonly Building _objBuilding;
 
-        readonly GUIButton _btnLeft;
-        readonly GUIButton _btnRight;
+        readonly GUIWindow _winMain;
+        //readonly GUIButton _btnLeft;
+        //readonly GUIButton _btnRight;
 
         readonly List<RecipeDisplay> _liRecipes;
         readonly Dictionary<int, bool> _diCraftingList;
 
-        public HUDRecipeBook(Machine m)
+        public RecipeBook(Building b)
         {
-            _objMachine = m;
+            _objBuilding = b;
 
             _liRecipes = new List<RecipeDisplay>();
             _diCraftingList = new Dictionary<int, bool>();
-            if (m.Producer)
+            if (b.Producer)
             {
-                foreach (var item in m.GetProductionDictionary())
+                foreach (var item in b.GetProductionDictionary())
                 {
                     foreach (var listItem in item.Value)
                     {
@@ -44,7 +45,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
             else
             {
-                foreach (var item in m.GetFullCraftingList())
+                foreach (var item in b.GetFullCraftingList())
                 {
                     _diCraftingList[item.Item1] = item.Item2;
                 }
@@ -57,11 +58,11 @@ namespace RiverHollow.GUIComponents.Screens
             _winMain = new GUIWindow(GUIUtils.WINDOW_WOODEN_TITLE, GameManager.ScaleIt(224), GameManager.ScaleIt(67));    //116
             AddControl(_winMain);
 
-            //Add Machine Name
-            var machineName = new GUIText(_objMachine.Name);
-            machineName.Position(_winMain);
-            machineName.AlignToObject(_winMain, SideEnum.CenterX);
-            machineName.MoveBy(0, (GUIUtils.WINDOW_WOODEN_TITLE.ScaledTopEdge - machineName.Height) / 2);
+            //Add Building Name
+            var buildingName = new GUIText(_objBuilding.Name);
+            buildingName.Position(_winMain);
+            buildingName.AlignToObject(_winMain, SideEnum.CenterX);
+            buildingName.MoveBy(0, (GUIUtils.WINDOW_WOODEN_TITLE.ScaledTopEdge - buildingName.Height) / 2);
 
             //Add page lines
             var top = new GUIImage(GUIUtils.RECIPE_TOP);
@@ -76,29 +77,23 @@ namespace RiverHollow.GUIComponents.Screens
             bottom.AnchorAndAlign(temp, SideEnum.Bottom, SideEnum.Left);
 
             //Add Crafts/Day
-            var mapProperties = MapManager.CurrentMap.GetMapProperties();
-            if (mapProperties.ContainsKey("BuildingID") && int.TryParse(mapProperties["BuildingID"], out int buildingID))
-            {
-                Building b = TownManager.GetBuildingByID(buildingID);
-                if (b != null)
-                {
-                    int craftsLeft = b.GetDailyCraftingLimit();
+
+                    int craftsLeft = _objBuilding.GetDailyCraftingLimit();
 
                     var craftIcon = new GUIIconText(craftsLeft.ToString(), 2, GUIUtils.ICON_HAMMER, GameIconEnum.Hammer, SideEnum.Right, SideEnum.CenterY);
                     craftIcon.PositionAndMove(_winMain, 187, 1);
-                }
-            }
+
 
             DetermineSize();
 
-            _btnLeft = new GUIButton(GUIUtils.BTN_LEFT_SMALL, BtnLeft);
-            _btnLeft.PositionAndMove(_winMain, -11, 58);
-            _btnLeft.Show(false);
+            //_btnLeft = new GUIButton(GUIUtils.BTN_LEFT_SMALL, BtnLeft);
+            //_btnLeft.PositionAndMove(_winMain, -11, 58);
+            //_btnLeft.Show(false);
 
-            _btnRight = new GUIButton(GUIUtils.BTN_RIGHT_SMALL, BtnRight);
-            _btnRight.PositionAndMove(_winMain, 189, 58);
-            _btnRight.Show(false);
-            AddControls(_btnLeft, _btnRight);
+            //_btnRight = new GUIButton(GUIUtils.BTN_RIGHT_SMALL, BtnRight);
+            //_btnRight.PositionAndMove(_winMain, 189, 58);
+            //_btnRight.Show(false);
+            //AddControls(_btnLeft, _btnRight);
 
             SetupRecipes();
             CenterOnScreen();
@@ -115,7 +110,7 @@ namespace RiverHollow.GUIComponents.Screens
             }
         }
 
-        private void SetupRecipes()
+        public void SetupRecipes()
         {
             foreach(var recipe in _liRecipes)
             {
@@ -129,7 +124,7 @@ namespace RiverHollow.GUIComponents.Screens
                 if (_diCraftingList.Count > i)
                 {
                     var id = _diCraftingList.Keys.ToList()[i];
-                    RecipeDisplay newDisplay = new RecipeDisplay(id, _diCraftingList, _objMachine);
+                    RecipeDisplay newDisplay = new RecipeDisplay(id, _diCraftingList, _objBuilding);
 
                     if (i == _iIndex)
                     {
@@ -137,19 +132,19 @@ namespace RiverHollow.GUIComponents.Screens
                     }
                     else if (i == ((_iIndex + _iMaxUsed) / 2))
                     {
-                        newDisplay.AnchorAndAlignWithSpacing(_liRecipes[0], SideEnum.Right, SideEnum.Bottom, 10);
+                        newDisplay.AnchorAndAlignWithSpacing(_liRecipes[0], SideEnum.Right, SideEnum.Bottom, 10, GUIUtils.ParentRuleEnum.ForceToParent);
                     }
                     else
                     {
-                        newDisplay.AnchorAndAlignWithSpacing(_liRecipes[i - _iIndex - 1], SideEnum.Bottom, SideEnum.Left, 1);
+                        newDisplay.AnchorAndAlignWithSpacing(_liRecipes[i - _iIndex - 1], SideEnum.Bottom, SideEnum.Left, 1, GUIUtils.ParentRuleEnum.ForceToParent);
                     }
 
                     _liRecipes.Add(newDisplay);
                 }
             }
 
-            _btnLeft.Show(_iIndex >= _iMaxUsed);
-            _btnRight.Show(_iIndex + _iMaxUsed < _diCraftingList.Count);
+            //_btnLeft.Show(_iIndex >= _iMaxUsed);
+            //_btnRight.Show(_iIndex + _iMaxUsed < _diCraftingList.Count);
         }
 
         public override bool ProcessRightButtonClick(Point mouse)
@@ -158,22 +153,22 @@ namespace RiverHollow.GUIComponents.Screens
             return true;
         }
 
-        public void BtnLeft()
-        {
-            _iIndex -= _iMaxUsed;
-            _btnRight.Enable(true);
-            SetupRecipes();
-        }
-        public void BtnRight()
-        {
-            _iIndex += _iMaxUsed;
-            _btnLeft.Enable(true);
-            SetupRecipes();
-        }
+        //public void BtnLeft()
+        //{
+        //    _iIndex -= _iMaxUsed;
+        //    _btnRight.Enable(true);
+        //    SetupRecipes();
+        //}
+        //public void BtnRight()
+        //{
+        //    _iIndex += _iMaxUsed;
+        //    _btnLeft.Enable(true);
+        //    SetupRecipes();
+        //}
 
         private class RecipeDisplay : GUIObject
         {
-            public RecipeDisplay(int id, Dictionary<int, bool> craftingList, Machine m)
+            public RecipeDisplay(int id, Dictionary<int, bool> craftingList, Building b)
             {
                 var item = DataManager.CraftItem(id);
                 GUIItem itemToCraft = new GUIItem(item, ItemBoxDraw.MoreThanOne, false);
@@ -203,7 +198,7 @@ namespace RiverHollow.GUIComponents.Screens
                             var guiRecipeItem = new GUIItem(recipeItem, ItemBoxDraw.MoreThanOne, false);
                             guiRecipeItem.SetNumberOffset(new Point(1, 5));
 
-                            if (!guiRecipeItem.CompareNumToInventory(m.GetStash()))
+                            if (!guiRecipeItem.CompareNumToInventory(b.Stash))
                             {
                                 itemToCraft.SetImageAlpha(0.3f);
                                 dots.Alpha(0.3f);
@@ -234,6 +229,11 @@ namespace RiverHollow.GUIComponents.Screens
                 //Always needs to be the same width, regarless of if it's missing objects
                 Width = GameManager.ScaleIt(98);
                 Height = GameManager.ScaleIt(22);
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
+            {
+                base.Draw(spriteBatch);
             }
         }
     }
