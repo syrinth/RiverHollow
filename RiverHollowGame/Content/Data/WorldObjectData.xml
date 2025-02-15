@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:2-30/0-15][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][TownScore:20][Shop][Near:16][Makes:167/168/57/164]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:2-30/0-15][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][TownScore:20][Shop][Near:16][Makes:167/168/57/164][Synergy:16-Near]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -699,7 +699,7 @@
     </Item>
     <Item>
       <Key>174</Key>
-      <Value>[Type:Buildable][Subtype:Decor][Image:7-38][Size:4-2][Base:0-1-4-1][Texture:Decor][ShopTable:6-3/18/3]</Value>
+      <Value>[Type:Buildable][Subtype:Basic][Image:11-36][Size:1-2][Base:0-1-1-1][Texture:Decor]</Value>
     </Item>
     <Item>
       <Key>175</Key>

@@ -334,9 +334,9 @@ namespace RiverHollow
         /// <param name="savefile"></param>
         public void LoadGame(string savefile)
         {
-            SaveManager.Load(savefile);
-
             MapManager.PopulateMaps(false);
+
+            SaveManager.Load(savefile);
 
             GoToHUDScreen();
             StartGame();

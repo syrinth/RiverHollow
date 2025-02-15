@@ -86,13 +86,15 @@ namespace RiverHollow.Buildings
                 Upgrade();
             }
 
+            int craftsLeft = GetDailyCraftingLimit();
+
             if (Producer)
             {
-                ProduceItem();
+                ProduceItem(craftsLeft);
             }
             else
             {
-                CraftItem();
+                CraftItem(craftsLeft);
             }
 
             InnerMap.AssignMerchandise();
@@ -164,6 +166,67 @@ namespace RiverHollow.Buildings
             {
                 rv += upgrade.CraftAmount;
             }
+
+            List<RHTile> nearTiles = new List<RHTile>();
+            var synergies = GetStringParamsByIDKey("Synergy");
+
+            var myTiles = Tiles();
+            var cornerTiles = new List<RHTile>
+            {
+                myTiles[0],
+                CurrentMap.GetTileByGridCoords(myTiles[0].X + BaseWidth -1, myTiles[0].Y),
+                CurrentMap.GetTileByGridCoords(myTiles[0].X, myTiles[0].Y + BaseHeight -1),
+                CurrentMap.GetTileByGridCoords(myTiles[0].X + BaseWidth -1, myTiles[0].Y + BaseHeight -1)
+            };
+
+            int nearDistance = 4;
+            int initialX = myTiles[0].X - nearDistance;
+            int endX = initialX + BaseWidth + (nearDistance*2);
+            int initialY = myTiles[0].Y - nearDistance;
+            int endY = initialY + BaseHeight + (nearDistance * 2);
+
+            Tuple<int, int> xRange = new Tuple<int, int>(myTiles[0].X, myTiles[0].X + BaseWidth-1);
+            Tuple<int, int> yRange = new Tuple<int, int>(myTiles[0].Y, myTiles[0].Y + BaseHeight-1);
+            for (int i = initialX; i < endX; i++)
+            {
+                for (int j = initialY; j < endY; j++)
+                {
+                    var tile = CurrentMap.GetTileByGridCoords(i, j);
+                    foreach (var cornerTile in cornerTiles)
+                    {
+                        //Works for corners but not the main base
+                        if (tile.X >= xRange.Item1 && tile.X <= xRange.Item2 ||
+                            tile.Y >= yRange.Item1 && tile.Y <= yRange.Item2 ||
+                            Util.GetRHTileDelta(tile, cornerTile) <= nearDistance)
+                        {
+                            nearTiles.Add(tile);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            //Now that we know all the nearby tiles for the Building, check for valid synergies
+            foreach (var s in synergies)
+            {
+                var split = Util.FindArguments(s);
+                if (int.TryParse(split[0], out int objID))
+                {
+                    var targetObj = TownManager.GetTownObjectsByID(objID);
+                    foreach (var obj in targetObj)
+                    {
+                        foreach(var tile in obj.Tiles())
+                        {
+                            if (nearTiles.Contains(tile))
+                            {
+                                rv++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
             return rv;
         }
 
@@ -193,9 +256,9 @@ namespace RiverHollow.Buildings
 
         #region Crafting
 
-        private void CraftItem()
+        private void CraftItem(int craftsLeft)
         {
-            int craftsLeft = GetDailyCraftingLimit();
+            
             var craftingList = GetCurrentCraftingList();
             var validItems = WhatCanWeCraft(craftingList);
 
@@ -248,9 +311,8 @@ namespace RiverHollow.Buildings
             }
         }
 
-        private void ProduceItem()
+        private void ProduceItem(int craftsLeft)
         {
-            int craftsLeft = GetDailyCraftingLimit();
             InventoryManager.InitExtraInventory(Merchandise);
 
             var productionDictionary = GetProductionDictionary();
