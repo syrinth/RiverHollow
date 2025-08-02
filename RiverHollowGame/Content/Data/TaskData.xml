@@ -7,15 +7,15 @@
     </Item>
     <Item>
       <Key>1</Key>
-      <Value>[Type:Fetch][StartNPC:43][AssignTrigger:Task-1][GoalItem:162-3][TriggerTask:2]</Value>
+      <Value>[Type:Fetch][StartNPC:43][AssignTrigger:Task-0][GoalItem:162-3][TriggerTask:2]</Value>
     </Item>
     <Item>
       <Key>2</Key>
-      <Value>[Type:Build][StartNPC:43][AssignTrigger:GameStart][TargetObjectID:18][EndBuildingID:18][CutsceneID:3][ItemRewardID:243-4/80-2/82-2/87-2][Money:50]</Value>
+      <Value>[Type:Build][StartNPC:43][AssignTrigger:Task-1][TargetObjectID:18][EndBuildingID:18][CutsceneID:3][ItemRewardID:243-4/80-2/82-2/87-2][Money:50]</Value>
     </Item>
     <Item>
       <Key>3</Key>
-      <Value>[Type:Build]</Value>
+      <Value>[Type:Fetch][StartNPC:20][AssignTrigger:GameStart][GoalItem:154-10][Money:50]</Value>
     </Item>
     <Item>
       <Key>4</Key>

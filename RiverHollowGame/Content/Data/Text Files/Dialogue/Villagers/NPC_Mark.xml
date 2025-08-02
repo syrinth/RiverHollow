@@ -80,5 +80,13 @@ Thanks.]</Value>
       <Value>[Name:Task_17_End][Text:I can breathe a bit easier now thanks! Although I guess it won't be too long until we've got more of them to deal with...
 Urgh, it makes my hands itch just thinking about it.]</Value>
     </Item>
+    <Item>
+      <Key>19</Key>
+      <Value>[Name:Task_3_Start][Text:We need to get some food growing.][ItemID:135/76-6]</Value>
+    </Item>
+    <Item>
+      <Key>20</Key>
+      <Value>[Name:Task_3_End][Text:Thanks for the food]</Value>
+    </Item>
   </Asset>
 </XnaContent>

@@ -133,7 +133,7 @@ namespace RiverHollow.GUIComponents.Screens
                 rv = base.ProcessLeftButtonClick(mouse);
             }
 
-            _recipeBook.SetupRecipes();
+            _recipeBook?.SetupRecipes();
 
             return rv;
         }

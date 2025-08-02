@@ -1516,7 +1516,7 @@ of... mostly gold. Master apothecary.]</Value>
     </Item>
     <Item>
       <Key>Task_3</Key>
-      <Value>[Name:~][Description:Time to set up a Smithy]</Value>
+      <Value>[Name:We Require More Food][Description:$Actor_20$ wants me to grow some food.]</Value>
     </Item>
     <Item>
       <Key>Task_4</Key>

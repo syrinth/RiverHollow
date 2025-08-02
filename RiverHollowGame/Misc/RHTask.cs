@@ -7,8 +7,6 @@ using System.Xml.Serialization;
 using RiverHollow.Items;
 using System;
 using static RiverHollow.Utilities.Enums;
-using System.Linq;
-using RiverHollow.Items.Tools;
 
 namespace RiverHollow.Misc
 {

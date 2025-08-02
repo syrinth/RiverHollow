@@ -122,6 +122,6 @@
   <object id="37" name="Craft" x="304" y="80" width="16" height="16"/>
   <object id="39" name="C_1" x="320" y="80" width="16" height="16"/>
   <object id="43" name="NPC_20" x="160" y="64" width="16" height="16"/>
-  <object id="60" name="NPC_43" x="288" y="192" width="16" height="16"/>
+  <object id="60" name="NPC_16" x="288" y="192" width="16" height="16"/>
  </objectgroup>
 </map>
