@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Craft][StartNPC:16][AssignTrigger:Task-0][GoalItem:60-40]</Value>
+      <Value>[Type:Craft]</Value>
     </Item>
     <Item>
       <Key>19</Key>

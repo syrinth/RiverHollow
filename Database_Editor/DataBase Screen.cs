@@ -1965,7 +1965,22 @@ namespace Database_Editor
             {
                 if (!s.StartsWith("Type") && !s.StartsWith("Subtype") && !s.StartsWith("Group") && !s.StartsWith("SubGroup"))
                 {
-                    dgvTags.Rows.Add(s);
+                    int index = s.IndexOf(':');
+                    if (index > -1)
+                    {
+                        string tag = s.Substring(0, index);
+                        string values = s.Substring(index + 1);
+
+                        string[] split = Util.FindParams(values);
+                        foreach (string str in split)
+                        {
+                            dgvTags.Rows.Add(tag + ":" + str);
+                        }
+                    }
+                    else
+                    {
+                        dgvTags.Rows.Add(s);
+                    }
                 }
             }
 

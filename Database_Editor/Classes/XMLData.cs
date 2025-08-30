@@ -116,7 +116,14 @@ namespace Database_Editor.Classes
         }
         public void SetTagInfo(string key, string value)
         {
-            _diTags[key] = value;
+            if (_diTags.ContainsKey(key))
+            {
+                _diTags[key] = _diTags[key] + "/" + value;
+            }
+            else
+            {
+                _diTags[key] = value;
+            }
         }
         public void AppendToTag(string key, string value)
         {
