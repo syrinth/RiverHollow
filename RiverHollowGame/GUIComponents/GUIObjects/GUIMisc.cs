@@ -272,12 +272,11 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
             _bDrawShadow = drawShadow;
         }
 
-        public bool CompareNumToInventory(Item[,] inventory)
+        public bool SetNumberComparison(int inventoryNumber)
         {
             bool rv = true;
             CompareToInventory = true;
             DrawNumbers = ItemBoxDraw.Always;
-            int inventoryNumber = InventoryManager.GetNumberInInventory(ItemObject.ID, inventory == null ? InventoryManager.PlayerInventory : inventory);
 
             var num = inventoryNumber;
             if (CompareToInventory && num > Constants.MAX_STACK_COMPARE)

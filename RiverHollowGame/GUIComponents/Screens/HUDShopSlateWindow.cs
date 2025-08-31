@@ -4,6 +4,7 @@ using RiverHollow.Characters;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
+using RiverHollow.GUIComponents.MainObjects;
 using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
@@ -28,7 +29,6 @@ namespace RiverHollow.GUIComponents.Screens
         private GUIImage BottomShelf => _liShelves[0];
         private readonly GUIInventoryWindow _gPlayerInventory;
         private GUIShopInventory _gShopInventory;
-        private RecipeBook _recipeBook;
 
         public HUDShopSlateWindow()
         {
@@ -85,30 +85,18 @@ namespace RiverHollow.GUIComponents.Screens
                 }
             }
 
-            if (_eItemType == BuildingTypeEnum.Craft)
-            {   
+            if(TownManager.GetCurrentBuilding() != null)
+            {
                 AddSlateToggle(DisplayMerchandiseInfo, GUIUtils.ICON_BAG);
                 AddSlateToggle(DisplaySupplyInfo, GUIUtils.ICON_CHEST);
 
-                _recipeBook = new RecipeBook(MapManager.CurrentMap.Building());
-                _recipeBook.AnchorAndAlignWithSpacing(_gPlayerInventory, SideEnum.Top, SideEnum.CenterX, 22);
-                _recipeBook.Show(false);
-                AddControl(_recipeBook);
-            }
-            else if(TownManager.GetCurrentBuilding() != null)
-            {
-                AddSlateToggle(DisplayMerchandiseInfo, GUIUtils.ICON_BAG);
+                //_recipeBook = new RecipeBook(MapManager.CurrentMap.Building());
+                //_recipeBook.AnchorAndAlignWithSpacing(_gPlayerInventory, SideEnum.Top, SideEnum.CenterX, 22);
+                //_recipeBook.Show(false);
+                //AddControl(_recipeBook);
             }
 
             ArrangeToggles();
-
-            //Add Recipe Book toggle
-            if (_eItemType == BuildingTypeEnum.Craft)
-            {
-                var btnRecipeBook = new GUIButton(GUIUtils.ICON_BOOK, OpenRecipeBook);
-                btnRecipeBook.AnchorAndAlignWithSpacing(_gSlateToggles[_gSlateToggles.Count - 1], SideEnum.Right, SideEnum.Top, 8);
-                AddControl(btnRecipeBook);
-            }
 
             if (_bSellsItems) { DisplayShopInfo(); }
             else { DisplayMerchandiseInfo(); }
@@ -133,8 +121,6 @@ namespace RiverHollow.GUIComponents.Screens
                 rv = base.ProcessLeftButtonClick(mouse);
             }
 
-            _recipeBook?.SetupRecipes();
-
             return rv;
         }
 
@@ -154,8 +140,6 @@ namespace RiverHollow.GUIComponents.Screens
                     if (rv) { break; }
                 }
             }
-
-            _recipeBook.SetupRecipes();
 
             return rv;
         }
@@ -225,10 +209,6 @@ namespace RiverHollow.GUIComponents.Screens
                         validIDs.AddRange(list);
                     }
                 }
-                else
-                {
-                    validIDs.AddRange(b.GetCurrentCraftingList());
-                }
             }
 
             InventoryManager.ValidIDs = validIDs;
@@ -284,12 +264,6 @@ namespace RiverHollow.GUIComponents.Screens
                     _gSlateToggles[i].AnchorAndAlign(_gSlateToggles[i - 1], SideEnum.Right, SideEnum.Bottom);
                 }
             }
-        }
-
-        private void OpenRecipeBook()
-        {
-            _recipeBook.Show(!_recipeBook.Visible);
-            _recipeBook.SetupRecipes();
         }
 
         public override void CloseMainWindow()

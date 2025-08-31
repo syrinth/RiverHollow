@@ -407,7 +407,7 @@ namespace RiverHollow.Game_Managers
                     {
                         if (b is Building bldg)
                         {
-                            possibleItems.AddRange(b.GetCurrentCraftingList());
+                            //possibleItems.AddRange(b.GetCurrentCraftingList());
                         }
                     }
 

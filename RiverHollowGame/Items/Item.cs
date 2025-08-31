@@ -34,6 +34,7 @@ namespace RiverHollow.Items
         public int Number { get => _iNum; }
 
         public virtual int Value => GetIntByIDKey("Value");
+        public virtual int EnergyCost => GetIntByIDKey("EnergyCost", 5);
         public int TotalSellValue => Value * _iNum;
 
         //What items and in what numbers are required to make this item

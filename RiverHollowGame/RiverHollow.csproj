@@ -210,7 +210,7 @@
     <Compile Include="GUIComponents\Screens\DayEndScreen.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIWindows\GUIOldStatDisplay.cs" />
     <Compile Include="GUIComponents\Screens\HUDInventoryDisplay.cs" />
-    <Compile Include="GUIComponents\GUIObjects\RecipeBook.cs" />
+    <Compile Include="GUIComponents\MainObjects\RecipeBook.cs" />
     <Compile Include="Game Managers\GUIManager.cs" />
     <Compile Include="GUIComponents\GUIObjects\GUIButton.cs" />
     <Compile Include="GUIComponents\Screens\GUIScreen.cs" />
@@ -231,6 +231,7 @@
     <Compile Include="WorldObjects\Beehive.cs" />
     <Compile Include="WorldObjects\Buildable.cs" />
     <Compile Include="WorldObjects\Field.cs" />
+    <Compile Include="WorldObjects\Machine.cs" />
     <Compile Include="WorldObjects\Trigger Objects\ColorBlocker.cs" />
     <Compile Include="WorldObjects\Hazard.cs" />
     <Compile Include="WorldObjects\Container.cs" />

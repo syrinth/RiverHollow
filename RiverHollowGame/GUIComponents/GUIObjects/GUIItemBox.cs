@@ -101,7 +101,7 @@ namespace RiverHollow.GUIComponents.GUIObjects
 
         public bool CompareNumToInventory()
         {
-            return _gItem.CompareNumToInventory(null);
+            return _gItem.SetNumberComparison(InventoryManager.GetNumberInInventory(_gItem.ItemObject.ID, InventoryManager.PlayerInventory));
         }
 
         public void SetAlpha(float val)

@@ -86,15 +86,10 @@ namespace RiverHollow.Buildings
                 Upgrade();
             }
 
-            int craftsLeft = GetDailyCraftingLimit();
-
+            //ToDo: Re-implement actual production number
             if (Producer)
             {
-                ProduceItem(craftsLeft);
-            }
-            else
-            {
-                CraftItem(craftsLeft);
+                ProduceItem();
             }
 
             InnerMap.AssignMerchandise();
@@ -159,7 +154,62 @@ namespace RiverHollow.Buildings
             return rv / 100;
         }
 
-        public int GetDailyCraftingLimit()
+        public override float GetTownScore()
+        {
+            float rv = base.GetTownScore();
+
+            foreach (var upgrade in GetUnlockedUpgrades())
+            {
+                rv += upgrade.TownScore;
+            }
+            return rv;
+        }
+        public Dictionary<RarityEnum, List<int>> GetProductionDictionary()
+        {
+            var rv = new Dictionary<RarityEnum, List<int>>();
+
+            string makes = GetStringByIDKey("Makes");
+            if (!string.IsNullOrEmpty(makes))
+            {
+                //Read in what items the building can make
+                string[] split = Util.FindParams(makes);
+                foreach (string s in split)
+                {
+                    int resourceID = -1;
+                    RarityEnum rarity = RarityEnum.C;
+                    Util.GetRarity(s, ref resourceID, ref rarity);
+
+                    Util.AddToListDictionary(ref rv, rarity, resourceID);
+                }
+            }
+
+            return rv;
+        }
+
+        private void ProduceItem()
+        {
+            InventoryManager.InitExtraInventory(Merchandise);
+
+            int craftsLeft = GetDailyProduction();
+            var productionDictionary = GetProductionDictionary();
+            while (craftsLeft > 0)
+            {
+                var rolledItem = Util.RollOnRarityTable(productionDictionary);
+                if (InventoryManager.HasSpaceInInventory(rolledItem, 1, false))
+                {
+                    var item = DataManager.CraftItem(rolledItem);
+                    InventoryManager.AddToInventory(item, false, true);
+                    TaskManager.AttemptProgressCraft(item);
+                    TownManager.AddToCodex(item.ID);
+                    craftsLeft--;
+                }
+                else { break; }
+            }
+
+            InventoryManager.ClearExtraInventory();
+        }
+
+        public int GetDailyProduction()
         {
             int rv = GetIntByIDKey("CraftAmount");
             foreach (var upgrade in GetUnlockedUpgrades())
@@ -181,12 +231,12 @@ namespace RiverHollow.Buildings
 
             int nearDistance = 4;
             int initialX = myTiles[0].X - nearDistance;
-            int endX = initialX + BaseWidth + (nearDistance*2);
+            int endX = initialX + BaseWidth + (nearDistance * 2);
             int initialY = myTiles[0].Y - nearDistance;
             int endY = initialY + BaseHeight + (nearDistance * 2);
 
-            Tuple<int, int> xRange = new Tuple<int, int>(myTiles[0].X, myTiles[0].X + BaseWidth-1);
-            Tuple<int, int> yRange = new Tuple<int, int>(myTiles[0].Y, myTiles[0].Y + BaseHeight-1);
+            Tuple<int, int> xRange = new Tuple<int, int>(myTiles[0].X, myTiles[0].X + BaseWidth - 1);
+            Tuple<int, int> yRange = new Tuple<int, int>(myTiles[0].Y, myTiles[0].Y + BaseHeight - 1);
             for (int i = initialX; i < endX; i++)
             {
                 for (int j = initialY; j < endY; j++)
@@ -215,7 +265,7 @@ namespace RiverHollow.Buildings
                     var targetObj = TownManager.GetTownObjectsByID(objID);
                     foreach (var obj in targetObj)
                     {
-                        foreach(var tile in obj.Tiles())
+                        foreach (var tile in obj.Tiles())
                         {
                             if (nearTiles.Contains(tile))
                             {
@@ -229,246 +279,6 @@ namespace RiverHollow.Buildings
 
             return rv;
         }
-
-        public int GetFormulaLevel()
-        {
-            int rv = 1;
-            foreach (var upgrade in GetUnlockedUpgrades())
-            {
-                if(upgrade.FormulaLevel > rv)
-                {
-                    rv = upgrade.FormulaLevel;
-                }
-            }
-            return rv;
-        }
-
-        public override float GetTownScore()
-        {
-            float rv = base.GetTownScore();
-
-            foreach (var upgrade in GetUnlockedUpgrades())
-            {
-                rv += upgrade.TownScore;
-            }
-            return rv;
-        }
-
-        #region Crafting
-
-        private void CraftItem(int craftsLeft)
-        {
-            
-            var craftingList = GetCurrentCraftingList();
-            var validItems = WhatCanWeCraft(craftingList);
-
-            InventoryManager.InitExtraInventory(Merchandise);
-
-            bool emptySlotFound = InventoryManager.HasSpaceInInventory(9999999, 1, false);
-            while (craftsLeft > 0)
-            {
-                if (validItems.Count > 0)
-                {
-                    var tempItems = validItems;
-                    bool success = false;
-                    //Determine if there are any items missing in stock
-                    var missingItems = tempItems.Where(x => !InventoryManager.HasItemInInventory(x.ID, 1, Merchandise)).ToList();
-
-                    //We found at least one missing item and an empty slot so make it
-                    if (missingItems.Count > 0 && emptySlotFound)
-                    {
-                        var item = missingItems[0];
-                        if (TryCraftAtTarget(item, Merchandise, craftingList, ref validItems))
-                        {
-                            success = true;
-
-                        }
-                    }
-                    else  //Unable to make a new item, make whichever item we have the fewest of
-                    {
-                        List<Tuple<int, int>> numberList = new List<Tuple<int, int>>();
-                        foreach (var i in Merchandise)
-                        {
-                            if (i != null && i.ID > -1)
-                            {
-                                numberList.Add(new Tuple<int, int>(i.ID, i.Number));
-                            }
-                        }
-
-                        numberList = numberList.OrderBy(x => x.Item2).ToList();
-
-                        var item = DataManager.GetItem(numberList[0].Item1);
-                        if (TryCraftAtTarget(item, Merchandise, craftingList, ref validItems))
-                        {
-                            success = true;
-                        }
-                    }
-
-                    if (!success) { break; }
-                    else { craftsLeft--; }
-                }
-                else { break; }
-            }
-        }
-
-        private void ProduceItem(int craftsLeft)
-        {
-            InventoryManager.InitExtraInventory(Merchandise);
-
-            var productionDictionary = GetProductionDictionary();
-            while (craftsLeft > 0)
-            {
-                var rolledItem = Util.RollOnRarityTable(productionDictionary);
-                if (InventoryManager.HasSpaceInInventory(rolledItem, 1, false))
-                {
-                    var item = DataManager.CraftItem(rolledItem);
-                    InventoryManager.AddToInventory(item, false, true);
-                    TaskManager.AttemptProgressCraft(item);
-                    TownManager.AddToCodex(item.ID);
-                    craftsLeft--;
-                }
-                else { break; }
-            }
-
-            InventoryManager.ClearExtraInventory();
-        }
-
-        private List<Item> WhatCanWeCraft(List<int> craftingList)
-        {
-            var validItems = new List<Item>();
-            foreach (var craftID in craftingList)
-            {
-                Item i = DataManager.GetItem(craftID);
-                if (HasSufficientItems(i))
-                {
-                    validItems.Add(i);
-                }
-            }
-
-            validItems = validItems.OrderByDescending(x => x.Value).ToList();
-
-            return validItems;
-        }
-
-        private void CheckAddToShopInventory(ref Dictionary<int, Tuple<int, List<Container>>> shopInventory, int id)
-        {
-            if (!shopInventory.ContainsKey(id))
-            {
-                shopInventory[id] = new Tuple<int, List<Container>>(0, new List<Container>());
-            }
-        }
-
-        private bool TryCraftAtTarget(Item chosenItem, Item[,] targetInventory, List<int> craftingList, ref List<Item> validItems)
-        {
-            bool rv = false;
-
-            if (InventoryManager.ExpendResources(chosenItem.GetRequiredItems(), Stash))
-            {
-                rv = true;
-
-                var targetItem = DataManager.CraftItem(chosenItem.ID);
-                InventoryManager.InitExtraInventory(targetInventory);
-                InventoryManager.AddToInventory(targetItem, false, true);
-                InventoryManager.ClearExtraInventory();
-
-                TaskManager.AttemptProgressCraft(targetItem);
-
-                TownManager.AddToCodex(chosenItem.ID);
-                validItems = WhatCanWeCraft(craftingList);
-            }
-
-            return rv;
-        }
-
-        public bool HasSufficientItems(Item targetItem)
-        {
-            bool rv = false;
-            if (GetCurrentCraftingList().Contains(targetItem.ID))
-            {
-                if (InventoryManager.HasSufficientItems(targetItem.GetRequiredItems(), Stash))
-                {
-                    rv = true;
-                }
-            }
-
-            return rv;
-        }
-
-        public List<Tuple<int, bool>> GetFullCraftingList()
-        {
-            var craftingList = new List<Tuple<int, bool>>();
-            string makes = GetStringByIDKey("Makes");
-            if (!string.IsNullOrEmpty(makes))
-            {
-                //Read in what items the building can make
-                string[] split = Util.FindParams(makes);
-                for (int i = 0; i < split.Length; i++)
-                {
-                    string[] formula = Util.FindArguments(split[i]);
-                    bool canCraft = formula.Length == 1 || (int.Parse(formula[1]) <= TownManager.GetBuildingByID(CurrentMap.BuildingID).GetFormulaLevel());
-
-                    craftingList.Add(new Tuple<int, bool>(int.Parse(formula[0]), canCraft));
-                }
-            }
-
-            return craftingList;
-        }
-
-        public List<int> GetCurrentCraftingList()
-        {
-            var craftingList = new List<int>();
-            string makes = GetStringByIDKey("Makes");
-            if (!string.IsNullOrEmpty(makes))
-            {
-                //Read in what items the building can make
-                string[] split = Util.FindParams(makes);
-                for (int i = 0; i < split.Length; i++)
-                {
-                    string[] formula = Util.FindArguments(split[i]);
-                    if (formula.Length == 1 || (int.Parse(formula[1]) <= TownManager.GetBuildingByID(CurrentMap.BuildingID).GetFormulaLevel()))
-                    {
-                        craftingList.Add(int.Parse(formula[0]));
-                    }
-                }
-            }
-
-            return craftingList;
-        }
-
-        public Dictionary<RarityEnum, List<int>> GetProductionDictionary()
-        {
-            var rv = new Dictionary<RarityEnum, List<int>>();
-
-            string makes = GetStringByIDKey("Makes");
-            if (!string.IsNullOrEmpty(makes))
-            {
-                //Read in what items the building can make
-                string[] split = Util.FindParams(makes);
-                foreach (string s in split)
-                {
-                    int resourceID = -1;
-                    RarityEnum rarity = RarityEnum.C;
-                    Util.GetRarity(s, ref resourceID, ref rarity);
-
-                    Util.AddToListDictionary(ref rv, rarity, resourceID);
-                }
-            }
-
-            return rv;
-        }
-
-        public struct Recipe
-        {
-            public int ID;
-            public int CraftTime;
-
-            public Recipe(int id, int craftTime)
-            {
-                ID = id;
-                CraftTime = craftTime;
-            }
-        }
-        #endregion
 
         #region Upgrade Handlers
         public bool MaxLevel()

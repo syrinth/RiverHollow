@@ -671,7 +671,7 @@
     </Item>
     <Item>
       <Key>167</Key>
-      <Value>[Type:Merchandise][Subtype:Recovery][Group:None][Image:8-9][Value:40][ReqItems:162-2][Tier:1]</Value>
+      <Value>[Type:Merchandise][Subtype:Recovery][Group:None][Image:8-9][Value:40][ReqItems:162-2][Tier:1][EnergyCost:5]</Value>
     </Item>
     <Item>
       <Key>168</Key>

@@ -31,11 +31,11 @@
     </Item>
     <Item>
       <Key>7</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Furnace][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:0-40/2-30][LightID:3-30-86/3-80-86][Upgradable:7/8-0][Shop][CraftAmount:8][Makes:62/37/38]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Furnace][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:0-40/2-30][LightID:3-30-86/3-80-86][Upgradable:7/8-0][Shop][CraftAmount:8]</Value>
     </Item>
     <Item>
       <Key>8</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Weaver][Size:6-7][Base:0-4-6-3][Entrance:2-5-1-2][ReqItems:0-50/2-50][Makes:3/7/52/53]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Weaver][Size:6-7][Base:0-4-6-3][Entrance:2-5-1-2][ReqItems:0-50/2-50]</Value>
     </Item>
     <Item>
       <Key>9</Key>
@@ -75,7 +75,7 @@
     </Item>
     <Item>
       <Key>18</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:2-30/0-15][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][TownScore:20][Shop][Near:16][Makes:167/168/57/164][Synergy:16-Near]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Apothecary][Size:7-7][Base:0-3-7-4][Entrance:2-5-1-2][ReqItems:2-30/0-15][UpgradeID:0-1][Upgradable:4/4-0][CraftAmount:2][TownScore:20][Shop][Near:16][Synergy:16-Near]</Value>
     </Item>
     <Item>
       <Key>19</Key>
@@ -91,7 +91,7 @@
     </Item>
     <Item>
       <Key>22</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-40/2-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/3-0][TownScore:30][Shop][Makes:169/230]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Wandmaker][Size:8-6][Base:0-3-8-3][Entrance:2-4-1-2][ReqItems:0-40/2-40][UpgradeID:0-1][Traveller:10][CraftAmount:2][Upgradable:3/3-0][TownScore:30][Shop]</Value>
     </Item>
     <Item>
       <Key>23</Key>
@@ -115,11 +115,11 @@
     </Item>
     <Item>
       <Key>28</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/2-0][CraftAmount:3][TownScore:20][Makes:70/75/155/195/213/214/215/217]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Inn][Size:9-9][Base:0-5-9-4][Entrance:3-7-1-2][LightID:3-30-86/3-80-86][Inn][Upgradable:2/2-0][CraftAmount:3][TownScore:20]</Value>
     </Item>
     <Item>
       <Key>29</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Mason][Size:6-7][Base:0-4-6-3][Entrance:2-5-1-2][ReqItems:0-60/2-40][Makes:55/68-2]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Mason][Size:6-7][Base:0-4-6-3][Entrance:2-5-1-2][ReqItems:0-60/2-40]</Value>
     </Item>
     <Item>
       <Key>30</Key>
@@ -127,7 +127,7 @@
     </Item>
     <Item>
       <Key>31</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:MagicShop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:1-10/68-20/205-20/199-1][UpgradeID:0-1][Upgradable:8/9-0][Shop][Makes:201/202/203/204/208]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:MagicShop][Size:7-7][Base:1-4-5-3][Entrance:3-5-1-2][ReqItems:1-10/68-20/205-20/199-1][UpgradeID:0-1][Upgradable:8/9-0][Shop]</Value>
     </Item>
     <Item>
       <Key>32</Key>
@@ -143,7 +143,7 @@
     </Item>
     <Item>
       <Key>35</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Smithy][Size:8-6][Base:0-3-8-3][Entrance:3-4-1-2][ReqItems:0-50/2-50][CraftAmount:2][TownScore:20][Makes:101/102/103]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Smithy][Size:8-6][Base:0-3-8-3][Entrance:3-4-1-2][ReqItems:0-50/2-50][CraftAmount:2][TownScore:20]</Value>
     </Item>
     <Item>
       <Key>36</Key>
@@ -159,7 +159,7 @@
     </Item>
     <Item>
       <Key>39</Key>
-      <Value>[Type:Buildable][Subtype:Building][Texture:Carpenter][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][UpgradeID:2][Upgradable:1/1-0][CraftAmount:30][TownScore:15][Makes:60/205-2]</Value>
+      <Value>[Type:Buildable][Subtype:Building][Texture:Carpenter][Size:7-6][Base:0-3-7-3][Entrance:2-4-1-2][LightID:3-30-86/3-80-86][UpgradeID:2][Upgradable:1/1-0][CraftAmount:30][TownScore:15]</Value>
     </Item>
     <Item>
       <Key>40</Key>
@@ -351,35 +351,35 @@
     </Item>
     <Item>
       <Key>87</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:18-8][Size:2-2][Base:0-1-2-1]</Value>
+      <Value>[Type:Machine][Image:0-2][Size:2-2][Base:0-1-2-1][Makes:101/102/103]</Value>
     </Item>
     <Item>
       <Key>88</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:3-7][Size:3-3][Base:0-1-3-2]</Value>
+      <Value>[Type:Machine][Image:0-16][Size:3-3][Base:0-1-3-2][Makes:167/168/57/164]</Value>
     </Item>
     <Item>
       <Key>89</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:0-0][Work:3-0.15][Size:1-2]</Value>
+      <Value>[Type:Machine][Image:0-0][Work:3-0.15][Size:1-2][Makes:62/37/38]</Value>
     </Item>
     <Item>
       <Key>90</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:6-7][Size:3-3][Base:0-1-3-2]</Value>
+      <Value>[Type:Machine][Image:5-16][Size:3-3][Base:0-1-3-2][Makes:169/230]</Value>
     </Item>
     <Item>
       <Key>91</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:15-8][Size:3-2][Base:0-1-3-1]</Value>
+      <Value>[Type:Machine][Image:0-10][Size:3-2][Base:0-1-3-1][Makes:3/7/52/53]</Value>
     </Item>
     <Item>
       <Key>92</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:20-8][Size:2-2][Base:0-1-2-1]</Value>
+      <Value>[Type:Machine][Image:0-14][Size:2-2][Base:0-1-2-1][Makes:60/205]</Value>
     </Item>
     <Item>
       <Key>93</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:20-6][Size:2-2][Base:0-1-2-1]</Value>
+      <Value>[Type:Machine][Image:0-12][Size:2-2][Base:0-1-2-1][Makes:55/68]</Value>
     </Item>
     <Item>
       <Key>94</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:6-20][Size:2-2][Base:0-1-2-1][Makes:8155/8156][Daily][Batch:1]</Value>
+      <Value>[Type:Machine][Image:6-20][Size:2-2][Base:0-1-2-1][Makes:8155/8156][Daily][Batch:1]</Value>
     </Item>
     <Item>
       <Key>95</Key>
@@ -595,7 +595,7 @@
     </Item>
     <Item>
       <Key>148</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:9-7][Size:2-3][Base:0-2-2-1]</Value>
+      <Value>[Type:Machine][Image:0-19][Size:2-3][Base:0-2-2-1][Makes:70/75/155/195/213/214/215/217]</Value>
     </Item>
     <Item>
       <Key>149</Key>
@@ -611,7 +611,7 @@
     </Item>
     <Item>
       <Key>152</Key>
-      <Value>[Type:Buildable][Subtype:Basic][Image:13-8][Size:2-2][Base:0-1-2-1]</Value>
+      <Value>[Type:Machine][Image:4-20][Size:2-2][Base:0-1-2-1][Makes:201/202/203/204/208]</Value>
     </Item>
     <Item>
       <Key>153</Key>
