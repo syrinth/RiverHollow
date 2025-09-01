@@ -58,9 +58,6 @@ namespace RiverHollow.Characters
 
         //The Data containing the path they are currently on
         PathData _currentPathData;
-        protected List<KeyValuePair<string, NPCActionState>> _liSchedule;
-        public bool HasSchedule => _liSchedule?.Count > 0;
-        public NPCActionState CurrentActionState { get; private set; }
         protected override string SpriteName()
         {
             return DataManager.VILLAGER_FOLDER + GetStringByIDKey("Key");
@@ -334,7 +331,7 @@ namespace RiverHollow.Characters
                     switch (SpawnStatus)
                     {
                         case SpawnStateEnum.WaitAtInn:
-                            SetPosition(map.GetRandomPosition(map.GetCharacterObject("Destination")));
+                            SetPosition(map.GetRandomPointFromObject("Destination"));
                             break;
                         case SpawnStateEnum.HasHome:
                         case SpawnStateEnum.NonTownMap:
@@ -619,7 +616,7 @@ namespace RiverHollow.Characters
 
             TravelManager.FinishThreading(ref _pathingThread);
 
-            CurrentActionState = _liSchedule[0].Value;
+            SetActionState(_liSchedule[0].Value);
             _liSchedule.RemoveAt(0);
         }
         private bool ProcessActionStateDataHandler(int id, string locationName, out Point targetPosition, out string targetMapName)

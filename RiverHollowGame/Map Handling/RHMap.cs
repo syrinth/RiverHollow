@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Win32;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tiled;
@@ -1784,23 +1785,35 @@ namespace RiverHollow.Map_Handling
         /// <returns></returns>
         public bool CheckForMapChange(Actor c, Rectangle movingChar)
         {
-            if (!c.Wandering && (c.ActorType == ActorTypeEnum.Villager || c == PlayerManager.PlayerActor))
+            if (!c.Wandering)
             {
                 foreach (KeyValuePair<string, TravelPoint> kvp in _diTravelPoints)
                 {
                     if (kvp.Value.Intersects(movingChar) && !kvp.Value.IsDoor && kvp.Value.IsActive)
                     {
-                        if (c != PlayerManager.PlayerActor || (!GameManager.InTownMode() && !PlayerManager.PlayerActor.HasKnockbackVelocity()))
+                        switch (c.ActorType)
                         {
-                            MapManager.ChangeMaps(c, this.Name, kvp.Value);
+                            case ActorTypeEnum.Player:
+                                if (!GameManager.InTownMode() && !PlayerManager.PlayerActor.HasKnockbackVelocity())
+                                {
+                                    MapManager.ChangeMaps(c, this.Name, kvp.Value);
+                                    return true;
+                                }
+                                break;
+                            case ActorTypeEnum.Traveler:
+                            case ActorTypeEnum.Villager:
+                                if (!kvp.Value.WorldMap)
+                                {
+                                    MapManager.ChangeMaps(c, this.Name, kvp.Value);
+                                }
+                                break;
+                            default:
+                                break;
                         }
-                        return true;
-
-                        //Unused code for now since AdventureMaps are unused
-                        //if (IsDungeon) { if (c == PlayerManager.World) { MapManager.ChangeDungeonRoom(kvp.Value); return true; } }
                     }
                 }
             }
+
             return false;
         }
 
@@ -2975,11 +2988,15 @@ namespace RiverHollow.Map_Handling
             return rvList;
         }
 
-        public Point GetRandomPosition()
+        public Point GetRandomPoint()
         {
-            return GetRandomPosition(new Rectangle(0, 0, MapWidthTiles * Constants.TILE_SIZE, MapHeightTiles * Constants.TILE_SIZE));
+            return GetRandomPointFromRectangle(new Rectangle(0, 0, MapWidthTiles * Constants.TILE_SIZE, MapHeightTiles * Constants.TILE_SIZE));
         }
-        public Point GetRandomPosition(Rectangle r)
+        public Point GetRandomPointFromObject(string objectName)
+        {
+            return GetRandomPointFromRectangle(GetCharacterObject(objectName));
+        }
+        public Point GetRandomPointFromRectangle(Rectangle r)
         {
             Point rv = Point.Zero;
 

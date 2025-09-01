@@ -1,4 +1,5 @@
-﻿using RiverHollow.Buildings;
+﻿using Microsoft.Xna.Framework;
+using RiverHollow.Buildings;
 using RiverHollow.Characters;
 using RiverHollow.Items;
 using RiverHollow.Map_Handling;
@@ -40,6 +41,8 @@ namespace RiverHollow.Game_Managers
         public static Merchant Merchant { get; private set; }
         public static List<Animal> TownAnimals { get; set; }
         public static List<Traveler> Travelers { get; set; }
+        private static List<Traveler> TravelerQueue { get; set; }
+        private static RHTimer _spawnTimer;
 
         public static Item[,] Pantry { get; private set; }
 
@@ -64,6 +67,7 @@ namespace RiverHollow.Game_Managers
 
             TownAnimals = new List<Animal>();
             Travelers = new List<Traveler>();
+            TravelerQueue = new List<Traveler>();
 
             _liMailbox = new List<Letter>();
             _diAllLetters = new Dictionary<LetterTemplateEnum, List<int>>
@@ -127,6 +131,33 @@ namespace RiverHollow.Game_Managers
             }
 
             _diGlobalUpgrades = DataManager.GetGlobalUpgrades();
+        }
+
+        public static void Update(GameTime gTime)
+        {
+            if (TravelerQueue.Count > 0 && GameCalendar.TimeBetween(Constants.TRAVELER_SPAWN_START, Constants.TRAVELER_SPAWN_END))
+            {
+                if (_spawnTimer == null)
+                {
+                    int totalMinutes = (Constants.TRAVELER_SPAWN_END - Constants.TRAVELER_SPAWN_START) * 60;
+                    int spawnDelay = Math.Min(Constants.TRAVELER_SPAWN_MAX_DELAY, totalMinutes / (TravelerQueue.Count + Travelers.Count));
+
+                    _spawnTimer = new RHTimer(RHRandom.Instance().Next(0, spawnDelay));
+                }
+                else if (_spawnTimer.TickDown(gTime))
+                {
+                    var traveler = Util.GetRandomItem(TravelerQueue);
+
+                    var map = MapManager.TownMap;
+                    traveler.SetPosition(map.GetRandomPointFromObject("Traveler_Entrance"));
+                    map.AddActor(traveler);
+
+                    Travelers.Add(traveler);
+                    TravelerQueue.Remove(traveler);
+
+                    _spawnTimer = null;
+                }
+            }
         }
 
         public static void NewGame()
@@ -278,6 +309,7 @@ namespace RiverHollow.Game_Managers
         {
             TownManager.GetTownScoreInfo(out int townScore, out AffinityEnum affinity);
 
+            //Clear out the active Travelers
             for (int i = 0; i < Travelers.Count; i++)
             {
                 Travelers[i].CurrentMap.RemoveCharacterImmediately(Travelers[i]);
@@ -295,7 +327,7 @@ namespace RiverHollow.Game_Managers
                 }
             }
 
-            int travelerNumber = Constants.BASE_TRAVELER_RATE + ((townScore - Constants.BASE_SCORE_TRAVELER_PENALTY)/ Constants.POINTS_PER_TRAVELER) ;
+            int travelerNumber = Constants.BASE_TRAVELER_RATE + Math.Max(0, (townScore - Constants.BASE_SCORE_TRAVELER_PENALTY) / Constants.POINTS_PER_TRAVELER);
             for (int i = 0; i < travelerNumber; i++)
             {
                 if (travelerList.Count == 0)
@@ -386,7 +418,7 @@ namespace RiverHollow.Game_Managers
 
         public static void AddTraveler(Traveler npc, int townScore)
         {
-            Travelers.Add(npc);
+            TravelerQueue.Add(npc);
 
             //TravelerNeed
             if (townScore > 0 && RHRandom.RollPercent(Constants.BASE_TRAVELER_NEED + (townScore / 100)))
@@ -419,31 +451,6 @@ namespace RiverHollow.Game_Managers
 
                 npc.AssignNeed(n);
             }
-
-            RHMap map = MapManager.TownMap;
-            int roll = RHRandom.Instance().Next(0, 2);
-            switch (roll)
-            {
-                case 0:
-                    if (EnvironmentManager.IsRaining())
-                    {
-                        map = MapManager.Maps[Inn.InnerMapName];
-                    }
-                    break;
-                case 1:
-                    map = MapManager.Maps[Inn.InnerMapName];
-                    break;
-                case 2:
-                    if (npc.BuildingID != -1 && TownObjectBuilt(npc.BuildingID))
-                    {
-                        map = MapManager.Maps[GetBuildingByID(npc.BuildingID).InnerMapName];
-                    }
-                    else { goto case 0; }
-                    break;
-
-            }
-            npc.SetPosition(map.GetRandomPosition());
-            map.AddActor(npc);
 
             ValueTuple<bool, int> tuple = DITravelerInfo[npc.ID];
             tuple.Item2 += 1;
@@ -783,7 +790,7 @@ namespace RiverHollow.Game_Managers
                 MerchantID = Merchant != null ? Merchant.ID : -1
             };
 
-            Travelers.ForEach(x => data.Travelers.Add(x.SaveData()));
+            TravelerQueue.ForEach(x => data.Travelers.Add(x.SaveData()));
             TownAnimals.ForEach(x => data.TownAnimals.Add(x.ID));
 
             //Mailbox Data

@@ -186,6 +186,7 @@ namespace RiverHollow
                     if (CutsceneManager.Playing) { CutsceneManager.Update(gTime); }
                     else if (!GamePaused())
                     {
+                        TownManager.Update(gTime);
                         MapManager.Update(gTime);
                         GameCalendar.Update(gTime);
                         if (!Scrying()) { PlayerManager.Update(gTime); }

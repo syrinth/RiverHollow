@@ -103,6 +103,9 @@ namespace RiverHollow.Utilities
         public const float HUNGER_MOD = -0.5f;
 
         public const int TRAVELER_ITEM_PURCHASE_CAP = 3;
+        public const int TRAVELER_SPAWN_START = 9;
+        public const int TRAVELER_SPAWN_END = 14;
+        public const int TRAVELER_SPAWN_MAX_DELAY = 60;
         public const int BASE_TRAVELER_NEED = 25;
         public const int BASE_TRAVELER_RATE = 1;
         public const int BASE_SCORE_TRAVELER_PENALTY = 50;

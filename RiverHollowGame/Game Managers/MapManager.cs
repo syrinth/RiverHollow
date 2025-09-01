@@ -239,7 +239,7 @@ namespace RiverHollow.Game_Managers
                         {
                             if(activePet == null || p.ID != activePet.ID)
                             {
-                                p.SetPosition(CurrentMap.GetRandomPosition(CurrentMap.GetCharacterObject("Destination")));
+                                p.SetPosition(CurrentMap.GetRandomPointFromObject("Destination"));
                                 CurrentMap.AddActor(p);
                             }
                         }

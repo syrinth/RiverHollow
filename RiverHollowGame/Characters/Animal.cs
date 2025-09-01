@@ -35,7 +35,7 @@ namespace RiverHollow.Characters
             if (TownManager.TownObjectBuilt(HouseID))
             {
                 RHMap map = MapManager.Maps[TownManager.GetBuildingByID(HouseID).InnerMapName];
-                if(!new WrappedItem(ItemID).PlaceOnMap(map.GetRandomPosition(), map))
+                if(!new WrappedItem(ItemID).PlaceOnMap(map.GetRandomPoint(), map))
                 {
                     LogManager.WriteToLog("Could not place item ID {0} on map {1}", ItemID, map);
                 }
@@ -52,7 +52,7 @@ namespace RiverHollow.Characters
             }
 
             map.AddActor(this);
-            SetPosition(map.GetRandomPosition());
+            SetPosition(map.GetRandomPoint());
         }
     }
 }

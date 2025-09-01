@@ -176,6 +176,11 @@ namespace RiverHollow.Game_Managers
             return CurrentHour.ToString("00") + ":" + CurrentMin.ToString("00");
         }
 
+        public static bool TimeBetween(int min, int max)
+        {
+            return CurrentHour >= min && CurrentHour <= max;
+        }
+
         public static string GetCurrentSeason()
         {
             return Util.GetEnumString(CurrentSeason);

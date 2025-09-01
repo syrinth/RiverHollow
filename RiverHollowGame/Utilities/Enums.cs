@@ -63,7 +63,7 @@ namespace RiverHollow.Utilities
         public enum ActorTraitsEnum { Early, Late, Prompt, Chatty, Anxious, Recluse, Musical };
         public enum WeightEnum { Light, Medium, Heavy, Immovable};
         public enum ActorFaceEnum { Default, Happy, Angry, Sad };
-        public enum ActorTypeEnum { Animal, Child, Critter, Effect, Fish, Merchant, Mob, Mount, Pet, Projectile, Spirit, TalkingActor, Traveler, Villager };
+        public enum ActorTypeEnum { Animal, Child, Critter, Effect, Fish, Merchant, Mob, Mount, Pet, Player, Projectile, Spirit, TalkingActor, Traveler, Villager };
         public enum MobTypeEnum { Basic, Mage, Shooter, Summoner };
         public enum TravelerGroupEnum { None, Adventurer, Dwarf, Goblin, Human, Magi, Noble};
         public enum StatusTypeEnum { Buff, Debuff, DoT, HoT };

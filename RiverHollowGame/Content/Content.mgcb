@@ -1561,6 +1561,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Actors/NPCs/Travelers/Adventurer2.png
 
+#begin Textures/Actors/NPCs/Travelers/Caspian.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Actors/NPCs/Travelers/Caspian.png
+
 #begin Textures/Actors/NPCs/Travelers/Magi1.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -6,7 +6,9 @@ using RiverHollow.Items;
 using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Runtime.InteropServices;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
@@ -29,6 +31,12 @@ namespace RiverHollow.Characters
 
         protected List<string> _liSpokenKeys;
         protected List<string> _liHeldItems;
+
+        //The Data containing the path they are currently on
+        PathData _currentPathData;
+        protected List<KeyValuePair<string, NPCActionState>> _liSchedule;
+        public bool HasSchedule => _liSchedule?.Count > 0;
+        public NPCActionState CurrentActionState { get; private set; }
 
         public TalkingActor() : base()
         {
@@ -382,6 +390,13 @@ namespace RiverHollow.Characters
             }
 
             return 0;
+        }
+        #endregion
+
+        #region Scheduling
+        protected void SetActionState(NPCActionState e)
+        {
+            CurrentActionState = e;
         }
         #endregion
     }

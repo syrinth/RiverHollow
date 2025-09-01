@@ -52,6 +52,7 @@ namespace RiverHollow.Characters
 
         public PlayerCharacter() : base()
         {
+            ActorType = ActorTypeEnum.Player;
             AppliedCosmetics = new Dictionary<CosmeticSlotEnum, AppliedCosmetic>();
             AddDefaultCosmetics();
 

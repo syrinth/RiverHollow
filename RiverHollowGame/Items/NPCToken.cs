@@ -38,7 +38,7 @@ namespace RiverHollow.Items
                     }
                     else if (MapManager.CurrentMap == TownManager.PetCafe.InnerMap)
                     {
-                        p.SetPosition(MapManager.CurrentMap.GetRandomPosition(MapManager.CurrentMap.GetCharacterObject("Destination")));
+                        p.SetPosition(MapManager.CurrentMap.GetRandomPointFromObject("Destination"));
                         MapManager.CurrentMap.AddActor(p);
                     }
 

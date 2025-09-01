@@ -1022,6 +1022,8 @@ namespace RiverHollow.Utilities
         {
             return index >= 0 && index < arr.Length;
         }
+
+        public static bool CompareType<T>(T type, params T[] types) { return types.Any(x => x.Equals(type)); }
     }
 
     public class RHRandom : Random
