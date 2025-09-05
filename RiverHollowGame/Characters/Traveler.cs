@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
@@ -6,13 +7,14 @@ using RiverHollow.Misc;
 using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
 {
-    using MerchKVP = KeyValuePair<Merchandise, Building>;
     using MerchDataDictionary = Dictionary<ClassTypeEnum, List<KeyValuePair<Merchandise, Building>>>;
+    using MerchKVP = KeyValuePair<Merchandise, Building>;
 
     public class Traveler : TalkingActor
     {
@@ -21,6 +23,7 @@ namespace RiverHollow.Characters
         public AffinityEnum Affinity => GetEnumByIDKey<AffinityEnum>("SubGroup");
         public ClassTypeEnum ClassType => GetEnumByIDKey<ClassTypeEnum>("Group");
         public int FoodID { get; private set;} = -1;
+        public List<int> ShoppingList { get; private set;}
         public List<int> PurchasedItemList { get; private set;}
         public int GeneratedIncome { get; private set; } = 0;
 
@@ -50,16 +53,22 @@ namespace RiverHollow.Characters
         {
             Money = GetIntByIDKey("Value");
 
+            ShoppingList = new List<int>();
             PurchasedItemList = new List<int>();
 
             _fWanderSpeed = Constants.NPC_WALK_SPEED;
-            Wandering = true;
             _eCollisionState = ActorCollisionState.Slow;
         }
 
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+
+            if (_pathingThread == null && _liTilePath.Count == 0 && _liSchedule.Count > 0 && Util.CompareTimeStrings(_liSchedule[0].Key, GameCalendar.GetTime()))
+            {
+                TravelManager.RequestPathing(this);
+            }
+
             if (PeriodicEmojiReady(gTime))
             {
                 if (!FollowingPath)
@@ -81,10 +90,27 @@ namespace RiverHollow.Characters
             }
         }
 
+        public override void Draw(SpriteBatch spriteBatch, bool useLayerDepth = false)
+        {
+            base.Draw(spriteBatch, useLayerDepth);
+            if (PurchasedItemList.Count() == 0)
+            {
+                var i = DataManager.GetItem(ShoppingList[0]);
+                var location = Position + new Point(0, -Constants.TILE_SIZE / 2);
+                i.Draw(spriteBatch, new Rectangle(location.X, location.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), Constants.MAX_LAYER_DEPTH, 0.5f);
+            }
+        }
+
         public override TextEntry GetOpeningText()
         {
             TownManager.DITravelerInfo[ID] = new ValueTuple<bool, int>(true, TownManager.DITravelerInfo[ID].Item2);
-            return GetDailyDialogue();
+            if (PurchasedItemList.Count == 0 && InventoryManager.HasItemInPlayerInventory(ShoppingList[0], 1)){
+                var item = DataManager.GetItem(ShoppingList[0]);
+                return DataManager.GetGameTextEntry("Sell_Merchandise", item.Name(), item.Value);
+            }
+            else {
+                return GetDailyDialogue();
+            }
         }
 
         public bool Validate(int townScore)
@@ -109,6 +135,74 @@ namespace RiverHollow.Characters
             return rv;
         }
 
+        #region Schedule
+        public override void CreateDailySchedule()
+        {
+            base.CreateDailySchedule();
+
+            var actions = new List<NPCActionState>() { NPCActionState.Market, NPCActionState.PetCafe, NPCActionState.Shopping };
+            if (TimeSpan.TryParse(string.Format("{0}:00", Constants.TRAVELER_SPAWN_START), out TimeSpan timeSpan))
+            {
+                CreateScheduleData(timeSpan.ToString(), NPCActionState.Inn, ref _liSchedule);
+
+                timeSpan = Util.AddHours(timeSpan, RHRandom.Instance().Next(1, 3));
+                CreateScheduleData(timeSpan.ToString(), NPCActionState.Shopping, ref _liSchedule);
+
+                timeSpan = Util.AddHours(timeSpan, RHRandom.Instance().Next(1, 3));
+                CreateScheduleData(timeSpan.ToString(), NPCActionState.Market, ref _liSchedule);
+
+                timeSpan = Util.AddHours(timeSpan, RHRandom.Instance().Next(1, 3));
+                CreateScheduleData(timeSpan.ToString(), NPCActionState.PetCafe, ref _liSchedule);
+                CreateScheduleData("18:00", NPCActionState.Inn, ref _liSchedule);
+            }
+
+            _liSchedule = _liSchedule.OrderBy(x => x.Key).ToList();
+        }
+
+        protected override bool ProcessActionStateData(out Point targetPosition, out string targetMapName, out DirectionEnum dir)
+        {
+            dir = DirectionEnum.Down;
+            var currentAction = _liSchedule[0].Value;
+            switch (currentAction)
+            {
+                case NPCActionState.Inn:
+                    return ProcessActionStateDataHandler(TownManager.Inn.ID, "Destination", out targetPosition, out targetMapName);
+                case NPCActionState.OpenShop:
+                    //if (ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_SHOP, out targetPosition, out targetMapName))
+                    //{
+                    //    return true; 
+                    //}
+                    //else { goto case NPCActionState.Inn; }
+                    break;
+                case NPCActionState.Market:
+                    if (TownManager.Merchant != null)
+                    {
+                        return ProcessActionStateDataHandler(TownManager.Market, out targetPosition, out targetMapName);
+                    }
+                    else { goto case NPCActionState.Inn; }
+                case NPCActionState.PetCafe:
+                    if (TownManager.PetCafe != null)
+                    {
+                        return ProcessActionStateDataHandler(TownManager.PetCafe.ID, "Destination", out targetPosition, out targetMapName);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            targetPosition = Point.Zero;
+            targetMapName = string.Empty;
+
+            return false;
+        }
+
+        protected override void GetPathToNextAction()
+        {
+            base.GetPathToNextAction();
+            _currentPathData?.SetWander(true);
+        }
+        #endregion
+
         #region Food
         public bool HasEaten()
         {
@@ -131,6 +225,26 @@ namespace RiverHollow.Characters
         #endregion
 
         #region Merchandise
+        public void BuyMerchandise()
+        {
+            var merch = DataManager.GetItem(ShoppingList[0]);
+            if (InventoryManager.HasItemInPlayerInventory(merch.ID, 1))
+            {
+                InventoryManager.RemoveItemsFromInventory(merch.ID, 1);
+                PurchasedItemList.Add(merch.ID);
+                ShoppingList.Remove(merch.ID);
+
+                PlayerManager.AddMoney(merch.Value);
+            }
+        }
+        public void AddToShopping(int x)
+        {
+            ShoppingList.Add(x);
+        }
+        public void ClearShopping()
+        {
+            ShoppingList.Clear();
+        }
         public void AssignNeed(TravelerNeed need)
         {
             _TravelerNeed = need;

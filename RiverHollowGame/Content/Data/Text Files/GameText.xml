@@ -171,7 +171,7 @@
     </Item>
 	<Item>
       <Key>42</Key>
-      <Value>[Name:]</Value>
+      <Value>[Name:Sell_Merchandise][Text:Sell {0} for {1}?][Selection:YesNo][Trigger:ConfirmSell]</Value>
     </Item>
 	<Item>
       <Key>43</Key>

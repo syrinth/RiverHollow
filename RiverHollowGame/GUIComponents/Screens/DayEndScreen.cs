@@ -338,7 +338,7 @@ namespace RiverHollow.GUIComponents.Screens
 
         protected override void BeginHover()
         {
-            if (Income > -1)
+            if (Income > -1 && _iItemIDs.Count > 0)
             {
                 _gCoin?.Show(false);
                 var status = new TravelerStatus(_iFoodID, _iItemIDs[0]);

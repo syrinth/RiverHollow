@@ -182,7 +182,10 @@ namespace RiverHollow.Game_Managers
         {
             foreach (RHMap map in Maps.Values)
             {
-                map.PopulateMap(gameStart);
+                if (map.BuildingID == -1)
+                {
+                    map.PopulateMap(gameStart);
+                }
             }
         }
 

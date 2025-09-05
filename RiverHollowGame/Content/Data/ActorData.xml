@@ -251,15 +251,15 @@
     </Item>
     <Item>
       <Key>62</Key>
-      <Value>[Type:Traveler][Subtype:Magi][Group:Healer][SubGroup:Arcane][Key:Magi1][Size:16-31][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Healthy][Disliked:Dessert][Building:22][Value:150]</Value>
+      <Value>[Type:Traveler][Subtype:Magi][Group:Healer][SubGroup:Arcane][Key:Magi1][Size:16-31][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Healthy][Disliked:Dessert][Value:150]</Value>
     </Item>
     <Item>
       <Key>63</Key>
-      <Value>[Type:Traveler][Subtype:Magi][Group:Mage][SubGroup:Arcane][Key:Magi2][Size:16-31][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Plain][Disliked:Healthy][Building:22][Value:150]</Value>
+      <Value>[Type:Traveler][Subtype:Magi][Group:Mage][SubGroup:Arcane][Key:Magi2][Size:16-31][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Plain][Disliked:Healthy][Value:150]</Value>
     </Item>
     <Item>
       <Key>64</Key>
-      <Value>[Type:Traveler][Subtype:Magi][Group:Mage][SubGroup:Arcane][Key:Magi3][Size:16-31][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Dessert][Disliked:Seafood][Building:22][Value:150]</Value>
+      <Value>[Type:Traveler][Subtype:Magi][Group:Mage][SubGroup:Arcane][Key:Magi3][Size:16-31][Idle:0-0-1-0-T][Walk:64-0-3-.2-T][FavFood:Dessert][Disliked:Seafood][Value:150]</Value>
     </Item>
     <Item>
       <Key>65</Key>

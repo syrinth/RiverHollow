@@ -391,12 +391,6 @@
     <property name="ObjectID" type="int" value="106"/>
    </properties>
   </object>
-  <object id="231" name="Resource" x="114" y="995" width="1005" height="285">
-   <properties>
-    <property name="FishingHole" type="bool" value="true"/>
-    <property name="ItemID" value="210-C/211-U"/>
-   </properties>
-  </object>
   <object id="256" name="Juice Berry" x="800" y="96" width="16" height="16">
    <properties>
     <property name="ObjectID" type="int" value="106"/>
@@ -427,7 +421,7 @@
     <property name="ObjectID" type="int" value="106"/>
    </properties>
   </object>
-  <object id="262" name="Cauldron" x="512" y="544" width="48" height="32">
+  <object id="262" name="Cauldron" x="352" y="544" width="48" height="32">
    <properties>
     <property name="ObjectID" type="int" value="88"/>
    </properties>

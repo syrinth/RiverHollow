@@ -94,7 +94,7 @@ namespace RiverHollow.Game_Managers
 
         public static string GetCalendarString()
         {
-            int minToFifteen = CurrentMin / 15;
+            int minuteBreakdown = CurrentMin / Constants.CALENDER_MINUTE_DISPLAY;
             string mins = "00";
             string hours = CurrentHour.ToString("00");
             if (CurrentHour > 12 && CurrentHour < 25)
@@ -105,7 +105,7 @@ namespace RiverHollow.Game_Managers
             {
                 hours = (CurrentHour - 24).ToString("00");
             }
-            switch (minToFifteen)
+            switch (minuteBreakdown)
             {
                 case 1:
                     mins = "15";

@@ -136,6 +136,8 @@ namespace RiverHollow.Buildings
                 _rShadowTarget.Offset(0, Sprite.Height - Constants.TILE_SIZE);
             }
 
+            InnerMap.PopulateMap(true);
+
             if (InnerMap.GetMapProperties().ContainsKey("Pantry"))
             {
                 TownManager.SetPantry(Merchandise);

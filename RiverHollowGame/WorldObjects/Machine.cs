@@ -1,19 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
-using RiverHollow.GUIComponents.Screens;
 using RiverHollow.Items;
 using RiverHollow.SpriteAnimations;
 using RiverHollow.Utilities;
 using System.Collections.Generic;
 
 using static RiverHollow.Utilities.Enums;
-using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 using System;
 using RiverHollow.Buildings;
-using static RiverHollow.Game_Managers.SaveManager;
-using System.Collections.Specialized;
 using RiverHollow.GUIComponents.MainObjects;
+using RiverHollow.Map_Handling;
 
 namespace RiverHollow.WorldObjects
 {
@@ -80,6 +77,12 @@ namespace RiverHollow.WorldObjects
                     CraftItem(b);
                 }
             }
+        }
+
+        public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
+        {
+            TownManager.AddToMachineList(this);
+            return base.PlaceOnMap(pos, map, ignoreActors);
         }
 
         private void CraftItem(Building b)

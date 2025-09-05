@@ -16,7 +16,7 @@ namespace RiverHollow.Utilities
         public enum BuildTypeEnum { Structure, WorldObject };
         public enum TextEntryVerbEnum { None, Yes, No, Talk, Gift, Party, Propose, Date, EndDay, Option_0, Option_1, Option_2, Option_3 };
         public enum TextEntrySelectionEnum { None, VillageTalk, YesNo, Bed };
-        public enum TextEntryTriggerEnum { None, ConfirmPurchase, Donate, PetFollow, PetUnfollow, GetBaby }
+        public enum TextEntryTriggerEnum { None, ConfirmPurchase, ConfirmSell, Donate, PetFollow, PetUnfollow, GetBaby }
 
         public enum SpawnTypeEnum { Item, Object, Mob };
         public enum RarityEnum { C, U, R, M };
@@ -78,7 +78,7 @@ namespace RiverHollow.Utilities
         public enum TravelerMoodEnum { Angry, Sad, Neutral, Happy };
         public enum NPCStateEnum { Alert, Idle, Leashing, MaintainDistance, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
-        public enum NPCActionState { Craft, Home, Inn, Market, PetCafe, Shop, Visit };
+        public enum NPCActionState { Craft, Home, Inn, Market, OpenShop, PetCafe, Shopping, VisitFriend };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
         public enum TaskTriggerEnum { None, Date, GameStart, FriendLevel, Building, Task };

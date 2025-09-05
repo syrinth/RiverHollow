@@ -29,6 +29,8 @@ namespace RiverHollow.Game_Managers
         public static Mailbox TownMailbox { get; private set; }
         #endregion
 
+        private static List<Machine> _liTownMachines;
+
         private static Dictionary<int, Upgrade> _diGlobalUpgrades;
         public static Dictionary<int, Villager> Villagers { get; private set; }
         public static Dictionary<int, Merchant> DIMerchants { get; private set; }
@@ -131,6 +133,7 @@ namespace RiverHollow.Game_Managers
             }
 
             _diGlobalUpgrades = DataManager.GetGlobalUpgrades();
+            _liTownMachines = new List<Machine>();
         }
 
         public static void Update(GameTime gTime)
@@ -151,6 +154,8 @@ namespace RiverHollow.Game_Managers
                     var map = MapManager.TownMap;
                     traveler.SetPosition(map.GetRandomPointFromObject("Traveler_Entrance"));
                     map.AddActor(traveler);
+
+                    traveler.CreateDailySchedule();
 
                     Travelers.Add(traveler);
                     TravelerQueue.Remove(traveler);
@@ -353,7 +358,7 @@ namespace RiverHollow.Game_Managers
 
                 if (npc != null)
                 {
-                    AddTraveler(npc, townScore);
+                    AddTravelerToQueue(npc);
                     travelerList.Remove(npc);
 
                     MakeGroup(ref travelerList, ref i, travelerNumber, npc.TravelerGroup, townScore);
@@ -392,7 +397,7 @@ namespace RiverHollow.Game_Managers
                 {
                     index++;
 
-                    AddTraveler(npc, townScore);
+                    AddTravelerToQueue(npc);
                     travelerList.Remove(npc);
 
                     //If we're making a group off of a None group, need to transition to any actual group we roll on
@@ -416,42 +421,58 @@ namespace RiverHollow.Game_Managers
             }
         }
 
-        public static void AddTraveler(Traveler npc, int townScore)
+        /// <summary>
+        /// Adds the indicated Traveler to the Traveler queue to be spawned.
+        /// </summary>
+        /// <param name="npc">The Traveler to add</param>
+        /// <param name="townScore"></param>
+        public static void AddTravelerToQueue(Traveler npc)
         {
             TravelerQueue.Add(npc);
 
-            //TravelerNeed
-            if (townScore > 0 && RHRandom.RollPercent(Constants.BASE_TRAVELER_NEED + (townScore / 100)))
+            var items = new List<int>();
+            foreach(var m in _liTownMachines)
             {
-                TravelerNeed n;
-
-                if (RHRandom.RollPercent(50))
-                {
-                    var enumArray = GetEnumArray<MerchandiseTypeEnum>();
-                    n = new TravelerNeed(Util.GetRandomItem(enumArray));
-                }
-                else
-                {
-                    List<int> possibleItems = new List<int>();
-                    //Need to determine which specific Item
-                    var buildings = MapManager.TownMap.GetObjectsByType<Building>();
-                    foreach (var b in buildings)
+                m.GetCurrentCraftingList().ForEach(x => {
+                    var item = DataManager.GetItem(x);
+                    if (item.ItemType != ItemTypeEnum.Food)
                     {
-                        if (b is Building bldg)
-                        {
-                            //possibleItems.AddRange(b.GetCurrentCraftingList());
-                        }
+                        items.Add(x);
                     }
-
-                    n = new TravelerNeed(Util.GetRandomItem(possibleItems));
-                }
-
-                //ToDo: Assign a Tier requirement occasionally.
-
-
-                npc.AssignNeed(n);
+                });
             }
 
+            npc.AddToShopping(Util.GetRandomItem(items));
+
+            //TravelerNeed n;
+
+            //if (RHRandom.RollPercent(50))
+            //{
+            //    var enumArray = GetEnumArray<MerchandiseTypeEnum>();
+            //    n = new TravelerNeed(Util.GetRandomItem(enumArray));
+            //}
+            //else
+            //{
+            //    List<int> possibleItems = new List<int>();
+            //    //Need to determine which specific Item
+            //    var buildings = MapManager.TownMap.GetObjectsByType<Building>();
+            //    foreach (var b in buildings)
+            //    {
+            //        if (b is Building bldg)
+            //        {
+            //            //possibleItems.AddRange(b.GetCurrentCraftingList());
+            //        }
+            //    }
+
+            //    n = new TravelerNeed(Util.GetRandomItem(possibleItems));
+            //}
+
+            ////ToDo: Assign a Tier requirement occasionally.
+
+
+            //npc.AssignNeed(n);
+
+            //Increment the number of times the Traveler has visited
             ValueTuple<bool, int> tuple = DITravelerInfo[npc.ID];
             tuple.Item2 += 1;
             DITravelerInfo[npc.ID] = new ValueTuple<bool, int>(DITravelerInfo[npc.ID].Item1, DITravelerInfo[npc.ID].Item2 + 1);
@@ -510,6 +531,11 @@ namespace RiverHollow.Game_Managers
         public static bool CanArchiveItem(Item it)
         {
             return it != null && DIArchive.ContainsKey(it.ID) && !DIArchive[it.ID].Archived;
+        }
+
+        public static void AddToMachineList(Machine m)
+        {
+            Util.AddUniquelyToList(ref _liTownMachines, m);
         }
 
         private static bool SkipType(int id)
@@ -868,7 +894,7 @@ namespace RiverHollow.Game_Managers
             {
                 Traveler newTraveler = DataManager.CreateActor<Traveler>(tData.id);
                 newTraveler.LoadData(tData);
-                AddTraveler(newTraveler, 0);
+                AddTravelerToQueue(newTraveler);
             }
 
             var unsentMessages = new List<int>(_diAllLetters[LetterTemplateEnum.Unsent]);

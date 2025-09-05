@@ -67,6 +67,7 @@ namespace RiverHollow.Utilities
 
         public const int SOUND_MAX_SAME_SOUND = 3;
 
+        public const int CALENDER_MINUTE_DISPLAY = 15;
         public const int CALENDAR_DAYS_IN_MONTH = 28;
         public const int CALENDAR_MINUTES_PER_SECOND = 1;
         public const int CALENDAR_NEW_DAY_HOUR = 8;
@@ -103,11 +104,11 @@ namespace RiverHollow.Utilities
         public const float HUNGER_MOD = -0.5f;
 
         public const int TRAVELER_ITEM_PURCHASE_CAP = 3;
-        public const int TRAVELER_SPAWN_START = 9;
+        public const int TRAVELER_SPAWN_START = 8;
         public const int TRAVELER_SPAWN_END = 14;
         public const int TRAVELER_SPAWN_MAX_DELAY = 60;
         public const int BASE_TRAVELER_NEED = 25;
-        public const int BASE_TRAVELER_RATE = 1;
+        public const int BASE_TRAVELER_RATE = 4;
         public const int BASE_SCORE_TRAVELER_PENALTY = 50;
         public const int POINTS_PER_TRAVELER = 20;
         public const int BASE_GROUP_CHANCE = 50;
@@ -136,8 +137,8 @@ namespace RiverHollow.Utilities
         public const string VILLAGER_VISIT_DEFAULT = "Skip";
         public const string VILLAGER_PETCAFE_DEFAULT = "Skip";
 
-        public const string TRAVELER_SHOP_DEFAULT = "09:00";
-        public const string TRAVELER_INN_DEFAULT = "12:00";
+        public const string TRAVELER_FIRST_TIME = "09:00";
+        public const string TRAVELER_SECOND_TIME = "08:00";
         public const string TRAVELER_MARKET_DEFAULT = "Skip";
 
         public const int TALK_FRIENDSHIP = 10;
