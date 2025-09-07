@@ -394,6 +394,12 @@ namespace RiverHollow.Game_Managers
 
             [XmlElement(ElementName = "NeedType")]
             public MerchandiseTypeEnum needType;
+
+            [XmlElement(ElementName = "Inn")]
+            public bool stayAtInn;
+
+            [XmlArray(ElementName = "ShoppingList")]
+            public List<int> shoppingList;
         }
         public struct ChildData
         {

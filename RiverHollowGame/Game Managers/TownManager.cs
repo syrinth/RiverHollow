@@ -138,6 +138,7 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
+            //Handlea adding Travelers to the Town
             if (TravelerQueue.Count > 0 && GameCalendar.TimeBetween(Constants.TRAVELER_SPAWN_START, Constants.TRAVELER_SPAWN_END))
             {
                 if (_spawnTimer == null)
@@ -149,10 +150,14 @@ namespace RiverHollow.Game_Managers
                 }
                 else if (_spawnTimer.TickDown(gTime))
                 {
-                    var traveler = Util.GetRandomItem(TravelerQueue);
+                    _spawnTimer = null;
 
-                    var map = MapManager.TownMap;
-                    traveler.SetPosition(map.GetRandomPointFromObject("Traveler_Entrance"));
+                    //Travelers who stayed at the Inn will spawn there
+                    var traveler = Util.GetRandomItem(TravelerQueue);
+                    var map = traveler.Inn ? MapManager.InnMap : MapManager.TownMap;
+                    var objStr = traveler.Inn ? "Destination" : "Traveler_Entrance";
+
+                    traveler.SetPosition(map.GetRandomPointFromObject(objStr));
                     map.AddActor(traveler);
 
                     traveler.CreateDailySchedule();
@@ -160,7 +165,10 @@ namespace RiverHollow.Game_Managers
                     Travelers.Add(traveler);
                     TravelerQueue.Remove(traveler);
 
-                    _spawnTimer = null;
+                    if (traveler.Inn)
+                    {
+                        traveler.StayAtInn(false);
+                    }
                 }
             }
         }
@@ -204,10 +212,29 @@ namespace RiverHollow.Game_Managers
                 npc.RollOver();
             }
 
+            RolloverTravelers();
+
+            RolloverMailbox(false);
+
+            foreach(var upgrade in _diGlobalUpgrades.Values)
+            {
+                if(upgrade.Status == UpgradeStatusEnum.InProgress)
+                {
+                    upgrade.TriggerUpgrade();
+                }
+            }
+        }
+
+        private static void RolloverTravelers()
+        {
+            //Transfer any remaining Travelers in the Queue to the Traveler List
+            Travelers.AddRange(TravelerQueue);
+            TravelerQueue.Clear();
+
+            //Any remaining Travelers will attempt to purchase items automatically
             Income = 0;
             if (Travelers.Count > 0)
             {
-
                 var merchantTables = new Dictionary<ClassTypeEnum, List<KeyValuePair<Merchandise, Building>>>();
                 GatherMerch(ref merchantTables);
 
@@ -251,17 +278,9 @@ namespace RiverHollow.Game_Managers
                 Travelers.ForEach(npc => Income += npc.CalculateIncome());
             }
 
-            SpawnTravelers();
+            Travelers.ForEach(x => x.RollForInn());
 
-            RolloverMailbox(false);
-
-            foreach(var upgrade in _diGlobalUpgrades.Values)
-            {
-                if(upgrade.Status == UpgradeStatusEnum.InProgress)
-                {
-                    upgrade.TriggerUpgrade();
-                }
-            }
+            PrepareTravelers();
         }
         private static void GatherMerch(ref Dictionary<ClassTypeEnum, List<KeyValuePair<Merchandise, Building>>> townMerchData)
         {
@@ -310,28 +329,34 @@ namespace RiverHollow.Game_Managers
         }
 
         #region Traveler Code        
-        private static void SpawnTravelers()
+        private static void PrepareTravelers()
         {
             TownManager.GetTownScoreInfo(out int townScore, out AffinityEnum affinity);
 
-            //Clear out the active Travelers
-            for (int i = 0; i < Travelers.Count; i++)
-            {
-                Travelers[i].CurrentMap.RemoveCharacterImmediately(Travelers[i]);
-            }
-            Travelers.Clear();
+            //Get a list of all Travelers who stayed overnight at the Inn
+            var stayedAtInn = Travelers.Where(x => x.Inn).Select(x => x.ID).ToList();
 
-            //Find all Travelers
+            //Find all valid Travelers
             var travelerList = new List<Traveler>();
             foreach (int value in DITravelerInfo.Keys)
             {
+                //Do not add Travelers that stayed at the Inn
                 Traveler npc = DataManager.CreateActor<Traveler>(value);
-                if (npc.Validate(townScore)) 
+                if (npc.Validate(townScore) && !stayedAtInn.Contains(npc.ID))
                 {
                     travelerList.Add(npc);
                 }
             }
 
+            //Clear out the active Travelers
+            for (int i = 0; i < Travelers.Count; i++)
+            {
+                Travelers[i].CurrentMap?.RemoveCharacterImmediately(Travelers[i]);
+            }
+
+            Travelers.Clear();
+
+            //If Travelers stayed the night, it does not impact how many new Travelers will arrive
             int travelerNumber = Constants.BASE_TRAVELER_RATE + Math.Max(0, (townScore - Constants.BASE_SCORE_TRAVELER_PENALTY) / Constants.POINTS_PER_TRAVELER);
             for (int i = 0; i < travelerNumber; i++)
             {
@@ -358,7 +383,7 @@ namespace RiverHollow.Game_Managers
 
                 if (npc != null)
                 {
-                    AddTravelerToQueue(npc);
+                    AddFreshTravelerToQueue(npc);
                     travelerList.Remove(npc);
 
                     MakeGroup(ref travelerList, ref i, travelerNumber, npc.TravelerGroup, townScore);
@@ -397,7 +422,7 @@ namespace RiverHollow.Game_Managers
                 {
                     index++;
 
-                    AddTravelerToQueue(npc);
+                    AddFreshTravelerToQueue(npc);
                     travelerList.Remove(npc);
 
                     //If we're making a group off of a None group, need to transition to any actual group we roll on
@@ -426,23 +451,27 @@ namespace RiverHollow.Game_Managers
         /// </summary>
         /// <param name="npc">The Traveler to add</param>
         /// <param name="townScore"></param>
-        public static void AddTravelerToQueue(Traveler npc)
+        public static void AddFreshTravelerToQueue(Traveler npc)
         {
             TravelerQueue.Add(npc);
 
-            var items = new List<int>();
-            foreach(var m in _liTownMachines)
+            if (npc.ShoppingList.Count == 0)
             {
-                m.GetCurrentCraftingList().ForEach(x => {
-                    var item = DataManager.GetItem(x);
-                    if (item.ItemType != ItemTypeEnum.Food)
+                var items = new List<int>();
+                foreach (var m in _liTownMachines)
+                {
+                    m.GetCurrentCraftingList().ForEach(x =>
                     {
-                        items.Add(x);
-                    }
-                });
-            }
+                        var item = DataManager.GetItem(x);
+                        if (item.ItemType != ItemTypeEnum.Food)
+                        {
+                            items.Add(x);
+                        }
+                    });
+                }
 
-            npc.AddToShopping(Util.GetRandomItem(items));
+                npc.AddToShopping(Util.GetRandomItem(items));
+            }
 
             //TravelerNeed n;
 
@@ -867,7 +896,10 @@ namespace RiverHollow.Game_Managers
 
             foreach (ResourceTypeEnum e in _diGoodsSold.Keys)
             {
-                data.GoodsSold.Add(new ValueTuple<int, int>((int)e, _diGoodsSold[e]));
+                if (_diGoodsSold[e] > 0)
+                {
+                    data.GoodsSold.Add(new ValueTuple<int, int>((int)e, _diGoodsSold[e]));
+                }
             }
 
             return data;
@@ -894,7 +926,7 @@ namespace RiverHollow.Game_Managers
             {
                 Traveler newTraveler = DataManager.CreateActor<Traveler>(tData.id);
                 newTraveler.LoadData(tData);
-                AddTravelerToQueue(newTraveler);
+                AddFreshTravelerToQueue(newTraveler);
             }
 
             var unsentMessages = new List<int>(_diAllLetters[LetterTemplateEnum.Unsent]);

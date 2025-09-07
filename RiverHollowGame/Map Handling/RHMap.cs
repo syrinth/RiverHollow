@@ -1802,9 +1802,14 @@ namespace RiverHollow.Map_Handling
                                 break;
                             case ActorTypeEnum.Traveler:
                             case ActorTypeEnum.Villager:
+                                TalkingActor t = (TalkingActor)c;
                                 if (!kvp.Value.WorldMap)
                                 {
                                     MapManager.ChangeMaps(c, this.Name, kvp.Value);
+                                }
+                                else if ( t.CurrentActionState == NPCActionState.LeaveTown)
+                                {
+                                    RemoveActor(t);
                                 }
                                 break;
                             default:

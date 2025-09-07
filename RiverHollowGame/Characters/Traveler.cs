@@ -8,6 +8,7 @@ using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -28,6 +29,7 @@ namespace RiverHollow.Characters
         public int GeneratedIncome { get; private set; } = 0;
 
         private int _iMerchBuildingID = -1;
+        private RHTimer _leaveTimer;
 
         public int BuildingID => GetIntByIDKey("Building");
 
@@ -36,6 +38,7 @@ namespace RiverHollow.Characters
 
         private int Money = 0;
 
+        public bool Inn = false;
         public bool Rare => GetBoolByIDKey("Rare");
 
         public TravelerGroupEnum TravelerGroup => GetEnumByIDKey<TravelerGroupEnum>("Subtype");
@@ -63,6 +66,12 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+            if (_leaveTimer != null && _leaveTimer.TickDown(gTime))
+            {
+                _leaveTimer = null;
+                _liSchedule.Clear();
+                _liSchedule.Add(new KeyValuePair<string, NPCActionState>(GameCalendar.GetTime().ToString(), NPCActionState.LeaveTown));
+            }
 
             if (_pathingThread == null && _liTilePath.Count == 0 && _liSchedule.Count > 0 && Util.CompareTimeStrings(_liSchedule[0].Key, GameCalendar.GetTime()))
             {
@@ -104,9 +113,9 @@ namespace RiverHollow.Characters
         public override TextEntry GetOpeningText()
         {
             TownManager.DITravelerInfo[ID] = new ValueTuple<bool, int>(true, TownManager.DITravelerInfo[ID].Item2);
-            if (PurchasedItemList.Count == 0 && InventoryManager.HasItemInPlayerInventory(ShoppingList[0], 1)){
-                var item = DataManager.GetItem(ShoppingList[0]);
-                return DataManager.GetGameTextEntry("Sell_Merchandise", item.Name(), item.Value);
+
+            if (ShoppingList.Contains(GameManager.CurrentItem.ID)){
+                return DataManager.GetGameTextEntry("Sell_Merchandise", GameManager.CurrentItem.Name(), GameManager.CurrentItem.Value);
             }
             else {
                 return GetDailyDialogue();
@@ -143,7 +152,10 @@ namespace RiverHollow.Characters
             var actions = new List<NPCActionState>() { NPCActionState.Market, NPCActionState.PetCafe, NPCActionState.Shopping };
             if (TimeSpan.TryParse(string.Format("{0}:00", Constants.TRAVELER_SPAWN_START), out TimeSpan timeSpan))
             {
-                CreateScheduleData(timeSpan.ToString(), NPCActionState.Inn, ref _liSchedule);
+                if (!Inn)
+                {
+                    CreateScheduleData(timeSpan.ToString(), NPCActionState.Inn, ref _liSchedule);
+                }
 
                 timeSpan = Util.AddHours(timeSpan, RHRandom.Instance().Next(1, 3));
                 CreateScheduleData(timeSpan.ToString(), NPCActionState.Shopping, ref _liSchedule);
@@ -167,13 +179,10 @@ namespace RiverHollow.Characters
             {
                 case NPCActionState.Inn:
                     return ProcessActionStateDataHandler(TownManager.Inn.ID, "Destination", out targetPosition, out targetMapName);
-                case NPCActionState.OpenShop:
-                    //if (ProcessActionStateDataHandler(HouseID, Constants.MAPOBJ_SHOP, out targetPosition, out targetMapName))
-                    //{
-                    //    return true; 
-                    //}
-                    //else { goto case NPCActionState.Inn; }
-                    break;
+                case NPCActionState.LeaveTown:
+                    targetMapName = MapManager.TownMap.Name;
+                    targetPosition = MapManager.TownMap.GetRandomPointFromObject("Traveler_Entrance");
+                    return true;
                 case NPCActionState.Market:
                     if (TownManager.Merchant != null)
                     {
@@ -203,6 +212,31 @@ namespace RiverHollow.Characters
         }
         #endregion
 
+        public bool RollForInn()
+        {
+            bool rv = false;
+            if (Inn)
+            {
+                rv = true;
+            }
+            else
+            {
+                var rollChance = ShoppingList.Count > 0 ? 30 : 10;
+                if (TownManager.Inn != null && RHRandom.RollPercent(rollChance))
+                {
+                    rv = true;
+                    StayAtInn(true);
+                }
+            }
+
+            return rv;
+        }
+
+        public void StayAtInn(bool val)
+        {
+            Inn = val;
+        }
+
         #region Food
         public bool HasEaten()
         {
@@ -227,14 +261,20 @@ namespace RiverHollow.Characters
         #region Merchandise
         public void BuyMerchandise()
         {
-            var merch = DataManager.GetItem(ShoppingList[0]);
-            if (InventoryManager.HasItemInPlayerInventory(merch.ID, 1))
+            var merch = GameManager.CurrentItem;
+            if (ShoppingList.Contains(merch.ID) && InventoryManager.HasItemInPlayerInventory(merch.ID, 1))
             {
-                InventoryManager.RemoveItemsFromInventory(merch.ID, 1);
                 PurchasedItemList.Add(merch.ID);
                 ShoppingList.Remove(merch.ID);
 
                 PlayerManager.AddMoney(merch.Value);
+
+                merch.Remove(1);
+
+                if (RollForInn())
+                {
+                    _leaveTimer = new RHTimer(10);
+                }
             }
         }
         public void AddToShopping(int x)
@@ -353,6 +393,8 @@ namespace RiverHollow.Characters
                 id = ID,
                 needID = _TravelerNeed != null ? _TravelerNeed.MerchID : -1,
                 needType = _TravelerNeed != null ? _TravelerNeed.MerchType : MerchandiseTypeEnum.None,
+                shoppingList = ShoppingList,
+                stayAtInn = Inn
             };
 
             return npcData;
@@ -367,6 +409,9 @@ namespace RiverHollow.Characters
             {
                 _TravelerNeed = new TravelerNeed(data.needType);
             }
+
+            ShoppingList = data.shoppingList;
+            Inn = data.stayAtInn;
         }
     }
 }
