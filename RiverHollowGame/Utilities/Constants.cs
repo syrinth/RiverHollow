@@ -67,7 +67,7 @@ namespace RiverHollow.Utilities
 
         public const int SOUND_MAX_SAME_SOUND = 3;
 
-        public const int CALENDER_MINUTE_DISPLAY = 15;
+        public const double CALENDER_MINUTE_INCREMENT = 5;
         public const int CALENDAR_DAYS_IN_MONTH = 28;
         public const int CALENDAR_MINUTES_PER_SECOND = 1;
         public const int CALENDAR_NEW_DAY_HOUR = 8;

@@ -94,8 +94,12 @@ namespace RiverHollow.Game_Managers
 
         public static string GetCalendarString()
         {
-            int minuteBreakdown = CurrentMin / Constants.CALENDER_MINUTE_DISPLAY;
-            string mins = "00";
+            int minuteBreakdown = (int)(Math.Round(CurrentMin / Constants.CALENDER_MINUTE_INCREMENT) * Constants.CALENDER_MINUTE_INCREMENT);
+            if (minuteBreakdown == 60)
+            {
+                minuteBreakdown = 0;
+            }
+
             string hours = CurrentHour.ToString("00");
             if (CurrentHour > 12 && CurrentHour < 25)
             {
@@ -105,23 +109,8 @@ namespace RiverHollow.Game_Managers
             {
                 hours = (CurrentHour - 24).ToString("00");
             }
-            switch (minuteBreakdown)
-            {
-                case 1:
-                    mins = "15";
-                    break;
-                case 2:
-                    mins = "30";
-                    break;
-                case 3:
-                    mins = "45";
-                    break;
-                case 4:
-                    mins = "00";
-                    hours = (int.Parse(hours) + 1).ToString();
-                    break;
-            }
-            return String.Format("Day {0}, {1}:{2}", CurrentDay.ToString("00"), hours, mins);
+
+            return String.Format("Day {0}, {1}:{2}", CurrentDay.ToString("00"), hours, minuteBreakdown.ToString("00"));
         }
 
         public static void NextDay()
