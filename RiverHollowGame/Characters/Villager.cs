@@ -119,7 +119,7 @@ namespace RiverHollow.Characters
             //Only follow schedules ATM if they are active and not married
             if (OnTheMap && !Married)
             {
-                if (_pathingThread == null && _liTilePath.Count == 0 && _liSchedule.Count > 0 && Util.CompareTimeStrings(_liSchedule[0].Key, GameCalendar.GetTime()))
+                if (_pathingThread == null && _liTilePath.Count == 0 && _liSchedule.Count > 0 && Util.CompareTimeStrings(_liSchedule[0].Time, GameCalendar.GetTime()))
                 {
                     TravelManager.RequestPathing(this);
                 }
@@ -375,14 +375,14 @@ namespace RiverHollow.Characters
                 AddScheduleAction(NPCActionState.VisitFriend);
                 AddScheduleAction(NPCActionState.PetCafe);
 
-                _liSchedule = _liSchedule.OrderBy(x => x.Key).ToList();
+                _liSchedule = _liSchedule.OrderBy(x => x.Time).ToList();
             }
         }
 
         protected override bool ProcessActionStateData(out Point targetPosition, out string targetMapName, out DirectionEnum dir)
         {
             dir = DirectionEnum.Down;
-            var currentAction = _liSchedule[0].Value;
+            var currentAction = _liSchedule[0].State;
             switch (currentAction)
             {
                 case NPCActionState.Inn:
@@ -432,13 +432,13 @@ namespace RiverHollow.Characters
         protected override bool FriendCheck(string targetMapName, out Point targetPosition)
         {
             bool rv = false;
-            var currentAction = _liSchedule[0].Value;
+            var currentAction = _liSchedule[0].State;
 
             targetPosition = Point.Zero;
             if (HasTrait(ActorTraitsEnum.Anxious) || (RHRandom.RollPercent(Constants.WALK_TO_FRIEND_PERCENT) && _emoji?.Emoji != ActorEmojiEnum.Dots))
             {
                 var chosenFriend = GetRandomFriend(x => x.GetOccupantTile() != null && x.GetOccupantTile().MapName.Equals(targetMapName));
-                if (chosenFriend != null && chosenFriend.CurrentActionState == currentAction)
+                if (chosenFriend != null && chosenFriend.CurrentSchedule.State == currentAction)
                 {
                     var tile = chosenFriend.GetOccupantTile();
                     var tiles = new List<RHTile>();
@@ -466,7 +466,7 @@ namespace RiverHollow.Characters
         private bool EmojiStateSocial()
         {
             var validStates = new List<NPCActionState>() { NPCActionState.VisitFriend, NPCActionState.Market, NPCActionState.Inn, NPCActionState.PetCafe };
-            return validStates.Contains(CurrentActionState);
+            return validStates.Contains(CurrentSchedule.State);
         }
 
         public void EmojiChecks(GameTime gTime)
@@ -475,7 +475,7 @@ namespace RiverHollow.Characters
             {
                 if (!FollowingPath)
                 {
-                    if (CurrentActionState == NPCActionState.Craft)
+                    if (CurrentSchedule.State == NPCActionState.Craft)
                     {
                         if (RHRandom.RollPercent(Constants.EMOJI_SING_DEFAULT_RATE + TraitValue(ActorTraitsEnum.Musical)))
                         {
@@ -519,7 +519,7 @@ namespace RiverHollow.Characters
             }
             
             //Off Work
-            if (CurrentActionState == NPCActionState.Craft)
+            if (CurrentSchedule.State == NPCActionState.Craft)
             {
                 if (EmojiActionAboutToEnd(Constants.EMOJI_WORK_FINISHED_DEFAULT_RATE))
                 {
@@ -528,7 +528,7 @@ namespace RiverHollow.Characters
             }
 
             //Going Home at night
-            if (_liSchedule.Count == 1 && _liSchedule[0].Value == NPCActionState.Home)
+            if (_liSchedule.Count == 1 && _liSchedule[0].State == NPCActionState.Home)
             {
                 if (EmojiActionAboutToEnd(Constants.EMOJI_SLEEPY_DEFAULT_RATE))
                 {

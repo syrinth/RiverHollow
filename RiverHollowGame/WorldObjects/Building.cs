@@ -204,6 +204,8 @@ namespace RiverHollow.Buildings
                     TaskManager.AttemptProgressCraft(item);
                     TownManager.AddToCodex(item.ID);
                     craftsLeft--;
+
+                    TownManager.AddMerchandise(rolledItem, ID);
                 }
                 else { break; }
             }
@@ -403,6 +405,7 @@ namespace RiverHollow.Buildings
                             if (newItem != null && itemData.Length > 2) { newItem.ApplyUniqueData(itemData[2]); }
 
                             InventoryManager.AddItemToInventorySpot(newItem, i, j, false);
+                            TownManager.AddMerchandise(newItem.ID, ID);
                         }
                     }
                 }

@@ -1807,7 +1807,7 @@ namespace RiverHollow.Map_Handling
                                 {
                                     MapManager.ChangeMaps(c, this.Name, kvp.Value);
                                 }
-                                else if ( t.CurrentActionState == NPCActionState.LeaveTown)
+                                else if ( t.CurrentSchedule.State == NPCActionState.LeaveTown)
                                 {
                                     RemoveActor(t);
                                 }

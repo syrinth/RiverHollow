@@ -78,7 +78,7 @@ namespace RiverHollow.Utilities
         public enum TravelerMoodEnum { Angry, Sad, Neutral, Happy };
         public enum NPCStateEnum { Alert, Idle, Leashing, MaintainDistance, TrackPlayer, Wander };
         public enum ChildStageEnum { Newborn, Infant, Toddler };
-        public enum NPCActionState { Craft, Home, LeaveTown, Inn, Market, OpenShop, PetCafe, Shopping, VisitFriend };
+        public enum NPCActionState { Craft, Home, LeaveTown, Inn, Market, OpenShop, PetCafe, PurchaseMerch, Shopping, VisitFriend };
        
         public enum TaskStateEnum { Waiting, Assigned, Talking, TaskLog, Completed };
         public enum TaskTriggerEnum { None, Date, GameStart, FriendLevel, Building, Task };

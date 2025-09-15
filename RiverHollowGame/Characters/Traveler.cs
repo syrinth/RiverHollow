@@ -8,7 +8,6 @@ using RiverHollow.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using static RiverHollow.Game_Managers.SaveManager;
 using static RiverHollow.Utilities.Enums;
 
@@ -29,7 +28,6 @@ namespace RiverHollow.Characters
         public int GeneratedIncome { get; private set; } = 0;
 
         private int _iMerchBuildingID = -1;
-        private RHTimer _leaveTimer;
 
         public int BuildingID => GetIntByIDKey("Building");
 
@@ -58,7 +56,6 @@ namespace RiverHollow.Characters
 
             ShoppingList = new List<int>();
             PurchasedItemList = new List<int>();
-
             _fWanderSpeed = Constants.NPC_WALK_SPEED;
             _eCollisionState = ActorCollisionState.Slow;
         }
@@ -66,16 +63,35 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
-            if (_leaveTimer != null && _leaveTimer.TickDown(gTime))
-            {
-                _leaveTimer = null;
-                _liSchedule.Clear();
-                _liSchedule.Add(new KeyValuePair<string, NPCActionState>(GameCalendar.GetTime().ToString(), NPCActionState.LeaveTown));
-            }
 
-            if (_pathingThread == null && _liTilePath.Count == 0 && _liSchedule.Count > 0 && Util.CompareTimeStrings(_liSchedule[0].Key, GameCalendar.GetTime()))
+            if (_pathingThread == null && _liTilePath.Count == 0 && _liSchedule.Count > 0 && Util.CompareTimeStrings(_liSchedule[0].Time, GameCalendar.GetTime()))
             {
                 TravelManager.RequestPathing(this);
+            }
+
+            if (_liTilePath.Count == 0)
+            {
+                switch (CurrentSchedule.State)
+                {
+                    case NPCActionState.PurchaseMerch:
+                        if (CurrentMap.GetCharacterObject(Constants.TRAVELER_SHOP_SPOT).Contains(CollisionCenter) && ShoppingList.Count > 0)
+                        {
+                            var b = CurrentMap.Building();
+                            foreach (var i in b?.Merchandise)
+                            {
+                                if (i != null && ShoppingList.Contains(i.ID))
+                                {
+                                    BuyMerchandise(i, b.Merchandise);
+                                    CurrentMap.AssignMerchandise();
+                                }
+                            }
+
+                            Wandering = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
 
             if (PeriodicEmojiReady(gTime))
@@ -145,36 +161,37 @@ namespace RiverHollow.Characters
         }
 
         #region Schedule
+        public void CheckFinishedShopping()
+        {
+            if (ShoppingList.Count == 0 && !RollForInn())
+            {
+                //ToDo: Need to put a random amount of time ahead of this
+                //Create a method to handle timeSpan nonsense.
+                AddScheduleData(GameCalendar.GetTime(), NPCActionState.LeaveTown, ref _liSchedule);
+            }
+        }
+
+        public void StartSchedule()
+        {
+            CreateScheduleData(GameCalendar.GetTime(), NPCActionState.Inn, ref _liSchedule);
+        }
         public override void CreateDailySchedule()
         {
+            //Should not create a Daily Schedule for Travelers. Travelers should have a single thing they do then re-evaluate.
             base.CreateDailySchedule();
 
-            var actions = new List<NPCActionState>() { NPCActionState.Market, NPCActionState.PetCafe, NPCActionState.Shopping };
-            if (TimeSpan.TryParse(string.Format("{0}:00", Constants.TRAVELER_SPAWN_START), out TimeSpan timeSpan))
+            if (!Inn)
             {
-                if (!Inn)
-                {
-                    CreateScheduleData(timeSpan.ToString(), NPCActionState.Inn, ref _liSchedule);
-                }
-
-                timeSpan = Util.AddHours(timeSpan, RHRandom.Instance().Next(1, 3));
-                CreateScheduleData(timeSpan.ToString(), NPCActionState.Shopping, ref _liSchedule);
-
-                timeSpan = Util.AddHours(timeSpan, RHRandom.Instance().Next(1, 3));
-                CreateScheduleData(timeSpan.ToString(), NPCActionState.Market, ref _liSchedule);
-
-                timeSpan = Util.AddHours(timeSpan, RHRandom.Instance().Next(1, 3));
-                CreateScheduleData(timeSpan.ToString(), NPCActionState.PetCafe, ref _liSchedule);
-                CreateScheduleData("18:00", NPCActionState.Inn, ref _liSchedule);
+                //If not at the Inn, set the first action to be to go to the Inn
+                CreateScheduleData(string.Format("{0}:00", Constants.TRAVELER_SPAWN_START), NPCActionState.Inn, ref _liSchedule);
             }
-
-            _liSchedule = _liSchedule.OrderBy(x => x.Key).ToList();
         }
 
         protected override bool ProcessActionStateData(out Point targetPosition, out string targetMapName, out DirectionEnum dir)
         {
             dir = DirectionEnum.Down;
-            var currentAction = _liSchedule[0].Value;
+            var currSchedule = _liSchedule[0];
+            var currentAction = currSchedule.State;
             switch (currentAction)
             {
                 case NPCActionState.Inn:
@@ -193,6 +210,16 @@ namespace RiverHollow.Characters
                     if (TownManager.PetCafe != null)
                     {
                         return ProcessActionStateDataHandler(TownManager.PetCafe.ID, "Destination", out targetPosition, out targetMapName);
+                    }
+                    break;
+                case NPCActionState.PurchaseMerch:
+                    if (int.TryParse(currSchedule.Data, out int buildingID)){
+                        var targetBuilding = TownManager.GetBuildingByID(buildingID);
+                        targetMapName = targetBuilding.InnerMapName;
+                        targetPosition = targetBuilding.InnerMap.GetCharacterObject(Constants.TRAVELER_SHOP_SPOT).Center;
+                        dir = DirectionEnum.Up;
+
+                        return true;
                     }
                     break;
                 default:
@@ -259,22 +286,56 @@ namespace RiverHollow.Characters
         #endregion
 
         #region Merchandise
-        public void BuyMerchandise()
+        public bool CheckShoppingList(int merchID, int buildingID)
         {
-            var merch = GameManager.CurrentItem;
-            if (ShoppingList.Contains(merch.ID) && InventoryManager.HasItemInPlayerInventory(merch.ID, 1))
-            {
-                PurchasedItemList.Add(merch.ID);
-                ShoppingList.Remove(merch.ID);
+            bool rv = false;
 
+            if (ShoppingList.Contains(merchID))
+            {
+                rv = true;
+                AddScheduleData(GameCalendar.GetTime(), NPCActionState.PurchaseMerch, ref _liSchedule, buildingID.ToString());
+            }
+
+            return rv;
+        }
+        public void FindShopping()
+        {
+            //If the Traveler is already planning to go shopping, do not do anything
+            foreach(var data in _liSchedule)
+            {
+                if (data.State == NPCActionState.PurchaseMerch)
+                {
+                    return;
+                }
+            }
+
+            foreach (var item in ShoppingList)
+            {
+                if (TownManager.FindMerchandise(item, out int buildingID) && TimeSpan.TryParse(GameCalendar.GetTime(), out TimeSpan timeSpan))
+                {
+                    int delay = RHRandom.Instance().Next(0, Constants.TRAVELER_SHOP_DELAY_RANGE);
+                    Util.AddTime(ref timeSpan, 0, delay);
+                    AddScheduleData(timeSpan, NPCActionState.PurchaseMerch, ref _liSchedule, buildingID.ToString());
+                    break;
+                }
+            }
+        }
+
+        public void BuyMerchandise(Item merch, Item[,] inventory)
+        {
+            if (ShoppingList.Contains(merch.ID))
+            {
+                InventoryManager.InitExtraInventory(inventory);
+                InventoryManager.RemoveItemFromInventory(merch, false);
+                InventoryManager.ClearExtraInventory();
+
+                ShoppingList.Remove(merch.ID);
+                PurchasedItemList.Add(merch.ID);
                 PlayerManager.AddMoney(merch.Value);
 
                 merch.Remove(1);
 
-                if (RollForInn())
-                {
-                    _leaveTimer = new RHTimer(10);
-                }
+                CheckFinishedShopping();
             }
         }
         public void AddToShopping(int x)

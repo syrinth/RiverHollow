@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="74" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="265">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="74" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="266">
  <properties>
   <property name="FillerID" value="103-50/51-5/60-5/147-5/65-15"/>
   <property name="FillerPercent" type="float" value="0.6"/>
@@ -424,6 +424,11 @@
   <object id="262" name="Cauldron" x="352" y="544" width="48" height="32">
    <properties>
     <property name="ObjectID" type="int" value="88"/>
+   </properties>
+  </object>
+  <object id="265" name="Cauldron" x="448" y="544" width="48" height="32">
+   <properties>
+    <property name="ObjectID" type="int" value="18"/>
    </properties>
   </object>
  </objectgroup>

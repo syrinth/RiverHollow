@@ -493,6 +493,7 @@ namespace RiverHollow.Characters
             }
 
             TravelManager.FinishThreading(ref _pathingThread);
+            Wandering = false;
         }
 
         /// <summary>

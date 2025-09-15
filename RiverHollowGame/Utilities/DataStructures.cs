@@ -92,6 +92,19 @@ namespace RiverHollow.Utilities
         }
     }
 
+    public struct ScheduleData
+    {
+        public string Time;
+        public NPCActionState State;
+        public string Data;
+
+        public ScheduleData(string time, NPCActionState state, string data = "") {
+            this.Time = time;
+            this.State = state;
+            this.Data = data;
+        }
+    }
+
     struct NewMapInfo
     {
         public DirectionEnum Facing;

@@ -1005,10 +1005,11 @@ namespace RiverHollow.Utilities
 
             return rv;
         }
-        public static TimeSpan AddHours(TimeSpan timeSpan, int hoursToAdd)
+
+        public static void AddTime(ref TimeSpan timespan, int hours, int mins)
         {
-            TimeSpan newSpan = new TimeSpan(0, hoursToAdd, 0, 0);
-            return timeSpan.Add(newSpan);
+            TimeSpan newSpan = new TimeSpan(0, hours, mins, 0);
+            timespan.Add(newSpan);
         }
 
         public static bool MinutesLeft(string checkValue, string targetValue, int minutesLeft)

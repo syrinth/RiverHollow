@@ -273,7 +273,18 @@ namespace RiverHollow.GUIComponents.Screens
             InventoryManager.CleanupInventoryDisplay();
             base.CloseMainWindow();
 
-            MapManager.CurrentMap.AssignMerchandise();
+            var bldg = MapManager.CurrentMap.Building();
+            foreach (var item in bldg.Merchandise)
+            {
+                if (item != null)
+                {
+                    TownManager.AddMerchandise(item.ID, bldg.ID);
+                }
+            }
+            foreach (var t in TownManager.Travelers)
+            {
+                t.FindShopping();
+            }
         }
     }
 

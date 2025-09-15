@@ -37,9 +37,9 @@ namespace RiverHollow.Characters
 
         //The Data containing the path they are currently on
         protected PathData _currentPathData;
-        protected List<KeyValuePair<string, NPCActionState>> _liSchedule;
+        protected List<ScheduleData> _liSchedule;
         public bool HasSchedule => _liSchedule?.Count > 0;
-        public NPCActionState CurrentActionState { get; private set; }
+        public ScheduleData CurrentSchedule { get; private set; }
 
         public TalkingActor() : base()
         {
@@ -50,7 +50,7 @@ namespace RiverHollow.Characters
         public TalkingActor(int id, Dictionary<string, string> stringData) : base(id, stringData)
         {
             FriendshipPoints = 0;
-            _liSchedule = new List<KeyValuePair<string, NPCActionState>>();
+            _liSchedule = new List<ScheduleData>();
             _liActorFaceQueue = new List<ActorFaceEnum>();
             _liSpokenKeys = new List<string>();
             _liHeldItems = new List<string>();
@@ -370,7 +370,7 @@ namespace RiverHollow.Characters
         #region Emojis And Traits
         protected bool EmojiActionAboutToEnd(int percentRate)
         {
-            return _liSchedule.Count > 0 && Util.MinutesLeft(GameCalendar.GetTime(), _liSchedule[0].Key, 1) && RHRandom.RollPercent(percentRate);
+            return _liSchedule.Count > 0 && Util.MinutesLeft(GameCalendar.GetTime(), _liSchedule[0].Time, 1) && RHRandom.RollPercent(percentRate);
         }
 
         protected bool PeriodicEmojiReady(GameTime gTime)
@@ -412,7 +412,7 @@ namespace RiverHollow.Characters
         public void RequeueCurrentAction()
         {
             _liTilePath.Clear();
-            _liSchedule.Insert(0, new KeyValuePair<string, NPCActionState>(string.Empty, CurrentActionState));
+            _liSchedule.Insert(0, CurrentSchedule);
             TravelManager.RequestPathing(this);
         }
 
@@ -426,7 +426,7 @@ namespace RiverHollow.Characters
             //ToDo: Need to be able to parse multiple actions in one day. For example:  Inn:09-30/14-30/Monday-11-00/Monday-18-00
             var timeKey = GetDefaultTime(actionState);
             var actionKey = Util.GetEnumString(actionState);
-            var todayList = new List<KeyValuePair<string, NPCActionState>>();
+            var todayList = new List<ScheduleData>();
             if (ValidActionInWeather(actionState))
             {
                 var strParamsKey = GetBoolByIDKey(actionKey) ? GetStringByIDKey(actionKey) : timeKey;
@@ -506,7 +506,7 @@ namespace RiverHollow.Characters
 
             TravelManager.FinishThreading(ref _pathingThread);
 
-            SetActionState(_liSchedule[0].Value);
+            SetCurrentSchedule(_liSchedule[0]);
             _liSchedule.RemoveAt(0);
         }
 
@@ -635,17 +635,29 @@ namespace RiverHollow.Characters
 
             return rv;
         }
-        protected void CreateScheduleData(string parameter, NPCActionState actionState, ref List<KeyValuePair<string, NPCActionState>> list)
+        protected void AddScheduleData(TimeSpan timeKey, NPCActionState e, ref List<ScheduleData> list, string data = "")
+        {
+            list.Add(new ScheduleData(timeKey.ToString(), e, data));
+        }
+        protected void AddScheduleData(string timeKey, NPCActionState e, ref List<ScheduleData> list, string data = "")
+        {
+            list.Add(new ScheduleData(timeKey, e, data));
+        }
+        protected void CreateScheduleData(string parameter, NPCActionState actionState, ref List<ScheduleData> list)
         {
             var str = Util.FindArguments(parameter);
             var timeStr = str.Length == 1 ? str[0] : string.Format("{0}:{1}", str[0], str[1]);
             if (TimeSpan.TryParse(timeStr, out TimeSpan timeSpan))
             {
-                var timeMod = GetTimeModifier();
-                timeSpan = timeSpan.Add(timeMod);
-                var timeKey = timeSpan.ToString();
-                list.Add(new KeyValuePair<string, NPCActionState>(timeKey, actionState));
+                CreateScheduleData(timeSpan, actionState, ref list);
             }
+        }
+        protected void CreateScheduleData(TimeSpan timeSpan, NPCActionState actionState, ref List<ScheduleData> list)
+        {
+            var timeMod = GetTimeModifier();
+            timeSpan = timeSpan.Add(timeMod);
+            var timeKey = timeSpan.ToString();
+            AddScheduleData(timeKey, actionState, ref list);
         }
 
         private TimeSpan GetTimeModifier()
@@ -668,9 +680,9 @@ namespace RiverHollow.Characters
             return rv;
         }
 
-        protected void SetActionState(NPCActionState e)
+        protected void SetCurrentSchedule(ScheduleData e)
         {
-            CurrentActionState = e;
+            CurrentSchedule = e;
         }
 
         protected void AddWalkableTile(ref List<RHTile> tiles, RHTile tile, DirectionEnum dir)

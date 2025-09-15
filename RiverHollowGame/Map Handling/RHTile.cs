@@ -447,7 +447,8 @@ namespace RiverHollow.Map_Handling
             bool rv = _diProps.Count > 0;
             foreach (TiledMapTileLayer l in _diProps.Keys)
             {
-                if (l.IsVisible && !l.Name.Contains("Upper") && ContainsProperty(l, "Impassable", out string val) && val.Equals("true"))
+                var impassable = ContainsProperty(l, "Impassable", out string val) && val.Equals("true");
+                if (!l.Name.Contains("Upper") && impassable)
                 {
                     rv = false;
                     break;

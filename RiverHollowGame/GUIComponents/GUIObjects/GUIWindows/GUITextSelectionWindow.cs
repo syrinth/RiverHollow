@@ -247,7 +247,7 @@ namespace RiverHollow.GUIComponents.GUIObjects.GUIWindows
                             MapManager.CurrentMap.TheShop.Purchase(GameManager.CurrentMerchandise);
                             break;
                         case TextEntryTriggerEnum.ConfirmSell:
-                            ((Traveler)GameManager.CurrentNPC).BuyMerchandise();
+                            ((Traveler)GameManager.CurrentNPC).BuyMerchandise(GameManager.CurrentItem, InventoryManager.PlayerInventory);
                             break;
                         case TextEntryTriggerEnum.Donate:
                             ((Villager)GameManager.CurrentNPC).FriendshipPoints += 40;

@@ -55,6 +55,7 @@ namespace RiverHollow.Game_Managers
         public static int PlantsGrown { get; private set; }
         public static int ValueGoodsSold { get; private set; }
         private static Dictionary<ResourceTypeEnum, int> _diGoodsSold;
+        public static Dictionary<int, int> _diMerchandise;
         #endregion
 
         public static void Initialize()
@@ -86,6 +87,7 @@ namespace RiverHollow.Game_Managers
                 _diAllLetters[target].Add(kvp.Key);
             }
 
+            _diMerchandise = new Dictionary<int, int>();
             DIMerchants = new Dictionary<int, Merchant>();
             Villagers = new Dictionary<int, Villager>();
             foreach (KeyValuePair<int, Dictionary<string, string>> npcData in DataManager.ActorData)
@@ -141,15 +143,15 @@ namespace RiverHollow.Game_Managers
             //Handlea adding Travelers to the Town
             if (TravelerQueue.Count > 0 && GameCalendar.TimeBetween(Constants.TRAVELER_SPAWN_START, Constants.TRAVELER_SPAWN_END))
             {
-                if (_spawnTimer == null)
-                {
-                    int totalMinutes = (Constants.TRAVELER_SPAWN_END - Constants.TRAVELER_SPAWN_START) * 60;
-                    int spawnDelay = Math.Min(Constants.TRAVELER_SPAWN_MAX_DELAY, totalMinutes / (TravelerQueue.Count + Travelers.Count));
+                //if (_spawnTimer == null)
+                //{
+                //    int totalMinutes = (Constants.TRAVELER_SPAWN_END - Constants.TRAVELER_SPAWN_START) * 60;
+                //    int spawnDelay = Math.Min(Constants.TRAVELER_SPAWN_MAX_DELAY, totalMinutes / (TravelerQueue.Count + Travelers.Count));
 
-                    _spawnTimer = new RHTimer(RHRandom.Instance().Next(0, spawnDelay));
-                }
-                else if (_spawnTimer.TickDown(gTime))
-                {
+                //    _spawnTimer = new RHTimer(RHRandom.Instance().Next(0, spawnDelay));
+                //}
+                //else if (_spawnTimer.TickDown(gTime))
+                //{
                     _spawnTimer = null;
 
                     //Travelers who stayed at the Inn will spawn there
@@ -160,7 +162,8 @@ namespace RiverHollow.Game_Managers
                     traveler.SetPosition(map.GetRandomPointFromObject(objStr));
                     map.AddActor(traveler);
 
-                    traveler.CreateDailySchedule();
+                    traveler.StartSchedule();
+                    traveler.FindShopping();
 
                     Travelers.Add(traveler);
                     TravelerQueue.Remove(traveler);
@@ -169,7 +172,7 @@ namespace RiverHollow.Game_Managers
                     {
                         traveler.StayAtInn(false);
                     }
-                }
+                //}
             }
         }
 
@@ -235,13 +238,13 @@ namespace RiverHollow.Game_Managers
             Income = 0;
             if (Travelers.Count > 0)
             {
-                var merchantTables = new Dictionary<ClassTypeEnum, List<KeyValuePair<Merchandise, Building>>>();
+                var merchantTables = new Dictionary<int, Building>();
                 GatherMerch(ref merchantTables);
 
                 //First, the Traveler attempts to fill their Need
                 foreach (var traveler in Travelers)
                 {
-                    traveler.PurchaseNeedItem(merchantTables);
+                    //traveler.PurchaseNeedItem(merchantTables);
                 }
 
                 //After shopping for their Need, they will eat
@@ -271,7 +274,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (!traveler.HasNeed)
                     {
-                        traveler.PurchaseExtraItems(merchantTables);
+                        //traveler.PurchaseExtraItems(merchantTables);
                     }
                 }
 
@@ -282,13 +285,8 @@ namespace RiverHollow.Game_Managers
 
             PrepareTravelers();
         }
-        private static void GatherMerch(ref Dictionary<ClassTypeEnum, List<KeyValuePair<Merchandise, Building>>> townMerchData)
+        public static void GatherMerch(ref Dictionary<int, Building> townMerchData)
         {
-            foreach (ClassTypeEnum e in GetEnumArray<ClassTypeEnum>())
-            {
-                townMerchData[e] = new List<KeyValuePair<Merchandise, Building>>();
-            }
-
             var allBuildings = MapManager.TownMap.GetObjectsByType<Building>();
             foreach (var building in allBuildings)
             {
@@ -296,8 +294,7 @@ namespace RiverHollow.Game_Managers
                 {
                     if (i is Merchandise merchItem)
                     {
-                        var itemData = new KeyValuePair<Merchandise, Building>(merchItem, building);
-                        townMerchData[merchItem.ClassType].Add(itemData);
+                        townMerchData[merchItem.ID] = building;
                     }
                 }
             }
@@ -327,6 +324,40 @@ namespace RiverHollow.Game_Managers
                 GUIManager.NewInfoAlertIcon(Constants.STR_ALERT_UPGRADE);
             }
         }
+
+        #region Merchandise
+        public static void AddMerchandise(int merchID, int buildingID)
+        {
+            if (!_diMerchandise.ContainsKey(merchID))
+            {
+                _diMerchandise[merchID] = buildingID;
+            }
+
+            foreach(var t in Travelers)
+            {
+                if (t.CheckShoppingList(merchID, buildingID))
+                {
+                    break;
+                }
+            }
+        }
+        public static bool FindMerchandise(int merchID, out int buildingID)
+        {
+            bool rv = false;
+
+            if (_diMerchandise.ContainsKey(merchID))
+            {
+                rv = true;
+                buildingID = _diMerchandise[merchID];
+            }
+            else
+            {
+                buildingID = -1;
+            }
+
+            return rv;
+        }
+        #endregion
 
         #region Traveler Code        
         private static void PrepareTravelers()
