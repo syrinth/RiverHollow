@@ -88,6 +88,7 @@ namespace RiverHollow.Game_Managers
             }
 
             _diMerchandise = new Dictionary<int, int>();
+
             DIMerchants = new Dictionary<int, Merchant>();
             Villagers = new Dictionary<int, Villager>();
             foreach (KeyValuePair<int, Dictionary<string, string>> npcData in DataManager.ActorData)
@@ -140,18 +141,18 @@ namespace RiverHollow.Game_Managers
 
         public static void Update(GameTime gTime)
         {
-            //Handlea adding Travelers to the Town
+            //Handle adding Travelers to the Town
             if (TravelerQueue.Count > 0 && GameCalendar.TimeBetween(Constants.TRAVELER_SPAWN_START, Constants.TRAVELER_SPAWN_END))
             {
-                //if (_spawnTimer == null)
-                //{
-                //    int totalMinutes = (Constants.TRAVELER_SPAWN_END - Constants.TRAVELER_SPAWN_START) * 60;
-                //    int spawnDelay = Math.Min(Constants.TRAVELER_SPAWN_MAX_DELAY, totalMinutes / (TravelerQueue.Count + Travelers.Count));
+                if (_spawnTimer == null)
+                {
+                    int totalMinutes = (Constants.TRAVELER_SPAWN_END - Constants.TRAVELER_SPAWN_START) * 60;
+                    int spawnDelay = Math.Min(Constants.TRAVELER_SPAWN_MAX_DELAY, totalMinutes / (TravelerQueue.Count + Travelers.Count));
 
-                //    _spawnTimer = new RHTimer(RHRandom.Instance().Next(0, spawnDelay));
-                //}
-                //else if (_spawnTimer.TickDown(gTime))
-                //{
+                    _spawnTimer = new RHTimer(RHRandom.Instance().Next(0, spawnDelay));
+                }
+                else if (_spawnTimer.TickDown(gTime))
+                {
                     _spawnTimer = null;
 
                     //Travelers who stayed at the Inn will spawn there
@@ -161,6 +162,8 @@ namespace RiverHollow.Game_Managers
 
                     traveler.SetPosition(map.GetRandomPointFromObject(objStr));
                     map.AddActor(traveler);
+
+                    AssignShoppingLists(traveler);
 
                     traveler.StartSchedule();
                     traveler.FindShopping();
@@ -172,7 +175,22 @@ namespace RiverHollow.Game_Managers
                     {
                         traveler.StayAtInn(false);
                     }
-                //}
+                }
+            }
+        }
+
+        public static void AssignShoppingLists(Traveler t)
+        {
+            var buildings = MapManager.TownMap.GetObjectsByType<Building>();
+            foreach (var building in buildings)
+            {
+                foreach (var item in t.ShoppingList)
+                {
+                    if (building.StoreMachine != null && building.StoreMachine.GetCurrentCraftingList().Contains(item))
+                    {
+                        building.StoreMachine.AddToCraftingQueue(item);
+                    }
+                }
             }
         }
 

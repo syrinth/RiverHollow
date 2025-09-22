@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using RiverHollow.Buildings;
 using RiverHollow.Game_Managers;
 using RiverHollow.Items;
 using RiverHollow.Map_Handling;
@@ -124,6 +125,8 @@ namespace RiverHollow.Characters
                     TravelManager.RequestPathing(this);
                 }
 
+                HandleState(gTime);
+
                 //Determine whether or not we are currently moving
                 bool stillMoving = _liTilePath.Count > 0;
 
@@ -178,6 +181,47 @@ namespace RiverHollow.Characters
 
             MoveToSpawn();
             CreateDailySchedule();
+        }
+
+        private bool InPosition()
+        {
+            bool rv = false;
+
+            if (TownManager.GetBuildingByID(HouseID) is Building b)
+            {
+                var homeMap = b.InnerMap;
+                switch (CurrentSchedule.State)
+                {
+                    case NPCActionState.Craft:
+                        if (CurrentMap == homeMap && homeMap.GetCharacterObject(Constants.MAPOBJ_CRAFT).Contains(CollisionCenter))
+                        {
+                            rv = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return rv;
+        }
+        private void HandleState(GameTime gTime)
+        {
+            if (_liTilePath.Count > 0 || !InPosition())
+            {
+                return;
+            }
+
+            switch (CurrentSchedule.State)
+            {
+                case NPCActionState.Craft:
+                    var b = CurrentMap.Building();
+                    b?.StoreMachine.CraftNewItem();
+
+                    break;
+                default:
+                    break;
+            }
         }
 
         public override bool DisplayIcons()

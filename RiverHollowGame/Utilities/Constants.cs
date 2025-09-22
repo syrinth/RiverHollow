@@ -103,7 +103,7 @@ namespace RiverHollow.Utilities
 
         public const float HUNGER_MOD = -0.5f;
 
-        public const string TRAVELER_SHOP_SPOT = "PurchaseSpot";
+        public const int MACHINE_BASE_CRAFT_TIME = 60;
         public const int TRAVELER_SHOP_DELAY_RANGE = 15;
         public const int TRAVELER_ITEM_PURCHASE_CAP = 3;
         public const int TRAVELER_SPAWN_START = 8;
@@ -130,10 +130,11 @@ namespace RiverHollow.Utilities
         public const string MAPOBJ_CRAFT = "Craft";
         public const string MAPOBJ_HOME = "NPC_";
         public const string MAPOBJ_SHOP = "Shop";
+        public const string MAPOBJ_PURCHASESPOT = "PurchaseSpot";
 
-        public const string VILLAGER_SHOP_DEFAULT = "09:00";
+        public const string VILLAGER_CRAFT_DEFAULT = "08:15";
         public const string VILLAGER_INN_DEFAULT = "12:00";
-        public const string VILLAGER_CRAFT_DEFAULT = "14:00";
+        public const string VILLAGER_SHOP_DEFAULT = "18:00";
         public const string VILLAGER_HOME_DEFAULT = "22:00";
         public const string VILLAGER_MARKET_DEFAULT = "Skip";
         public const string VILLAGER_VISIT_DEFAULT = "Skip";

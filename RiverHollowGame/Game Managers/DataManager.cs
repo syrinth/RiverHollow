@@ -744,7 +744,7 @@ namespace RiverHollow.Game_Managers
                     case ObjectTypeEnum.Gatherable:
                         return new WrappedItem(id);
                     case ObjectTypeEnum.Machine:
-                        return new Machine(id);
+                        return new Machine(id, args);
                     case ObjectTypeEnum.Plant:
                         return new Plant(id);
                     case ObjectTypeEnum.WarpPoint:

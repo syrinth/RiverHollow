@@ -69,30 +69,7 @@ namespace RiverHollow.Characters
                 TravelManager.RequestPathing(this);
             }
 
-            if (_liTilePath.Count == 0)
-            {
-                switch (CurrentSchedule.State)
-                {
-                    case NPCActionState.PurchaseMerch:
-                        if (CurrentMap.GetCharacterObject(Constants.TRAVELER_SHOP_SPOT).Contains(CollisionCenter) && ShoppingList.Count > 0)
-                        {
-                            var b = CurrentMap.Building();
-                            foreach (var i in b?.Merchandise)
-                            {
-                                if (i != null && ShoppingList.Contains(i.ID))
-                                {
-                                    BuyMerchandise(i, b.Merchandise);
-                                    CurrentMap.AssignMerchandise();
-                                }
-                            }
-
-                            Wandering = true;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
+            HandleState(gTime);
 
             if (PeriodicEmojiReady(gTime))
             {
@@ -123,6 +100,48 @@ namespace RiverHollow.Characters
                 var i = DataManager.GetItem(ShoppingList[0]);
                 var location = Position + new Point(0, -Constants.TILE_SIZE / 2);
                 i.Draw(spriteBatch, new Rectangle(location.X, location.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), Constants.MAX_LAYER_DEPTH, 0.5f);
+            }
+        }
+
+        private void HandleState(GameTime gTime)
+        {
+            if (_liTilePath.Count > 0)
+            {
+                return;
+            }
+
+            switch (CurrentSchedule.State)
+            {
+                case NPCActionState.PurchaseMerch:
+                    if (CurrentMap.GetCharacterObject(Constants.MAPOBJ_PURCHASESPOT).Contains(CollisionCenter) && ShoppingList.Count > 0)
+                    {
+                        SetFacing(DirectionEnum.Up);
+                        PlayAnimationVerb(VerbEnum.Idle); 
+
+                        if (_timer == null)
+                        {
+                            _timer = new RHTimer(1);
+                        }
+                        else if (_timer.Finished())
+                        {
+                            _timer = null;
+
+                            var b = CurrentMap.Building();
+                            foreach (var i in b?.Merchandise)
+                            {
+                                if (i != null && ShoppingList.Contains(i.ID))
+                                {
+                                    BuyMerchandise(i, b.Merchandise);
+                                    CurrentMap.AssignMerchandise();
+                                }
+                            }
+
+                            Wandering = true;
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -216,7 +235,7 @@ namespace RiverHollow.Characters
                     if (int.TryParse(currSchedule.Data, out int buildingID)){
                         var targetBuilding = TownManager.GetBuildingByID(buildingID);
                         targetMapName = targetBuilding.InnerMapName;
-                        targetPosition = targetBuilding.InnerMap.GetCharacterObject(Constants.TRAVELER_SHOP_SPOT).Center;
+                        targetPosition = targetBuilding.InnerMap.GetCharacterObject(Constants.MAPOBJ_PURCHASESPOT).Center;
                         dir = DirectionEnum.Up;
 
                         return true;

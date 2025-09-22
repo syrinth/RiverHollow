@@ -39,6 +39,8 @@ namespace RiverHollow.Buildings
         public Item[,] Stash;
         public Item[,] Merchandise;
 
+        public Machine StoreMachine { get; private set; }
+
         public Building(int id) : base(id)
         {
             ID = id;
@@ -144,6 +146,11 @@ namespace RiverHollow.Buildings
             }
 
             return rv;
+        }
+
+        public void SetStoreMachine(Machine m)
+        {
+            StoreMachine = m;
         }
 
         public float GetShopProfitModifier()

@@ -76,6 +76,7 @@
   <object id="42" name="WorldObject" x="176" y="128" width="48" height="32">
    <properties>
     <property name="ObjectID" type="int" value="88"/>
+    <property name="StoreMachine" type="bool" value="true"/>
    </properties>
   </object>
   <object id="65" name="Shop Slate" x="80" y="112" width="16" height="16">

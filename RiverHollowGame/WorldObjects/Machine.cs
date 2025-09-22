@@ -11,16 +11,24 @@ using System;
 using RiverHollow.Buildings;
 using RiverHollow.GUIComponents.MainObjects;
 using RiverHollow.Map_Handling;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RiverHollow.WorldObjects
 {
     public class Machine : WorldObject
     {
-        public Recipe CraftingSlot { get; private set; }
-
+        public bool StoreMachine { get; private set; } = false;
         public bool Producer => GetBoolByIDKey("Producer");
+        public virtual int Tier => GetIntByIDKey("Tier", 1);
 
-        public Machine(int id) : base(id) { }
+        private List<int> _liCraftingQueue;
+        private Item _currentItem;
+        private RHTimer _timer;
+
+        public Machine(int id, Dictionary<string, string> args) : base(id) {
+            _liCraftingQueue = new List<int>();
+            StoreMachine = args.ContainsKey("StoreMachine");
+        }
 
         protected override void LoadSprite()
         {
@@ -43,11 +51,27 @@ namespace RiverHollow.WorldObjects
             SetSpritePos(MapPosition);
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            if (MakingSomething())
+            {
+                var location = Sprite.Position + new Point((Sprite.Width/2) - Constants.TILE_SIZE/2, 0);
+                _currentItem.Draw(spriteBatch, new Rectangle(location.X, location.Y, Constants.TILE_SIZE, Constants.TILE_SIZE), Sprite.LayerDepth + 1);
+            }
+        }
+
         public override void Update(GameTime gTime)
         {
             if (MakingSomething())
             {
                 Sprite.Update(gTime);
+            }
+
+            if (_timer != null && _timer.TickDown(gTime))
+            {
+                _timer = null;
+                CraftQueuedItem();
             }
         }
 
@@ -77,13 +101,119 @@ namespace RiverHollow.WorldObjects
                     CraftItem(b);
                 }
             }
+
+            ClearCraftingQueue();
         }
 
         public override bool PlaceOnMap(Point pos, RHMap map, bool ignoreActors = false)
         {
-            TownManager.AddToMachineList(this);
-            return base.PlaceOnMap(pos, map, ignoreActors);
+            bool rv = false;
+            if (base.PlaceOnMap(pos, map, ignoreActors))
+            {
+                rv = true;
+                TownManager.AddToMachineList(this);
+                if (GetObjectBuilding() is Building b)
+                {
+                    b.SetStoreMachine(this);
+                }
+            }
+            
+            return rv;
         }
+
+        #region Crafting
+        public bool PlayerCraftItem(int i)
+        {
+            bool rv = false;
+
+            Item it = DataManager.GetItem(i);
+            if (!MakingSomething() && PlayerManager.HasEnergy(it.EnergyCost) && InventoryManager.ExpendResources(it.GetRequiredItems(), InventoryManager.PlayerInventory))
+            {
+                rv = true;
+
+                PlayerManager.LoseEnergy(it.EnergyCost);
+
+                var targetItem = DataManager.CraftItem(i);
+                SoundManager.PlayEffect(SoundEffectEnum.Button);
+                InventoryManager.AddToInventory(targetItem);
+
+                TaskManager.AttemptProgressCraft(targetItem);
+                TownManager.AddToCodex(i);
+            }
+
+            return rv;
+        }
+
+        public void AddToCraftingQueue(int i)
+        {
+            _liCraftingQueue.Add(i);
+        }
+
+        public void ClearCraftingQueue()
+        {
+            _liCraftingQueue.Clear();
+        }
+
+        private int GetCraftTime(Item i)
+        {
+            return (i.Tier * Constants.MACHINE_BASE_CRAFT_TIME / this.Tier);
+        }
+        public void CraftNewItem()
+        {
+            if (_currentItem == null)
+            {
+                var valid = WhatCanWeCraft(_liCraftingQueue);
+                if (valid.Count > 0)
+                {
+                    var item = Util.GetRandomItem(valid);
+                    if (item != null && InventoryManager.ExpendResources(item.GetRequiredItems(), GetStash()))
+                    {
+                        _timer = new RHTimer(GetCraftTime(item));
+                        _currentItem = item;
+                        _liCraftingQueue.Remove(item.ID);
+                    }
+                }
+            }
+        }
+
+        private List<Item> WhatCanWeCraft(List<int> craftingList)
+        {
+            var validItems = new List<Item>();
+            foreach (var craftID in craftingList)
+            {
+                Item i = DataManager.GetItem(craftID);
+                if (HasSufficientItems(i))
+                {
+                    validItems.Add(i);
+                }
+            }
+
+            validItems = validItems.OrderByDescending(x => x.Value).ToList();
+
+            return validItems;
+        }
+
+        private void CraftQueuedItem()
+        {
+            var targetItem = DataManager.CraftItem(_currentItem.ID);
+            InventoryManager.InitExtraInventory(GetMerchandiseStock());
+            InventoryManager.AddToInventory(targetItem, false, true);
+            InventoryManager.ClearExtraInventory();
+
+            TaskManager.AttemptProgressCraft(targetItem);
+
+            TownManager.AddToCodex(_currentItem.ID);
+            if (GetObjectBuilding() is Building store)
+            {
+                TownManager.AddMerchandise(_currentItem.ID, store.ID);
+            }
+            CurrentMap.AssignMerchandise();
+
+            _currentItem = null;
+        }
+
+        
+        #endregion
 
         private void CraftItem(Building b)
         {
@@ -163,45 +293,6 @@ namespace RiverHollow.WorldObjects
             }
 
             InventoryManager.ClearExtraInventory();
-        }
-
-        private List<Item> WhatCanWeCraft(List<int> craftingList)
-        {
-            var validItems = new List<Item>();
-            foreach (var craftID in craftingList)
-            {
-                Item i = DataManager.GetItem(craftID);
-                if (HasSufficientItems(i))
-                {
-                    validItems.Add(i);
-                }
-            }
-
-            validItems = validItems.OrderByDescending(x => x.Value).ToList();
-
-            return validItems;
-        }
-
-        public bool PlayerCraftItem(int i)
-        {
-            bool rv = false;
-
-            Item it = DataManager.GetItem(i);
-            if (PlayerManager.HasEnergy(it.EnergyCost) && InventoryManager.ExpendResources(it.GetRequiredItems(), InventoryManager.PlayerInventory))
-            {
-                rv = true;
-
-                PlayerManager.LoseEnergy(it.EnergyCost);
-
-                var targetItem = DataManager.CraftItem(i);
-                SoundManager.PlayEffect(SoundEffectEnum.Button);
-                InventoryManager.AddToInventory(targetItem);
-
-                TaskManager.AttemptProgressCraft(targetItem);
-                TownManager.AddToCodex(i);
-            }
-
-            return rv;
         }
 
         private void CheckAddToShopInventory(ref Dictionary<int, Tuple<int, List<Container>>> shopInventory, int id)
@@ -288,7 +379,7 @@ namespace RiverHollow.WorldObjects
 
         public bool MakingSomething()
         {
-            return CraftingSlot.ID >= 0;
+            return _currentItem != null;
         }
 
         public List<Tuple<int, bool>> GetFullCraftingList()

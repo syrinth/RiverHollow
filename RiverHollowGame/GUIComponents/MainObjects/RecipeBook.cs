@@ -5,10 +5,8 @@ using Microsoft.Xna.Framework;
 using RiverHollow.Game_Managers;
 using RiverHollow.GUIComponents.GUIObjects;
 using RiverHollow.GUIComponents.GUIObjects.GUIWindows;
-using RiverHollow.Buildings;
 
 using static RiverHollow.Utilities.Enums;
-using Microsoft.Xna.Framework.Graphics;
 using RiverHollow.WorldObjects;
 
 namespace RiverHollow.GUIComponents.MainObjects

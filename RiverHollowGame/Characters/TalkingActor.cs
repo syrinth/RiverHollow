@@ -9,9 +9,7 @@ using RiverHollow.Utilities;
 using RiverHollow.WorldObjects;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Runtime.InteropServices;
 using static RiverHollow.Utilities.Enums;
 
 namespace RiverHollow.Characters
@@ -36,6 +34,7 @@ namespace RiverHollow.Characters
         protected List<string> _liHeldItems;
 
         //The Data containing the path they are currently on
+        protected RHTimer _timer;
         protected PathData _currentPathData;
         protected List<ScheduleData> _liSchedule;
         public bool HasSchedule => _liSchedule?.Count > 0;
@@ -87,6 +86,7 @@ namespace RiverHollow.Characters
         public override void Update(GameTime gTime)
         {
             base.Update(gTime);
+            _timer?.TickDown(gTime);
 
             CheckBumpedIntoSomething();
 
